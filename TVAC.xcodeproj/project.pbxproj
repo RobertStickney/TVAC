@@ -6,10 +6,23 @@
 	objectVersion = 48;
 	objects = {
 
+/* Begin PBXFileReference section */
+		E1CABD381EF59BD800E0B179 /* CTL_server */ = {isa = PBXFileReference; lastKnownFileType = folder; name = CTL_server; path = head/CTL_server; sourceTree = "<group>"; };
+		E1CABD391EF59BD800E0B179 /* doc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = doc; path = head/doc; sourceTree = "<group>"; };
+		E1CABD3A1EF59BD800E0B179 /* keys */ = {isa = PBXFileReference; lastKnownFileType = folder; name = keys; path = head/keys; sourceTree = "<group>"; };
+		E1CABD3B1EF59BD800E0B179 /* LabVIEW */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LabVIEW; path = head/LabVIEW; sourceTree = "<group>"; };
+		E1CABD3C1EF59BD800E0B179 /* sandbox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sandbox; path = head/sandbox; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
 /* Begin PBXGroup section */
 		E1C1DF5E1EF5964D00E168B6 = {
 			isa = PBXGroup;
 			children = (
+				E1CABD381EF59BD800E0B179 /* CTL_server */,
+				E1CABD391EF59BD800E0B179 /* doc */,
+				E1CABD3A1EF59BD800E0B179 /* keys */,
+				E1CABD3B1EF59BD800E0B179 /* LabVIEW */,
+				E1CABD3C1EF59BD800E0B179 /* sandbox */,
 			);
 			sourceTree = "<group>";
 		};
