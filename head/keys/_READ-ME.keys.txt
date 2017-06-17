@@ -1,0 +1,5 @@
+_READ-ME.keys.txt
+TVAC/keys/ Directory:
+
+This directory is to store TVAC SSL keys
+Do not deploy this to the TVAC_GUI user.

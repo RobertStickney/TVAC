@@ -1,0 +1,5 @@
+_READ-ME.sandbox.txt
+TVAC/sandbox/ Directory:
+
+This directory is a programming scratch pad with test code. Use at own risk
+Do not deploy this to the TVAC_GUI user.

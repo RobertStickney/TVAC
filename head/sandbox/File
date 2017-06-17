@@ -1,0 +1,48 @@
+https://docs.python.org/3.2/library/os.html#os.open
+os.open(file, flags[, mode])
+Open the file file and set various flags according to flags and possibly its mode according to mode. The default mode is 0o777 (octal), and the current umask value is first masked out. Return the file descriptor for the newly opened file.
+
+For a description of the flag and mode values, see the C run-time documentation; flag constants (like O_RDONLY and O_WRONLY) are defined in this module too (see open() flag constants). In particular, on Windows adding O_BINARY is needed to open files in binary mode.
+
+Availability: Unix, Windows.
+
+Note This function is intended for low-level I/O. For normal usage, use the built-in function open(), which returns a file object with read() and write() methods (and many more). To wrap a file descriptor in a file object, use fdopen().
+
+https://docs.python.org/3.2/library/os.html#open-constants
+15.1.4.1. open() flag constants
+The following constants are options for the flags parameter to the open() function. They can be combined using the bitwise OR operator |. Some of them are not available on all platforms. For descriptions of their availability and use, consult the open(2) manual page on Unix (https://manpages.debian.org/wheezy/manpages-dev/open.2.en.html) or the MSDN on Windows.
+
+os.O_RDONLY
+os.O_WRONLY
+os.O_RDWR, os.O_WRONLY, and os.O_RDONLY: Unlike the other values that can be specified in flags, the access mode values O_RDONLY, O_WRONLY, and O_RDWR, do not specify individual bits. Rather, they define the low order two bits of flags, and are defined respectively as 0, 1, and 2. In other words, the combination O_RDONLY | O_WRONLY is a logical error, and certainly does not have the same meaning as O_RDWR. Linux reserves the special, nonstandard access mode 3 (binary 11) in flags to mean: check for read and write permission on the file and return a descriptor that can't be used for reading or writing.
+os.O_APPEND: The file is opened in append mode. Before each write(2), the file offset is positioned at the end of the file, as if with lseek(2). O_APPEND may lead to corrupted files on NFS file systems if more than one process appends data to a file at once. This is because NFS does not support appending to a file, so the client kernel has to simulate it, which can't be done without a race condition
+os.O_CREAT: If the file does not exist it will be created. The owner (user ID) of the file is set to the effective user ID of the process. The group ownership (group ID) is set either to the effective group ID of the process or to the group ID of the parent directory (depending on file system type and mount options, and the mode of the parent directory, see the mount options bsdgroups and sysvgroups described in mount(8)).
+os.O_EXCL: Ensure that this call creates the file: if this flag is specified in conjunction with O_CREAT, and pathname already exists, then open() will fail.
+os.O_TRUNC: If the file already exists and is a regular file and the open mode allows writing (i.e., is O_RDWR or O_WRONLY) it will be truncated to length 0. If the file is a FIFO or terminal device file, the O_TRUNC flag is ignored. Otherwise the effect of O_TRUNC is unspecified.
+These constants are available on Unix and Windows.
+
+os.O_DSYNC
+os.O_RSYNC, and os.O_DSYNC: POSIX provides for three different variants of synchronized I/O, corresponding to the flags O_SYNC, O_DSYNC, and O_RSYNC. Currently (2.6.31), Linux only implements O_SYNC, but glibc maps O_DSYNC and O_RSYNC to the same numerical value as O_SYNC. Most Linux file systems don't actually implement the POSIX O_SYNC semantics, which require all metadata updates of a write to be on disk on returning to user space, but only the O_DSYNC semantics, which require only actual file data and metadata necessary to retrieve it to be on disk by the time the system call returns.
+os.O_SYNC: The file is opened for synchronous I/O. Any write(2)s on the resulting file descriptor will block the calling process until the data has been physically written to the underlying hardware. But see NOTES below.
+os.O_NDELAY
+os.O_NONBLOCK or os.O_NDELAY: When possible, the file is opened in nonblocking mode. Neither the open() nor any subsequent operations on the file descriptor which is returned will cause the calling process to wait. For the handling of FIFOs (named pipes), see also fifo(7). For a discussion of the effect of O_NONBLOCK in conjunction with mandatory file locks and with file leases, see fcntl(2).
+os.O_NOCTTY: If pathname refers to a terminal device—see tty(4)— it will not become the process's controlling terminal even if the process does not have one.
+os.O_SHLOCK
+os.O_EXLOCK
+These constants are only available on Unix.
+
+os.O_BINARY
+os.O_NOINHERIT
+os.O_SHORT_LIVED
+os.O_TEMPORARY
+os.O_RANDOM
+os.O_SEQUENTIAL
+os.O_TEXT
+These constants are only available on Windows.
+
+os.O_ASYNC: Enable signal-driven I/O: generate a signal (SIGIO by default, but this can be changed via fcntl(2)) when input or output becomes possible on this file descriptor. This feature is only available for terminals, pseudoterminals, sockets, and (since Linux 2.6) pipes and FIFOs. See fcntl(2) for further details.
+os.O_DIRECT: Try to minimize cache effects of the I/O to and from this file. In general this will degrade performance, but it is useful in special situations, such as when applications do their own caching. File I/O is done directly to/from user space buffers. The O_DIRECT flag on its own makes an effort to transfer data synchronously, but does not give the guarantees of the O_SYNC flag that data and necessary metadata are transferred. To guarantee synchronous I/O, O_SYNC must be used in addition to O_DIRECT. See NOTES below for further discussion. A semantically similar (but deprecated) interface for block devices is described in raw(8).
+os.O_DIRECTORY: If pathname is not a directory, cause the open to fail. This flag is Linux-specific, and was added in kernel version 2.1.126, to avoid denial-of-service problems if opendir(3) is called on a FIFO or tape device, but should not be used outside of the implementation of opendir(3).
+os.O_NOFOLLOW: If pathname is a symbolic link, then the open fails. This is a FreeBSD extension, which was added to Linux in version 2.1.126. Symbolic links in earlier components of the pathname will still be followed.
+os.O_NOATIME: Do not update the file last access time (st_atime in the inode) when the file is read(2). This flag is intended for use by indexing or backup programs, where its use can significantly reduce the amount of disk activity. This flag may not be effective on all file systems. One example is NFS, where the server maintains the access time.
+These constants are GNU extensions and not present if they are not defined by the C library.

@@ -1,0 +1,5 @@
+_READ-ME.CTL_server.txt
+TVAC/CTL_server/ Directory:
+
+This directory stores the TVAC Control Server which runs on the ts7250-V2.
+Do not deploy this to the TVAC_GUI user.

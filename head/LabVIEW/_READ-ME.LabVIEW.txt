@@ -1,0 +1,5 @@
+_READ-ME.LabVIEW.txt
+TVAC/LabVIEW/ Directory:
+
+This directory stores the TVAC GUI.
+Should be the only directory deployed to the TVAC_GUI users.
