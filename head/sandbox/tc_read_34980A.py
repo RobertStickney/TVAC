@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from datetime import datetime
 import time
 import sys
 from telnetlib import Telnet
@@ -142,61 +143,62 @@ if (len(sys.argv)>1) and ('-a' in sys.argv):
     print('\n')
 
 print('\n'*3)
+print(datetime.today().strftime('%Y-%m-%d-%H-%M-%S'))
 print("Thermocouple read time: {:.3f}s".format(TCs['time'][-1]))
 
 # Platen 76 - 88
-print("-----Platen Thermocouples (#s 76 - 80")
+print("-----Platen Thermocouples (#s 76 - 80)")
 for n in range(76, 80+1):
     printTC(TCs,n)
-print("-----Platen Feedthough LN2 supply Thermocouple (# 85")
+print("-----Platen Feedthough LN2 supply Thermocouple (# 85)")
 printTC(TCs,85)
-print("-----Platen LN2 supply Thermocouple (# 81")
+print("-----Platen LN2 supply Thermocouple (# 81)")
 printTC(TCs,81)
-print("-----Platen Vent Thermocouples (#s 82 - 84")
+print("-----Platen Vent Thermocouples (#s 82 - 84)")
 for n in range(82, 84+1):
     printTC(TCs,n)
-print("-----Platen Feedthrough Vent Thermocouples (#s 86 - 88")
+print("-----Platen Feedthrough Vent Thermocouples (#s 86 - 88)")
 for n in range(86, 88+1):
     printTC(TCs,n)
 
 # Left Shroud 96 - 100
-print("-----Left Shroud Thermocouples (#s 96 - 100")
+print("-----Left Shroud Thermocouples (#s 96 - 100)")
 for n in range(96, 100+1):
     printTC(TCs,n)
 
 # Top Shroud 101 - 105
-print("-----Top Shroud Thermocouples (#s 101 - 105")
+print("-----Top Shroud Thermocouples (#s 101 - 105)")
 for n in range(101, 105+1):
     printTC(TCs,n)
 
 # Right Shroud 106 - 110
-print("-----Right Shroud Thermocouples (#s 106 - 110")
+print("-----Right Shroud Thermocouples (#s 106 - 110)")
 for n in range(106, 110+1):
     printTC(TCs,n)
 
 # Front Door 111 - 115
-print("-----Front Door Thermocouples (#s 111 - 115")
+print("-----Front Door Thermocouples (#s 111 - 115)")
 for n in range(111, 115+1):
     printTC(TCs,n)
 
 # Back Door 116 - 120
-print("-----Back Door Thermocouples (#s 116 - 120")
+print("-----Back Door Thermocouples (#s 116 - 120)")
 for n in range(116, 120+1):
     printTC(TCs,n)
 
-print("-----Shroud Feedthough LN2 supply Thermocouple (# 91")
+print("-----Shroud Feedthough LN2 supply Thermocouple (# 91)")
 printTC(TCs,91)
-print("-----Shroud Vent Thermocouples (#s 94 - 95")
+print("-----Shroud Vent Thermocouples (#s 94 - 95)")
 printTC(TCs,94)
 printTC(TCs,95)
-print("-----Shroud Feedthrough Vent Thermocouples (#s 92 - 93")
+print("-----Shroud Feedthrough Vent Thermocouples (#s 92 - 93)")
 printTC(TCs,92)
 printTC(TCs,93)
 
 # Chamber Wall 89-90
-print("-----Chamber wall Top Thermocouple (# 89")
+print("-----Chamber wall Top Thermocouple (# 89)")
 printTC(TCs,89)
-print("-----Chamber wall Top Thermocouple (# 90")
+print("-----Chamber wall Top Thermocouple (# 90)")
 printTC(TCs,90)
 
 Tharsis.close()
