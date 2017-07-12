@@ -99,6 +99,24 @@ class TS_Registers():
 		self.pc104.seek(address)
 		self.pc104.write_byte(b)
 
+	def DIO_Write_Pin(self, cardNum, pinNum, value):
+		pinNum = 31 & int(pinNum)
+		addr = (pinN >> 3) + ts.DioOutBaseAddr
+		if cardNum == '2':
+			addr = ts.Dio2_Addr(addr)
+		else:          # assume cardNum = 1
+			addr = ts.Dio1_Addr(addr)
+		b = ts.DIO_Read_byte(addr)
+		print("DIO address: {:x} byte: {:02x}".format(addr, b))
+		if sys.argv[3] == 'set':
+			b |= 0x01 << (7 & pinN)
+		elif sys.argv[3] == 'clear':
+			b &= 0xfe << (7 & pinN)
+		ts.DIO_Write_byte(addr, b)
+		print("Write byte: 0x{:x}".format(b))
+
+
+
 def test_mmap():
 	ts = TS_Registers()
 	ts.open_Registers()
