@@ -1,4 +1,4 @@
-from ZoneCollection import ZoneCollection
+from DataContracts.ZoneCollection import ZoneCollection
 
 class ProfileInstance:
     # Here will be the instance stored.

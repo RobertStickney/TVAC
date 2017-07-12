@@ -1,4 +1,4 @@
-from ZoneCollection import ZoneCollection
+from DataContracts.ZoneCollection import ZoneCollection
 
 class ZonesInstance:
     # Here will be the instance stored.

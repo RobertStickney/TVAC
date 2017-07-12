@@ -1,4 +1,4 @@
-from ProfileInstance import ProfileInstance
+from DataContracts.ProfileInstance import ProfileInstance
 
 
 class PostContol:

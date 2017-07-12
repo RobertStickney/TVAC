@@ -1,5 +1,4 @@
-from ZoneContract import ZoneContract
-from ZoneProfileContract import ZoneProfileContract
+from DataContracts.ZoneProfileContract import ZoneProfileContract
 
 
 class ZoneCollection:

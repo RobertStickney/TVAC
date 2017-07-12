@@ -1,11 +1,8 @@
 import http.server
 import json
-import time
 
-from PostControl import PostContol
-import _thread
-
-from ProfileInstance import ProfileInstance
+from Controlers.PostControl import PostContol
+from DataContracts.ProfileInstance import ProfileInstance
 
 
 class VerbHandler(http.server.BaseHTTPRequestHandler):
