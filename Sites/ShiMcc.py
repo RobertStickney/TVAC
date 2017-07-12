@@ -162,8 +162,8 @@ class ShiMcc:
 
     def startRegen(self,num):
         if (num < 0) | (num > 4):
-            print('First stage control method is out of range (0-3): {:d}'.format(method))
-            return self.formatResponce("Temp out of range: " + str(method), error=True)
+        print('First stage control method is out of range (0-4): {:d}'.format(num))
+        return Format_Responce("Temp out of range: "+str(num), error = True)
         return self.sendCmd("N{0:d}".format(num))
 
     def getRegenCycles(self):  # Command Ex: "$Z?K\r"
@@ -205,32 +205,33 @@ class ShiMcc:
     def getRegenParam_z(self):
         return self.sendCmd("Pz?")
 
-    def setRegenParam(self,Param, Value):
-        if (int(Param) == '0') & ((Value < 0) | (Value > 59994)):
-            return self.formatResponce("RegenParam: Pump Restart Delay out of range: " + str(Value), error=True)
-        elif (int(Param) == '1') & ((Value < 0) | (Value > 9990)):
-            return self.formatResponce("RegenParam: Extend Purge time out of range: " + str(Value), error=True)
-        elif (int(Param) == '2') & ((Value < 0) | (Value > 200)):
-            return self.formatResponce("RegenParam: Repurge Cycles out of range: " + str(Value), error=True)
-        elif (int(Param) == '3') & ((Value < 25) | (Value > 200)):
-            return self.formatResponce("RegenParam: Rough to Pressure out of range: " + str(Value), error=True)
-        elif (int(Param) == '4') & ((Value < 1) | (Value > 100)):
-            return self.formatResponce("RegenParam: Rate of Rise out of range: " + str(Value), error=True)
-        elif (int(Param) == '5') & ((Value < 0) | (Value > 200)):
-            return self.formatResponce("RegenParam: Rate of Rise Cycles out of range: " + str(Value), error=True)
-        elif (int(Param) == '6') & ((Value < 0) | (Value > 80)):
-            return self.formatResponce("RegenParam: Restart Temperature out of range: " + str(Value), error=True)
-        elif (str(Param) == 'A') & ((Value < 0) | (Value > 1)):
-            return self.formatResponce("RegenParam: Roughing Interlock not 0 or 1: " + str(Value), error=True)
-        elif (str(Param) == 'C') & ((Value < 1) | (Value > 3)):
-            return self.formatResponce("RegenParam: Pumps per Compressor: " + str(Value), error=True)
-        elif (str(Param) == 'G') & ((Value < 0) | (Value > 9999)):
-            return self.formatResponce("RegenParam: Repurge time out of range: " + str(Value), error=True)
-        elif (str(Param) == 'z') & ((Value < 0) | (Value > 1)):
-            return self.formatResponce("RegenParam: Stand by mode not 0 or 1: " + str(Value), error=True)
+    def setRegenParam(self, Param, Value): # expected call: Set_RegenParam(chr(int), int)
+        if   (Param not in ['0', '1', '2', '3', '4', '5', '6', 'A', 'C', 'G', 'z']):
+            return Format_Responce("Parameter out of range: "+str(Param), error = True)
+        elif   (Param == '0') & ((Value < 0) | (Value > 59994)):
+            return Format_Responce("RegenParam: Pump Restart Delay out of range: "+str(Value), error = True)
+        elif (Param == '1') & ((Value < 0) | (Value > 9990)):
+            return Format_Responce("RegenParam: Extend Purge time out of range: "+str(Value), error = True)
+        elif (Param == '2') & ((Value < 0) | (Value > 200)):
+            return Format_Responce("RegenParam: Repurge Cycles out of range: "+str(Value), error = True)
+        elif (Param == '3') & ((Value < 25)| (Value > 200)):
+            return Format_Responce("RegenParam: Rough to Pressure out of range: "+str(Value), error = True)
+        elif (Param == '4') & ((Value < 1) | (Value > 100)):
+            return Format_Responce("RegenParam: Rate of Rise out of range: "+str(Value), error = True)
+        elif (Param == '5') & ((Value < 0) | (Value > 200)):
+            return Format_Responce("RegenParam: Rate of Rise Cycles out of range: "+str(Value), error = True)
+        elif (Param == '6') & ((Value < 0) | (Value > 80)):
+            return Format_Responce("RegenParam: Restart Temperature out of range: "+str(Value), error = True)
+        elif (Param == 'A') & ((Value < 0) | (Value > 1)):
+            return Format_Responce("RegenParam: Roughing Interlock not 0 or 1: "+str(Value), error = True)
+        elif (Param == 'C') & ((Value < 1) | (Value > 3)):
+            return Format_Responce("RegenParam: Pumps per Compressor: "+str(Value), error = True)
+        elif (Param == 'G') & ((Value < 0) | (Value > 9999)):
+            return Format_Responce("RegenParam: Repurge time out of range: "+str(Value), error = True)
+        elif (Param == 'z') & ((Value < 0) | (Value > 1)):
+            return Format_Responce("RegenParam: Stand by mode not 0 or 1: "+str(Value), error = True)
         else:
-            return self.formatResponce("Parameter out of range: " + str(Param), error=True)
-        return self.sendCmd("P" + str(Param) + str(Value))
+            return Send_cmd("P"+str(Param)+str(Value))
 
     def getRegenStep(self):  # Command Ex: "$O>\r"
         return self.sendcmd("O")
