@@ -1,0 +1,75 @@
+{
+	"Profiles": [{
+		"zone": 1,
+		"steps":
+		[
+			{
+				"Step": 0,
+				"TempGoal": 273.15,
+				"Ramp": 3,
+				"GoalDuration": 10,
+				"Average": 1,
+				"ThermalCouples": [
+					1,
+					2,
+					3,
+					4,
+					5
+				]
+			},
+			{
+				"Step": 1,
+				"TempGoal": 283.75,
+				"Ramp": 4,
+				"GoalDuration": 15,
+				"Average": 2,
+				"ThermalCouples": [
+					6,
+					7,
+					8
+				]
+			},
+			{
+				"Step": 2,
+				"TempGoal": 293.75,
+				"Ramp": 5,
+				"GoalDuration": 5,
+				"Average": 3,
+				"ThermalCouples": [
+					9,
+					10,
+					11
+				]
+			}
+		]
+	}
+	,
+		{
+			"zone": 2,
+			"steps":[{
+				"Step": 0,
+				"TempGoal": 273.15,
+				"Ramp": 3,
+				"GoalDuration": 5,
+				"Average": 1,
+				"ThermalCouples": [1, 2, 3, 4, 5]
+			},
+				{
+					"Step": 1,
+					"TempGoal": 283.75,
+					"Ramp": 4,
+					"GoalDuration": 15,
+					"Average": 2,
+					"ThermalCouples": [6, 7, 8]
+				}, {
+					"Step": 2,
+					"TempGoal": 293.75,
+					"Ramp": 5,
+					"GoalDuration": 10,
+					"Average": 3,
+					"ThermalCouples": [9, 10, 11]
+				}
+			]
+		}
+	]
+}

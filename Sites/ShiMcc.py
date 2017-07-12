@@ -2,7 +2,7 @@ import time
 import json
 
 from ZoneContract import ZoneContract
-from ZonesInstance import ZonesInstance
+from ProfileInstance import ZonesInstance
 
 
 class ShiMcc:

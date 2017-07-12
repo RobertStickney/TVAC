@@ -1,23 +1,26 @@
 from ZoneContract import ZoneContract
+from ZoneProfileContract import ZoneProfileContract
+
 
 class ZoneCollection:
 
     def __init__(self):
         zoneDictEmpty = {}
-        listOfZones = [ZoneContract(zoneDictEmpty)];
-        self.zoneDict = {"zone1":ZoneContract(zoneDictEmpty),
-                         "zone2":ZoneContract(zoneDictEmpty),
-                         "zone3":ZoneContract(zoneDictEmpty),
-                         "zone4":ZoneContract(zoneDictEmpty),
-                         "zone5":ZoneContract(zoneDictEmpty),
-                         "zone6":ZoneContract(zoneDictEmpty),
-                         "zone7":ZoneContract(zoneDictEmpty),
-                         "zone8":ZoneContract(zoneDictEmpty),
-                         "zone9":ZoneContract(zoneDictEmpty)}
+
+        self.zoneDict = {"zone1":ZoneProfileContract(zoneDictEmpty),
+                         "zone2":ZoneProfileContract(zoneDictEmpty),
+                         "zone3":ZoneProfileContract(zoneDictEmpty),
+                         "zone4":ZoneProfileContract(zoneDictEmpty),
+                         "zone5":ZoneProfileContract(zoneDictEmpty),
+                         "zone6":ZoneProfileContract(zoneDictEmpty),
+                         "zone7":ZoneProfileContract(zoneDictEmpty),
+                         "zone8":ZoneProfileContract(zoneDictEmpty),
+                         "zone9":ZoneProfileContract(zoneDictEmpty)}
 
     def update(self,d):
-        zoneName = "zone"+str(d.zone)
-        self.zoneDict[zoneName].update(d)
+        for zoneProfile in d['Profiles']:
+            zoneName = "zone"+str(zoneProfile['zone'])
+            self.zoneDict[zoneName].update(zoneProfile)
 
     def getZone(self,d):
         return self.zoneDict[d]
