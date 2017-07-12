@@ -203,32 +203,33 @@ def Get_RegenParam_G():
     return Send_cmd("PG?")
 def Get_RegenParam_z():
     return Send_cmd("Pz?")
-def Set_RegenParam(Param, Value):
-    if   (int(Param) == '0') & ((Value < 0) | (Value > 59994)):
+def Set_RegenParam(Param, Value): # expected call: Set_RegenParam(chr(int), int)
+    if   (Param not in ['0', '1', '2', '3', '4', '5', '6', 'A', 'C', 'G', 'z']):
+        return Format_Responce("Parameter out of range: "+str(Param), error = True)
+    elif   (Param == '0') & ((Value < 0) | (Value > 59994)):
         return Format_Responce("RegenParam: Pump Restart Delay out of range: "+str(Value), error = True)
-    elif (int(Param) == '1') & ((Value < 0) | (Value > 9990)):
+    elif (Param == '1') & ((Value < 0) | (Value > 9990)):
         return Format_Responce("RegenParam: Extend Purge time out of range: "+str(Value), error = True)
-    elif (int(Param) == '2') & ((Value < 0) | (Value > 200)):
+    elif (Param == '2') & ((Value < 0) | (Value > 200)):
         return Format_Responce("RegenParam: Repurge Cycles out of range: "+str(Value), error = True)
-    elif (int(Param) == '3') & ((Value < 25)| (Value > 200)):
+    elif (Param == '3') & ((Value < 25)| (Value > 200)):
         return Format_Responce("RegenParam: Rough to Pressure out of range: "+str(Value), error = True)
-    elif (int(Param) == '4') & ((Value < 1) | (Value > 100)):
+    elif (Param == '4') & ((Value < 1) | (Value > 100)):
         return Format_Responce("RegenParam: Rate of Rise out of range: "+str(Value), error = True)
-    elif (int(Param) == '5') & ((Value < 0) | (Value > 200)):
+    elif (Param == '5') & ((Value < 0) | (Value > 200)):
         return Format_Responce("RegenParam: Rate of Rise Cycles out of range: "+str(Value), error = True)
-    elif (int(Param) == '6') & ((Value < 0) | (Value > 80)):
+    elif (Param == '6') & ((Value < 0) | (Value > 80)):
         return Format_Responce("RegenParam: Restart Temperature out of range: "+str(Value), error = True)
-    elif (str(Param) == 'A') & ((Value < 0) | (Value > 1)):
+    elif (Param == 'A') & ((Value < 0) | (Value > 1)):
         return Format_Responce("RegenParam: Roughing Interlock not 0 or 1: "+str(Value), error = True)
-    elif (str(Param) == 'C') & ((Value < 1) | (Value > 3)):
+    elif (Param == 'C') & ((Value < 1) | (Value > 3)):
         return Format_Responce("RegenParam: Pumps per Compressor: "+str(Value), error = True)
-    elif (str(Param) == 'G') & ((Value < 0) | (Value > 9999)):
+    elif (Param == 'G') & ((Value < 0) | (Value > 9999)):
         return Format_Responce("RegenParam: Repurge time out of range: "+str(Value), error = True)
-    elif (str(Param) == 'z') & ((Value < 0) | (Value > 1)):
+    elif (Param == 'z') & ((Value < 0) | (Value > 1)):
         return Format_Responce("RegenParam: Stand by mode not 0 or 1: "+str(Value), error = True)
     else:
-        return Format_Responce("Parameter out of range: "+str(Param), error = True)
-    return Send_cmd("P"+str(Param)+str(Value))
+        return Send_cmd("P"+str(Param)+str(Value))
 
 # 2.20 • Regeneration Sequence pg:17
 def Get_RegenStep(): # Command Ex: "$O>\r"
