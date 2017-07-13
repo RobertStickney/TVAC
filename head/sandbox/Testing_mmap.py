@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+ #!/usr/bin/env python3
 
 import time
 import os
@@ -87,33 +87,43 @@ class TS_Registers():
 		self.setEVGPIO(3)
 		self.clearEVGPIO(7)
 
-	def DIO_Read(self, address):
-		self.pc104.seek(address)
+	def DIO_Read(self, cardNum = 1, DigIn = True):
+		if DigIn:	# read to digital inputs
+			if cardNum == '2':
+				addr = self.Dio2_Addr(self.DioInBaseAddr)
+			else:
+				addr = self.Dio1_Addr(self.DioInBaseAddr)
+		else: 		# read to digital outputs
+			if cardNum == '2':
+				addr = self.Dio2_Addr(self.DioOutBaseAddr)
+			else:
+				addr = self.Dio1_Addr(self.DioOutBaseAddr)
+		self.pc104.seek(addr)
 		return self.pc104.read(4)
 
-	def DIO_Read_byte(self, address):
+	def __DIO_Read_byte__(self, address):
 		self.pc104.seek(address)
 		return self.pc104.read_byte()
 
-	def DIO_Write_byte(self, address, b):
+	def __DIO_Write_byte__(self, address, b):
 		self.pc104.seek(address)
 		self.pc104.write_byte(b)
 
-	def DIO_Write_Pin(self, cardNum, pinNum, value):
+	def DIO_Write_Pin(self, cardNum, pinNum, setBit):
 		pinNum = 31 & int(pinNum)
-		addr = (pinN >> 3) + ts.DioOutBaseAddr
+		addr = (pinNum >> 3) + self.DioOutBaseAddr
 		if cardNum == '2':
-			addr = ts.Dio2_Addr(addr)
+			addr = self.Dio2_Addr(addr)
 		else:          # assume cardNum = 1
-			addr = ts.Dio1_Addr(addr)
-		b = ts.DIO_Read_byte(addr)
-		print("DIO address: {:x} byte: {:02x}".format(addr, b))
-		if sys.argv[3] == 'set':
-			b |= 0x01 << (7 & pinN)
-		elif sys.argv[3] == 'clear':
-			b &= 0xfe << (7 & pinN)
-		ts.DIO_Write_byte(addr, b)
-		print("Write byte: 0x{:x}".format(b))
+			addr = self.Dio1_Addr(addr)
+		b = self.__DIO_Read_byte__(addr)
+		#print("DIO address: {:x}; byte: {:02x}".format(addr, b))
+		if setBit:
+			b |= 0x01 << (7 & pinNum)
+		else: # clearBit 
+			b &= 0xfe << (7 & pinNum)
+		self.__DIO_Write_byte__(addr, b)
+		#print("Write byte: 0x{:x}".format(b))
 
 
 
@@ -160,32 +170,15 @@ if __name__ == '__main__':
 				addr = ts.Dio2_Addr(ts.DioInBaseAddr)
 			else:
 				addr = ts.Dio1_Addr(ts.DioInBaseAddr)
-			b = ts.DIO_Read(addr)
+			b = ts.DIO_Read(sys.argv[2])
 			print(type(b))
-			print("DIO address: {:x} bytes: 0x{:02x} {:02x} {:02x} {:02x}".format(addr, 
-											ts.DIO_Read_byte(addr+3), 
-											ts.DIO_Read_byte(addr+2), 
-											ts.DIO_Read_byte(addr+1), 
-											ts.DIO_Read_byte(addr+0)))
+			print("DIO address: {:x} bytes: 0x{:02x} {:02x} {:02x} {:02x}".format(addr, b[3], b[2], b[1], b[1]))
 		elif sys.argv[1] == 'do':
 			if (len(sys.argv)>4):
-				pinN = 31 & int(sys.argv[4])
-				addr = (pinN >> 3) + ts.DioOutBaseAddr
-				if sys.argv[2] == '2':
-					addr = ts.Dio2_Addr(addr)
-				else:
-					addr = ts.Dio1_Addr(addr)
-				b = ts.DIO_Read_byte(addr)
-				print("DIO address: {:x} byte: {:02x}".format(addr, b))
-				if sys.argv[3] == 'set':
-					b |= 0x01 << (7 & pinN)
+				if sys.argv[3] == 'set': #cardNum, pinNum,    SetBit
+					ts.DIO_Write_Pin(sys.argv[2],sys.argv[4], True)
 				elif sys.argv[3] == 'clear':
-					b &= 0xfe << (7 & pinN)
-				ts.DIO_Write_byte(addr, b)
-				print("Write byte: 0x{:x}".format(b))
-
-
-
+					ts.DIO_Write_Pin(sys.argv[2],sys.argv[4], False)
 
 
 	ts.close()

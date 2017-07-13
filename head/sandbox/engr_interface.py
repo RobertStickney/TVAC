@@ -9,18 +9,21 @@ import subprocess
 
 import SHI_MCC_Interface
 from Pfeiffer_guage_Interface import *
+from Testing_mmap import TS_Registers, setup_pc104
 
 #server_Address = ""
 #server_Address = "10.0.1.201"
-server_Address = "192.168.99.201"
+server_Address = "192.168.99.1"
 server_Port = 8080
 
 class MyHandler(http.server.CGIHTTPRequestHandler):
 
-    allow_reuse_address = True
-    cgi_directories = ""
-    cmd_buff_len = 0
-    cmd_buff = ""
+    self.allow_reuse_address = True
+    self.cgi_directories = ""
+    self.cmd_buff_len = 0
+    self.cmd_buff = ""
+           self.DigIO = setup_pc104
+
 
     def printCommand(self):
         print("Command:", self.command)
@@ -79,27 +82,16 @@ class MyHandler(http.server.CGIHTTPRequestHandler):
                 resp['Pressure'].append(Pfeiffer_GetPressure(gauge))
             buff = json.dumps(resp)
         elif self.path.startswith("/setPin"):
-            setPin = json.loads(self.cmd_buff)
-            setPin.insert(0, 'tsctl-noncavium')
-            setPin.insert(1, 'DIO')
-            setPin.insert(2, 'SetAsync')
-            print(setPin)
-            buff = json.dumps(subprocess.check_call(setPin))
+            args = json.loads(self.cmd_buff)
+            if args[2] == 1:
+                self.DigIO.DIO_Write_Pin(args[0], args[1], True)
+            else:
+                self.DigIO.DIO_Write_Pin(args[0], args[1], False)
         elif self.path.startswith("/getPins"):
-            resp = dict(PinsOut = [], PinsIn = [])
-            for i in range(1, 6+1):
-                resp['PinsOut'].append(subprocess.check_output([
-                    "tsctl-noncavium", 
-                    "DIO", 
-                    "GetAsync", 
-                    "8820_out{:d}".format(i)], universal_newlines=True))
-            for i in range(1, 14+1):
-                resp['PinsIn'].append(subprocess.check_output([
-                    "tsctl-noncavium", 
-                    "DIO", 
-                    "GetAsync", 
-                    "8820_in{:d}".format(i)], universal_newlines=True))
-            buff = json.dumps(resp)
+            buff = json.dumps(list(self.DigIO.DIO_Read(1,False)) 
+                            + list(self.DigIO.DIO_Read(2,False)) 
+                            + list(self.DigIO.DIO_Read(1,True)) 
+                            + list(self.DigIO.DIO_Read(2,True)))
         elif self.path.startswith("/MCC_cmd/"):
             if '/get/' in self.path:
                 if 'MCC_ver' in self.path:
@@ -187,7 +179,9 @@ class MyHandler(http.server.CGIHTTPRequestHandler):
         http.server.CGIHTTPRequestHandler.do_HEAD(self)
 
 
+
 print('\n'*4)
+TS_Registers.getInstance
 httpd = socketserver.TCPServer(( server_Address, server_Port), MyHandler )
 print("Serving HTTP requests at: ", server_Address, ":", server_Port)
 httpd.serve_forever()
