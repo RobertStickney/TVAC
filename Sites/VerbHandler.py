@@ -22,7 +22,10 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
         control = PostContol()
 
         result = {
-            '/setProfile': control.loadProfile
+            '/setProfile': control.loadProfile,
+            '/runProfiles': control.runProfile,
+            '/runSingleProfile': control.runSingleProfile,
+            '/checkThreadStatus': control.checkTreadStatus
         }[path](contractObj)
 
 
@@ -41,25 +44,25 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
     def displayZones(self):
         zonesInstance = ProfileInstance.getInstance()
         message = []
-        message.append("[")
-        message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone1").__dict__))
-        message.append(",")
-        message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone2").__dict__))
-        message.append(",")
-        message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone3").__dict__))
-        message.append(",")
-        message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone4").__dict__))
-        message.append(",")
-        message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone5").__dict__))
-        message.append(",")
-        message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone6").__dict__))
-        message.append(",")
-        message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone7").__dict__))
-        message.append(",")
-        message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone8").__dict__))
-        message.append(",")
-        message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone9").__dict__))
-        message.append("]")
+        # message.append("[")
+        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone1").__dict__))
+        # message.append(",")
+        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone2").__dict__))
+        # message.append(",")
+        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone3").__dict__))
+        # message.append(",")
+        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone4").__dict__))
+        # message.append(",")
+        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone5").__dict__))
+        # message.append(",")
+        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone6").__dict__))
+        # message.append(",")
+        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone7").__dict__))
+        # message.append(",")
+        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone8").__dict__))
+        # message.append(",")
+        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone9").__dict__))
+        # message.append("]")
         self.wfile.write(''.join(message).encode())
 
 
