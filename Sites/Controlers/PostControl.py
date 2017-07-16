@@ -19,6 +19,16 @@ class PostContol:
         threadInstance.threadCollection.runSingleThread(data);
         return "{'result':'success'}"
 
+    def pauseSingleThread(self,data):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        threadInstance.threadCollection.pause(data)
+        return "{'result':'success'}"
+
+    def removePauseSingleThread(self,data):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        threadInstance.threadCollection.removePause(data)
+        return "{'result':'success'}"
+
     def checkTreadStatus(self,data):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.checkThreadStatus()

@@ -5,11 +5,11 @@ from DataContracts.TermalProfileContract import TermalProfileContract
 class ZoneProfileContract:
     def __init__(self, d):
         if 'zone' in d:
-            self.zoneID = d['zone']
+            self.zone = d['zone']
         else:
             self.zone = 0
         if 'Average' in d:
-            self.average = d['Average']
+            self.zone = d['Average']
         else:
             self.average = 0
         if 'TermalProfiles' in d:
@@ -17,11 +17,15 @@ class ZoneProfileContract:
         else:
             self.termalProfiles = ''
         if 'ThermalCouples' in d:
-            self.thermalCouples = []
-            for couple in d['ThermalCouples']:
-                self.thermalCouples.append(TermalCoupleContract(couple))
+            self.thermalCouples = self.setThermakCouples(d['ThermalCouples'])
         else:
             self.thermalCouples = []
+
+    def setThermakCouples(self,thermalCouples):
+        list = []
+        for couple in thermalCouples:
+            list.append(TermalCoupleContract(couple))
+        return list
 
     def setTermalProfiles(self,termalProfiles):
         list = []
@@ -37,5 +41,31 @@ class ZoneProfileContract:
         if 'TermalProfiles' in d:
             self.termalProfiles = self.setTermalProfiles(d['TermalProfiles'])
         if 'ThermalCouples' in d:
-            for couple in d['ThermalCouples']:
-                self.thermalCouples.append(TermalCoupleContract(couple))
+            self.thermalCouples = self.setThermakCouples(d['ThermalCouples'])
+
+    def getJson(self):
+        message = []
+        message.append('{"zone":%s,' % self.zone)
+        message.append('"average":%s,' % self.average)
+        message.append('"termalprofiles":[')
+        profileLen = len(self.termalProfiles)
+        count = 0
+        for profile in self.termalProfiles:
+            message.append(profile.getJson())
+            if count < (profileLen - 1):
+                message.append(',')
+                count = count + 1
+
+        message.append('],')
+        message.append('"thermalcouples":[')
+        coupleLen = len(self.thermalCouples)
+        count = 0
+        for couple in self.thermalCouples:
+            message.append(couple.getJson())
+            if count < (coupleLen - 1):
+                message.append(',')
+                count = count + 1
+
+        message.append(']}')
+        test = ''.join(message)
+        return test

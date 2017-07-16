@@ -25,7 +25,9 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             '/setProfile': control.loadProfile,
             '/runProfiles': control.runProfile,
             '/runSingleProfile': control.runSingleProfile,
-            '/checkThreadStatus': control.checkTreadStatus
+            '/checkThreadStatus': control.checkTreadStatus,
+            '/pauseThread': control.pauseSingleThread,
+            '/pauseRemoveThread': control.removePauseSingleThread
         }[path](contractObj)
 
 
@@ -42,28 +44,8 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
 
     def displayZones(self):
-        zonesInstance = ProfileInstance.getInstance()
-        message = []
-        # message.append("[")
-        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone1").__dict__))
-        # message.append(",")
-        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone2").__dict__))
-        # message.append(",")
-        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone3").__dict__))
-        # message.append(",")
-        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone4").__dict__))
-        # message.append(",")
-        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone5").__dict__))
-        # message.append(",")
-        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone6").__dict__))
-        # message.append(",")
-        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone7").__dict__))
-        # message.append(",")
-        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone8").__dict__))
-        # message.append(",")
-        # message.append(json.dumps(zonesInstance.zoneProfiles.getZone("zone9").__dict__))
-        # message.append("]")
-        self.wfile.write(''.join(message).encode())
+        profileInstance = ProfileInstance.getInstance()
+        self.wfile.write(profileInstance.zoneProfiles.getJson().encode())
 
 
 

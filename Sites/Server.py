@@ -8,6 +8,7 @@ PORT = 8000
 
 profileInstance = ProfileInstance.getInstance()
 threadInstance = ThreadCollectionInstance.getInstance()
+
 httpd = socketserver.TCPServer(("", PORT), VerbHandler)
 
 print("serving")
