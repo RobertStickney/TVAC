@@ -9,7 +9,7 @@ class ThreadCollection:
         self.threadDict = self.createCollection()
 
     def createCollection(self):
-        return {"zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': random.randrange(10)})),
+        return {"zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10})),
          "zone2": HardWareControlStub(args=('zone2',), kwargs=({'pause': random.randrange(10)})),
          "zone3": HardWareControlStub(args=('zone3',), kwargs=({'pause': random.randrange(10)})),
          "zone4": HardWareControlStub(args=('zone4',), kwargs=({'pause': random.randrange(10)})),
@@ -42,3 +42,16 @@ class ThreadCollection:
     def removePause(self,data):
         thread = data['zone']
         self.threadDict[thread].paused = False
+
+    def holdThread(self,data):
+        thread = data['zone']
+        self.threadDict[thread].hold = True
+
+    def releaseHoldThread(self,data):
+        thread = data['zone']
+        self.threadDict[thread].hold = False
+
+    def abortThread(self,data):
+        thread = data['zone']
+        self.threadDict[thread].terminate()
+        self.threadDict[thread] = HardWareControlStub(args=(thread,), kwargs=({'pause': 10}))

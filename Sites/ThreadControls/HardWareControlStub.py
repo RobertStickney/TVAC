@@ -16,23 +16,28 @@ class HardWareControlStub(Thread):
         self.kwargs = kwargs
         self.handeled = False
         self.paused = False
+        self.step = 0
+        self.hold = False
+        self.runCount = 0
+
         return
 
     def run(self):
-        tempGoal = self.profile.termalProfiles[0].tempGoal
+        tempGoal = self.profile.termalProfiles[self.step].tempGoal
         print('running ', self.args, self.kwargs, ' Goal temp ', tempGoal, ' temp ',
-              self.profile.termalProfiles[0].temp, ' is alive ', self.is_alive())
-        runCount = self.kwargs['pause']
+              self.profile.termalProfiles[self.step].temp, ' is alive ', self.is_alive())
+        self.runCount = self.kwargs['pause']
 
-        while runCount > 0:
-            self.profile.termalProfiles[0].temp = tempGoal
+        while self.runCount > 0:
+            self.profile.termalProfiles[self.step].temp = tempGoal
             self.checkPause()
+            self.checkHold()
             time.sleep(1)
-            runCount = runCount - 1
-            print(runCount)
+            self.runCount = self.runCount - 1
+            print(self.runCount)
 
         print('running ', self.args, self.kwargs, ' Goal temp ', tempGoal, ' temp ',
-              self.profile.termalProfiles[0].temp, ' is alive ', self.is_alive())
+              self.profile.termalProfiles[self.step].temp, ' is alive ', self.is_alive())
 
         self.handeled = True
         return
@@ -41,3 +46,25 @@ class HardWareControlStub(Thread):
         while(self.paused):
             print('paused')
             time.sleep(.5)
+
+    def checkHold(self):
+        tempHold = self.profile.termalProfiles[self.step].hold
+
+        if self.hold and not tempHold:
+            self.profile.termalProfiles[self.step].heldTemp = self.profile.termalProfiles[self.step].tempGoal
+            self.profile.termalProfiles[self.step].tempGoal = self.profile.termalProfiles[self.step].temp
+            self.profile.termalProfiles[self.step].hold = True
+
+        if not self.hold and tempHold:
+            self.profile.termalProfiles[self.step].tempGoal = self.profile.termalProfiles[self.step].heldTemp
+            self.profile.termalProfiles[self.step].heldTemp = 0
+            self.profile.termalProfiles[self.step].hold = False
+
+    def terminate(self):
+        self.runCount = 0
+
+
+
+
+
+

@@ -18,6 +18,8 @@ class TermalProfileContract:
             self.ramp = 0
         self.duration = 0
         self.temp = 0
+        self.hold = False
+        self.heldTemp = 0
 
     def update(self, d):
         if 'TempGoal' in d:

@@ -25,13 +25,16 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             '/setProfile': control.loadProfile,
             '/runProfiles': control.runProfile,
             '/runSingleProfile': control.runSingleProfile,
-            '/checkThreadStatus': control.checkTreadStatus,
-            '/pauseThread': control.pauseSingleThread,
-            '/pauseRemoveThread': control.removePauseSingleThread
+            '/checkZoneStatus': control.checkTreadStatus,
+            '/pauseZone': control.pauseSingleThread,
+            '/pauseRemoveZone': control.removePauseSingleThread,
+            '/holdZone': control.holdSingleThread,
+            '/abortZone': control.abortSingleThread
         }[path](contractObj)
 
 
         self.setHeader()
+        self.wfile.write(result.encode())
         self.displayZones()
 
     def getBody(self):

@@ -33,3 +33,13 @@ class PostContol:
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.checkThreadStatus()
         return "{'result':'success'}"
+
+    def holdSingleThread(self,data):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        threadInstance.threadCollection.holdThread(data)
+        return "{'result':'success'}"
+
+    def abortSingleThread(self,data):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        threadInstance.threadCollection.abortThread(data)
+        return "{'result':'success'}"
