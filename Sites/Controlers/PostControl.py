@@ -43,3 +43,8 @@ class PostContol:
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.abortThread(data)
         return "{'result':'success'}"
+
+    def calculateRamp(self,data):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        threadInstance.threadCollection.calculateRamp(data)
+        return "{'result':'success'}"

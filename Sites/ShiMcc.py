@@ -1,20 +1,11 @@
 import json
 import time
 
-from DataContracts.ProfileInstance import ZonesInstance
-from DataContracts.ZoneContract import ZoneContract
-
 
 class ShiMcc:
 
     def getChecksum(self,cmd):  # append the sum of the string's bytes mod 256 + '\r'
         d = sum(cmd.encode())
-        contractObj = ZoneContract(json.loads('{"zone":6,"temp":"updateing"}'))
-        zonesInstance = ZonesInstance.getInstance()
-        zonesInstance.zones.update(contractObj)
-        time.sleep(60)
-        contractObj2 = ZoneContract(json.loads('{"zone":6,"temp":"updated"}'))
-        zonesInstance.zones.update(contractObj2)
         #       0x30 + ( (d2 to d6) or (d0 xor d6) or ((d1 xor d7) shift to d2)
         return 0x30 + ((d & 0x3c) |
                        ((d & 0x01) ^ ((d & 0x40) >> 6)) |  # (d0 xor d6)

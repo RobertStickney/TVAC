@@ -29,13 +29,12 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             '/pauseZone': control.pauseSingleThread,
             '/pauseRemoveZone': control.removePauseSingleThread,
             '/holdZone': control.holdSingleThread,
-            '/abortZone': control.abortSingleThread
+            '/abortZone': control.abortSingleThread,
+            '/calculateRamp': control.calculateRamp
         }[path](contractObj)
-
 
         self.setHeader()
         self.wfile.write(result.encode())
-        self.displayZones()
 
     def getBody(self):
         content_len = int(self.headers['content-length'])

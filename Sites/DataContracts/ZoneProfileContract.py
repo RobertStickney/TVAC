@@ -8,18 +8,20 @@ class ZoneProfileContract:
             self.zone = d['zone']
         else:
             self.zone = 0
-        if 'Average' in d:
-            self.zone = d['Average']
+        if 'average' in d:
+            self.zone = d['average']
         else:
             self.average = 0
-        if 'TermalProfiles' in d:
-            self.termalProfiles = self.setTermalProfiles(d['TermalProfiles'])
+        if 'termalprofiles' in d:
+            self.termalProfiles = self.setTermalProfiles(d['termalprofiles'])
         else:
             self.termalProfiles = ''
-        if 'ThermalCouples' in d:
-            self.thermalCouples = self.setThermakCouples(d['ThermalCouples'])
+        if 'thermalcouples' in d:
+            self.thermalCouples = self.setThermakCouples(d['thermalcouples'])
         else:
             self.thermalCouples = []
+
+        self.uuid = ''
 
     def setThermakCouples(self,thermalCouples):
         list = []
@@ -36,12 +38,14 @@ class ZoneProfileContract:
     def update(self, d):
         if 'zone' in d:
             self.zone = d['zone']
-        if 'Average' in d:
-            self.average = d['Average']
-        if 'TermalProfiles' in d:
-            self.termalProfiles = self.setTermalProfiles(d['TermalProfiles'])
-        if 'ThermalCouples' in d:
-            self.thermalCouples = self.setThermakCouples(d['ThermalCouples'])
+        if 'uuid' in d:
+            self.uuid = d['uuid']
+        if 'average' in d:
+            self.average = d['average']
+        if 'termalprofiles' in d:
+            self.termalProfiles = self.setTermalProfiles(d['termalprofiles'])
+        if 'thermalcouples' in d:
+            self.thermalCouples = self.setThermakCouples(d['thermalcouples'])
 
     def getJson(self):
         message = []

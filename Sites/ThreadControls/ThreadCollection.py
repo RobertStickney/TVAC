@@ -55,3 +55,7 @@ class ThreadCollection:
         thread = data['zone']
         self.threadDict[thread].terminate()
         self.threadDict[thread] = HardWareControlStub(args=(thread,), kwargs=({'pause': 10}))
+
+    def calculateRamp(self,data):
+        thread = data['zone']
+        self.threadDict[thread].calculateRamp()

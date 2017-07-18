@@ -1,19 +1,19 @@
 class TermalProfileContract:
     def __init__(self, d):
-        if 'TermalSetPoint' in d:
-            self.termalsetpoint = d['TermalSetPoint']
+        if 'termalsetpoint' in d:
+            self.termalsetpoint = d['termalsetpoint']
         else:
             self.zone = 0
-        if 'TempGoal' in d:
-            self.tempGoal = d['TempGoal']
+        if 'tempgoal' in d:
+            self.tempGoal = d['tempgoal']
         else:
             self.temp = 0
-        if 'GoalDuration' in d:
-            self.goalDuration = d['GoalDuration']
+        if 'soakduration' in d:
+            self.soakduration = d['soakduration']
         else:
-            self.goalDuration = 0
-        if 'Ramp' in d:
-            self.ramp = d['Ramp']
+            self.soakduration = 0
+        if 'ramp' in d:
+            self.ramp = d['ramp']
         else:
             self.ramp = 0
         self.duration = 0
@@ -22,12 +22,12 @@ class TermalProfileContract:
         self.heldTemp = 0
 
     def update(self, d):
-        if 'TempGoal' in d:
-            self.tempGoal = d['TempGoal']
-        if 'GoalDuration' in d:
-            self.goalDuration = d['GoalDuration']
-        if 'Ramp' in d:
-            self.ramp = d['Ramp']
+        if 'tempgoal' in d:
+            self.tempGoal = d['tempgoal']
+        if 'soakduration' in d:
+            self.soakduration = d['soakduration']
+        if 'ramp' in d:
+            self.ramp = d['ramp']
         if 'temp' in d:
             self.temp = d['temp']
         if 'duration' in d:
@@ -38,7 +38,7 @@ class TermalProfileContract:
         message.append('{"termalsetpoint":%s,'% self.termalsetpoint)
         message.append('"tempgoal":%s,' % self.tempGoal)
         message.append('"temp":%s,'%self.temp)
-        message.append('"goalduration":%s,'%self.goalDuration)
+        message.append('"soakduration":%s,'%self.soakduration)
         message.append('"duration":%s,'%self.duration)
         message.append('"ramp":%s}'%self.ramp)
         return ''.join(message)

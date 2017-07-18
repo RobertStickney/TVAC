@@ -1,3 +1,4 @@
+from DataBaseController.MySql import MySQlConnect
 from DataContracts.ZoneProfileContract import ZoneProfileContract
 
 
@@ -5,6 +6,7 @@ class ZoneCollection:
 
     def __init__(self):
         self.zoneDict = self.buildCollection()
+        self.updatePeriod = 1
 
     def buildCollection(self):
         zoneDictEmpty = {}
@@ -19,17 +21,17 @@ class ZoneCollection:
                          "zone9":ZoneProfileContract(zoneDictEmpty)}
 
     def update(self,d):
-        for zoneProfile in d['Profiles']:
+        for zoneProfile in d['profiles']:
             zoneName = "zone"+str(zoneProfile['zone'])
             self.zoneDict[zoneName].update(zoneProfile)
+        MySQlConnect.pushProfile()
 
     def getZone(self,d):
         return self.zoneDict[d]
 
     def getJson(self):
-        #message = []
-        #message.append("{'profile':[ %s ]" % self.fillZones())
         return ('{"profile":[ %s ]}' % self.fillZones())
+
     def fillZones(self):
         message = []
         zoneLen = len(self.zoneDict)
