@@ -44,8 +44,8 @@ class ZoneProfileContract:
             self.zone = d['zone']
         if 'profileuuid' in d:
             self.profileUUID = d['profileuuid']
-        if 'uuid' in d:
-            self.uuid = d['uuid']
+        if 'zoneuuid' in d:
+            self.zoneUUID = d['zoneuuid']
         if 'average' in d:
             self.average = d['average']
         if 'termalprofiles' in d:

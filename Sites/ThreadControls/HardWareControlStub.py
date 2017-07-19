@@ -25,17 +25,16 @@ class HardWareControlStub(Thread):
         self.inRamp = True
         self.inSoak = False
         self.soakComplete = False
-        self.runCount = 0
+        self.runCount = 1
         self.tempRampStepCount = 0
         self.tempChange = 0.0
         self.zoneUUID = uuid.uuid4()
-        self.profile.update(json.loads('{"uuid":"%s"}'%self.zoneUUID))
+        self.profile.update(json.loads('{"zoneuuid":"%s"}'%self.zoneUUID))
 
     def run(self):
         tempGoal = self.profile.termalProfiles[self.termalProfile].tempGoal
         print('running ', self.args, self.kwargs, ' Goal temp ', tempGoal, ' temp ',
               self.profile.termalProfiles[self.termalProfile].temp, ' is alive ', self.is_alive())
-        self.runCount = self.kwargs['pause']
 
         while self.runCount > 0:
             self.runProcess()
@@ -52,13 +51,15 @@ class HardWareControlStub(Thread):
     def runProcess(self):
         self.checkPause()
         self.checkHold()
-        print(self.runRamp())
-        print(self.runSoak())
+        self.runRamp()
+        self.runSoak()
 
     def checkPause(self):
-        while(self.paused):
+        if self.paused:
             self.event('pause')
+        while self.paused :
             time.sleep(.5)
+
 
     def checkHold(self):
         tempHold = self.profile.termalProfiles[self.termalProfile].hold
@@ -88,7 +89,7 @@ class HardWareControlStub(Thread):
             changePerMin = self.profile.termalProfiles[self.termalProfile].ramp
 
             if(changePerMin > 0):
-                minsToResult = tempDelta / self.profile.termalProfiles[self.termalProfile].ramp
+                minsToResult = tempDelta / changePerMin
             else:
                 minsToResult = 0
 
@@ -102,7 +103,7 @@ class HardWareControlStub(Thread):
                 self.inRamp = False
 
             self.tempChange = (changePerMin * self.updatePeriod) / 60
-            return self.event('ramp')
+            self.event('ramp')
 
     def runSoak(self):
         if not self.inRamp and not self.inSoak and not self.soakComplete:
@@ -116,6 +117,7 @@ class HardWareControlStub(Thread):
         if self.inSoak:
             self.tempChange = self.profile.termalProfiles[self.termalProfile].tempGoal - self.profile.termalProfiles[self.termalProfile].temp
             self.runCount -= 1
+            self.event('soak')
             if self.runCount <= 0:
                 termalProfileCount = len(self.profile.termalProfiles) - 1
                 if self.termalProfile < termalProfileCount:
@@ -125,8 +127,6 @@ class HardWareControlStub(Thread):
                     self.runCount = 1
                 else:
                     self.reset()
-
-        return self.event('soak')
 
     def reset(self):
         self.inRamp = False
