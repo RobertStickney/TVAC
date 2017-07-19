@@ -21,9 +21,10 @@ class ThreadCollection:
 
     def runAllThreads(self):
         for thread in self.threadDict:
-            if self.threadDict[thread].handeled:
-                self.threadDict[thread] = HardWareControlStub(args=(thread,),kwargs=({'pause':random.randrange(10)}))
-            self.threadDict[thread].start()
+            if self.threadDict[thread].profile.zone > 0:
+                if self.threadDict[thread].handeled:
+                    self.threadDict[thread] = HardWareControlStub(args=(thread,),kwargs=({'pause':random.randrange(10)}))
+                self.threadDict[thread].start()
 
     def runSingleThread(self,data):
         thread = data['zone']

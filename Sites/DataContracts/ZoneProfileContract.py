@@ -8,6 +8,10 @@ class ZoneProfileContract:
             self.zone = d['zone']
         else:
             self.zone = 0
+        if 'profileuuid' in d:
+            self.profileUUID = d['profileuuid']
+        else:
+            self.profileUUID = ''
         if 'average' in d:
             self.zone = d['average']
         else:
@@ -21,7 +25,7 @@ class ZoneProfileContract:
         else:
             self.thermalCouples = []
 
-        self.uuid = ''
+        self.zoneUUID = ''
 
     def setThermakCouples(self,thermalCouples):
         list = []
@@ -38,6 +42,8 @@ class ZoneProfileContract:
     def update(self, d):
         if 'zone' in d:
             self.zone = d['zone']
+        if 'profileuuid' in d:
+            self.profileUUID = d['profileuuid']
         if 'uuid' in d:
             self.uuid = d['uuid']
         if 'average' in d:
@@ -50,7 +56,9 @@ class ZoneProfileContract:
     def getJson(self):
         message = []
         message.append('{"zone":%s,' % self.zone)
+        message.append('"profileuuid":"%s",' % self.profileUUID)
         message.append('"average":%s,' % self.average)
+        message.append('"zoneUUID":"%s",' % self.zoneUUID)
         message.append('"termalprofiles":[')
         profileLen = len(self.termalProfiles)
         count = 0

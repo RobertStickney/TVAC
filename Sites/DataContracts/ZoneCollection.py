@@ -1,12 +1,14 @@
+import uuid
+
 from DataBaseController.MySql import MySQlConnect
 from DataContracts.ZoneProfileContract import ZoneProfileContract
-
 
 class ZoneCollection:
 
     def __init__(self):
         self.zoneDict = self.buildCollection()
         self.updatePeriod = 1
+        self.profileUUID = uuid.uuid4()
 
     def buildCollection(self):
         zoneDictEmpty = {}
@@ -21,7 +23,9 @@ class ZoneCollection:
                          "zone9":ZoneProfileContract(zoneDictEmpty)}
 
     def update(self,d):
+        self.profileUUID = uuid.uuid4()
         for zoneProfile in d['profiles']:
+            zoneProfile['profileuuid'] = self.profileUUID
             zoneName = "zone"+str(zoneProfile['zone'])
             self.zoneDict[zoneName].update(zoneProfile)
         MySQlConnect.pushProfile()
@@ -30,7 +34,7 @@ class ZoneCollection:
         return self.zoneDict[d]
 
     def getJson(self):
-        return ('{"profile":[ %s ]}' % self.fillZones())
+        return ('{"profileuuid":"%s","updateperiod":%s,"profile":[ %s ]}' % (self.profileUUID,self.updatePeriod,self.fillZones()))
 
     def fillZones(self):
         message = []
@@ -42,7 +46,3 @@ class ZoneCollection:
                 message.append(',')
                 count = count + 1
         return ''.join(message)
-
-
-
-

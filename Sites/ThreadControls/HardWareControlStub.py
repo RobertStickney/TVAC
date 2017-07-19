@@ -3,6 +3,7 @@ import time;
 import json;
 import uuid;
 
+from DataBaseController.MySql import MySQlConnect
 from DataContracts.ProfileInstance import ProfileInstance
 
 
@@ -27,8 +28,8 @@ class HardWareControlStub(Thread):
         self.runCount = 0
         self.tempRampStepCount = 0
         self.tempChange = 0.0
-        self.UUID = uuid.uuid4()
-        self.profile.update(json.loads('{"uuid":"%s"}'%self.UUID))
+        self.zoneUUID = uuid.uuid4()
+        self.profile.update(json.loads('{"uuid":"%s"}'%self.zoneUUID))
 
     def run(self):
         tempGoal = self.profile.termalProfiles[self.termalProfile].tempGoal
@@ -56,7 +57,7 @@ class HardWareControlStub(Thread):
 
     def checkPause(self):
         while(self.paused):
-            print('paused')
+            self.event('pause')
             time.sleep(.5)
 
     def checkHold(self):
@@ -66,11 +67,20 @@ class HardWareControlStub(Thread):
             self.profile.termalProfiles[self.termalProfile].heldTemp = self.profile.termalProfiles[self.termalProfile].tempGoal
             self.profile.termalProfiles[self.termalProfile].tempGoal = self.profile.termalProfiles[self.termalProfile].temp
             self.profile.termalProfiles[self.termalProfile].hold = True
+            self.event('starthold')
 
         if not self.hold and tempHold:
             self.profile.termalProfiles[self.termalProfile].tempGoal = self.profile.termalProfiles[self.termalProfile].heldTemp
             self.profile.termalProfiles[self.termalProfile].heldTemp = 0
             self.profile.termalProfiles[self.termalProfile].hold = False
+            self.event('endhold')
+
+        if self.hold and tempHold:
+            self.tempChange = self.profile.termalProfiles[self.termalProfile].tempGoal - self.profile.termalProfiles[
+                self.termalProfile].temp
+            self.profile.termalProfiles[self.termalProfile].temp += self.tempChange
+            time.sleep(.5)
+            self.checkHold()
 
     def runRamp(self):
         if self.inRamp:
@@ -92,7 +102,7 @@ class HardWareControlStub(Thread):
                 self.inRamp = False
 
             self.tempChange = (changePerMin * self.updatePeriod) / 60
-            return '{"ChangeSteps":"%s", "TempChange":"%s"}'%(self.runCount,(self.profile.termalProfiles[self.termalProfile].temp+self.tempChange))
+            return self.event('ramp')
 
     def runSoak(self):
         if not self.inRamp and not self.inSoak and not self.soakComplete:
@@ -116,16 +126,22 @@ class HardWareControlStub(Thread):
                 else:
                     self.reset()
 
-        return '{"Zone":"%s","ChangeSteps":"%s", "Temp":"%s", "inRamp":"%s", "insoak":"%s" }'%\
-               (self.args ,self.runCount,(self.profile.termalProfiles[self.termalProfile].temp),self.inRamp,self.inSoak)
+        return self.event('soak')
 
     def reset(self):
         self.inRamp = False
         self.inSoak = False
         self.soakComplete = True
 
+
     def terminate(self):
         self.runCount = 0
+
+    def event(self,eventName):
+        eventCreated = '{"event":"%s","profileuuid":"%s","zoneuuid":"%s","Zone":"%s","ChangeSteps":"%s", "Temp":"%s", "inRamp":"%s", "insoak":"%s" }'%\
+               (eventName,self.profile.profileUUID,self.profile.zoneUUID,self.args[0] ,self.runCount,(self.profile.termalProfiles[self.termalProfile].temp),self.inRamp,self.inSoak)
+        MySQlConnect.pushEvent(eventCreated)
+        print(eventCreated)
 
 
 
