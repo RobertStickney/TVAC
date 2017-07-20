@@ -10,7 +10,6 @@ class MySQlConnect:
         conn = pymysql.connect(host='localhost', user='root', passwd='mysql', db='Cryogenics')
         cur = conn.cursor()
         sql = "insert into profiles (jdoc,profileUUID) values ('%s','%s');"%(profile.zoneProfiles.getJson(),profile.zoneProfiles.profileUUID)
-
         cur.execute(sql)
         conn.commit()
         cur.close()

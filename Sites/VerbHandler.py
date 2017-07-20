@@ -2,6 +2,7 @@ import http.server
 import json
 
 from Controlers.PostControl import PostContol
+from DataBaseController.FileCreation import FileCreation
 from DataContracts.ProfileInstance import ProfileInstance
 
 
@@ -16,25 +17,32 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
 
     def do_POST(self):
         """Respond to a POST request."""
+        try:
+            contractObj = json.loads(self.getBody())
+            path = self.path
+            control = PostContol()
+            error = 1/0
+            result = {
+                '/setProfile': control.loadProfile,
+                '/runProfiles': control.runProfile,
+                '/runSingleProfile': control.runSingleProfile,
+                '/checkZoneStatus': control.checkTreadStatus,
+                '/pauseZone': control.pauseSingleThread,
+                '/pauseRemoveZone': control.removePauseSingleThread,
+                '/holdZone': control.holdSingleThread,
+                '/releaseHoldZone': control.releaseHoldSingleThread,
+                '/abortZone': control.abortSingleThread,
+                '/calculateRamp': control.calculateRamp
+            }[path](contractObj)
 
-        contractObj = json.loads(self.getBody())
-        path = self.path
-        control = PostContol()
+            self.setHeader()
+            self.wfile.write(result.encode())
+        except Exception as e:
+            FileCreation.pushFile("Error","Post",'{"errorMessage":"%s"}'%(e))
+            self.setHeader()
+            output = '{"Error":"%s"}'%(e)
+            self.wfile.write(output.encode())
 
-        result = {
-            '/setProfile': control.loadProfile,
-            '/runProfiles': control.runProfile,
-            '/runSingleProfile': control.runSingleProfile,
-            '/checkZoneStatus': control.checkTreadStatus,
-            '/pauseZone': control.pauseSingleThread,
-            '/pauseRemoveZone': control.removePauseSingleThread,
-            '/holdZone': control.holdSingleThread,
-            '/abortZone': control.abortSingleThread,
-            '/calculateRamp': control.calculateRamp
-        }[path](contractObj)
-
-        self.setHeader()
-        self.wfile.write(result.encode())
 
     def getBody(self):
         content_len = int(self.headers['content-length'])

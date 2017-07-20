@@ -39,6 +39,11 @@ class PostContol:
         threadInstance.threadCollection.holdThread(data)
         return "{'result':'success'}"
 
+    def releaseHoldSingleThread(self,data):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        threadInstance.threadCollection.releaseHoldThread(data)
+        return "{'result':'success'}"
+
     def abortSingleThread(self,data):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.abortThread(data)

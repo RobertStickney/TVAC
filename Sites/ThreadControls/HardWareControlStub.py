@@ -1,8 +1,10 @@
 from threading import Thread
-import time;
-import json;
-import uuid;
+import json
+import uuid
+import time
+import datetime
 
+from DataBaseController.FileCreation import FileCreation
 from DataBaseController.MySql import MySQlConnect
 from DataContracts.ProfileInstance import ProfileInstance
 
@@ -30,22 +32,28 @@ class HardWareControlStub(Thread):
         self.tempChange = 0.0
         self.zoneUUID = uuid.uuid4()
         self.profile.update(json.loads('{"zoneuuid":"%s"}'%self.zoneUUID))
+        self.timeStartForHold = None
 
     def run(self):
-        tempGoal = self.profile.termalProfiles[self.termalProfile].tempGoal
-        print('running ', self.args, self.kwargs, ' Goal temp ', tempGoal, ' temp ',
-              self.profile.termalProfiles[self.termalProfile].temp, ' is alive ', self.is_alive())
+        try:
+            tempGoal = self.profile.termalProfiles[self.termalProfile].tempGoal
+            self.event('StartRun')
+            print('running ', self.args, self.kwargs, ' Goal temp ', tempGoal, ' temp ',
+                  self.profile.termalProfiles[self.termalProfile].temp, ' is alive ', self.is_alive())
 
-        while self.runCount > 0:
-            self.runProcess()
-            self.profile.termalProfiles[self.termalProfile].temp += self.tempChange
-            time.sleep(self.updatePeriod)
-            print(self.runCount)
+            while self.runCount > 0:
+                self.runProcess()
+                self.profile.termalProfiles[self.termalProfile].temp += self.tempChange
+                #someHardwareDriver.updateTemp(self.profile.termalProfiles[self.termalProfile].temp + self.tempChange)
+                time.sleep(self.updatePeriod)
+                print(self.runCount)
 
-        print('running ', self.args, self.kwargs, ' Goal temp ', tempGoal, ' temp ',
-              self.profile.termalProfiles[self.termalProfile].temp, ' is alive ', self.is_alive())
+            self.event('EndRun')
 
-        self.handeled = True
+            self.handeled = True
+        except Exception as e:
+            FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
+
         return
 
     def runProcess(self):
@@ -68,12 +76,17 @@ class HardWareControlStub(Thread):
             self.profile.termalProfiles[self.termalProfile].heldTemp = self.profile.termalProfiles[self.termalProfile].tempGoal
             self.profile.termalProfiles[self.termalProfile].tempGoal = self.profile.termalProfiles[self.termalProfile].temp
             self.profile.termalProfiles[self.termalProfile].hold = True
+            tempHold = True
+            while not self.timeStartForHold:
+                self.timeStartForHold = int(time.time())
             self.event('starthold')
 
         if not self.hold and tempHold:
             self.profile.termalProfiles[self.termalProfile].tempGoal = self.profile.termalProfiles[self.termalProfile].heldTemp
             self.profile.termalProfiles[self.termalProfile].heldTemp = 0
             self.profile.termalProfiles[self.termalProfile].hold = False
+            if self.inSoak:
+                self.releaseHold()
             self.event('endhold')
 
         if self.hold and tempHold:
@@ -128,6 +141,18 @@ class HardWareControlStub(Thread):
                 else:
                     self.reset()
 
+    def releaseHold(self):
+        timeEndForHold = None
+        while not timeEndForHold:
+            timeEndForHold = int(time.time())
+        diff = timeEndForHold - self.timeStartForHold
+        d = divmod(diff, 86400)  # days
+        h = divmod(d[1], 3600)  # hours
+        m = divmod(h[1], 60)  # minutes
+        self.profile.termalProfiles[self.termalProfile].soakduration += m[1]
+
+
+
     def reset(self):
         self.inRamp = False
         self.inSoak = False
@@ -135,13 +160,17 @@ class HardWareControlStub(Thread):
 
 
     def terminate(self):
+        self.reset()
         self.runCount = 0
+        self.event("abort")
 
     def event(self,eventName):
         eventCreated = '{"event":"%s","profileuuid":"%s","zoneuuid":"%s","Zone":"%s","ChangeSteps":"%s", "Temp":"%s", "inRamp":"%s", "insoak":"%s" }'%\
                (eventName,self.profile.profileUUID,self.profile.zoneUUID,self.args[0] ,self.runCount,(self.profile.termalProfiles[self.termalProfile].temp),self.inRamp,self.inSoak)
+
         MySQlConnect.pushEvent(eventCreated)
-        print(eventCreated)
+        #print(eventCreated)
+        return eventCreated
 
 
 
