@@ -21,7 +21,6 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             contractObj = json.loads(self.getBody())
             path = self.path
             control = PostContol()
-            error = 1/0
             result = {
                 '/setProfile': control.loadProfile,
                 '/runProfiles': control.runProfile,
