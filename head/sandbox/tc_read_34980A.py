@@ -116,16 +116,18 @@ class Keysight34980A_TC(Telnet):
             tc['raw'].append([v1[i], v2[i], v3[i], v4[i]])
         return tc
 
-def printTC(TCs, num):
+def printTC(TCs, num, newline = False):
     try: 
         i = TCs['channel'].index(num)
     except ValueError:
         print("TC-{0:d} not in Channel List: '{1}'".format(num, Channel_List))
     else:
         if TCs['valid'][i]:
-            print("TC-{0:d}: {1:.2f}K: {2:.2f}°C: {3:.2f}°F".format(num, TCs['temp'][i], TCs['tempC'][i], TCs['tempF'][i]))
+            print("TC-{0:d}: {1:.2f}K: {2:.2f}C: {3:.2f}F".format(num, TCs['temp'][i], TCs['tempC'][i], TCs['tempF'][i]), end=', ')
         else:
-            print("TC-{0:d} not working".format(num))
+            print("TC-{0:d} not working".format(num), end=', ')
+        if newline:
+            print('')
 
 
 Tharsis = Keysight34980A_TC(ipAddr_34980A, ChannelList = Channel_List)
@@ -150,56 +152,56 @@ print("Thermocouple read time: {:.3f}s".format(TCs['time'][-1]))
 print("-----Platen Thermocouples (#s 76 - 80)")
 for n in range(76, 80+1):
     printTC(TCs,n)
-print("-----Platen Feedthough LN2 supply Thermocouple (# 85)")
-printTC(TCs,85)
+print("\n-----Platen Feedthough LN2 supply Thermocouple (# 85)")
+printTC(TCs,85, True)
 print("-----Platen LN2 supply Thermocouple (# 81)")
-printTC(TCs,81)
+printTC(TCs,81, True)
 print("-----Platen Vent Thermocouples (#s 82 - 84)")
 for n in range(82, 84+1):
     printTC(TCs,n)
-print("-----Platen Feedthrough Vent Thermocouples (#s 86 - 88)")
+print("\n-----Platen Feedthrough Vent Thermocouples (#s 86 - 88)")
 for n in range(86, 88+1):
     printTC(TCs,n)
 
 # Left Shroud 96 - 100
-print("-----Left Shroud Thermocouples (#s 96 - 100)")
+print("\n-----Left Shroud Thermocouples (#s 96 - 100)")
 for n in range(96, 100+1):
     printTC(TCs,n)
 
 # Top Shroud 101 - 105
-print("-----Top Shroud Thermocouples (#s 101 - 105)")
+print("\n-----Top Shroud Thermocouples (#s 101 - 105)")
 for n in range(101, 105+1):
     printTC(TCs,n)
 
 # Right Shroud 106 - 110
-print("-----Right Shroud Thermocouples (#s 106 - 110)")
+print("\n-----Right Shroud Thermocouples (#s 106 - 110)")
 for n in range(106, 110+1):
     printTC(TCs,n)
 
 # Front Door 111 - 115
-print("-----Front Door Thermocouples (#s 111 - 115)")
+print("\n-----Front Door Thermocouples (#s 111 - 115)")
 for n in range(111, 115+1):
     printTC(TCs,n)
 
 # Back Door 116 - 120
-print("-----Back Door Thermocouples (#s 116 - 120)")
+print("\n-----Back Door Thermocouples (#s 116 - 120)")
 for n in range(116, 120+1):
     printTC(TCs,n)
 
-print("-----Shroud Feedthough LN2 supply Thermocouple (# 91)")
-printTC(TCs,91)
+print("\n-----Shroud Feedthough LN2 supply Thermocouple (# 91)")
+printTC(TCs,91, True)
 print("-----Shroud Vent Thermocouples (#s 94 - 95)")
 printTC(TCs,94)
-printTC(TCs,95)
+printTC(TCs,95, True)
 print("-----Shroud Feedthrough Vent Thermocouples (#s 92 - 93)")
 printTC(TCs,92)
-printTC(TCs,93)
+printTC(TCs,93, True)
 
 # Chamber Wall 89-90
 print("-----Chamber wall Top Thermocouple (# 89)")
-printTC(TCs,89)
+printTC(TCs,89, True)
 print("-----Chamber wall Top Thermocouple (# 90)")
-printTC(TCs,90)
+printTC(TCs,90, True)
 
 Tharsis.close()
 
