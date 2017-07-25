@@ -158,10 +158,11 @@ class TS_Registers():
 			addr = self.Dio1_Addr(addr)
 		b = self.__DIO_Read_byte__(addr)
 		print("DIO address: {:x}; byte: {:02x}".format(addr, b))
+		mask = 0x01 << (7 & pinNum)
 		if setBit:
-			b |= 0x01 << (7 & pinNum)
+			b |= mask
 		else: # clearBit 
-			b &= 0xfe << (7 & pinNum)
+			b &= ~mask
 		self.__DIO_Write_byte__(addr, b)
 		print("Write byte: 0x{:x}".format(b))
 
