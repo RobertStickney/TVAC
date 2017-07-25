@@ -1,0 +1,5 @@
+/Users/jerryedwards/Development/Cryogenics/Sites/SHI_MCC_Interface.py
+Line 171 what is method? 
+	A: Coppy paste error from line 135. corrected changed to num
+Line 231 does function get to this last return statment?
+	A: Good catch! needed to think for a sec. corrected logic

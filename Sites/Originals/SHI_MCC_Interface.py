@@ -29,7 +29,7 @@ def ResponceGood(Responce):
     return True # Yea!! responce seems ok
 
 def Send_cmd(Command):
-    MCC = open('/dev/ttyxuart0', 'r+b', buffering=0)
+    MCC = open('/dev/ttyxuart2', 'r+b', buffering=0)
     for tries in range(3):
         MCC.write(GenCmd(Command).encode())
         time.sleep(0.10*(tries+1))
