@@ -196,6 +196,7 @@ if __name__ == '__main__':
     httpd = socketserver.TCPServer(( server_Address, server_Port), MyHandler )
     pins = PC_104_Instance.getInstance()
     pins.digIO.open_Registers()
+    #Pfiefer_SetSwPressure()
     print("Serving HTTP requests at: ", server_Address, ":", server_Port)
     httpd.serve_forever()
 
