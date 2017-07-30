@@ -3,7 +3,7 @@ from datetime import datetime
 
 class Keysight34980A_TC(Telnet):
 
-    def __init__(self, host=None, port=5024, timeout=10, 
+    def __init__(self, host=None, port=5024, timeout=7,
                 ChannelList = "(@1001:1040,2001:2040,3001:3040)"):
         Telnet.__init__(self)
         self.Ch_List = ChannelList
@@ -15,7 +15,7 @@ class Keysight34980A_TC(Telnet):
     def open(self, host, port=5024, timeout=10):
         Telnet.open(self, host, port, timeout)
         print(self.read(timeout,True))
-    
+
     def read(self, timeout=1, try_fix_prompt=False):
         responce = self.read_until(self.telnet_prompt.encode(), timeout).decode()
         if responce.endswith(self.telnet_prompt):

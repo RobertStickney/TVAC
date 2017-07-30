@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from datetime import datetime
 import sys
 from datetime import datetime
 from tc_read_34980A import Keysight34980A_TC

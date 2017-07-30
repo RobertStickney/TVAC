@@ -1,5 +1,5 @@
-from DataContracts.TermalCoupleContract import TermalCoupleContract
-from DataContracts.TermalProfileContract import TermalProfileContract
+from DataContracts.ThermocoupleContract import ThermocoupleContract
+from DataContracts.ThermalProfileContract import ThermalProfileContract
 
 
 class ZoneProfileContract:
@@ -21,22 +21,22 @@ class ZoneProfileContract:
         else:
             self.termalProfiles = ''
         if 'thermalcouples' in d:
-            self.thermalCouples = self.setThermakCouples(d['thermalcouples'])
+            self.thermalCouples = self.setThermalCouples(d['thermalcouples'])
         else:
             self.thermalCouples = []
 
         self.zoneUUID = ''
 
-    def setThermakCouples(self,thermalCouples):
+    def setThermalCouples(self,thermalCouples):
         list = []
-        for couple in thermalCouples:
-            list.append(TermalCoupleContract(couple))
+        for tc in thermalCouples:
+            list.append(ThermocoupleContract(tc))
         return list
 
     def setTermalProfiles(self,termalProfiles):
         list = []
         for profile in termalProfiles:
-            list.append(TermalProfileContract(profile))
+            list.append(ThermalProfileContract(profile))
         return list
 
     def update(self, d):
@@ -51,7 +51,7 @@ class ZoneProfileContract:
         if 'termalprofiles' in d:
             self.termalProfiles = self.setTermalProfiles(d['termalprofiles'])
         if 'thermalcouples' in d:
-            self.thermalCouples = self.setThermakCouples(d['thermalcouples'])
+            self.thermalCouples = self.setThermalCouples(d['thermalcouples'])
 
     def getJson(self):
         message = []
