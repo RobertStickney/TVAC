@@ -34,7 +34,7 @@ class ZoneCollection:
         return self.zoneDict[d]
 
     def getJson(self):
-        return ('{"profileuuid":"%s","updateperiod":%s,"profile":[ %s ]}' % (self.profileUUID,self.updatePeriod,self.fillZones()))
+        return ('{"profileuuid":"%s","updateperiod":%s,"profile":{ %s }}' % (self.profileUUID,self.updatePeriod,self.fillZones()))
 
     def fillZones(self):
         message = []
