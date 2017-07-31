@@ -9,8 +9,8 @@ class ThermocoupleContract:
     def update(self, d):
         if 'temp' in d: # all temperatures are in Kelven
             self.temp = d['temp']
-        if 'valid' in d:
-            self.valid = d['valid']
+        if 'working' in d:
+            self.valid = d['working']
         if 'time' in d:  # time offset from start of scan
             self.time = d['time']
 

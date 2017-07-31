@@ -1,11 +1,13 @@
-import datetime, json
+#!/usr/bin/env python3
+import json
+from datetime import datetime
 
 from DataContracts.ThermocoupleContract import ThermocoupleContract
 
 class ThermocoupleCollection:
 
-    def __init__(self, Num = 120):
-        self.tcList = self.buildCollection(Num)
+    def __init__(self, num = 120):
+        self.tcList = self.buildCollection(num)
         self.time = datetime.now()
         self.ValidTCs = []
         self.InvalidTCs = []
@@ -13,17 +15,18 @@ class ThermocoupleCollection:
             self.updateValidTCs(tc)
 
 
-    def buidCollection(self, Num):
+    def buildCollection(self, num):
         TCs = []
-        for i in range(1, Num+1):
-            TCs.append = ThermocoupleContract(i)
+        for i in range(1, num+1):
+            TCs.append(ThermocoupleContract(i))
         return TCs
 
     def update(self, d):
         if 'time' in d:
-            self.time = d['time']
+            self.time = d['time'] # Start of scan time
         for updateTC in d['tcList']:
             tc = self.getTC(updateTC['Thermocouple'])
+            print(type(tc))
             tc.update(updateTC)
             self.updateValidTCs(tc)
 
@@ -48,16 +51,28 @@ class ThermocoupleCollection:
 
     def getJson(self, whichTCs = 'all'):
         message = []
-        message.append('"time":%s}' % self.time)
-        if whichTCs == 'valid':
+        message.append('{"time":%s, ' % self.time)
+        if whichTCs == 'Working':
             message.append('TCs:%s' % json.dumps([tc.getJson() for tc in self.ValidTCs]))
-        elif whichTCs == 'invalid':
+        elif whichTCs == 'NotWorking':
             message.append('TCs:%s' % json.dumps([tc.getJson() for tc in self.InvalidTCs]))
         else:
             message.append('TCs:%s' % json.dumps([tc.getJson() for tc in self.tcList]))
-
+        message.append('}')
         return ''.join(message)
 
 if __name__ == '__main__':
     tcColl = ThermocoupleCollection(5)
-    tcColl.updateValidTCs()
+    print(' ')
+    print(tcColl.getJson())
+    print(tcColl.getJson('Working'))
+    tcColl.update({'time': datetime.now(), 'tcList': [
+        {'Thermocouple': 2, 'temp': 34},
+        {'Thermocouple': 4, 'temp': 300, 'working': True}]})
+    print(' ')
+    print(tcColl.getJson())
+    print(' ')
+    print(tcColl.getJson('Working'))
+    print(' ')
+    print(tcColl.getJson('NotWorking'))
+    print(' ')
