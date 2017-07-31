@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import socketserver
 
 from DataContracts.ProfileInstance import ProfileInstance
