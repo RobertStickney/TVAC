@@ -1,4 +1,4 @@
-from DataContracts.ThermocoupleContract import ThermocoupleContract
+from DataContracts.HardwareStatusInstance import HardwareStatusInstance
 from DataContracts.ThermalProfileContract import ThermalProfileContract
 
 
@@ -20,17 +20,18 @@ class ZoneProfileContract:
             self.termalProfiles = self.setTermalProfiles(d['termalprofiles'])
         else:
             self.termalProfiles = ''
-        if 'thermalcouples' in d:
-            self.thermalCouples = self.setThermalCouples(d['thermalcouples'])
+        if 'thermocouples' in d:
+            self.thermocouples = self.setThermocouples(d['thermocouples'])
         else:
-            self.thermalCouples = []
+            self.thermocouples = []
 
         self.zoneUUID = ''
 
-    def setThermalCouples(self,thermalCouples):
+    def setThermocouples(self, thermocouples):
+        hwStatus = HardwareStatusInstance.getInstance()
         list = []
-        for tc in thermalCouples:
-            list.append(ThermocoupleContract(tc))
+        for tc in thermocouples:
+            list.append(hwStatus.Thermocouples.getTC(tc))
         return list
 
     def setTermalProfiles(self,termalProfiles):
@@ -50,8 +51,8 @@ class ZoneProfileContract:
             self.average = d['average']
         if 'termalprofiles' in d:
             self.termalProfiles = self.setTermalProfiles(d['termalprofiles'])
-        if 'thermalcouples' in d:
-            self.thermalCouples = self.setThermalCouples(d['thermalcouples'])
+        if 'thermocouples' in d:
+            self.thermocouples = self.setThermocouples(d['thermalcouples'])
 
     def getJson(self):
         message = []
@@ -69,7 +70,7 @@ class ZoneProfileContract:
                 count = count + 1
 
         message.append('],')
-        message.append('"thermalcouples":[')
+        message.append('"thermocouples":[')
         coupleLen = len(self.thermalCouples)
         count = 0
         for couple in self.thermalCouples:

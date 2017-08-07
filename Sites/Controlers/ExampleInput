@@ -4,7 +4,7 @@ http://localhost:8000/setProfile
     {
       "zone": 1,
       "average": 1,
-      "thermalcouples": [1, 2, 3, 4, 5],
+      "thermocouples": [1, 2, 3, 4, 5],
       "termalprofiles":
       [
         {
@@ -31,7 +31,7 @@ http://localhost:8000/setProfile
     {
       "zone": 2,
       "average": 2,
-      "thermalcouples": [6, 7, 8, 9, 10],
+      "thermocouples": [6, 7, 8, 9, 10],
       "termalprofiles":[
         {
             "termalsetpoint": 0,
