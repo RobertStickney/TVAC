@@ -52,31 +52,32 @@ class ThermocoupleCollection:
         # temp_units values: ['K', 'C', 'F']
         # whichTCs values: ['all', 'Working', 'NotWorking']
         message = []
-        message.append('{"time":%s, ' % self.time)
+        message.append('{"time":%s,' % self.time)
         if whichTCs == 'Working':
-            message.append('TCs:%s' % json.dumps([tc.getJson(temp_units) for tc in self.ValidTCs]))
+            message.append('TCs:[%s]' %','.join([tc.getJson(temp_units) for tc in self.ValidTCs]))
         elif whichTCs == 'NotWorking':
-            message.append('TCs:%s' % json.dumps([tc.getJson(temp_units) for tc in self.InvalidTCs]))
+            message.append('TCs:[%s]' %','.join([tc.getJson(temp_units) for tc in self.InvalidTCs]))
         else:
-            message.append('TCs:%s' % json.dumps([tc.getJson(temp_units) for tc in self.tcList]))
+            message.append('TCs:[%s]' %','.join([tc.getJson(temp_units) for tc in self.tcList]))
         message.append('}')
         return ''.join(message)
 
 if __name__ == '__main__':
     tcColl = ThermocoupleCollection(5)
+    units = 'K'
     print(' ')
     print(tcColl.getJson())
-    print(tcColl.getJson('Working'))
+    print(tcColl.getJson(units,'Working'))
     tcColl.update({'time': datetime.now(), 'tcList': [
         {'Thermocouple': 2, 'temp': 34},
         {'Thermocouple': 4, 'temp': 300, 'working': True}]})
     print(' ')
     print(tcColl.getJson())
-    print(tcColl.getJson('Working'))
-    print(tcColl.getJson('NotWorking'))
+    print(tcColl.getJson(units,'Working'))
+    print(tcColl.getJson(units,'NotWorking'))
     tcColl.update({'time': datetime.now(), 'tcList': [
         {'Thermocouple': 4, 'temp': 342},
         {'Thermocouple': 3, 'temp': 303, 'working': True}]})
     print(' ')
-    print(tcColl.getJson('Working'))
+    print(tcColl.getJson(units,'Working'))
     print(tcColl.getJson())

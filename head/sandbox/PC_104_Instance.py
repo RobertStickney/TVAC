@@ -1,4 +1,4 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 from Testing_mmap import TS_Registers
 
 class PC_104_Instance:
@@ -17,4 +17,5 @@ class PC_104_Instance:
             raise Exception("This class is a singleton!")
         else:
             self.digIO = TS_Registers()
+            self.analogIO = None
             PC_104_Instance.__instance = self

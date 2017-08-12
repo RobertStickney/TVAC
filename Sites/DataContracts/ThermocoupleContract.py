@@ -29,11 +29,11 @@ class ThermocoupleContract:
             return self.temp
 
 
-def getJson(self, temp_units = 'K'):
+    def getJson(self, temp_units = 'K'):
         # temp_units values: ['K', 'C', 'F']
         message = []
         message.append('{"thermocouple":%s,' % self.Thermocouple)
-        message.append('"time":%s}' % self.time)
-        message.append('"temp":%s}' % self.getTemp(temp_units))
+        message.append('"time":%s,' % self.time)
+        message.append('"temp":%s,' % self.getTemp(temp_units))
         message.append('"working":%s}' % self.working)
         return ''.join(message)
