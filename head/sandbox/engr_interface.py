@@ -83,14 +83,16 @@ class MyHandler(http.server.CGIHTTPRequestHandler):
             buff = json.dumps(resp)
         elif self.path.startswith("/setDigital"):
             pins = PC_104_Instance.getInstance()
-            args = json.loads(self.cmd_buff)
-            pins.digital_out.update(self.cmd_buff)
+            pins.digital_out.update(json.loads(self.cmd_buff))
         elif self.path.startswith("/getDigital"):
             pins = PC_104_Instance.getInstance()
-            buff = "{'out':%s,'in':%s}" % (pins.digital_out.getJson(), pins.digital_in.getJson())
+            buff = '{"out":%s,"in":%s}' % (pins.digital_out.getJson(), pins.digital_in.getJson())
+        elif self.path.startswith("/setAnalog"):
+            pins = PC_104_Instance.getInstance()
+            pins.analog_out.update(json.loads(self.cmd_buff))
         elif self.path.startswith("/getAnalog"):
             pins = PC_104_Instance.getInstance()
-            buff = "{'out':%s,'in':%s}" % (pins.analog_out.getJson(), pins.analog_in.getJson())
+            buff = '{"out":%s,"in":%s}' % (pins.analog_out.getJson(), pins.analog_in.getJson())
         elif self.path.startswith("/MCC_cmd/"):
             if '/get/' in self.path:
                 if 'MCC_ver' in self.path:

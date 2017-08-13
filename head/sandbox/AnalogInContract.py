@@ -68,6 +68,6 @@ class AnalogInContract:
         message.append('"pgChamber":%s,' % self.pgChamber)
         message.append('"pgCrypPump":%s,' % self.pgCrypPump)
         message.append('"pgRoughPump":%s,' % self.pgRoughPump)
-        message.append('"LN2platen":%s,' % self.LN2platen)
-        message.append('"LN2shroud":%s}' % self.LN2shroud)
+        message.append('"LN2 platen":%s,' % self.LN2platen)
+        message.append('"LN2 shroud":%s}' % self.LN2shroud)
         return ''.join(message)
