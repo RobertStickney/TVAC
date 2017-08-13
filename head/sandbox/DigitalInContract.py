@@ -152,6 +152,6 @@ class DigitalInContract:
         #message.append('"notUsed1":%s,' % self.notUsed1) uncomment when this is used
         message.append('"LN2AirOK":%s,' % self.LN2AirOK)
         message.append('"AirOK":%s,' % self.AirOK)
-        #message.append('"t1":%s,' % self.t1) uncomment when this is used
+        #message.append('"t20":%s,' % self.t20) uncomment when this is used
         message.append('"LN2en":%s}' %self.LN2en)
         return ''.join(message)

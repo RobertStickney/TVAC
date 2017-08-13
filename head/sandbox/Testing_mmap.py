@@ -111,23 +111,6 @@ class TS_Registers():
         self.setEVGPIO(3)
         self.clearEVGPIO(7)
 
-    def DIO_Read4(self, cardNum=1, DigIn=True):
-        if DigIn:  # read to digital inputs
-            if cardNum == 2:
-                addr = self.Dio2_Addr(self.DioInBaseAddr)
-            else:
-                addr = self.Dio1_Addr(self.DioInBaseAddr)
-        else:  # read to digital outputs
-            if cardNum == 2:
-                addr = self.Dio2_Addr(self.DioOutBaseAddr)
-            else:
-                addr = self.Dio1_Addr(self.DioOutBaseAddr)
-        self.pc104.seek(addr)
-        return [self.pc104.read_byte(),
-                self.pc104.read_byte(),
-                self.pc104.read_byte(),
-                self.pc104.read_byte()]
-
     def __DIO_Read_byte__(self, address):
         self.pc104.seek(address)
         return self.pc104.read_byte()
@@ -135,6 +118,36 @@ class TS_Registers():
     def __DIO_Write_byte__(self, address, b):
         self.pc104.seek(address)
         self.pc104.write_byte(b)
+
+    def dio_read4(self, cardNum=1, DigIn=True):
+        if cardNum == 2:
+            if DigIn:  # read digital inputs on card 2
+                addr = self.Dio2_Addr(self.DioInBaseAddr)
+            else:  # read digital outputs on card 2
+                addr = self.Dio2_Addr(self.DioOutBaseAddr)
+            key = ['C2 B0', 'C2 B1', 'C2 B2', 'C2 B3']
+        else:
+            if DigIn:  # read digital inputs on card 1
+                addr = self.Dio1_Addr(self.DioInBaseAddr)
+            else:  # read digital outputs on card 1
+                addr = self.Dio1_Addr(self.DioOutBaseAddr)
+            key = ['C1 B0', 'C1 B1', 'C1 B2', 'C1 B3']
+        self.pc104.seek(addr)
+        return {key[0]: self.pc104.read_byte(),
+                key[1]: self.pc104.read_byte(),
+                key[2]: self.pc104.read_byte(),
+                key[3]: self.pc104.read_byte()}
+
+    def do_write4(self, bytes, cardNum = 1):
+        if cardNum == 2:
+            addr = self.Dio2_Addr(self.DioOutBaseAddr)
+        else:
+            addr = self.Dio1_Addr(self.DioOutBaseAddr)
+        self.pc104.seek(addr)
+        self.pc104.write_byte(bytes[0])
+        self.pc104.write_byte(bytes[1])
+        self.pc104.write_byte(bytes[2])
+        self.pc104.write_byte(bytes[3])
 
     #      cardNum = 1|2;  pinNum Starts at 1
     def DIO_Write_Pin(self, cardNum, pinNum, setBit):
@@ -164,12 +177,12 @@ if __name__ == '__main__':
     if (len(sys.argv) > 2):
         if sys.argv[1] == 'di':
             if sys.argv[2] == '2':
-                addr = ts.Dio2_Addr(ts.DioInBaseAddr)
+                address = ts.Dio2_Addr(ts.DioInBaseAddr)
             else:
-                addr = ts.Dio1_Addr(ts.DioInBaseAddr)
-            b = ts.DIO_Read(sys.argv[2])
+                address = ts.Dio1_Addr(ts.DioInBaseAddr)
+            #b = ts.DIO_Read(sys.argv[2])
             print(type(b))
-            print("DIO address: {:x} bytes: 0x{:02x} {:02x} {:02x} {:02x}".format(addr, b[3], b[2], b[1], b[1]))
+            print("DIO address: {:x} bytes: 0x{:02x} {:02x} {:02x} {:02x}".format(address, b[3], b[2], b[1], b[1]))
         elif sys.argv[1] == 'do':
             if (len(sys.argv) > 4):
                 if sys.argv[3] == 'set':  # cardNum, pinNum,    SetBit

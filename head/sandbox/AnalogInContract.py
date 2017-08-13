@@ -15,8 +15,8 @@ class AnalogInContract:
         self.pgChamber = 0     # ADC 11- Pfeiffer gauge Analog Pressure Reading for the chamber
         self.pgCrypPump = 0    # ADC 12- Pfeiffer gauge Analog Pressure Reading for the Cryp-Pump
         self.pgRoughPump = 0   # ADC 13- Pfeiffer gauge Analog Pressure Reading for the Roughing Pump
-        self.LN2platten = 0    # ADC 14- Platten LN2 Supply Valve Position
-        self.LN2shroud = 0     # ADC 14- Shroud LN2 Supply Valve Position
+        self.LN2platen = 0     # ADC 14- Platen LN2 Supply Valve Position 4-20mA
+        self.LN2shroud = 0     # ADC 14- Shroud LN2 Supply Valve Position 4-20mA
 
     def update(self, d):
         if 'ADC 0' in d:
@@ -48,7 +48,7 @@ class AnalogInContract:
         if 'ADC 13' in d:
             self.pgRoughPump = d['ADC 13']  # todo: add conversion to value from ADC counts
         if 'ADC 14' in d:
-            self.LN2platten = d['ADC 14']  # todo: add conversion to value from ADC counts
+            self.LN2platen = d['ADC 14']  # todo: add conversion to value from ADC counts
         if 'ADC 15' in d:
             self.LN2shroud = d['ADC 15']  # todo: add conversion to value from ADC counts
 
@@ -68,6 +68,6 @@ class AnalogInContract:
         message.append('"pgChamber":%s,' % self.pgChamber)
         message.append('"pgCrypPump":%s,' % self.pgCrypPump)
         message.append('"pgRoughPump":%s,' % self.pgRoughPump)
-        message.append('"LN2platten":%s,' % self.LN2platten)
-        message.append('"LN2shroud":%s}' %self.LN2shroud)
+        message.append('"LN2platen":%s,' % self.LN2platen)
+        message.append('"LN2shroud":%s}' % self.LN2shroud)
         return ''.join(message)

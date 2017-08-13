@@ -6,14 +6,20 @@ from DataContracts.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 from VerbHandler import VerbHandler
 
-PORT = 8000
 
-hardwareStatusInstance = HardwareStatusInstance.getInstance()
-profileInstance = ProfileInstance.getInstance()
-threadInstance = ThreadCollectionInstance.getInstance()
+class ReuseAddrTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
 
-httpd = socketserver.TCPServer(("", PORT), VerbHandler)
 
-print("serving")
+if __name__ == '__main__':
+    PORT = 8000
 
-httpd.serve_forever()
+    hardwareStatusInstance = HardwareStatusInstance.getInstance()
+    profileInstance = ProfileInstance.getInstance()
+    threadInstance = ThreadCollectionInstance.getInstance()
+
+    httpd = ReuseAddrTCPServer(("", PORT), VerbHandler)
+
+    print("serving")
+
+    httpd.serve_forever()

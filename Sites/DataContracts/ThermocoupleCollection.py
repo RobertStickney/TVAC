@@ -4,6 +4,7 @@ from datetime import datetime
 
 from DataContracts.ThermocoupleContract import ThermocoupleContract
 
+
 class ThermocoupleCollection:
 
     def __init__(self, num = 120):

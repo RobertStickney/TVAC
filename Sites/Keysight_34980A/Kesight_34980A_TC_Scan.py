@@ -22,7 +22,7 @@ class Keysight34980A_TC(Telnet):
         Telnet.__init__(self)
         self.Ch_List = ChannelList
         self.working_tc_lower_limit= 8
-        self.working_tc_upper_limit = 600
+        self.working_tc_upper_limit = 2000
         self.telnet_prompt = "Tharsis> "
         if host is not None:
             self.open(host, port, timeout)
@@ -90,7 +90,6 @@ class Keysight34980A_TC(Telnet):
         self.send("SYST:BEEP") # Have unit beep when done with init
 
     def getTC_Values(self, print_raw_values = False):
-        hwStatus = hwStatus = HardwareStatusInstance.getInstance()
         ## tc_list formating from "DataContracts.ThermocoupleCollection"
         tc_list = {'time':datetime.now(), 'tcList': []}
         values = self.send("READ?",6).split(',')

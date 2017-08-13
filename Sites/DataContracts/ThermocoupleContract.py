@@ -9,7 +9,7 @@ class ThermocoupleContract:
     def update(self, d):
         if 'time' in d:  # time offset from start of scan
             self.time = d['time']
-        if 'temp' in d: # all temperatures are in Kelven
+        if 'temp' in d:  # all temperatures are in Kelven
             self.temp = d['temp']
         if 'working' in d:
             self.working = d['working']
@@ -27,7 +27,6 @@ class ThermocoupleContract:
             return (self.temp - 273.15)*9/5 + 32
         else:
             return self.temp
-
 
     def getJson(self, temp_units = 'K'):
         # temp_units values: ['K', 'C', 'F']
