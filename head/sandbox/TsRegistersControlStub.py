@@ -40,6 +40,9 @@ class TsRegistersControlStub(Thread):
                                        self.da_io.digital_out.c2_b1,
                                        self.da_io.digital_out.c2_b2,
                                        self.da_io.digital_out.c2_b3], 2)
+                if self.da_io.digital_out.RoughP_Start:
+                    time.sleep(10)
+                    self.da_io.digital_out.update('{"RoughP Start":false}')
                 self.da_io.digital_in.update(self.ts_reg.dio_read(1))
                 self.da_io.digital_in.update(self.ts_reg.dio_read(2))
                 time.sleep(self.updatePeriod)
