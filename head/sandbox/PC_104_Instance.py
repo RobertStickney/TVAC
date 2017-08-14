@@ -1,5 +1,8 @@
- #!/usr/bin/env python3
-from Testing_mmap import TS_Registers
+from DigitalInContract import DigitalInContract
+from DigitalOutContract import DigitalOutContract
+from AnalogInContract import AnalogInContract
+from AnalogOutContract import AnalogOutContract
+
 
 class PC_104_Instance:
     # Here will be the instance stored.
@@ -16,5 +19,8 @@ class PC_104_Instance:
         if PC_104_Instance.__instance != None:
             raise Exception("This class is a singleton!")
         else:
-            self.digIO = TS_Registers()
+            self.digital_in = DigitalInContract()
+            self.digital_out = DigitalOutContract()
+            self.analog_in = AnalogInContract()
+            self.analog_out = AnalogOutContract()
             PC_104_Instance.__instance = self

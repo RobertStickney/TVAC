@@ -28,9 +28,9 @@ class ThermalProfileContract:
             self.soakduration = d['soakduration']
         if 'ramp' in d:
             self.ramp = d['ramp']
-        if 'temp' in d: # all temperatures are in Kelven
+        if 'temp' in d:  # Derived value - all temperatures are in Kelven
             self.temp = d['temp']
-        if 'duration' in d:
+        if 'duration' in d:  # Derived value
             self.duration = d['duration']
 
     def getJson(self):
