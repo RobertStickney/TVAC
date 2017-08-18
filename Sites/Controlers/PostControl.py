@@ -1,6 +1,7 @@
 from DataContracts.ProfileInstance import ProfileInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
+from HouseKeeping.globalVars import debugPrint
 
 class PostContol:
 
@@ -30,6 +31,7 @@ class PostContol:
         return "{'result':'success'}"
 
     def checkTreadStatus(self,data):
+        # Why is this a POST and not a GET?
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.checkThreadStatus()
         return "{'result':'success'}"

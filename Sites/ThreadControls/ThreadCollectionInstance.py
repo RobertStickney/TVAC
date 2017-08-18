@@ -1,5 +1,6 @@
 from ThreadControls.ThreadCollection import ThreadCollection
 
+from HouseKeeping.globalVars import debugPrint
 
 class ThreadCollectionInstance:
     # Here will be the instance stored.
@@ -16,5 +17,6 @@ class ThreadCollectionInstance:
         if ThreadCollectionInstance.__instance != None:
             raise Exception("This class is a singleton!")
         else:
+            debugPrint(2,"Creating ThreadCollectionInstance")
             self.threadCollection = ThreadCollection()
             ThreadCollectionInstance.__instance = self

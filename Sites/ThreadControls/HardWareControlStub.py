@@ -8,11 +8,14 @@ from DataBaseController.FileCreation import FileCreation
 from DataBaseController.MySql import MySQlConnect
 from DataContracts.ProfileInstance import ProfileInstance
 
+from HouseKeeping.globalVars import debugPrint
 
 class HardWareControlStub(Thread):
 
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs=None, verbose=None):
+        debugPrint(3,"Creating HardWareControlStub")
+        debugPrint(4,"args: {}".format(args))
         Thread.__init__(self, group=group, target=target, name=name)
         self.args = args
         self.kwargs = kwargs
@@ -34,8 +37,18 @@ class HardWareControlStub(Thread):
         self.profile.update(json.loads('{"zoneuuid":"%s"}'%self.zoneUUID))
         self.timeStartForHold = None
 
+    
+    def getState(self):
+        '''
+        This will be a simple debug medthod that will print 
+        the current state of the hardware Thread
+        '''
+        pass
+
+
     def run(self):
         try:
+            debugPrint(2,"Running HW control Thread")
             tempGoal = self.profile.termalProfiles[self.termalProfile].tempGoal
             self.event('StartRun')
             print('running ', self.args, self.kwargs, ' Goal temp ', tempGoal, ' temp ',

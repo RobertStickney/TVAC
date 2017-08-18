@@ -4,10 +4,13 @@ from datetime import datetime
 
 from DataContracts.ThermocoupleContract import ThermocoupleContract
 
+from HouseKeeping.globalVars import debugPrint
 
 class ThermocoupleCollection:
 
     def __init__(self, num = 120):
+        debugPrint(2, "Creating ThermocoupleCollection")
+        debugPrint(2, "Number of Thermo Couples: {}".format(num))
         self.tcList = self.buildCollection(num)
         self.time = datetime.now()
         self.ValidTCs = []

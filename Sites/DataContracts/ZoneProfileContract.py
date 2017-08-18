@@ -1,6 +1,7 @@
 from DataContracts.HardwareStatusInstance import HardwareStatusInstance
 from DataContracts.ThermalProfileContract import ThermalProfileContract
 
+from HouseKeeping.globalVars import debugPrint
 
 class ZoneProfileContract:
     def __init__(self, d):
@@ -41,6 +42,7 @@ class ZoneProfileContract:
         return list
 
     def update(self, d):
+        debugPrint(4, "Updating zone with info:\n{}".format(d))
         if 'zone' in d:
             self.zone = d['zone']
         if 'profileuuid' in d:

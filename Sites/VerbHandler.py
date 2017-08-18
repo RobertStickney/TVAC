@@ -5,6 +5,7 @@ from Controlers.PostControl import PostContol
 from DataBaseController.FileCreation import FileCreation
 from DataContracts.ProfileInstance import ProfileInstance
 
+from HouseKeeping.globalVars import debugPrint
 
 class VerbHandler(http.server.BaseHTTPRequestHandler):
 
@@ -13,13 +14,27 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "application/json")
         self.end_headers()
-        self.displayZones()
+        # self.displayZones()
+
+        self.wfile.write("Hello \n".encode())
+        # Basic status update...
+        # UUID
+        # Current pressure
+        # Which Thermalcouple are running, and current status
+
+        # get Thermalcouple
 
     def do_POST(self):
         """Respond to a POST request."""
+        debugPrint(1,"Received Post Request")
         try:
-            contractObj = json.loads(self.getBody())
+            body = self.getBody()
+            if type(body) == type(b'a'):
+                debugPrint(3,"Changing body from bytes to String")
+                body = body.decode("utf-8")
+            contractObj = json.loads(body)
             path = self.path
+            debugPrint(3,"on path: '{}'".format(path))
             control = PostContol()
             result = {
                 '/setProfile': control.loadProfile,
@@ -37,15 +52,17 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             self.setHeader()
             self.wfile.write(result.encode())
         except Exception as e:
-            FileCreation.pushFile("Error","Post",'{"errorMessage":"%s"}'%(e))
+            print("There has been an error")
+            FileCreation.pushFile("Error","Post",'{"errorMessage":"%s"}\n'%(e))
             self.setHeader()
-            output = '{"Error":"%s"}'%(e)
+            output = '{"Error":"%s"}\n'%(e)
             self.wfile.write(output.encode())
 
 
     def getBody(self):
         content_len = int(self.headers['content-length'])
-        return self.rfile.read(content_len)
+        tempStr = self.rfile.read(content_len)
+        return tempStr
 
     def setHeader(self):
         self.send_response(200)

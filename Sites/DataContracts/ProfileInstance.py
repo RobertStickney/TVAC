@@ -1,5 +1,7 @@
 from DataContracts.ZoneCollection import ZoneCollection
 
+from HouseKeeping.globalVars import debugPrint
+
 class ProfileInstance:
     # Here will be the instance stored.
     __instance = None
@@ -15,5 +17,6 @@ class ProfileInstance:
         if ProfileInstance.__instance != None:
             raise Exception("This class is a singleton!")
         else:
+            debugPrint(2,"Creating ProfileInstance")
             self.zoneProfiles = ZoneCollection()
             ProfileInstance.__instance = self

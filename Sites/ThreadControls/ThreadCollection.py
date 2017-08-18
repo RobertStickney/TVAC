@@ -2,6 +2,7 @@ import random
 
 from ThreadControls.HardWareControlStub import HardWareControlStub
 
+from HouseKeeping.globalVars import debugPrint
 
 class ThreadCollection:
 
@@ -18,7 +19,9 @@ class ThreadCollection:
             "zone7": HardWareControlStub(args=('zone7',)),
             "zone8": HardWareControlStub(args=('zone8',)),
             "zone9": HardWareControlStub(args=('zone9',)),
-            "VacGuages": "Init PfeifferGuages class here"}
+            # commented out so checkThreadStatus works
+            # "VacGuages": "Init PfeifferGuages class here"
+            }
 
     def runAllThreads(self):
         for thread in self.threadDict:
@@ -34,6 +37,7 @@ class ThreadCollection:
         self.threadDict[thread].start()
 
     def checkThreadStatus(self):
+        debugPrint(2,"checkThreadStatus")
         for thread in self.threadDict:
             print(thread, " is alive ", self.threadDict[thread].is_alive(), ' is handeled ', self.threadDict[thread].handeled )
 
