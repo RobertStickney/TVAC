@@ -32,8 +32,10 @@ class ZoneCollection:
         for zoneProfile in d['profiles']:
             zoneProfile['profileuuid'] = self.profileUUID
             zoneName = "zone"+str(zoneProfile['zone'])
+            debugPrint(4,"zone: {}".format(zoneName))
             self.zoneDict[zoneName].update(zoneProfile)
-        MySQlConnect.pushProfile()
+        # commenting out while testing
+        # MySQlConnect.pushProfile()
 
     def getZone(self,d):
         return self.zoneDict[d]

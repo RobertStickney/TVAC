@@ -30,11 +30,11 @@ class PostContol:
         threadInstance.threadCollection.removePause(data)
         return "{'result':'success'}"
 
-    def checkTreadStatus(self,data):
-        # Why is this a POST and not a GET?
-        threadInstance = ThreadCollectionInstance.getInstance()
-        threadInstance.threadCollection.checkThreadStatus()
-        return "{'result':'success'}"
+    # def checkTreadStatus(self,data):
+    #     # Why is this a POST and not a GET?
+    #     threadInstance = ThreadCollectionInstance.getInstance()
+    #     threadInstance.threadCollection.checkThreadStatus()
+    #     return "{'result':'success'}"
 
     def holdSingleThread(self,data):
         threadInstance = ThreadCollectionInstance.getInstance()

@@ -37,9 +37,11 @@ class ThreadCollection:
         self.threadDict[thread].start()
 
     def checkThreadStatus(self):
-        debugPrint(2,"checkThreadStatus")
+        debugPrint(2,"Starting checkThreadStatus:")
         for thread in self.threadDict:
-            print(thread, " is alive ", self.threadDict[thread].is_alive(), ' is handeled ', self.threadDict[thread].handeled )
+            isAlive = self.threadDict[thread].is_alive()
+            handled = self.threadDict[thread].handeled
+            print("{} is {} and is {} handled".format(thread, "ALIVE" if isAlive else "DEAD", "NOT" if not handled else ""))
 
     def pause(self,data):
         thread = data['zone']
