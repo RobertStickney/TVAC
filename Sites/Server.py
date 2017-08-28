@@ -2,8 +2,8 @@
 import socketserver
 import sys
 
-from DataContracts.ProfileInstance import ProfileInstance
-from DataContracts.HardwareStatusInstance import HardwareStatusInstance
+from Collections.ProfileInstance import ProfileInstance
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 from VerbHandler import VerbHandler
 

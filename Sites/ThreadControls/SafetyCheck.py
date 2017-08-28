@@ -2,7 +2,7 @@ from threading import Thread
 import time
 import os
 
-from DataContracts.HardwareStatusInstance import HardwareStatusInstance
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 
 from HouseKeeping.globalVars import debugPrint
 

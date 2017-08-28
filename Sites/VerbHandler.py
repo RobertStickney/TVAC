@@ -1,11 +1,11 @@
 import http.server
 import json
 
-from Controlers.PostControl import PostContol
-from Controlers.GetControl import GetControl
+from Controllers.PostControl import PostContol
+from Controllers.GetControl import GetControl
 
 from DataBaseController.FileCreation import FileCreation
-from DataContracts.ProfileInstance import ProfileInstance
+from Collections.ProfileInstance import ProfileInstance
 
 from HouseKeeping.globalVars import debugPrint
 

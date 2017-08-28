@@ -1,6 +1,6 @@
-from DataContracts.ThermocoupleCollection import ThermocoupleCollection
-from DataContracts.PfeifferGuageCollection import PfeifferGuageCollection
-#from DataContracts.ShiCryopumpCollection import ShiCryopumpCollection
+from Collections.ThermocoupleCollection import ThermocoupleCollection
+from Collections.PfeifferGuageCollection import PfeifferGuageCollection
+#from Collections.ShiCryopumpCollection import ShiCryopumpCollection
 
 
 from HouseKeeping.globalVars import debugPrint

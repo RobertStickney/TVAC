@@ -6,7 +6,7 @@ from datetime import datetime
 from Keysight_34980A import Kesight_34980A_TC_Scan
 from HouseKeeping.globalVars import debugPrint
 
-from DataContracts.HardwareStatusInstance import HardwareStatusInstance
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 
 class ThermoCoupleUpdater(Thread):
 

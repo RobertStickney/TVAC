@@ -1,4 +1,4 @@
-from DataContracts.HardwareStatusInstance import HardwareStatusInstance
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 from DataContracts.ThermalProfileContract import ThermalProfileContract
 
 from HouseKeeping.globalVars import debugPrint

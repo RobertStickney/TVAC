@@ -6,9 +6,9 @@ import datetime
 
 from DataBaseController.FileCreation import FileCreation
 from DataBaseController.MySql import MySQlConnect
-from DataContracts.ProfileInstance import ProfileInstance
+from Collections.ProfileInstance import ProfileInstance
 
-from DataContracts.HardwareStatusInstance import HardwareStatusInstance
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 from PID.PID import PID
 
 from HouseKeeping.globalVars import debugPrint

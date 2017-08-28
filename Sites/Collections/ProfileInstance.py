@@ -1,4 +1,4 @@
-from DataContracts.ZoneCollection import ZoneCollection
+from Collections.ZoneCollection import ZoneCollection
 
 from HouseKeeping.globalVars import debugPrint
 
