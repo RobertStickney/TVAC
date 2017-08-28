@@ -12,7 +12,7 @@ from PC_104_Instance import PC_104_Instance
 from TsRegistersControlStub import TsRegistersControlStub
 
 from DataContracts import ThermocoupleCollection as tc
-
+from DataContracts import ZoneCollection as zc
 
 #server_Address = ""
 server_Address = "127.0.0.201"
@@ -75,19 +75,9 @@ class MyHandler(http.server.CGIHTTPRequestHandler):
             units = 'K'
             print(' ')
             buff=(tcColl.getJson()) 
-            #resp=dict(time='2017-09-24 15:43:23.2342',tcs=[])
-            #resp['time'].append("2017-09-24 15:58:2242")
-           #resp['tcs'].append("123")
-            # resp = dict(Addr = [], Kind = [], Pressure = [])
-            # #resp=dict(Test=[])
-            # resp['Addr'].append('sdf') 
-            # resp['Kind'].append('hot')
-            # resp['Pressure'].append(123.2)
-            #resp['Test'].append('Eureka')
-            #resp={"Addr":["abc","sdf"],"Kind":["hello there","burp"],"Pressure":["1","2","3"]}
-            #buff = json.dumps(resp)         
-
-           # buff="eureka" 
+        elif self.path=="/getTprofile":
+        	zpColl=zc.ZoneCollection()
+        	buff=(zpColl.getJson())
         elif self.path == "/Pgauge":
             if self.cmd_buff_len > 0:
                 gauges = json.loads(self.cmd_buff)

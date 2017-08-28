@@ -93,7 +93,7 @@ def Pfeiffer_Convert_Press2Str(pressure, inTorr = True):
 def Pfeiffer_SendReceive(Address, Parm=349, dataStr=None):
     p_gauge = open('/dev/ttyxuart2', 'r+b', buffering=0)
     for tries in range(3):
-        if dataStr is None
+        if dataStr is None:
             p_gauge.write(Pfeiffer_GenCmdRead(Address,Parm).encode())
         else:
             p_gauge.write(Pfeiffer_GenCmdWrite(Address,Parm,dataStr).encode())

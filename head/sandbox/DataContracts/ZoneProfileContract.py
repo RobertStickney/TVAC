@@ -1,6 +1,7 @@
 from DataContracts.HardwareStatusInstance import HardwareStatusInstance
 from DataContracts.ThermalProfileContract import ThermalProfileContract
 
+#from HouseKeeping.globalVars import debugPrint
 
 class ZoneProfileContract:
     def __init__(self, d):
@@ -41,6 +42,7 @@ class ZoneProfileContract:
         return list
 
     def update(self, d):
+       # debugPrint(4, "Updating zone profile with info:\n{}".format(d))
         if 'zone' in d:
             self.zone = d['zone']
         if 'profileuuid' in d:
@@ -52,7 +54,7 @@ class ZoneProfileContract:
         if 'termalprofiles' in d:
             self.termalProfiles = self.setTermalProfiles(d['termalprofiles'])
         if 'thermocouples' in d:
-            self.thermocouples = self.setThermocouples(d['thermalcouples'])
+            self.thermocouples = self.setThermocouples(d['thermocouples'])
 
     def getJson(self):
         message = []
@@ -71,9 +73,9 @@ class ZoneProfileContract:
 
         message.append('],')
         message.append('"thermocouples":[')
-        coupleLen = len(self.thermalCouples)
+        coupleLen = len(self.thermocouples)
         count = 0
-        for couple in self.thermalCouples:
+        for couple in self.thermocouples:
             message.append(couple.getJson())
             if count < (coupleLen - 1):
                 message.append(',')
