@@ -20,6 +20,7 @@ class GetControl:
     	return json
 
     def getAllZoneData(self, data):
+        # This doesn't work...
     	debugPrint(2, "Calling: getAllZoneData")
     	profileInstance = ProfileInstance.getInstance()
     	zones = profileInstance.zoneProfiles.zoneDict
