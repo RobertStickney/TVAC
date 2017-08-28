@@ -1,7 +1,7 @@
 from DataContracts.ThermocoupleCollection import ThermocoupleCollection
 from DataContracts.PfeifferGuageCollection import PfeifferGuageCollection
 #from DataContracts.ShiCryopumpCollection import ShiCryopumpCollection
-from Keysight_34980A.ThermoCoupleUpdater import ThermoCoupleUpdater
+
 
 from HouseKeeping.globalVars import debugPrint
 
@@ -26,9 +26,7 @@ class HardwareStatusInstance:
             self.PfeifferGuages = PfeifferGuageCollection()
             #self.ShiCryopump = ShiCryopumpCollection()
 
-            # Change this to be a "hardward updater" not just TC
-            thermoCoupleUpdater = ThermoCoupleUpdater(self)
-            thermoCoupleUpdater.start()
+
 
 
 

@@ -6,7 +6,7 @@ from DataContracts.ProfileInstance import ProfileInstance
 from DataContracts.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 from VerbHandler import VerbHandler
-from ThreadControls.SafetyCheck import SafetyCheck
+
 
 from HouseKeeping import globalVars
 from HouseKeeping.globalVars import debugPrint
@@ -34,8 +34,6 @@ if __name__ == '__main__':
     profileInstance = ProfileInstance.getInstance()
     threadInstance = ThreadCollectionInstance.getInstance()
     
-    safetyCheck = SafetyCheck()
-    safetyCheck.start()
 
     
     debugPrint(1,"Finished initializing threads and drivers")

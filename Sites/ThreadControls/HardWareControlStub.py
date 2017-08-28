@@ -62,16 +62,16 @@ class HardWareControlStub(Thread):
             debugPrint(1,"======{}: currentTemp - {}".format(self.args,currentTemp))
 
 
-            self.pid = PID()
-            
-            proportional_gain = 0.2
-            integral_gain = 0
-            derivative_gain = 0
-            
-            self.pid.setKp(proportional_gain)
-            self.pid.setKi(integral_gain)
-            self.pid.setKd(derivative_gain)
-            self.pid.SetPoint = goalTemp
+            # we'll be moving this probably to the Zone Profile Contract
+
+            # self.pid = PID()
+            # proportional_gain = 0.2
+            # integral_gain = 0
+            # derivative_gain = 0
+            # self.pid.setKp(proportional_gain)
+            # self.pid.setKi(integral_gain)
+            # self.pid.setKd(derivative_gain)
+            # self.pid.SetPoint = goalTemp
 
 
             while self.runCount > 0:
@@ -79,9 +79,9 @@ class HardWareControlStub(Thread):
                 debugPrint(1,"{}: Current/Goal temp: {}/{}".format(self.args, currentTemp,goalTemp))
                 self.runProcess()
 
-                self.pid.update(currentTemp)
-                corrections = self.pid.output
-                debugPrint(2,"{}: PID corrections: {}".format(self.args, corrections))
+                # self.pid.update(currentTemp)
+                # corrections = self.pid.output
+                # debugPrint(2,"{}: PID corrections: {}".format(self.args, corrections))
                 # corrections is the "power" needed to change the temp to goal,
                 # This still needs to be converted duty cylces for the heaters
 
