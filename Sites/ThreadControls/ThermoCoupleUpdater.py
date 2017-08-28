@@ -38,7 +38,9 @@ class ThermoCoupleUpdater(Thread):
 
 			# stop when the program ends
 			while os.getppid() != 1: 
+
 				debugPrint(3,"(should be) Pulling live data for TC")
+
 				# on comment when live
 				# TCs = Tharsis.getTC_Values()
 
