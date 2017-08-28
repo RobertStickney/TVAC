@@ -33,6 +33,7 @@ class ThermalProfileContract:
         if 'duration' in d:  # Derived value
             self.duration = d['duration']
 
+
     def getJson(self):
         message = []
         message.append('{"termalsetpoint":%s,'% self.termalsetpoint)

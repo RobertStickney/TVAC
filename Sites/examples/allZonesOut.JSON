@@ -144,10 +144,23 @@
 				}
 			]
 		},
-		{"zone":0,"profileuuid":"","average":0,"zoneUUID":"623a2a6b-58fb-423b-9100-a037d5caf34f","termalprofiles":[],"thermocouples":[]},
-		{"zone":0,"profileuuid":"","average":0,"zoneUUID":"983de019-3496-4cef-84a1-106c85481424","termalprofiles":[],"thermocouples":[]},
-		{"zone":0,"profileuuid":"","average":0,"zoneUUID":"35321038-18c7-4c51-b4e0-62d6f129c9e0","termalprofiles":[],"thermocouples":[]},
-		{"zone":0,"profileuuid":"","average":0,"zoneUUID":"90d55b7b-4923-4598-b320-4264c4669837","termalprofiles":[],"thermocouples":[]},
-		{"zone":0,"profileuuid":"","average":0,"zoneUUID":"fe962fce-f1e2-4e61-93d1-cc9a6926fb14","termalprofiles":[],"thermocouples":[]}
-		]
-		}
+		{
+			"zone":0,
+			"profileuuid":"",
+			"average":0,
+			"zoneUUID":"623a2a6b-58fb-423b-9100-a037d5caf34f",
+			"termalprofiles":[],
+			"thermocouples":[]
+		},
+		{
+			"zone":0,
+			"profileuuid":"",
+			"average":0,"zoneUUID":"983de019-3496-4cef-84a1-106c85481424","termalprofiles":[],"thermocouples":[]},
+		{
+			"zone":0,"profileuuid":"","average":0,"zoneUUID":"35321038-18c7-4c51-b4e0-62d6f129c9e0","termalprofiles":[],"thermocouples":[]},
+		{
+			"zone":0,"profileuuid":"","average":0,"zoneUUID":"90d55b7b-4923-4598-b320-4264c4669837","termalprofiles":[],"thermocouples":[]},
+		{
+			"zone":0,"profileuuid":"","average":0,"zoneUUID":"fe962fce-f1e2-4e61-93d1-cc9a6926fb14","termalprofiles":[],"thermocouples":[]}
+	]
+}

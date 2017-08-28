@@ -26,6 +26,10 @@ class ThermocoupleCollection:
         return TCs
 
     def update(self, d):
+        '''
+        Given a new diciatary of TC data, this will update the 
+        collection with the new data
+        '''
         if 'time' in d:
             self.time = d['time'] # Start of scan time
         for updateTC in d['tcList']:

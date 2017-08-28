@@ -4,6 +4,14 @@ from DataContracts.ThermalProfileContract import ThermalProfileContract
 from HouseKeeping.globalVars import debugPrint
 
 class ZoneProfileContract:
+    '''
+    This is a Class that holds all the data on a given zone, this data includes:
+    
+    - A list of thermocouples
+    - A list of termalProfiles, this is a list of time points, ramps, soak times, and temps. 
+    - The Average temp of all the TC's
+    - Zone data number and UUID
+    '''
     def __init__(self, d):
         if 'zone' in d:
             self.zone = d['zone']
@@ -55,6 +63,22 @@ class ZoneProfileContract:
             self.termalProfiles = self.setTermalProfiles(d['termalprofiles'])
         if 'thermocouples' in d:
             self.thermocouples = self.setThermocouples(d['thermocouples'])
+
+
+    def getTemp(self, mode="Average"):
+        if mode == "Average":
+            print(self.getJson())
+            # for tmp in self.thermocouples:
+            #     print(tmp.temp)
+            pass
+        if mode == "Min":
+            return max(self.thermocouples, key=lambda x: x.getTemp()).getTemp()
+        if mode == "Max":
+            print("1")
+            return max(self.thermocouples, key=lambda x: x.getTemp()).getTemp()
+        
+
+        
 
     def getJson(self):
         message = []

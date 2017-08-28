@@ -25,9 +25,10 @@ class ThreadCollection:
 
     def runAllThreads(self):
         for thread in self.threadDict:
-            if self.threadDict[thread].profile.zone > 0:
+            if self.threadDict[thread].zoneProfile.zone > 0:
                 if self.threadDict[thread].handeled:
                     self.threadDict[thread] = HardWareControlStub(args=(thread,))
+                print("Zone {} is handled, about the start".format(self.threadDict[thread].zoneProfile.zone,))
                 self.threadDict[thread].start()
 
     def runSingleThread(self,data):
