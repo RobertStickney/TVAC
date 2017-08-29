@@ -29,9 +29,10 @@ class SafetyCheck(Thread):
 		SLEEP_TIME = 1 # in seconds
 		
 		hardwareStatusInstance = HardwareStatusInstance.getInstance()
-
+		debugPrint(4, "Starting Safety Checker Thread")
 		# stop when the program ends
-		while os.getppid() != 1: 
+		while True: 
+			debugPrint(4, "Running Safety Checker Thread")
 			TCs = hardwareStatusInstance.Thermocouples.tcList
 			for tc in TCs:
 				# if there are any TC's higher than max temp

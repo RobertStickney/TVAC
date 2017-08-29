@@ -1,7 +1,7 @@
 from Collections.ThermocoupleCollection import ThermocoupleCollection
 from Collections.PfeifferGuageCollection import PfeifferGuageCollection
 #from Collections.ShiCryopumpCollection import ShiCryopumpCollection
-
+from Collections.PC_104_Instance import PC_104_Instance
 
 from HouseKeeping.globalVars import debugPrint
 
@@ -26,7 +26,7 @@ class HardwareStatusInstance:
             self.PfeifferGuages = PfeifferGuageCollection()
             #self.ShiCryopump = ShiCryopumpCollection()
 
-
+            self.PC_104_Instance = PC_104_Instance.getInstance()
 
 
 

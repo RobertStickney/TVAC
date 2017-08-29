@@ -3,6 +3,8 @@ from DataContracts.ThermalProfileContract import ThermalProfileContract
 
 from HouseKeeping.globalVars import debugPrint
 
+import threading
+
 class ZoneProfileContract:
     '''
     This is a Class that holds all the data on a given zone, this data includes:
@@ -12,6 +14,9 @@ class ZoneProfileContract:
     - The Average temp of all the TC's
     - Zone data number and UUID
     '''
+
+    __lock = threading.RLock()
+
     def __init__(self, d):
         if 'zone' in d:
             self.zone = d['zone']
@@ -37,19 +42,24 @@ class ZoneProfileContract:
         self.zoneUUID = ''
 
     def setThermocouples(self, thermocouples):
+        self.__lock.acquire()
         hwStatus = HardwareStatusInstance.getInstance()
         list = []
         for tc in thermocouples:
             list.append(hwStatus.Thermocouples.getTC(tc))
+        self.__lock.release()
         return list
 
     def setTermalProfiles(self,termalProfiles):
+        self.__lock.acquire()
         list = []
         for profile in termalProfiles:
             list.append(ThermalProfileContract(profile))
+        self.__lock.release()
         return list
 
     def update(self, d):
+        self.__lock.acquire()
         debugPrint(4, "Updating zone profile with info:\n{}".format(d))
         if 'zone' in d:
             self.zone = d['zone']
@@ -63,24 +73,27 @@ class ZoneProfileContract:
             self.termalProfiles = self.setTermalProfiles(d['termalprofiles'])
         if 'thermocouples' in d:
             self.thermocouples = self.setThermocouples(d['thermocouples'])
+        self.__lock.release()
 
 
-    def getTemp(self, mode="Average"):
+    def getTemp(self, mode=None):
+        self.__lock.acquire()
+        if not mode:
+            mode = self.average
         if mode == "Average":
-            print(self.getJson())
-            # for tmp in self.thermocouples:
-            #     print(tmp.temp)
-            pass
+            temp = (sum(a) / len(a))
         if mode == "Min":
-            return max(self.thermocouples, key=lambda x: x.getTemp()).getTemp()
+            temp = min(self.thermocouples, key=lambda x: x.getTemp()).getTemp()
         if mode == "Max":
-            print("1")
-            return max(self.thermocouples, key=lambda x: x.getTemp()).getTemp()
-        
+            temp = max(self.thermocouples, key=lambda x: x.getTemp()).getTemp()
+        self.__lock.release()
+        return temp
+
 
         
 
     def getJson(self):
+        self.__lock.acquire()
         message = []
         message.append('{"zone":%s,' % self.zone)
         message.append('"profileuuid":"%s",' % self.profileUUID)
@@ -107,4 +120,5 @@ class ZoneProfileContract:
 
         message.append(']}')
         test = ''.join(message)
+        self.__lock.release()
         return test

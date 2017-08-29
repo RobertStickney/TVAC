@@ -32,20 +32,24 @@ class ThermoCoupleUpdater(Thread):
 			Channel_List = "(@1001:1020,2036:2040,3001:3040)"
 			hwStatus = self.hardwareStatusInstance
 
-			# uncomment when live, hasn't been tested on system yet.
-			# Tharsis = Kesight_34980A_TC_Scan.Keysight34980A_TC(ipAddr_34980A, ChannelList = Channel_List)
-			# Tharsis.init_sys()
+			userName = os.environ['LOGNAME']
+
+			if "root" in userName:
+				# Hasn't been tested yet
+				Tharsis = Kesight_34980A_TC_Scan.Keysight34980A_TC(ipAddr_34980A, ChannelList = Channel_List)
+				Tharsis.init_sys()
 
 			# stop when the program ends
-			while os.getppid() != 1: 
+			while True: 
 
-				debugPrint(3,"(should be) Pulling live data for TC")
 
-				# on comment when live
-				# TCs = Tharsis.getTC_Values()
+				if "root" in userName:
+					debugPrint(4,"Pulling live data for TC")
+					# Hasn't been tested yet
+					TCs = Tharsis.getTC_Values()
 
-				# TCs is a list of dicitations ordered like this....
 				'''
+				TCs is a list of dicitations ordered like this....
 				{
 				  'Thermocouple': tc_num,
 	              'time': tc_time_offset,
@@ -54,6 +58,7 @@ class ThermoCoupleUpdater(Thread):
                   'alarm': tc_alarm
                  }
                 '''
+                
                 # uncomment if you want to test updating temps
 				# TCs = {
 				# 	'time': datetime.now(),
@@ -61,8 +66,6 @@ class ThermoCoupleUpdater(Thread):
 				# 		{'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 1},
 				# 	]
 				# }
-
-				# This is not thread safe, adding some locks to hwStatus.Thermocouples would be needed 
-				# hwStatus.Thermocouples.update(TCs)
+				hwStatus.Thermocouples.update(TCs)					
 
 				time.sleep(SLEEP_TIME)
