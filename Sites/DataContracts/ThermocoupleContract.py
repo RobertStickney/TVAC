@@ -8,6 +8,7 @@ class ThermocoupleContract:
         self.Thermocouple = d
         self.temp = 0
         self.working = False
+        self.userDefined = False
 
 
         self.time = 0
@@ -21,6 +22,8 @@ class ThermocoupleContract:
             self.temp = d['temp']
         if 'working' in d:
             self.working = d['working']
+        if 'userDefined' in d:
+            self.userDefined = d['userDefined']
         if 'alarm' in d:
             self.alarm = d['alarm']
         self.__lock.release()

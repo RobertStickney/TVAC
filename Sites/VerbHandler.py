@@ -27,7 +27,8 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             result = {
                 '/checkZoneStatus': control.checkTreadStatus,
                 '/getAllThermoCoupleData': control.getAllThermoCoupleData,
-                '/getAllZoneData': control.getAllZoneData
+                '/getAllZoneData': control.getAllZoneData,
+                '/getLastError' : control.getLastError
             }[path](contractObj)
 
             debugPrint(1,"Sending results")

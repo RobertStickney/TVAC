@@ -30,7 +30,7 @@ class ThermoCoupleUpdater(Thread):
 			SLEEP_TIME = 5 # will be 30 seconds
 			ipAddr_34980A = '192.168.99.3'
 			Channel_List = "(@1001:1020,2036:2040,3001:3040)"
-			hwStatus = self.hardwareStatusInstance
+			hwStatus = self.hardwareStatusInstance.getInstance()
 
 			userName = os.environ['LOGNAME']
 
@@ -41,13 +41,24 @@ class ThermoCoupleUpdater(Thread):
 
 			# stop when the program ends
 			while True: 
-
-
 				if "root" in userName:
 					debugPrint(4,"Pulling live data for TC")
 					# Hasn't been tested yet
 					TCs = Tharsis.getTC_Values()
-
+				else:
+					debugPrint(4,"Generating test data for TC")
+					TCs = {
+						'time': datetime.now(),
+						'tcList': [
+							{'Thermocouple': 1, 'temp': hwStatus.Thermocouples.getTC(1).getTemp() - 50},
+							{'Thermocouple': 5, 'temp': hwStatus.Thermocouples.getTC(5).getTemp() + 50},
+							{'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 50},
+							{'Thermocouple': 3, 'temp': hwStatus.Thermocouples.getTC(3).getTemp() - 50,
+							'userDefined':True},
+							{'Thermocouple': 4, 'temp': hwStatus.Thermocouples.getTC(4).getTemp() + 50,
+							'userDefined':True},
+						]
+					}
 				'''
 				TCs is a list of dicitations ordered like this....
 				{
@@ -58,14 +69,9 @@ class ThermoCoupleUpdater(Thread):
                   'alarm': tc_alarm
                  }
                 '''
+					
+
                 
-                # uncomment if you want to test updating temps
-				# TCs = {
-				# 	'time': datetime.now(),
-				# 	'tcList': [
-				# 		{'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 1},
-				# 	]
-				# }
 				hwStatus.Thermocouples.update(TCs)					
 
 				time.sleep(SLEEP_TIME)
