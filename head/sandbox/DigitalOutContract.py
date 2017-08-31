@@ -79,22 +79,9 @@ class DigitalOutContract:
         self.CryoP_PwrRelay1 = False    # C 2: Do 29-
         self.CryoP_PwrRelay2 = False    # C 2: Do 30-
         self.RoughP_PwrRelay = False    # C 2: Do 31-
-        self.IR_Lamp_1_pwm_dc = 0.0     # Lamp 1 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_2_pwm_dc = 0.0     # Lamp 2 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_3_pwm_dc = 0.0     # Lamp 3 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_4_pwm_dc = 0.0     # Lamp 4 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_5_pwm_dc = 0.0     # Lamp 5 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_6_pwm_dc = 0.0     # Lamp 6 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_7_pwm_dc = 0.0     # Lamp 7 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_8_pwm_dc = 0.0     # Lamp 8 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_9_pwm_dc = 0.0     # Lamp 9 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_10_pwm_dc = 0.0    # Lamp 10 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_11_pwm_dc = 0.0    # Lamp 11 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_12_pwm_dc = 0.0    # Lamp 12 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_13_pwm_dc = 0.0    # Lamp 13 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_14_pwm_dc = 0.0    # Lamp 14 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_15_pwm_dc = 0.0    # Lamp 15 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_16_pwm_dc = 0.0    # Lamp 16 PWM duty cycle range: 0 - 1
+        # Lamps PWM duty cycle range: 0 - 1
+        self.IR_Lamps_pwm_dc = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        #                        1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
 
     def updatePin(self, CardNum, pinNum, setBit):  # Todo Delete this method when not used in engr_ interface
         # Do not use this funciton in the real server
@@ -608,58 +595,97 @@ class DigitalOutContract:
             else:
                 self.c2_b3 &= ~0x80
         if 'IR Lamp 1 PWM DC' in d:
-            self.IR_Lamp_1_pwm_dc = d['IR Lamp 1 PWM DC']
+            self.IR_Lamps_pwm_dc[0] = d['IR Lamp 1 PWM DC']
         if 'IR Lamp 2 PWM DC' in d:
-            self.IR_Lamp_2_pwm_dc = d['IR Lamp 2 PWM DC']
+            self.IR_Lamps_pwm_dc[1] = d['IR Lamp 2 PWM DC']
         if 'IR Lamp 3 PWM DC' in d:
-            self.IR_Lamp_3_pwm_dc = d['IR Lamp 3 PWM DC']
+            self.IR_Lamps_pwm_dc[2] = d['IR Lamp 3 PWM DC']
         if 'IR Lamp 4 PWM DC' in d:
-            self.IR_Lamp_4_pwm_dc = d['IR Lamp 4 PWM DC']
+            self.IR_Lamps_pwm_dc[3] = d['IR Lamp 4 PWM DC']
         if 'IR Lamp 5 PWM DC' in d:
-            self.IR_Lamp_5_pwm_dc = d['IR Lamp 5 PWM DC']
+            self.IR_Lamps_pwm_dc[4] = d['IR Lamp 5 PWM DC']
         if 'IR Lamp 6 PWM DC' in d:
-            self.IR_Lamp_6_pwm_dc = d['IR Lamp 6 PWM DC']
+            self.IR_Lamps_pwm_dc[5] = d['IR Lamp 6 PWM DC']
         if 'IR Lamp 7 PWM DC' in d:
-            self.IR_Lamp_7_pwm_dc = d['IR Lamp 7 PWM DC']
+            self.IR_Lamps_pwm_dc[6] = d['IR Lamp 7 PWM DC']
         if 'IR Lamp 8 PWM DC' in d:
-            self.IR_Lamp_8_pwm_dc = d['IR Lamp 8 PWM DC']
+            self.IR_Lamps_pwm_dc[7] = d['IR Lamp 8 PWM DC']
         if 'IR Lamp 9 PWM DC' in d:
-            self.IR_Lamp_9_pwm_dc = d['IR Lamp 9 PWM DC']
+            self.IR_Lamps_pwm_dc[8] = d['IR Lamp 9 PWM DC']
         if 'IR Lamp 10 PWM DC' in d:
-            self.IR_Lamp_10_pwm_dc = d['IR Lamp 10 PWM DC']
+            self.IR_Lamps_pwm_dc[9] = d['IR Lamp 10 PWM DC']
         if 'IR Lamp 11 PWM DC' in d:
-            self.IR_Lamp_11_pwm_dc = d['IR Lamp 11 PWM DC']
+            self.IR_Lamps_pwm_dc[10] = d['IR Lamp 11 PWM DC']
         if 'IR Lamp 12 PWM DC' in d:
-            self.IR_Lamp_12_pwm_dc = d['IR Lamp 12 PWM DC']
+            self.IR_Lamps_pwm_dc[11] = d['IR Lamp 12 PWM DC']
         if 'IR Lamp 13 PWM DC' in d:
-            self.IR_Lamp_13_pwm_dc = d['IR Lamp 13 PWM DC']
+            self.IR_Lamps_pwm_dc[12] = d['IR Lamp 13 PWM DC']
         if 'IR Lamp 14 PWM DC' in d:
-            self.IR_Lamp_14_pwm_dc = d['IR Lamp 14 PWM DC']
+            self.IR_Lamps_pwm_dc[13] = d['IR Lamp 14 PWM DC']
         if 'IR Lamp 15 PWM DC' in d:
-            self.IR_Lamp_15_pwm_dc = d['IR Lamp 15 PWM DC']
+            self.IR_Lamps_pwm_dc[14] = d['IR Lamp 15 PWM DC']
         if 'IR Lamp 16 PWM DC' in d:
-            self.IR_Lamp_16_pwm_dc = d['IR Lamp 16 PWM DC']
+            self.IR_Lamps_pwm_dc[15] = d['IR Lamp 16 PWM DC']
         self.__lock.release()
+
+    # Get the IR lamps PWM Duty Cycle: lamp_num range = (1 to 16)
+    def get_IR_Lamps_pwm_dc(self, lamp_num):
+        self.__lock.acquire()
+        val = self.IR_Lamps_pwm_dc[lamp_num-1]
+        self.__lock.release()
+        return val
+
+    def get_c1_b0(self):
+        self.__lock.acquire()
+        val = self.c1_b0
+        self.__lock.release()
+        return val
+
+    def get_c1_b1(self):
+        self.__lock.acquire()
+        val = self.c1_b1
+        self.__lock.release()
+        return val
+
+    def get_c1_b2(self):
+        self.__lock.acquire()
+        val = self.c1_b2
+        self.__lock.release()
+        return val
+
+    def get_c1_b3(self):
+        self.__lock.acquire()
+        val = self.c1_b3
+        self.__lock.release()
+        return val
+
+    def get_c2_b0(self):
+        self.__lock.acquire()
+        val = self.c2_b0
+        self.__lock.release()
+        return val
+
+    def get_c2_b1(self):
+        self.__lock.acquire()
+        val = self.c2_b1
+        self.__lock.release()
+        return val
+
+    def get_c2_b2(self):
+        self.__lock.acquire()
+        val = self.c2_b2
+        self.__lock.release()
+        return val
+
+    def get_c2_b3(self):
+        self.__lock.acquire()
+        val = self.c2_b3
+        self.__lock.release()
+        return val
 
     def getVal(self, name):
         self.__lock.acquire()
-        if name == 'C1 B0':
-            val = self.c1_b0
-        elif name == 'C1 B1':
-            val = self.c1_b1
-        elif name == 'C1 B2':
-            val = self.c1_b2
-        elif name == 'C1 B3':
-            val = self.c1_b3
-        elif name == 'C2 B0':
-            val = self.c2_b0
-        elif name == 'C2 B1':
-            val = self.c2_b1
-        elif name == 'C2 B2':
-            val = self.c2_b2
-        elif name == 'C2 B3':
-            val = self.c2_b3
-        elif name == 'LN2-P EN':
+        if name == 'LN2-P EN':
             val = self.LN2_P_EN
         elif name == 'LN2-S EN':
             val = self.LN2_S_EN

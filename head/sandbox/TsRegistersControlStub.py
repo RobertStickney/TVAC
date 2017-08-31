@@ -31,14 +31,15 @@ class TsRegistersControlStub(Thread):
             self.da_io.digital_out.update(self.ts_reg.dio_read4(2, False))
 
             while os.getppid() != 1:  # Exit when parent thread stops running
-                self.ts_reg.do_write4([self.da_io.digital_out.c1_b0,
-                                       self.da_io.digital_out.c1_b1,
-                                       self.da_io.digital_out.c1_b2,
-                                       self.da_io.digital_out.c1_b3], 1)
-                self.ts_reg.do_write4([self.da_io.digital_out.c2_b0,
-                                       self.da_io.digital_out.c2_b1,
-                                       self.da_io.digital_out.c2_b2,
-                                       self.da_io.digital_out.c2_b3], 2)
+                # self.ir_lamp_duty_cycle()
+                self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0,
+                                       self.da_io.digital_out.get_c1_b1,
+                                       self.da_io.digital_out.get_c1_b2,
+                                       self.da_io.digital_out.get_c1_b3], 1)
+                self.ts_reg.do_write4([self.da_io.digital_out.get_c2_b0,
+                                       self.da_io.digital_out.get_c2_b1,
+                                       self.da_io.digital_out.get_c2_b2,
+                                       self.da_io.digital_out.get_c2_b3], 2)
                 if self.da_io.digital_out.RoughP_Start:
                     self.da_io.digital_out.update({"RoughP Start":False})
                 self.da_io.digital_in.update(self.ts_reg.dio_read4(1))
@@ -66,7 +67,11 @@ class TsRegistersControlStub(Thread):
         print(d)
         #self.da_io.analog_in.update(d)
 
-    def apply_duty_cycle(self):
-        pass
+    def ir_lamp_duty_cycle(self):
+        for n in range(1, 16+1):
+            pass
+
+
+
 
 

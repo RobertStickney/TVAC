@@ -4,7 +4,7 @@ import json
 
 class DigitalOutContract:
 
-    __updateLock = threading.RLock()
+    __lock = threading.RLock()
 
     def __init__(self):
         self.c1_b0 = 0x00               # C1: B0: Do0 - Do7
@@ -95,9 +95,12 @@ class DigitalOutContract:
         self.IR_Lamp_14_pwm_dc = 0.0    # Lamp 14 PWM duty cycle range: 0 - 1
         self.IR_Lamp_15_pwm_dc = 0.0    # Lamp 15 PWM duty cycle range: 0 - 1
         self.IR_Lamp_16_pwm_dc = 0.0    # Lamp 16 PWM duty cycle range: 0 - 1
+        # Lamps PWM duty cycle range: 0 - 1
+        self.IR_Lamps_pwm_dc = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        #                        1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
 
     def update(self, d):
-        self.__updateLock.acquire()
+        self.__lock.acquire()
         if 'C1 B0' in d:
             self.c1_b0 = d['C1 B0']
             self.LN2_P_EN = ((self.c1_b0 & 0x01) > 0)  # C 1: Do 0
@@ -570,40 +573,207 @@ class DigitalOutContract:
             else:
                 self.c2_b3 &= ~0x80
         if 'IR Lamp 1 PWM DC' in d:
-            self.IR_Lamp_1_pwm_dc = d['IR Lamp 1 PWM DC']
+            self.IR_Lamps_pwm_dc[0] = d['IR Lamp 1 PWM DC']
         if 'IR Lamp 2 PWM DC' in d:
-            self.IR_Lamp_2_pwm_dc = d['IR Lamp 2 PWM DC']
+            self.IR_Lamps_pwm_dc[1] = d['IR Lamp 2 PWM DC']
         if 'IR Lamp 3 PWM DC' in d:
-            self.IR_Lamp_3_pwm_dc = d['IR Lamp 3 PWM DC']
+            self.IR_Lamps_pwm_dc[2] = d['IR Lamp 3 PWM DC']
         if 'IR Lamp 4 PWM DC' in d:
-            self.IR_Lamp_4_pwm_dc = d['IR Lamp 4 PWM DC']
+            self.IR_Lamps_pwm_dc[3] = d['IR Lamp 4 PWM DC']
         if 'IR Lamp 5 PWM DC' in d:
-            self.IR_Lamp_5_pwm_dc = d['IR Lamp 5 PWM DC']
+            self.IR_Lamps_pwm_dc[4] = d['IR Lamp 5 PWM DC']
         if 'IR Lamp 6 PWM DC' in d:
-            self.IR_Lamp_6_pwm_dc = d['IR Lamp 6 PWM DC']
+            self.IR_Lamps_pwm_dc[5] = d['IR Lamp 6 PWM DC']
         if 'IR Lamp 7 PWM DC' in d:
-            self.IR_Lamp_7_pwm_dc = d['IR Lamp 7 PWM DC']
+            self.IR_Lamps_pwm_dc[6] = d['IR Lamp 7 PWM DC']
         if 'IR Lamp 8 PWM DC' in d:
-            self.IR_Lamp_8_pwm_dc = d['IR Lamp 8 PWM DC']
+            self.IR_Lamps_pwm_dc[7] = d['IR Lamp 8 PWM DC']
         if 'IR Lamp 9 PWM DC' in d:
-            self.IR_Lamp_9_pwm_dc = d['IR Lamp 9 PWM DC']
+            self.IR_Lamps_pwm_dc[8] = d['IR Lamp 9 PWM DC']
         if 'IR Lamp 10 PWM DC' in d:
-            self.IR_Lamp_10_pwm_dc = d['IR Lamp 10 PWM DC']
+            self.IR_Lamps_pwm_dc[9] = d['IR Lamp 10 PWM DC']
         if 'IR Lamp 11 PWM DC' in d:
-            self.IR_Lamp_11_pwm_dc = d['IR Lamp 11 PWM DC']
+            self.IR_Lamps_pwm_dc[10] = d['IR Lamp 11 PWM DC']
         if 'IR Lamp 12 PWM DC' in d:
-            self.IR_Lamp_12_pwm_dc = d['IR Lamp 12 PWM DC']
+            self.IR_Lamps_pwm_dc[11] = d['IR Lamp 12 PWM DC']
         if 'IR Lamp 13 PWM DC' in d:
-            self.IR_Lamp_13_pwm_dc = d['IR Lamp 13 PWM DC']
+            self.IR_Lamps_pwm_dc[12] = d['IR Lamp 13 PWM DC']
         if 'IR Lamp 14 PWM DC' in d:
-            self.IR_Lamp_14_pwm_dc = d['IR Lamp 14 PWM DC']
+            self.IR_Lamps_pwm_dc[13] = d['IR Lamp 14 PWM DC']
         if 'IR Lamp 15 PWM DC' in d:
-            self.IR_Lamp_15_pwm_dc = d['IR Lamp 15 PWM DC']
+            self.IR_Lamps_pwm_dc[14] = d['IR Lamp 15 PWM DC']
         if 'IR Lamp 16 PWM DC' in d:
-            self.IR_Lamp_16_pwm_dc = d['IR Lamp 16 PWM DC']
-        self.__updateLock.release()
+            self.IR_Lamps_pwm_dc[15] = d['IR Lamp 16 PWM DC']
+        self.__lock.release()
+
+    # Get the IR lamps PWM Duty Cycle: lamp_num range = (1 to 16)
+    def get_IR_Lamps_pwm_dc(self, lamp_num):
+        self.__lock.acquire()
+        val = self.IR_Lamps_pwm_dc[lamp_num-1]
+        self.__lock.release()
+        return val
+
+    def get_c1_b0(self):
+        self.__lock.acquire()
+        val = self.c1_b0
+        self.__lock.release()
+        return val
+
+    def get_c1_b1(self):
+        self.__lock.acquire()
+        val = self.c1_b1
+        self.__lock.release()
+        return val
+
+    def get_c1_b2(self):
+        self.__lock.acquire()
+        val = self.c1_b2
+        self.__lock.release()
+        return val
+
+    def get_c1_b3(self):
+        self.__lock.acquire()
+        val = self.c1_b3
+        self.__lock.release()
+        return val
+
+    def get_c2_b0(self):
+        self.__lock.acquire()
+        val = self.c2_b0
+        self.__lock.release()
+        return val
+
+    def get_c2_b1(self):
+        self.__lock.acquire()
+        val = self.c2_b1
+        self.__lock.release()
+        return val
+
+    def get_c2_b2(self):
+        self.__lock.acquire()
+        val = self.c2_b2
+        self.__lock.release()
+        return val
+
+    def get_c2_b3(self):
+        self.__lock.acquire()
+        val = self.c2_b3
+        self.__lock.release()
+        return val
+
+    def getVal(self, name):
+        self.__lock.acquire()
+        if name == 'LN2-P EN':
+            val = self.LN2_P_EN
+        elif name == 'LN2-S EN':
+            val = self.LN2_S_EN
+        elif name == 'LN2-Sol EN':
+            val = self.LN2_Sol_EN
+        elif name == 'notUsed1':
+            val = self.notUsed1
+        elif name == 'IR Lamp 1':
+            val = self.IR_Lamp_1
+        elif name == 'IR Lamp 2':
+            val = self.IR_Lamp_2
+        elif name == 'IR Lamp 3':
+            val = self.IR_Lamp_3
+        elif name == 'IR Lamp 4':
+            val = self.IR_Lamp_4
+        elif name == 'IR Lamp 5':
+            val = self.IR_Lamp_5
+        elif name == 'IR Lamp 6':
+            val = self.IR_Lamp_6
+        elif name == 'IR Lamp 7':
+            val = self.IR_Lamp_7
+        elif name == 'IR Lamp 8':
+            val = self.IR_Lamp_8
+        elif name == 'IR Lamp 9':
+            val = self.IR_Lamp_9
+        elif name == 'IR Lamp 10':
+            val = self.IR_Lamp_10
+        elif name == 'IR Lamp 11':
+            val = self.IR_Lamp_11
+        elif name == 'IR Lamp 12':
+            val = self.IR_Lamp_12
+        elif name == 'IR Lamp 13':
+            val = self.IR_Lamp_13
+        elif name == 'IR Lamp 14':
+            val = self.IR_Lamp_14
+        elif name == 'IR Lamp 15':
+            val = self.IR_Lamp_15
+        elif name == 'IR Lamp 16':
+            val = self.IR_Lamp_16
+        elif name == 'Heater SSR 1':
+            val = self.Heater_1
+        elif name == 'Heater SSR 2':
+            val = self.Heater_2
+        elif name == 'Heater SSR 3':
+            val = self.Heater_3
+        elif name == 'Heater SSR 4':
+            val = self.Heater_4
+        elif name == 'Heater SSR 5':
+            val = self.Heater_5
+        elif name == 'Heater SSR 6':
+            val = self.Heater_6
+        elif name == 'Heater SSR 7':
+            val = self.Heater_7
+        elif name == 'Heater SSR 8':
+            val = self.Heater_8
+        elif name == 'Heater SSR 9':
+            val = self.Heater_9
+        elif name == 'Heater SSR 10':
+            val = self.Heater_10
+        elif name == 'Heater SSR 11':
+            val = self.Heater_11
+        elif name == 'Heater SSR 12':
+            val = self.Heater_12
+        elif name == 'Heater SSR 13':
+            val = self.Heater_13
+        elif name == 'Heater SSR 14':
+            val = self.Heater_14
+        elif name == 'Heater SSR 15':
+            val = self.Heater_15
+        elif name == 'Heater SSR 16':
+            val = self.Heater_16
+        elif name == 'Heater SSR 17':
+            val = self.Heater_17
+        elif name == 'Heater SSR 18':
+            val = self.Heater_18
+        elif name == 'Heater SSR 19':
+            val = self.Heater_19
+        elif name == 'Heater SSR 20':
+            val = self.Heater_20
+        elif name == 'Heater SSR 21':
+            val = self.Heater_21
+        elif name == 'MCC Power':
+            val = self.MCC_Power
+        elif name == 'MCC2 Power':
+            val = self.MCC2_Power
+        elif name == 'RoughP GateValve':
+            val = self.RoughP_GateValve
+        elif name == 'RoughP Start':
+            val = self.RoughP_Start
+        elif name == 'CryoP GateValve':
+            val = self.CryoP_GateValve
+        elif name == 'RoughP PurgeGass':
+            val = self.RoughP_PurgeGass
+        elif name == 'LN2-S Sol':
+            val = self.LN2_S_Sol
+        elif name == 'LN2-P Sol':
+            val = self.LN2_P_Sol
+        elif name == 'CryoP Pwr Relay 1':
+            val = self.CryoP1_PwrRelay
+        elif name == 'CryoP Pwr Relay 2':
+            val = self.CryoP2_PwrRelay
+        elif name == 'RoughP Pwr Relay':
+            val = self.RoughP_PwrRelay
+        else:  # Unknown Value!
+            val = None
+        self.__lock.release()
+        return val
 
     def getJson(self):
+        self.__lock.acquire()
         message = []
         message.append('{"LN2-P EN":%s,' % json.dumps(self.LN2_P_EN))
         message.append('"LN2-S EN":%s,' % json.dumps(self.LN2_S_EN))
@@ -657,4 +827,5 @@ class DigitalOutContract:
         message.append('"CryoP Pwr Relay 1":%s,' % json.dumps(self.CryoP_PwrRelay1))
         message.append('"CryoP Pwr Relay 2":%s,' % json.dumps(self.CryoP_PwrRelay2))
         message.append('"RoughP Pwr Relay":%s}' % json.dumps(self.RoughP_PwrRelay))
+        self.__lock.release()
         return ''.join(message)
