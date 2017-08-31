@@ -3,6 +3,7 @@ import random
 from ThreadControls.HardWareControlStub import HardWareControlStub
 from ThreadControls.SafetyCheck import SafetyCheck
 from ThreadControls.ThermoCoupleUpdater import ThermoCoupleUpdater
+from ThreadControls.TsRegistersControlStub import TsRegistersControlStub
 
 from HouseKeeping.globalVars import debugPrint
 
@@ -11,7 +12,14 @@ class ThreadCollection:
     def __init__(self):
         self.zoneThreadDict = self.createZoneCollection()
         self.hardwareInterfaceThreadDict = self.createHardwareInterfaces()
-        self.safetyThread = self.createSafetyThread()
+        self.safetyThread = SafetyCheck()
+
+        for thread in self.hardwareInterfaceThreadDict.values():
+            thread.daemon = True
+            thread.start()
+        self.safetyThread.daemon = True
+        self.safetyThread.start()
+
 
     def createZoneCollection(self):
         return {"zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10})),
@@ -22,22 +30,18 @@ class ThreadCollection:
             "zone6": HardWareControlStub(args=('zone6',)),
             "zone7": HardWareControlStub(args=('zone7',)),
             "zone8": HardWareControlStub(args=('zone8',)),
-            "zone9": HardWareControlStub(args=('zone9',)),
-            # commented out so checkThreadStatus works
-            # "VacGuages": "Init PfeifferGuages class here"
+            "zone9": HardWareControlStub(args=('zone9',))
             }
 
     def createHardwareInterfaces(self):
         return {
         # commented out aren't fully tested
-        # "PC_104" : TsRegistersControlStub(),
+        "PC_104" : TsRegistersControlStub(),
         # "PfeifferGuage" : ThermoCoupleUpdater()
         "ThermoCouple" : ThermoCoupleUpdater(),
         # "MCC" : PASS
         }
 
-    def createSafetyThread(self):
-        safetyCheck = SafetyCheck()
 
     def runAllThreads(self):
         for thread in self.zoneThreadDict:

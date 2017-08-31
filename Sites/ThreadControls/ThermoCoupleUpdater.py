@@ -6,7 +6,7 @@ from datetime import datetime
 from Keysight_34980A import Kesight_34980A_TC_Scan
 from HouseKeeping.globalVars import debugPrint
 
-from DataContracts.HardwareStatusInstance import HardwareStatusInstance
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 
 class ThermoCoupleUpdater(Thread):
 
@@ -30,20 +30,37 @@ class ThermoCoupleUpdater(Thread):
 			SLEEP_TIME = 5 # will be 30 seconds
 			ipAddr_34980A = '192.168.99.3'
 			Channel_List = "(@1001:1020,2036:2040,3001:3040)"
-			hwStatus = self.hardwareStatusInstance
+			hwStatus = self.hardwareStatusInstance.getInstance()
 
-			# uncomment when live, hasn't been tested on system yet.
-			# Tharsis = Kesight_34980A_TC_Scan.Keysight34980A_TC(ipAddr_34980A, ChannelList = Channel_List)
-			# Tharsis.init_sys()
+			userName = os.environ['LOGNAME']
+
+			if "root" in userName:
+				# Hasn't been tested yet
+				Tharsis = Kesight_34980A_TC_Scan.Keysight34980A_TC(ipAddr_34980A, ChannelList = Channel_List)
+				Tharsis.init_sys()
 
 			# stop when the program ends
-			while os.getppid() != 1: 
-
-				# on comment when live
-				# TCs = Tharsis.getTC_Values()
-
-				# TCs is a list of dicitations ordered like this....
+			while True: 
+				if "root" in userName:
+					debugPrint(4,"Pulling live data for TC")
+					# Hasn't been tested yet
+					TCs = Tharsis.getTC_Values()
+				else:
+					debugPrint(4,"Generating test data for TC")
+					TCs = {
+						'time': datetime.now(),
+						'tcList': [
+							{'Thermocouple': 1, 'temp': hwStatus.Thermocouples.getTC(1).getTemp() - 50},
+							{'Thermocouple': 5, 'temp': hwStatus.Thermocouples.getTC(5).getTemp() + 50},
+							{'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 50},
+							{'Thermocouple': 3, 'temp': hwStatus.Thermocouples.getTC(3).getTemp() - 50,
+							'userDefined':True},
+							{'Thermocouple': 4, 'temp': hwStatus.Thermocouples.getTC(4).getTemp() + 50,
+							'userDefined':True},
+						]
+					}
 				'''
+				TCs is a list of dicitations ordered like this....
 				{
 				  'Thermocouple': tc_num,
 	              'time': tc_time_offset,
@@ -52,15 +69,9 @@ class ThermoCoupleUpdater(Thread):
                   'alarm': tc_alarm
                  }
                 '''
-                # uncomment if you want to test updating temps
-				# TCs = {
-				# 	'time': datetime.now(),
-				# 	'tcList': [
-				# 		{'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 1},
-				# 	]
-				# }
+					
 
-				# This is not thread safe, adding some locks to hwStatus.Thermocouples would be needed 
-				# hwStatus.Thermocouples.update(TCs)
+                
+				hwStatus.Thermocouples.update(TCs)					
 
 				time.sleep(SLEEP_TIME)

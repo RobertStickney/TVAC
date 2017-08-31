@@ -1,11 +1,11 @@
 import http.server
 import json
 
-from Controlers.PostControl import PostContol
-from Controlers.GetControl import GetControl
+from Controllers.PostControl import PostContol
+from Controllers.GetControl import GetControl
 
 from DataBaseController.FileCreation import FileCreation
-from DataContracts.ProfileInstance import ProfileInstance
+from Collections.ProfileInstance import ProfileInstance
 
 from HouseKeeping.globalVars import debugPrint
 
@@ -27,7 +27,8 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             result = {
                 '/checkZoneStatus': control.checkTreadStatus,
                 '/getAllThermoCoupleData': control.getAllThermoCoupleData,
-                '/getAllZoneData': control.getAllZoneData
+                '/getAllZoneData': control.getAllZoneData,
+                '/getLastError' : control.getLastError
             }[path](contractObj)
 
             debugPrint(1,"Sending results")
