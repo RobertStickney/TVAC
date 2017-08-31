@@ -1,7 +1,11 @@
+import threading
 import json
 
 
-class DigitalInContract:
+class DigitalInContract:    
+
+    __lock = threading.RLock()
+
     def __init__(self):
         self.pgRoughPumpRelay1 = False    # C 1: Di 0 - Roughing Pump Pressure Gauge Relay 1
         self.pgRoughPumpRelay2 = False    # C 1: Di 1 - Roughing Pump Pressure Gauge Relay 2
@@ -69,6 +73,7 @@ class DigitalInContract:
         self.LN2en = False                # C 2: Di 31- LN2 flow is enabled
 
     def update(self, d):
+        self.__lock.acquire()
         if 'C1 B0' in d:
             self.pgRoughPumpRelay1 = ((d['C1 B0'] & 0x01) > 0)  # C 1: Di 1
             self.pgRoughPumpRelay2 = ((d['C1 B0'] & 0x02) > 0)  # C 1: Di 1
@@ -141,8 +146,77 @@ class DigitalInContract:
             self.notUsed10 = ((d['C2 B3'] & 0x20) > 0)  # C 2: Di 29
             self.notUsed11 = ((d['C2 B3'] & 0x40) > 0)  # C 2: Di 30
             self.LN2en = ((d['C2 B3'] & 0x80) > 0)  # C 2: Di 31
+        self.__lock.release()
+
+    def getVal(self, name):
+        self.__lock.acquire()
+        if name == 'pgRoughPumpRelay1':
+            val = self.pgRoughPumpRelay1
+        elif name == 'pgRoughPumpRelay2':
+            val = self.pgRoughPumpRelay2
+        elif name == 'pgCryoPumpRelay1':
+            val = self.pgCryoPumpRelay1
+        elif name == 'pgCryoPumpRelay2':
+            val = self.pgCryoPumpRelay2
+        elif name == 'pgChamberRelay1':
+            val = self.pgChamberRelay1
+        elif name == 'pgChamberRelay2':
+            val = self.pgChamberRelay2
+        elif name == 'LN2_P_Sol_Open_NC':
+            val = self.LN2_P_Sol_Open_NC
+        elif name == 'LN2_P_Sol_Open_O':
+            val = self.LN2_P_Sol_Open_O
+        elif name == 'LN2_P_Sol_Closed_NC':
+            val = self.LN2_P_Sol_Closed_NC
+        elif name == 'LN2_P_Sol_Closed_O':
+            val = self.LN2_P_Sol_Closed_O
+        elif name == 'LN2_S_Sol_Open_NC':
+            val = self.LN2_S_Sol_Open_NC
+        elif name == 'LN2_S_Sol_Open_O':
+            val = self.LN2_S_Sol_Open_O
+        elif name == 'LN2_S_Sol_Closed_NC':
+            val = self.LN2_S_Sol_Closed_NC
+        elif name == 'LN2_S_Sol_Closed_O':
+            val = self.LN2_S_Sol_Closed_O
+        elif name == 'CryoP_GV_Open_NC':
+            val = self.CryoP_GV_Open_NC
+        elif name == 'CryoP_GV_Open_O':
+            val = self.CryoP_GV_Open_O
+        elif name == 'CryoP_GV_Closed_NC':
+            val = self.CryoP_GV_Closed_NC
+        elif name == 'CryoP_GV_Closed_O':
+            val = self.CryoP_GV_Closed_O
+        elif name == 'RoughP_GV_Open':
+            val = self.RoughP_GV_Open
+        elif name == 'RoughP_GV_Closed':
+            val = self.RoughP_GV_Closed
+        elif name == 'RoughP_Pwr_NC':
+            val = self.RoughP_Pwr_NC
+        elif name == 'RoughP_Pwr_O':
+            val = self.RoughP_Pwr_O
+        elif name == 'RoughP_On_NC':
+            val = self.RoughP_On_NC
+        elif name == 'RoughP_On_O':
+            val = self.RoughP_On_O
+        # elif name == 'notUsed1':
+        #     val = self.notUsed1
+        elif name == 'LN2AirOK':
+            val = self.LN2AirOK
+        elif name == 'AirOK':
+            val = self.AirOK
+        # elif name == 't20':
+        #     val = self.t20
+        # elif name == 'notUsed7':
+        #     val = self.notUsed7
+        elif name == 'LN2en':
+            val = self.LN2en
+        else:  # Unknown Value!
+            val = None
+        self.__lock.release()
+        return val
 
     def getJson(self):
+        self.__lock.acquire()
         message = []
         message.append('{"PG-SW-RoughP-Relay 1":%s,' % json.dumps(self.pgRoughPumpRelay1))
         message.append('"PG-SW-RoughP-Relay 2":%s,' % json.dumps(self.pgRoughPumpRelay2))
@@ -174,4 +248,5 @@ class DigitalInContract:
         #message.append('"t20":%s,' % json.dumps(self.t20)) uncomment when this is used
         #message.append('"notUsed7":%s,' % json.dumps(self.notUsed7)) uncomment when this is used
         message.append('"LN2-en":%s}' % json.dumps(self.LN2en))
+        self.__lock.release()
         return ''.join(message)

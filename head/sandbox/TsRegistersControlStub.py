@@ -19,12 +19,14 @@ class TsRegistersControlStub(Thread):
 
         self.ts_reg = TS_Registers()
         self.da_io = PC_104_Instance.getInstance()
-        self.updatePeriod = 0.2 # in seconds
+        self.adc_period = 0.0125  # adc_clock*8 = 0.1s loop period
+        self.pwm_period = 20  # seconds
 
     def run(self):
         print('TsRegistersControlStub PID: {:d}  Parent PID: {:d}'.format(os.getpid(), os.getppid()))
         try:
             self.ts_reg.open_Registers()
+            self.ts_reg.start_adc(1, 7, int(32e6*self.adc_period))
             self.da_io.digital_out.update(self.ts_reg.dio_read4(1, False))
             self.da_io.digital_out.update(self.ts_reg.dio_read4(2, False))
 
@@ -43,7 +45,7 @@ class TsRegistersControlStub(Thread):
                 self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
                 self.ts_reg.dac_write(self.da_io.analog_out.dac_counts[2], 2)
                 self.ts_reg.dac_write(self.da_io.analog_out.dac_counts[3], 3)
-                time.sleep(self.updatePeriod)
+                self.read_analog_in()  #loop period is adc_period * 2 seconds
 
             self.ts_reg.close()
             print('Closed the mmaps!')
@@ -52,9 +54,19 @@ class TsRegistersControlStub(Thread):
             print('Error accessing the PC104 Bus. Error: %s' % e)
         return
 
+    def read_analog_in(self):
+        (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
+        while fifo_depth < 16:
+            print("FIFO depth: {:d}".format(fifo_depth))
+            time.sleep(self.adc_period * ((fifo_depth / 2) - 8))
+            (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
+        d = {}
+        for n in range(fifo_depth):
+            d['ADC ' + str((n + first_channel) % 16)] = self.ts_reg.adc_fifo_read()
+        print(d)
+        #self.da_io.analog_in.update(d)
 
-
-
-
+    def apply_duty_cycle(self):
+        pass
 
 

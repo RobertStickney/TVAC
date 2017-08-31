@@ -5,8 +5,8 @@ import time
 import datetime
 import os
 
-from PC_104_Instance import PC_104_Instance
-from Testing_mmap import TS_Registers
+from HardwareStatusInstance import HardwareStatusInstance
+from TS_7250_V2.TS_Registers import TS_Registers
 
 
 class TsRegistersControlStub(Thread):
@@ -18,7 +18,7 @@ class TsRegistersControlStub(Thread):
         self.kwargs = kwargs
 
         self.ts_reg = TS_Registers()
-        self.da_io = PC_104_Instance.getInstance()
+        # TODO CHANGE ME self.da_io = PC_104_Instance.getInstance()
         self.updatePeriod = 0.2 # in seconds
 
     def run(self):

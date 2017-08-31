@@ -1,5 +1,8 @@
 
 class AnalogInContract:
+
+    __Lock = threading.RLock()
+
     def __init__(self):
         self.cabinetTemp1 = 0  # ADC 0 - Cabinet Temperature Sensor 1
         self.cabinetTemp2 = 0  # ADC 1 - Cabinet Temperature Sensor 2
@@ -19,6 +22,7 @@ class AnalogInContract:
         self.LN2shroud = 0     # ADC 14- Shroud LN2 Supply Valve Position 4-20mA
 
     def update(self, d):
+        self.__Lock.acquire()
         if 'ADC 0' in d:
             self.cabinetTemp1 = d['ADC 0']  # todo: add conversion to value from ADC counts
         if 'ADC 1' in d:
@@ -51,23 +55,122 @@ class AnalogInContract:
             self.LN2platen = d['ADC 14']  # todo: add conversion to value from ADC counts
         if 'ADC 15' in d:
             self.LN2shroud = d['ADC 15']  # todo: add conversion to value from ADC counts
+        self.__Lock.release()
+
+    def get_cabinetTemp1(self):
+        self.__Lock.acquire()
+        val = self.cabinetTemp1
+        self.__Lock.release()
+        return val
+
+    def get_cabinetTemp2(self):
+        self.__Lock.acquire()
+        val = self.cabinetTemp2
+        self.__Lock.release()
+        return val
+
+    def get_cabinetTemp3(self):
+        self.__Lock.acquire()
+        val = self.cabinetTemp3
+        self.__Lock.release()
+        return val
+
+    def get_notUsed1(self):
+        self.__Lock.acquire()
+        val = self.notUsed1
+        self.__Lock.release()
+        return val
+
+    def get_fsFrontDoor1(self):
+        self.__Lock.acquire()
+        val = self.fsFrontDoor1
+        self.__Lock.release()
+        return val
+
+    def get_fsFrontDoor2(self):
+        self.__Lock.acquire()
+        val = self.fsFrontDoor2
+        self.__Lock.release()
+        return val
+
+    def get_fsFrontDoor3(self):
+        self.__Lock.acquire()
+        val = self.fsFrontDoor3
+        self.__Lock.release()
+        return val
+
+    def get_fsBackDoor1(self):
+        self.__Lock.acquire()
+        val = self.fsBackDoor1
+        self.__Lock.release()
+        return val
+
+    def get_fsBackDoor2(self):
+        self.__Lock.acquire()
+        val = self.fsBackDoor2
+        self.__Lock.release()
+        return val
+
+    def get_fsBackDoor3(self):
+        self.__Lock.acquire()
+        val = self.fsBackDoor3
+        self.__Lock.release()
+        return val
+
+    def get_pgRoughTemp(self):
+        self.__Lock.acquire()
+        val = self.pgRoughTemp
+        self.__Lock.release()
+        return val
+
+    def get_pgChamber(self):
+        self.__Lock.acquire()
+        val = self.pgChamber
+        self.__Lock.release()
+        return val
+
+    def get_pgCrypPump(self):
+        self.__Lock.acquire()
+        val = self.pgCrypPump
+        self.__Lock.release()
+        return val
+
+    def get_pgRoughPump(self):
+        self.__Lock.acquire()
+        val = self.pgRoughPump
+        self.__Lock.release()
+        return val
+
+    def get_LN2platen(self):
+        self.__Lock.acquire()
+        val = self.LN2platen
+        self.__Lock.release()
+        return val
+
+    def get_LN2shroud(self):
+        self.__Lock.acquire()
+        val = self.LN2shroud
+        self.__Lock.release()
+        return val
 
     def getJson(self):
+        self.__Lock.acquire()
         message = []
-        message.append('{"cabinetTemp1":%s,' % self.cabinetTemp1)
-        message.append('"cabinetTemp2":%s,' % self.cabinetTemp2)
-        message.append('"cabinetTemp3":%s,' % self.cabinetTemp3)
-        #message.append('"notUsed1":%s,' % self.notUsed1) uncomment when this is used
-        message.append('"fsFrontDoor1":%s,' % self.fsFrontDoor1)
-        message.append('"fsFrontDoor2":%s,' % self.fsFrontDoor2)
-        message.append('"fsFrontDoor3":%s,' % self.fsFrontDoor3)
-        message.append('"fsBackDoor1":%s,' % self.fsBackDoor1)
-        message.append('"fsBackDoor2":%s,' % self.fsBackDoor2)
-        message.append('"fsBackDoor3":%s,' % self.fsBackDoor3)
-        message.append('"pgRoughTemp":%s,' % self.pgRoughTemp)
-        message.append('"pgChamber":%s,' % self.pgChamber)
-        message.append('"pgCrypPump":%s,' % self.pgCrypPump)
-        message.append('"pgRoughPump":%s,' % self.pgRoughPump)
+        message.append('{"Cabinet Temp 1":%s,' % self.cabinetTemp1)
+        message.append('"Cabinet Temp 2":%s,' % self.cabinetTemp2)
+        message.append('"Cabinet Temp 3":%s,' % self.cabinetTemp3)
+        message.append('"notUsed1":%s,' % self.notUsed1)
+        message.append('"fs Front Door 1":%s,' % self.fsFrontDoor1)
+        message.append('"fs Front Door 2":%s,' % self.fsFrontDoor2)
+        message.append('"fs Front Door 3":%s,' % self.fsFrontDoor3)
+        message.append('"fs Back Door 1":%s,' % self.fsBackDoor1)
+        message.append('"fs Back Door 2":%s,' % self.fsBackDoor2)
+        message.append('"fs Back Door 3":%s,' % self.fsBackDoor3)
+        message.append('"Rough Pump Temp":%s,' % self.pgRoughTemp)
+        message.append('"pg Chamber":%s,' % self.pgChamber)
+        message.append('"pg Cryp Pump":%s,' % self.pgCrypPump)
+        message.append('"pg Rough Pump":%s,' % self.pgRoughPump)
         message.append('"LN2 platen":%s,' % self.LN2platen)
         message.append('"LN2 shroud":%s}' % self.LN2shroud)
+        self.__Lock.release()
         return ''.join(message)
