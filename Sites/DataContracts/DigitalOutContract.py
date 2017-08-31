@@ -79,44 +79,22 @@ class DigitalOutContract:
         self.CryoP_PwrRelay1 = False    # C 2: Do 29-
         self.CryoP_PwrRelay2 = False    # C 2: Do 30-
         self.RoughP_PwrRelay = False    # C 2: Do 31-
-
-    def updatePin(self, CardNum, pinNum, setBit):  # Todo Delete this method when not used in engr_ interface
-        # Do not use this funciton in the real server
-        # this is a hack for the engr_interface
-        pinNum = 31 & int(pinNum - 1)
-        if CardNum == 2:
-            if (pinNum >> 3) == 3:
-                key = "C2 B3"
-                val = self.c2_b3
-            elif (pinNum >> 3) == 2:
-                key = "C2 B2"
-                val = self.c2_b2
-            elif (pinNum >> 3) == 1:
-                key = "C2 B1"
-                val = self.c2_b1
-            else:
-                key = "C2 B0"
-                val = self.c2_b0
-        else:
-            if (pinNum >> 3) == 3:
-                key = "C1 B3"
-                val = self.c1_b3
-            elif (pinNum >> 3) == 2:
-                key = "C1 B2"
-                val = self.c1_b2
-            elif (pinNum >> 3) == 1:
-                key = "C1 B1"
-                val = self.c1_b1
-            else:
-                key = "C1 B0"
-                val = self.c1_b0
-        mask = 0x01 << (7 & pinNum)
-        if setBit:
-            val |= mask
-        else:  # clearBit
-            val &= ~mask
-        self.update({key: val})
-        # Todo Delete this method when not used in engr_ interface
+        self.IR_Lamp_1_pwm_dc = 0.0     # Lamp 1 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_2_pwm_dc = 0.0     # Lamp 2 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_3_pwm_dc = 0.0     # Lamp 3 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_4_pwm_dc = 0.0     # Lamp 4 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_5_pwm_dc = 0.0     # Lamp 5 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_6_pwm_dc = 0.0     # Lamp 6 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_7_pwm_dc = 0.0     # Lamp 7 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_8_pwm_dc = 0.0     # Lamp 8 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_9_pwm_dc = 0.0     # Lamp 9 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_10_pwm_dc = 0.0    # Lamp 10 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_11_pwm_dc = 0.0    # Lamp 11 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_12_pwm_dc = 0.0    # Lamp 12 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_13_pwm_dc = 0.0    # Lamp 13 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_14_pwm_dc = 0.0    # Lamp 14 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_15_pwm_dc = 0.0    # Lamp 15 PWM duty cycle range: 0 - 1
+        self.IR_Lamp_16_pwm_dc = 0.0    # Lamp 16 PWM duty cycle range: 0 - 1
 
     def update(self, d):
         self.__updateLock.acquire()
@@ -591,6 +569,38 @@ class DigitalOutContract:
                 self.c2_b3 |= 0x80        # C 2: Do 31
             else:
                 self.c2_b3 &= ~0x80
+        if 'IR Lamp 1 PWM DC' in d:
+            self.IR_Lamp_1_pwm_dc = d['IR Lamp 1 PWM DC']
+        if 'IR Lamp 2 PWM DC' in d:
+            self.IR_Lamp_2_pwm_dc = d['IR Lamp 2 PWM DC']
+        if 'IR Lamp 3 PWM DC' in d:
+            self.IR_Lamp_3_pwm_dc = d['IR Lamp 3 PWM DC']
+        if 'IR Lamp 4 PWM DC' in d:
+            self.IR_Lamp_4_pwm_dc = d['IR Lamp 4 PWM DC']
+        if 'IR Lamp 5 PWM DC' in d:
+            self.IR_Lamp_5_pwm_dc = d['IR Lamp 5 PWM DC']
+        if 'IR Lamp 6 PWM DC' in d:
+            self.IR_Lamp_6_pwm_dc = d['IR Lamp 6 PWM DC']
+        if 'IR Lamp 7 PWM DC' in d:
+            self.IR_Lamp_7_pwm_dc = d['IR Lamp 7 PWM DC']
+        if 'IR Lamp 8 PWM DC' in d:
+            self.IR_Lamp_8_pwm_dc = d['IR Lamp 8 PWM DC']
+        if 'IR Lamp 9 PWM DC' in d:
+            self.IR_Lamp_9_pwm_dc = d['IR Lamp 9 PWM DC']
+        if 'IR Lamp 10 PWM DC' in d:
+            self.IR_Lamp_10_pwm_dc = d['IR Lamp 10 PWM DC']
+        if 'IR Lamp 11 PWM DC' in d:
+            self.IR_Lamp_11_pwm_dc = d['IR Lamp 11 PWM DC']
+        if 'IR Lamp 12 PWM DC' in d:
+            self.IR_Lamp_12_pwm_dc = d['IR Lamp 12 PWM DC']
+        if 'IR Lamp 13 PWM DC' in d:
+            self.IR_Lamp_13_pwm_dc = d['IR Lamp 13 PWM DC']
+        if 'IR Lamp 14 PWM DC' in d:
+            self.IR_Lamp_14_pwm_dc = d['IR Lamp 14 PWM DC']
+        if 'IR Lamp 15 PWM DC' in d:
+            self.IR_Lamp_15_pwm_dc = d['IR Lamp 15 PWM DC']
+        if 'IR Lamp 16 PWM DC' in d:
+            self.IR_Lamp_16_pwm_dc = d['IR Lamp 16 PWM DC']
         self.__updateLock.release()
 
     def getJson(self):
