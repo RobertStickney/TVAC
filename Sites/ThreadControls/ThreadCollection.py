@@ -1,14 +1,27 @@
 import random
 
 from ThreadControls.HardWareControlStub import HardWareControlStub
+from ThreadControls.SafetyCheck import SafetyCheck
+from ThreadControls.ThermoCoupleUpdater import ThermoCoupleUpdater
+from ThreadControls.TsRegistersControlStub import TsRegistersControlStub
 
+from HouseKeeping.globalVars import debugPrint
 
 class ThreadCollection:
 
     def __init__(self):
-        self.threadDict = self.createCollection()
+        self.zoneThreadDict = self.createZoneCollection()
+        self.hardwareInterfaceThreadDict = self.createHardwareInterfaces()
+        self.safetyThread = SafetyCheck()
 
-    def createCollection(self):
+        for thread in self.hardwareInterfaceThreadDict.values():
+            thread.daemon = True
+            thread.start()
+        self.safetyThread.daemon = True
+        self.safetyThread.start()
+
+
+    def createZoneCollection(self):
         return {"zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10})),
             "zone2": HardWareControlStub(args=('zone2',)),
             "zone3": HardWareControlStub(args=('zone3',)),
@@ -17,47 +30,61 @@ class ThreadCollection:
             "zone6": HardWareControlStub(args=('zone6',)),
             "zone7": HardWareControlStub(args=('zone7',)),
             "zone8": HardWareControlStub(args=('zone8',)),
-            "zone9": HardWareControlStub(args=('zone9',)),
-            "VacGuages": "Init PfeifferGuages class here"}
+            "zone9": HardWareControlStub(args=('zone9',))
+            }
+
+    def createHardwareInterfaces(self):
+        return {
+        # commented out aren't fully tested
+        "PC_104" : TsRegistersControlStub(),
+        # "PfeifferGuage" : ThermoCoupleUpdater()
+        "ThermoCouple" : ThermoCoupleUpdater(),
+        # "MCC" : PASS
+        }
+
 
     def runAllThreads(self):
-        for thread in self.threadDict:
-            if self.threadDict[thread].profile.zone > 0:
-                if self.threadDict[thread].handeled:
-                    self.threadDict[thread] = HardWareControlStub(args=(thread,))
-                self.threadDict[thread].start()
+        for thread in self.zoneThreadDict:
+            if self.zoneThreadDict[thread].zoneProfile.zone > 0:
+                if self.zoneThreadDict[thread].handeled:
+                    self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
+                print("Zone {} is handled, about the start".format(self.zoneThreadDict[thread].zoneProfile.zone,))
+                self.zoneThreadDict[thread].start()
 
     def runSingleThread(self,data):
         thread = data['zone']
-        if self.threadDict[thread].handeled:
-            self.threadDict[thread] = HardWareControlStub(args=(thread,))
-        self.threadDict[thread].start()
+        if self.zoneThreadDict[thread].handeled:
+            self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
+        self.zoneThreadDict[thread].start()
 
     def checkThreadStatus(self):
-        for thread in self.threadDict:
-            print(thread, " is alive ", self.threadDict[thread].is_alive(), ' is handeled ', self.threadDict[thread].handeled )
+        debugPrint(2,"Starting checkThreadStatus:")
+        for thread in self.zoneThreadDict:
+            isAlive = self.zoneThreadDict[thread].is_alive()
+            handled = self.zoneThreadDict[thread].handeled
+            print("{} is {} and is {} handled".format(thread, "ALIVE" if isAlive else "DEAD", "NOT" if not handled else ""))
 
     def pause(self,data):
         thread = data['zone']
-        self.threadDict[thread].paused = True;
+        self.zoneThreadDict[thread].paused = True;
 
     def removePause(self,data):
         thread = data['zone']
-        self.threadDict[thread].paused = False
+        self.zoneThreadDict[thread].paused = False
 
     def holdThread(self,data):
         thread = data['zone']
-        self.threadDict[thread].hold = True
+        self.zoneThreadDict[thread].hold = True
 
     def releaseHoldThread(self,data):
         thread = data['zone']
-        self.threadDict[thread].hold = False
+        self.zoneThreadDict[thread].hold = False
 
     def abortThread(self,data):
         thread = data['zone']
-        self.threadDict[thread].terminate()
-        self.threadDict[thread] = HardWareControlStub(args=(thread,))
+        self.zoneThreadDict[thread].terminate()
+        self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
 
     def calculateRamp(self,data):
         thread = data['zone']
-        self.threadDict[thread].calculateRamp()
+        self.zoneThreadDict[thread].calculateRamp()

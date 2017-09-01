@@ -5,12 +5,11 @@ import socketserver
 import io
 import time
 import json
+import subprocess
 
 import SHI_MCC_Interface
 from Pfeiffer_guage_Interface import *
 from PC_104_Instance import PC_104_Instance
-from TsRegistersControlStub import TsRegistersControlStub
-
 
 #server_Address = ""
 #server_Address = "10.0.1.201"
@@ -19,6 +18,7 @@ server_Port = 8080
 
 class MyHandler(http.server.CGIHTTPRequestHandler):
 
+    allow_reuse_address = True
     cgi_directories = ""
     cmd_buff_len = 0
     cmd_buff = ""
@@ -81,18 +81,28 @@ class MyHandler(http.server.CGIHTTPRequestHandler):
                 resp['Kind'].append(Pfeiffer_DataRequest(gauge))
                 resp['Pressure'].append(Pfeiffer_GetPressure(gauge))
             buff = json.dumps(resp)
-        elif self.path.startswith("/setDigital"):
+        elif self.path.startswith("/setPin"):
             pins = PC_104_Instance.getInstance()
-            pins.digital_out.update(json.loads(self.cmd_buff))
-        elif self.path.startswith("/getDigital"):
+            args = json.loads(self.cmd_buff)
+            if args[2] == 1:
+                pins.digIO.DIO_Write_Pin(args[0], args[1], True)
+            else:
+                pins.digIO.DIO_Write_Pin(args[0], args[1], False)
+        elif self.path.startswith("/getPins"):
             pins = PC_104_Instance.getInstance()
-            buff = '{"out":%s,"in":%s}' % (pins.digital_out.getJson(), pins.digital_in.getJson())
-        elif self.path.startswith("/setAnalog"):
-            pins = PC_104_Instance.getInstance()
-            pins.analog_out.update(json.loads(self.cmd_buff))
-        elif self.path.startswith("/getAnalog"):
-            pins = PC_104_Instance.getInstance()
-            buff = '{"out":%s,"in":%s}' % (pins.analog_out.getJson(), pins.analog_in.getJson())
+            t1=pins.digIO.DIO_Read4(1,False)
+            t2=pins.digIO.DIO_Read4(2,False)
+            t3=pins.digIO.DIO_Read4(1,True)
+            t4=pins.digIO.DIO_Read4(2,True)
+            print(t1)
+            print(t2)
+            print(t3)
+            print(t4)
+            buff = json.dumps(t1+t2+t3+t4)
+            #buff = json.dumps(list(pins.digIO.DIO_Read(1,False)) 
+            #                + list(pins.digIO.DIO_Read(2,False)) 
+            #                + list(pins.digIO.DIO_Read(1,True)) 
+            #                + list(pins.digIO.DIO_Read(2,True)))
         elif self.path.startswith("/MCC_cmd/"):
             if '/get/' in self.path:
                 if 'MCC_ver' in self.path:
@@ -180,16 +190,12 @@ class MyHandler(http.server.CGIHTTPRequestHandler):
         http.server.CGIHTTPRequestHandler.do_HEAD(self)
 
 
-class ReuseAddrTCPServer(socketserver.TCPServer):
-    allow_reuse_address = True
-
 
 if __name__ == '__main__':
     print('\n'*4)
-    httpd = ReuseAddrTCPServer((server_Address, server_Port), MyHandler )
+    httpd = socketserver.TCPServer(( server_Address, server_Port), MyHandler )
     pins = PC_104_Instance.getInstance()
-    reg = TsRegistersControlStub()
-    reg.start()
+    pins.digIO.open_Registers()
     #Pfiefer_SetSwPressure()
     print("Serving HTTP requests at: ", server_Address, ":", server_Port)
     httpd.serve_forever()

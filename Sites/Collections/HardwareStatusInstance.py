@@ -1,6 +1,10 @@
-from DataContracts.ThermocoupleCollection import ThermocoupleCollection
-#from DataContracts.PfeiferGuageCollection import PfeiferGuageCollection
-#from DataContracts.ShiCryopumpCollection import ShiCryopumpCollection
+from Collections.ThermocoupleCollection import ThermocoupleCollection
+from Collections.PfeifferGuageCollection import PfeifferGuageCollection
+#from Collections.ShiCryopumpCollection import ShiCryopumpCollection
+from Collections.PC_104_Instance import PC_104_Instance
+
+from HouseKeeping.globalVars import debugPrint
+
 
 class HardwareStatusInstance:
     # Here will be the instance stored.
@@ -17,7 +21,15 @@ class HardwareStatusInstance:
         if HardwareStatusInstance.__instance != None:
             raise Exception("This class is a singleton!")
         else:
+            debugPrint(2,"Creating HardwareStatusInstance")
             self.Thermocouples = ThermocoupleCollection()
-            #self.PfeifferGuages = PfeiferGuageCollection()
+            self.PfeifferGuages = PfeifferGuageCollection()
             #self.ShiCryopump = ShiCryopumpCollection()
+
+            self.PC_104_Instance = PC_104_Instance.getInstance()
+
+
+
+
+
             HardwareStatusInstance.__instance = self

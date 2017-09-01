@@ -5,7 +5,7 @@ import sys
 from telnetlib import Telnet
 from datetime import datetime
 
-from DataContracts.HardwareStatusInstance import HardwareStatusInstance
+# from DataContracts.HardwareStatusInstance import HardwareStatusInstance
 
 ## TODO!! Change all print errors to ERROR logger.
 

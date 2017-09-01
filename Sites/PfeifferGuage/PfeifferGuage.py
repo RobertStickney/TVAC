@@ -11,6 +11,7 @@ class PfeifferGuage:
     def genCmdRead(self,Address, Parm=349):  # Cmd syntax see page #16 of MPT200 Operating instructions
         return self.applyChecksum("{:03d}00{:03d}02=?".format(Address, Parm))
 
+    # Why is this never used?
     def genCmdWrite(self,Address, Parm, dataStr):  # Cmd syntax on page #16 of MPT200 Operating instructions
         return self.applyChecksum("{0:03d}10{1:03d}{2:02d}{3}".format(Address, Parm, len(dataStr), dataStr))
 
@@ -44,7 +45,7 @@ class PfeifferGuage:
         else:
             print("No more tries! Something is wrong!")
             Resp = "{:*^32}".format('Timeout!')
-        p_gauge.close
+        p_gauge.close()
         return Resp[10:-3]
 
     def getPressure(self,Address):  # Pfeifer returns pressure in hPa
@@ -52,3 +53,4 @@ class PfeifferGuage:
         if (len(buff) == 6 and buff.isdigit):
             return float((int(buff[:4]) / 1000) * 10 ** (int(buff[-2:]) - 20))
         print('Data: ' + buff + '')
+        return buff

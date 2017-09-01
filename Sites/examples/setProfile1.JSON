@@ -1,4 +1,3 @@
-http://localhost:8000/setProfile
 {
   "profiles": [
     {
@@ -54,31 +53,3 @@ http://localhost:8000/setProfile
     }
   ]
 }
-
-
-http://localhost:8000/abortZone
-{"zone": "zone1"}
-
-http://localhost:8000/runSingleProfile
-{"zone": "zone1"}
-
-http://localhost:8000/runProfiles
-{"": ""}
-
-http://localhost:8000/checkThreadStatus
-{"zone": "zone1"}
-
-http://localhost:8000/pauseRemoveZone
-{"zone": "zone1"}
-
-http://localhost:8000/pauseZone
-{"zone": "zone1"}
-
-http://localhost:8000/calculateRamp
-{"zone":"zone1"}
-
-http://localhost:8000/holdZone
-{"zone": "zone1"}
-
-http://localhost:8000/releaseHoldZone
-{"zone": "zone1"}

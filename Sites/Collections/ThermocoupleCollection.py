@@ -4,10 +4,13 @@ from datetime import datetime
 
 from DataContracts.ThermocoupleContract import ThermocoupleContract
 
+from HouseKeeping.globalVars import debugPrint
 
 class ThermocoupleCollection:
 
     def __init__(self, num = 120):
+        debugPrint(2, "Creating ThermocoupleCollection")
+        debugPrint(2, "Number of Thermo Couples: {}".format(num))
         self.tcList = self.buildCollection(num)
         self.time = datetime.now()
         self.ValidTCs = []
@@ -23,6 +26,10 @@ class ThermocoupleCollection:
         return TCs
 
     def update(self, d):
+        '''
+        Given a new diciatary of TC data, this will update the 
+        collection with the new data
+        '''
         if 'time' in d:
             self.time = d['time'] # Start of scan time
         for updateTC in d['tcList']:
