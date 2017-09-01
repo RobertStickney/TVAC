@@ -24,7 +24,7 @@ class PWM_Square_Wave():
                 if self.duty_cycle == 0:
                     self.time_for_next_edge = self.time_last_rising_edge + self.period
                     self.waveform_state = False
-                elif:
+                elif self.duty_cycle == 1:
                     self.time_for_next_edge = self.time_last_rising_edge + self.period
                     self.waveform_state = True
                 else:
