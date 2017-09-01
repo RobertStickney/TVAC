@@ -59,9 +59,9 @@ class PID:
         self.int_error = 0.0
         self.windup_guard = 20.0
 
-        self.output = 0.0
+        self.error_value = 0.0
 
-    def update(self, feedback_value):
+    def update(self, process_variable):
         """Calculates PID value for given reference feedback
 
         .. math::
@@ -73,7 +73,7 @@ class PID:
            Test PID with Kp=1.2, Ki=1, Kd=0.001 (test_pid.py)
 
         """
-        error = self.SetPoint - feedback_value
+        error = self.SetPoint - process_variable
 
         self.current_time = time.time()
         delta_time = self.current_time - self.last_time
@@ -96,7 +96,7 @@ class PID:
             self.last_error = error
 
 
-            self.output = self.PTerm + (self.Ki * self.ITerm) + (self.Kd * self.DTerm)
+            self.error_value = self.PTerm + (self.Ki * self.ITerm) + (self.Kd * self.DTerm)
 
     def setKp(self, proportional_gain):
         """Determines how aggressively the PID reacts to the current error with setting Proportional Gain"""

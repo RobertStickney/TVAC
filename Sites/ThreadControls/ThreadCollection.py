@@ -11,7 +11,7 @@ class ThreadCollection:
 
     def __init__(self):
         self.zoneThreadDict = self.createZoneCollection()
-        self.hardwareInterfaceThreadDict = self.createHardwareInterfaces()
+        self.hardwareInterfaceThreadDict = self.createHardwareInterfaces(self)
         self.safetyThread = SafetyCheck()
 
         for thread in self.hardwareInterfaceThreadDict.values():
@@ -33,12 +33,13 @@ class ThreadCollection:
             "zone9": HardWareControlStub(args=('zone9',))
             }
 
-    def createHardwareInterfaces(self):
+    def createHardwareInterfaces(self,parent):
+        # sending parent for testing, getting current profile data to zone instance
         return {
         # commented out aren't fully tested
         "PC_104" : TsRegistersControlStub(),
         # "PfeifferGuage" : ThermoCoupleUpdater()
-        "ThermoCouple" : ThermoCoupleUpdater(),
+        "ThermoCouple" : ThermoCoupleUpdater(parent),
         # "MCC" : PASS
         }
 
@@ -49,12 +50,14 @@ class ThreadCollection:
                 if self.zoneThreadDict[thread].handeled:
                     self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
                 print("Zone {} is handled, about the start".format(self.zoneThreadDict[thread].zoneProfile.zone,))
+                self.zoneThreadDict[thread].daemon = True
                 self.zoneThreadDict[thread].start()
 
     def runSingleThread(self,data):
         thread = data['zone']
         if self.zoneThreadDict[thread].handeled:
             self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
+        self.zoneThreadDict[thread].daemon = True
         self.zoneThreadDict[thread].start()
 
     def checkThreadStatus(self):
