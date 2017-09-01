@@ -32,8 +32,7 @@ class TS_Registers():
         b1 = self.syscon.read_byte()
         self.syscon.seek(0)
         if printID:
-            print('Board Model #: 0x{0:x}; Byte 0: 0x{1:x}'.format(int.from_bytes(self.syscon.read(2), sys.byteorder),
-                                                                   b1))
+            print('Board Model #: 0x{0:x}; Byte 0: 0x{1:x}'.format(int.from_bytes(self.syscon.read(2), sys.byteorder), b1))
         self.pc104 = mmap.mmap(self.fp, 4096, offset=self.Pc104Addr)
         self.enPc104()
         if printID:

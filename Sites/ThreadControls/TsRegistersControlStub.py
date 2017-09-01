@@ -22,7 +22,7 @@ class TsRegistersControlStub(Thread):
         self.ts_reg = TS_Registers()
         self.da_io = PC_104_Instance.getInstance()
         self.adc_period = 0.0125  # adc_clock*8 = 0.1s loop period
-        self.pwm_period = 20  # seconds
+        self.ir_lamp_pwm = []
 
     def run(self):
         debugPrint(2,"Starting TS Registers Control Stub Thread")
@@ -59,7 +59,7 @@ class TsRegistersControlStub(Thread):
                     time.sleep(self.adc_period*8)
 
             self.ts_reg.close()
-            print('Closed the mmaps!')
+            debugPrint(3,'Closed the mmaps!')
         except Exception as e:
             # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
             print('Error accessing the PC104 Bus. Error: %s' % e)
@@ -68,13 +68,13 @@ class TsRegistersControlStub(Thread):
     def read_analog_in(self):
         (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
         while fifo_depth < 16:
-            print("FIFO depth: {:d}".format(fifo_depth))
+            debugPrint(3,"FIFO depth: {:d}".format(fifo_depth))
             time.sleep(self.adc_period * ((fifo_depth / 2) - 8))
             (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
         d = {}
         for n in range(fifo_depth):
             d['ADC ' + str((n + first_channel) % 16)] = self.ts_reg.adc_fifo_read()
-        print(d)
+        debugPrint(3,d)
         # self.da_io.analog_in.update(d)
 
     def ir_lamp_duty_cycle(self):
