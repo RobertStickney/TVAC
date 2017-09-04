@@ -1,7 +1,7 @@
-from DigitalInContract import DigitalInContract
-from DigitalOutContract import DigitalOutContract
-from AnalogInContract import AnalogInContract
-from AnalogOutContract import AnalogOutContract
+from DataContracts.DigitalInContract import DigitalInContract
+from DataContracts.DigitalOutContract import DigitalOutContract
+from DataContracts.AnalogInContract import AnalogInContract
+from DataContracts.AnalogOutContract import AnalogOutContract
 
 
 class PC_104_Instance:

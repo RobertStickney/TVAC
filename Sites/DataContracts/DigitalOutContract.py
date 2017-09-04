@@ -76,25 +76,9 @@ class DigitalOutContract:
         self.RoughP_PurgeGass = False   # C 2: Do 26-
         self.LN2_S_Sol = False          # C 2: Do 27-
         self.LN2_P_Sol = False          # C 2: Do 28-
-        self.CryoP_PwrRelay1 = False    # C 2: Do 29-
-        self.CryoP_PwrRelay2 = False    # C 2: Do 30-
+        self.CryoP1_PwrRelay = False    # C 2: Do 29-
+        self.CryoP2_PwrRelay = False    # C 2: Do 30-
         self.RoughP_PwrRelay = False    # C 2: Do 31-
-        self.IR_Lamp_1_pwm_dc = 0.0     # Lamp 1 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_2_pwm_dc = 0.0     # Lamp 2 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_3_pwm_dc = 0.0     # Lamp 3 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_4_pwm_dc = 0.0     # Lamp 4 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_5_pwm_dc = 0.0     # Lamp 5 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_6_pwm_dc = 0.0     # Lamp 6 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_7_pwm_dc = 0.0     # Lamp 7 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_8_pwm_dc = 0.0     # Lamp 8 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_9_pwm_dc = 0.0     # Lamp 9 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_10_pwm_dc = 0.0    # Lamp 10 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_11_pwm_dc = 0.0    # Lamp 11 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_12_pwm_dc = 0.0    # Lamp 12 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_13_pwm_dc = 0.0    # Lamp 13 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_14_pwm_dc = 0.0    # Lamp 14 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_15_pwm_dc = 0.0    # Lamp 15 PWM duty cycle range: 0 - 1
-        self.IR_Lamp_16_pwm_dc = 0.0    # Lamp 16 PWM duty cycle range: 0 - 1
         # Lamps PWM duty cycle range: 0 - 1
         self.IR_Lamps_pwm_dc = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         #                        1    2    3    4    5    6    7    8    9    10   11   12   13   14   15   16
@@ -824,8 +808,8 @@ class DigitalOutContract:
         message.append('"RoughP PurgeGass":%s,' % json.dumps(self.RoughP_PurgeGass))
         message.append('"LN2-S Sol":%s,' % json.dumps(self.LN2_S_Sol))
         message.append('"LN2-P Sol":%s,' % json.dumps(self.LN2_P_Sol))
-        message.append('"CryoP Pwr Relay 1":%s,' % json.dumps(self.CryoP_PwrRelay1))
-        message.append('"CryoP Pwr Relay 2":%s,' % json.dumps(self.CryoP_PwrRelay2))
+        message.append('"CryoP Pwr Relay 1":%s,' % json.dumps(self.CryoP1_PwrRelay))
+        message.append('"CryoP Pwr Relay 2":%s,' % json.dumps(self.CryoP2_PwrRelay))
         message.append('"RoughP Pwr Relay":%s}' % json.dumps(self.RoughP_PwrRelay))
         self.__lock.release()
         return ''.join(message)
