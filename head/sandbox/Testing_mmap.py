@@ -172,6 +172,47 @@ class TS_Registers():
         self.pc104.write_byte(value & 0xFF)
         self.pc104.write_byte(((channel & 0x03) << 6) | 0x30 | ((value & 0xF00)>>8))
 
+    def start_adc(self,
+                  sys_com = 1,          # 1 = Start ADC conversion state machine
+                  num_chan = 7,         # Range: 0-7; Acquire Channel 0 to (num_chan*2)+1
+                  adc_delay = 400000,   # adc clock 32,000,000Hz/400,000 = 80Hz; 80Hz/8(ch pairs) = 10Hz; 1/10Hz = 0.1s
+                  single_ended = 1,     # Single ended = 1; Differential = 0
+                  input_range = 1,      # Input Range: 0 = -5V to +5V; 1 = 0V to +5V; 2 = -10V to +10V; 3 = 0V to +10V
+                  ext_trig = 0,         # 1 = Start ADC with sys_com; 0 = Start ADC when digital in
+                  fifo_int_trig = 256,  # Fifo level to trigger interrupt
+                  fifo_en_int = 0):     # 1 = Enable fifo interrupt
+        self.pc104.seek(self.Adc16Addr(0x08))  # ADCSTAT
+        self.pc104.write_byte(((fifo_int_trig & 0x3) << 6) | (fifo_en_int & 0x01))
+        self.pc104.write_byte((fifo_int_trig & 0x3fc) >> 2)
+
+        self.pc104.seek(self.Adc16Addr(0x04))  # ADCDLY_MSB
+        self.pc104.write_byte((adc_delay & 0xFF0000) >> 16)
+
+        self.pc104.seek(self.Adc16Addr(0x06))  # ADCDLY_LSB
+        self.pc104.write_byte(adc_delay & 0xFF)
+        self.pc104.write_byte((adc_delay & 0xFF00) >> 8)
+
+        self.pc104.seek(self.Adc16Addr(0x03))  # ADCCFG_MSB
+        self.pc104.write_byte(((ext_trig & 0x01) << 1) | (single_ended & 0x01))
+
+        self.pc104.seek(self.Adc16Addr(0x03))  # ADCCFG_LSB Writing to this byte resets the adc state machine.
+        self.pc104.write_byte(((input_range & 0x03) << 6) |
+                              ((single_ended & 0x01) << 5) |
+                              ((num_chan & 0x07) << 1) |
+                              (sys_com & 0x01))
+
+    def adc_fifo_status(self):
+        self.pc104.seek(self.Adc16Addr(0x08))  # ADCSTAT
+        b1 = self.pc104.read_byte()
+        b2 = self.pc104.read_byte()
+        return ((b1 & 0x3e) >> 1,  # FFHEAD: Channel on head of fifo. It increments to (num_chan*2)+1 then wraps to 0
+                ((b2 & 0xff) << 2) | ((b1 & 0xC0) >> 6))  # Number of elements in fifo
+
+    def adc_fifo_read(self):  # channel #'s for the values returned is FFHEAD
+        self.pc104.seek(self.Adc16Addr(0x1A))  # ADCFIFO_LSB
+        b = self.pc104.read_byte()                # read ADCFIFO_LSB
+        return (self.pc104.read_byte() << 8) | b  # read ADCFIFO_MSB
+
 # Command lines testing of driver
 if __name__ == '__main__':
     ts = TS_Registers()

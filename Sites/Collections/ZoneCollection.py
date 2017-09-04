@@ -17,14 +17,14 @@ class ZoneCollection:
     def buildCollection(self):
         zoneDictEmpty = {}
         return {"zone1":ZoneProfileContract(zoneDictEmpty),
-                         "zone2":ZoneProfileContract(zoneDictEmpty),
-                         "zone3":ZoneProfileContract(zoneDictEmpty),
-                         "zone4":ZoneProfileContract(zoneDictEmpty),
-                         "zone5":ZoneProfileContract(zoneDictEmpty),
-                         "zone6":ZoneProfileContract(zoneDictEmpty),
-                         "zone7":ZoneProfileContract(zoneDictEmpty),
-                         "zone8":ZoneProfileContract(zoneDictEmpty),
-                         "zone9":ZoneProfileContract(zoneDictEmpty)}
+                "zone2":ZoneProfileContract(zoneDictEmpty),
+                "zone3":ZoneProfileContract(zoneDictEmpty),
+                "zone4":ZoneProfileContract(zoneDictEmpty),
+                "zone5":ZoneProfileContract(zoneDictEmpty),
+                "zone6":ZoneProfileContract(zoneDictEmpty),
+                "zone7":ZoneProfileContract(zoneDictEmpty),
+                "zone8":ZoneProfileContract(zoneDictEmpty),
+                "zone9":ZoneProfileContract(zoneDictEmpty)}
 
     def update(self,d):
         debugPrint(4, "Updating zone with info:\n{}".format(d))
