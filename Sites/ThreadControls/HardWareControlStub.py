@@ -84,8 +84,8 @@ class HardWareControlStub(Thread):
 
 
         while self.runCount > 0:
-            print("="*100)
-            print("self.runCount :" + str(self.runCount))
+            # print("="*100)
+            # print("self.runCount :" + str(self.runCount))
             currentTemp = self.zoneProfile.getTemp("Max")
             debugPrint(1,"{}: Current/Goal temp: {}/{}".format(self.args, currentTemp,goalTemp))
             self.runProcess()
@@ -96,19 +96,19 @@ class HardWareControlStub(Thread):
             self.pid.SetPoint = self.tempGoalTemperature
             self.pid.update(currentTemp)
             error_value = self.pid.error_value
-            print("PID error_value: {}c per update?".format(error_value))
-            print("maxTempRisePerUpdate: {}c".format(self.maxTempRisePerUpdate))
-            print("percent of duty cycle: "+str(error_value/self.maxTempRisePerUpdate))
+            # print("PID error_value: {}c per update?".format(error_value))
+            # print("maxTempRisePerUpdate: {}c".format(self.maxTempRisePerUpdate))
+            # print("percent of duty cycle: "+str(error_value/self.maxTempRisePerUpdate))
             # corrections is the "power" needed to change the temp to goal,
             # This still needs to be converted duty cylces for the heaters
             
 
-            print("currentTemp: {}".format(currentTemp))
-            print("currentGoal: {}".format(self.tempGoalTemperature))
+            debugPrint(4,"{}: currentTemp: {}".format(self.args, currentTemp))
+            debugPrint(4,"{}: currentGoal: {}".format(self.args, self.tempGoalTemperature))
             # someHardwareDriver.updateTemp(self.zoneProfile.termalProfiles[self.termalProfile].temp + self.tempChange)
             # hardwareStatusInstance.Thermocouples
             
-            print("="*100)
+            # print("="*100)
             time.sleep(self.updatePeriod)
             # print(self.runCount)
 
@@ -190,7 +190,7 @@ class HardWareControlStub(Thread):
                 self.timer = time.time()
                 self.timerOn = True
 
-            print("self.tempGoal " +str(self.zoneProfile.termalProfiles[self.termalProfile].tempGoal))
+            # print("self.tempGoal " +str(self.zoneProfile.termalProfiles[self.termalProfile].tempGoal))
             tempDelta = self.zoneProfile.termalProfiles[self.termalProfile].tempGoal - self.zoneProfile.termalProfiles[self.termalProfile].temp
             # changePerMin = self.zoneProfile.termalProfiles[self.termalProfile].ramp
             rampDuration = self.zoneProfile.termalProfiles[self.termalProfile].ramp
@@ -198,7 +198,7 @@ class HardWareControlStub(Thread):
             # debugPrint(3,"{}: rampDuration - {}".format(self.args, rampDuration))
             rampRunTime = time.time() - self.timer
             rampDuration = (rampDuration - rampRunTime) / 60
-            print("rampRunTime: {}".format(rampRunTime))
+            # print("rampRunTime: {}".format(rampRunTime))
             # debugPrint(3,"{}: rampDuration - {}".format(self.args, rampDuration))
             changePerMin = tempDelta / rampDuration
 
@@ -213,8 +213,8 @@ class HardWareControlStub(Thread):
             else:
                 minsToResult = 0
 
-            debugPrint(3,"{}: minsToResult - {}".format(self.args, minsToResult))
-            debugPrint(3,"{}: updatePeriod - {}".format(self.args, self.updatePeriod))
+            # debugPrint(3,"{}: minsToResult - {}".format(self.args, minsToResult))
+            # debugPrint(3,"{}: updatePeriod - {}".format(self.args, self.updatePeriod))
             if(self.updatePeriod > 0):
                 self.runCount = round((minsToResult * 60)/self.updatePeriod)
             else:
@@ -224,8 +224,8 @@ class HardWareControlStub(Thread):
             if self.runCount <= 0:
                 self.inRamp = False
 
-            debugPrint(3,"{}: runCount - {}".format(self.args, self.runCount))
-            debugPrint(3,"{}: inRamp - {}".format(self.args, self.inRamp))
+            # debugPrint(3,"{}: runCount - {}".format(self.args, self.runCount))
+            # debugPrint(3,"{}: inRamp - {}".format(self.args, self.inRamp))
 
             self.tempChange = (changePerMin * self.updatePeriod) / 60
             self.event('ramp')
