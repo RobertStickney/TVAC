@@ -54,6 +54,8 @@ class ZoneProfileContract:
         self.__lock.acquire()
         list = []
         for profile in termalProfiles:
+            debugPrint(4,"T-SP: {}".format(profile['termalsetpoint']))
+            debugPrint(4,profile)
             list.append(ThermalProfileContract(profile))
         self.__lock.release()
         return list

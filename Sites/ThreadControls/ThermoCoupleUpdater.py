@@ -8,18 +8,23 @@ from HouseKeeping.globalVars import debugPrint
 
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 
+
+# used for testing
+import random
+
 class ThermoCoupleUpdater(Thread):
 
 	"""
 	docstring for ThermoCoupleUpdater
 	"""
 	__instance = None
-	def __init__(self):
+	def __init__(self, parent):
 		if ThermoCoupleUpdater.__instance != None:
 			raise Exception("This class is a singleton!")
 		else:
 			debugPrint(2,"Creating ThermoCoupleUpdater")
 			ThermoCoupleUpdater.__instance = self
+			self.parent = parent
 			self.hardwareStatusInstance = HardwareStatusInstance
 			super(ThermoCoupleUpdater, self).__init__()
 
@@ -47,18 +52,38 @@ class ThermoCoupleUpdater(Thread):
 					TCs = Tharsis.getTC_Values()
 				else:
 					debugPrint(4,"Generating test data for TC")
+					# currentTestTemp = hwStatus.Thermocouples.getTC(1).getTemp()
+					currentTestTemp = self.parent.zoneThreadDict["zone1"].tempGoalTemperature
+					currentPID = self.parent.zoneThreadDict["zone1"].pid.error_value
+					# if currentTestTemp < 5:
 					TCs = {
 						'time': datetime.now(),
 						'tcList': [
-							{'Thermocouple': 1, 'temp': hwStatus.Thermocouples.getTC(1).getTemp() - 50},
-							{'Thermocouple': 5, 'temp': hwStatus.Thermocouples.getTC(5).getTemp() + 50},
-							{'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 50},
-							{'Thermocouple': 3, 'temp': hwStatus.Thermocouples.getTC(3).getTemp() - 50,
-							'userDefined':True},
-							{'Thermocouple': 4, 'temp': hwStatus.Thermocouples.getTC(4).getTemp() + 50,
-							'userDefined':True},
+						# (random.uniform(0,10)-5)
+							{'Thermocouple': 1,'working':True, 'temp':hwStatus.Thermocouples.getTC(1).getTemp() + currentPID + 0},
+							# {'Thermocouple': 5, 'temp': hwStatus.Thermocouples.getTC(5).getTemp() + 50},
+							# {'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 50},
+							# {'Thermocouple': 3, 'temp': hwStatus.Thermocouples.getTC(3).getTemp() - 50,
+							# 'userDefined':True},
+							# {'Thermocouple': 4, 'temp': hwStatus.Thermocouples.getTC(4).getTemp() + 50,
+							# 'userDefined':True},
 						]
-					}
+						}
+					# elif currentTestTemp < 10:
+					# 	TCs = {
+					# 		'time': datetime.now(),
+					# 		'tcList': [
+					# 			{'Thermocouple': 1,'working':True, 'temp': currentTestTemp + 2},
+					# 		]
+					# 	}
+					# else:
+					# 	TCs = {
+					# 		'time': datetime.now(),
+					# 		'tcList': [
+					# 			{'Thermocouple': 1,'working':True, 'temp': currentTestTemp},
+					# 		]
+					# 	}
+					
 				'''
 				TCs is a list of dicitations ordered like this....
 				{
@@ -69,9 +94,10 @@ class ThermoCoupleUpdater(Thread):
                   'alarm': tc_alarm
                  }
                 '''
-					
+				debugPrint(3,"current TC reading")
+				for tc in TCs['tcList']:
+					debugPrint(3,"TC {} --> {}c".format(tc['Thermocouple'],tc['temp']))
 
-                
 				hwStatus.Thermocouples.update(TCs)					
 
 				time.sleep(SLEEP_TIME)
