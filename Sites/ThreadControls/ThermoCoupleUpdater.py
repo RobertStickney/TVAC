@@ -10,7 +10,7 @@ from Collections.HardwareStatusInstance import HardwareStatusInstance
 
 
 # used for testing
-# from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
+import random
 
 class ThermoCoupleUpdater(Thread):
 
@@ -54,11 +54,13 @@ class ThermoCoupleUpdater(Thread):
 					debugPrint(4,"Generating test data for TC")
 					# currentTestTemp = hwStatus.Thermocouples.getTC(1).getTemp()
 					currentTestTemp = self.parent.zoneThreadDict["zone1"].tempGoalTemperature
+					currentPID = self.parent.zoneThreadDict["zone1"].pid.error_value
 					# if currentTestTemp < 5:
 					TCs = {
 						'time': datetime.now(),
 						'tcList': [
-							{'Thermocouple': 1,'working':True, 'temp': currentTestTemp},
+						# (random.uniform(0,10)-5)
+							{'Thermocouple': 1,'working':True, 'temp':hwStatus.Thermocouples.getTC(1).getTemp() + currentPID + 0},
 							# {'Thermocouple': 5, 'temp': hwStatus.Thermocouples.getTC(5).getTemp() + 50},
 							# {'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 50},
 							# {'Thermocouple': 3, 'temp': hwStatus.Thermocouples.getTC(3).getTemp() - 50,
