@@ -7,7 +7,7 @@ class PWM_Square_Wave:
     def __init__(self, period, offset, min_duty_cycle=0.0, update_key='', update_fun=None):
         self.period = round(period, 1)  # in seoonds
         if period < 1: # seconds
-            raise RuntimeError("PWM square wave period must be greater than 1 second.")
+            raise RuntimeError("PWM square wave period must be greater than 1 second, currently: {}".format(period))
         self.min_dc = self.coerce_to_range(min_duty_cycle, 0.0, 0.99999)
         self.duty_cycle = self.min_dc
         self.time_for_next_edge = round(time.time(), 1) + round(offset, 1)
@@ -62,9 +62,9 @@ if __name__ == '__main__':
     from DataContracts.DigitalOutContract import DigitalOutContract
 
     d_out = DigitalOutContract()
-    numbers = [2, 9]
+    numbers = [1, 2]
     offsets = [.4,.9]
-    duty_cycles = [.6, .4]
+    duty_cycles = [0, 1]
     pwm_wf = []
     for i in range(len(numbers)):
         pwm_wf.append(PWM_Square_Wave(5, offsets[i], 0, "IR Lamp "+str(numbers[i]), d_out.update))

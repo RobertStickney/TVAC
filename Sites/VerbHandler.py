@@ -1,8 +1,8 @@
 import http.server
 import json
 
-from Controlers.PostControl import PostContol
-from Controlers.GetControl import GetControl
+from Controllers.PostControl import PostContol
+from Controllers.GetControl import GetControl
 
 from DataBaseController.FileCreation import FileCreation
 from Collections.ProfileInstance import ProfileInstance
