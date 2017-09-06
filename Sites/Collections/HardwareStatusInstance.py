@@ -23,7 +23,9 @@ class HardwareStatusInstance:
         else:
             debugPrint(2,"Creating HardwareStatusInstance")
             self.Thermocouples = ThermocoupleCollection()
-            self.PfeifferGuages = PfeifferGuageCollection()
+            # commented out Weds sep 6, due to merge breaking something
+            # self.PfeifferGuages = PfeifferGuageCollection()
+            
             #self.ShiCryopump = ShiCryopumpCollection()
 
             self.PC_104 = PC_104_Instance.getInstance()

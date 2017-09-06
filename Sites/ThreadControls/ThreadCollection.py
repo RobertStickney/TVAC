@@ -22,15 +22,16 @@ class ThreadCollection:
 
 
     def createZoneCollection(self):
-        return {"zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10})),
-            "zone2": HardWareControlStub(args=('zone2',)),
-            "zone3": HardWareControlStub(args=('zone3',)),
-            "zone4": HardWareControlStub(args=('zone4',)),
-            "zone5": HardWareControlStub(args=('zone5',)),
-            "zone6": HardWareControlStub(args=('zone6',)),
-            "zone7": HardWareControlStub(args=('zone7',)),
-            "zone8": HardWareControlStub(args=('zone8',)),
-            "zone9": HardWareControlStub(args=('zone9',))
+        return {"zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10}),lamps=['IR Lamp 1','IR Lamp 2']),
+            "zone2": HardWareControlStub(args=('zone2',),lamps=['IR Lamp 3','IR Lamp 4']),
+            "zone3": HardWareControlStub(args=('zone3',),lamps=['IR Lamp 5','IR Lamp 6']),
+            "zone4": HardWareControlStub(args=('zone4',),lamps=['IR Lamp 7','IR Lamp 8']),
+            "zone5": HardWareControlStub(args=('zone5',),lamps=['IR Lamp 9','IR Lamp 10']),
+            "zone6": HardWareControlStub(args=('zone6',),lamps=['IR Lamp 11','IR Lamp 12']),
+            "zone7": HardWareControlStub(args=('zone7',),lamps=['IR Lamp 13','IR Lamp 14']),
+            "zone8": HardWareControlStub(args=('zone8',),lamps=['IR Lamp 15','IR Lamp 16']),
+            # zone9 is the platen
+            # "zone9": HardWareControlStub(args=('zone9',))
             }
 
     def createHardwareInterfaces(self,parent):

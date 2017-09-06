@@ -7,8 +7,8 @@ import datetime
 from DataBaseController.FileCreation import FileCreation
 from DataBaseController.MySql import MySQlConnect
 from Collections.ProfileInstance import ProfileInstance
-
 from Collections.HardwareStatusInstance import HardwareStatusInstance
+from DataContracts.DigitalOutContract import DigitalOutContract
 from PID.PID import PID
 
 from HouseKeeping.globalVars import debugPrint
@@ -16,7 +16,7 @@ from HouseKeeping.globalVars import debugPrint
 class HardWareControlStub(Thread):
 
     def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs=None, verbose=None):
+                 args=(), kwargs=None, verbose=None, lamps=None):
         debugPrint(3,"Creating HardWareControlStub")
         debugPrint(4,"args: {}".format(args))
         Thread.__init__(self, group=group, target=target, name=name)
@@ -39,6 +39,7 @@ class HardWareControlStub(Thread):
         self.zoneUUID = uuid.uuid4()
         self.zoneProfile.update(json.loads('{"zoneuuid":"%s"}'%self.zoneUUID))
         self.timeStartForHold = None
+        self.lamps = lamps
 
         self.tempGoalTemperature = 0
         self.timerOn = False
@@ -98,7 +99,8 @@ class HardWareControlStub(Thread):
             error_value = self.pid.error_value
             # print("PID error_value: {}c per update?".format(error_value))
             # print("maxTempRisePerUpdate: {}c".format(self.maxTempRisePerUpdate))
-            # print("percent of duty cycle: "+str(error_value/self.maxTempRisePerUpdate))
+            self.dutyCycle = error_value/self.maxTempRisePerUpdate
+            print("percent of duty cycle: "+str(error_value/self.maxTempRisePerUpdate))
             # corrections is the "power" needed to change the temp to goal,
             # This still needs to be converted duty cylces for the heaters
             
@@ -107,6 +109,10 @@ class HardWareControlStub(Thread):
             debugPrint(4,"{}: currentGoal: {}".format(self.args, self.tempGoalTemperature))
             # someHardwareDriver.updateTemp(self.zoneProfile.termalProfiles[self.termalProfile].temp + self.tempChange)
             # hardwareStatusInstance.Thermocouples
+
+            # update both lamps...this needs to change
+            d_out.update({self.lamps[0] + " PWM DC": self.dutyCycle})
+            d_out.update({self.lamps[1] + " PWM DC": self.dutyCycle})
             
             # print("="*100)
             time.sleep(self.updatePeriod)

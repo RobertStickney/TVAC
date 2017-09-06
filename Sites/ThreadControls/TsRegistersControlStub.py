@@ -29,17 +29,19 @@ class TsRegistersControlStub(Thread):
         userName = os.environ['LOGNAME']
 
         try:
+            # This should be done both inside and outside of testing
+            self.ir_lamp_pwm_start()
             if "root" in userName:
-                self.ir_lamp_pwm_start()
                 self.ts_reg.open_Registers()
                 self.ts_reg.start_adc(1, 7, int(32e6 * self.adc_period))
                 self.da_io.digital_out.update(self.ts_reg.dio_read4(1, False))
                 self.da_io.digital_out.update(self.ts_reg.dio_read4(2, False))
 
             while os.getppid() != 1:  # Exit when parent thread stops running
+                # This should be done both inside and outside of testing
+                for i in range(len(self.ir_lamp_pwm)):
+                    self.ir_lamp_pwm[i].update_waveform_state(self.da_io.digital_out.get_IR_Lamps_pwm_dc(i+1))
                 if "root" in userName:
-                    for i in range(len(self.ir_lamp_pwm)):
-                        self.ir_lamp_pwm[i].update_waveform_state(self.da_io.digital_out.get_IR_Lamps_pwm_dc(i+1))
                     debugPrint(3,"Reading and writing with PC 104")
                     self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0,
                                            self.da_io.digital_out.get_c1_b1,
