@@ -811,5 +811,6 @@ class DigitalOutContract:
         message.append('"CryoP Pwr Relay 1":%s,' % json.dumps(self.CryoP1_PwrRelay))
         message.append('"CryoP Pwr Relay 2":%s,' % json.dumps(self.CryoP2_PwrRelay))
         message.append('"RoughP Pwr Relay":%s}' % json.dumps(self.RoughP_PwrRelay))
+        message.append('"IR_Lamps_pwm_dc":%s}' % json.dumps(self.IR_Lamps_pwm_dc))
         self.__lock.release()
         return ''.join(message)

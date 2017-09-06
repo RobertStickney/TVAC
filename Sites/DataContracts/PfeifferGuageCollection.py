@@ -72,7 +72,7 @@ class PfeifferGuageCollection:
     def Pfeiffer_SendReceive(self, Address, Parm=349, dataStr=None):
         p_gauge = open('/dev/ttyxuart2', 'r+b', buffering=0)
         for tries in range(3):
-            if dataStr is None
+            if dataStr is None:
                 p_gauge.write(self.Pfeiffer_GenCmdRead(Address, Parm).encode())
             else:
                 p_gauge.write(self.Pfeiffer_GenCmdWrite(Address, Parm, dataStr).encode())

@@ -26,10 +26,5 @@ class HardwareStatusInstance:
             self.PfeifferGuages = PfeifferGuageCollection()
             #self.ShiCryopump = ShiCryopumpCollection()
 
-            self.PC_104_Instance = PC_104_Instance.getInstance()
-
-
-
-
-
+            self.PC_104 = PC_104_Instance.getInstance()
             HardwareStatusInstance.__instance = self

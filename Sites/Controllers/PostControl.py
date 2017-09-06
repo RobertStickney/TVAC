@@ -1,32 +1,33 @@
 from Collections.ProfileInstance import ProfileInstance
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
 from HouseKeeping.globalVars import debugPrint
 
 class PostContol:
 
-    def loadProfile(self,data):
+    def loadProfile(self, data):
         profileInstance = ProfileInstance.getInstance()
         profileInstance.zoneProfiles.update(data)
         return "{'result':'success'}"
 
-    def runProfile(self,data):
+    def runProfile(self, data):
         debugPrint(2,"Calling: runProfile")
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.runAllThreads();
         return "{'result':'success'}"
 
-    def runSingleProfile(self,data):
+    def runSingleProfile(self, data):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.runSingleThread(data);
         return "{'result':'success'}"
 
-    def pauseSingleThread(self,data):
+    def pauseSingleThread(self, data):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.pause(data)
         return "{'result':'success'}"
 
-    def removePauseSingleThread(self,data):
+    def removePauseSingleThread(self, data):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.removePause(data)
         return "{'result':'success'}"
@@ -37,22 +38,37 @@ class PostContol:
     #     threadInstance.threadCollection.checkThreadStatus()
     #     return "{'result':'success'}"
 
-    def holdSingleThread(self,data):
+    def holdSingleThread(self, data):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.holdThread(data)
         return "{'result':'success'}"
 
-    def releaseHoldSingleThread(self,data):
+    def releaseHoldSingleThread(self, data):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.releaseHoldThread(data)
         return "{'result':'success'}"
 
-    def abortSingleThread(self,data):
+    def abortSingleThread(self, data):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.abortThread(data)
         return "{'result':'success'}"
 
-    def calculateRamp(self,data):
+    def calculateRamp(self, data):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.calculateRamp(data)
         return "{'result':'success'}"
+
+    ## Todo: These functions are for engeering tests only Remove from deliverable.
+    def setPC104_Digital(self, data):
+        pins = HardwareStatusInstance.getInstance().PC_104
+        pins.digital_out.update(data)
+        return "{'result':'success'}"
+
+    def setPC104_Analog(self, data):
+        pins = HardwareStatusInstance.getInstance().PC_104
+        pins.analog_out.update(data)
+        return "{'result':'success'}"
+
+
+
+

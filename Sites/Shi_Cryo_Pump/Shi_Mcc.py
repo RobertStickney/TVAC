@@ -19,7 +19,6 @@ class ShiMcc:
         if Responce[-1] != '\r':
             print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
             return False
-        # print("Checksum: '" + Responce[-2] + "' Data: '" + Responce[1:-2] + "' Calc cksum: '" + chr(GetChecksum(Responce[1:-2])) + "'")
         if Responce[-2] != chr(self.getChecksum(Responce[1:-2])):
             print("R:--" + Responce.replace('\r', r'\r') + "---", "Checksum: " + chr(self.getChecksum(Responce[1:-2])))
             return False
@@ -37,21 +36,21 @@ class ShiMcc:
             resp = MCC.read(64).decode()
             if self.responceGood(resp):
                 if resp[1] == 'A':  # Responce Good!
-                    Data = self.format_Responce(resp[2:-2])
+                    Data = self.format_responce(resp[2:-2])
                 elif resp[1] == 'B':
-                    Data = self.format_Responce(resp[2:-2], pwrFail=True)
+                    Data = self.format_responce(resp[2:-2], pwrFail=True)
                 elif resp[1] == 'E':
-                    Data = self.format_Responce(resp[2:-2], error=True)
+                    Data = self.format_responce(resp[2:-2], error=True)
                 elif resp[1] == 'F':
-                    Data = self.format_Responce(resp[2:-2], error=True, pwrFail=True)
+                    Data = self.format_responce(resp[2:-2], error=True, pwrFail=True)
                 else:
-                    Data = self.format_Responce("R--" + resp + "-- unknown", error=True)
+                    Data = self.format_responce("R--" + resp + "-- unknown", error=True)
                 break
             print("Try number: " + str(tries))
         else:
             print("No more tries! Something is wrong!")
-            Data = self.format_Responce('Timeout!', error=True)
-        MCC.close
+            Data = self.format_responce('Timeout!', error=True)
+        MCC.close()
         return Data
 
     def getStatus(self):
@@ -102,7 +101,7 @@ class ShiMcc:
             vals[key] = val['Data']
         return self.formatResponce(json.dumps(vals), er, pf)
 
-    def formatResponce(self,d, error=False, pwrFail=False):
+    def format_responce(self,d, error=False, pwrFail=False):
         return {"Error": error, "PowerFailure": pwrFail, "Data": d}
 
     def getDutyCycle(self):  # Command Ex: "$XOI??_\r"

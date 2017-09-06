@@ -60,6 +60,7 @@ class TsRegistersControlStub(Thread):
                     debugPrint(4, "Blank loop while testing: PC 104 loop")
                     time.sleep(self.adc_period*8)
 
+            self.ir_lamp_pwm_stop()
             self.ts_reg.close()
             debugPrint(3,'Closed the mmaps!')
         except Exception as e:

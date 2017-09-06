@@ -19,7 +19,7 @@ def ResponceGood(Responce):
     if Responce[-1] != '\r':
         print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
         return False
-    #print("Checksum: '" + Responce[-2] + "' Data: '" + Responce[1:-2] + "' Calc cksum: '" + chr(GetChecksum(Responce[1:-2])) + "'")
+    # print("Checksum: '" + Responce[-2] + "' Data: '" + Responce[1:-2] + "' Calc cksum: '" + chr(GetChecksum(Responce[1:-2])) + "'")
     if Responce[-2] != chr(GetChecksum(Responce[1:-2])):
         print("R:--" + Responce.replace('\r', r'\r') + "---","Checksum: " + chr(GetChecksum(Responce[1:-2])))
         return False
@@ -51,7 +51,7 @@ def Send_cmd(Command):
     else:
         print("No more tries! Something is wrong!")
         Data = Format_Responce('Timeout!', error = True)
-    MCC.close
+    MCC.close()
     return Data
 
 def get_Status():

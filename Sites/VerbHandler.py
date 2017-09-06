@@ -1,8 +1,8 @@
 import http.server
 import json
 
-from Controlers.PostControl import PostContol
-from Controlers.GetControl import GetControl
+from Controllers.PostControl import PostContol
+from Controllers.GetControl import GetControl
 
 from DataBaseController.FileCreation import FileCreation
 from Collections.ProfileInstance import ProfileInstance
@@ -28,6 +28,8 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/checkZoneStatus': control.checkTreadStatus,
                 '/getAllThermoCoupleData': control.getAllThermoCoupleData,
                 '/getAllZoneData': control.getAllZoneData,
+                '/getPC104_Digital': control.getPC104_Digital,
+                '/getPC104_Analog': control.getPC104_Analog,
                 '/getLastError' : control.getLastError
             }[path](contractObj)
 
@@ -76,7 +78,9 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             '/holdZone': control.holdSingleThread,
             '/releaseHoldZone': control.releaseHoldSingleThread,
             '/abortZone': control.abortSingleThread,
-            '/calculateRamp': control.calculateRamp
+            '/calculateRamp': control.calculateRamp,
+            '/setDigital': control.setPC104_Digital,  #TODO: Remove this Engeering function!
+            '/setAnalog': control.setPC104_Analog  #TODO: Remove this Engeering function!
         }[path](contractObj)
 
         self.setHeader()
