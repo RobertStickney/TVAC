@@ -2,10 +2,10 @@
 import socketserver
 import sys
 
+from VerbHandler import VerbHandler
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
-from VerbHandler import VerbHandler
 
 
 from HouseKeeping import globalVars
