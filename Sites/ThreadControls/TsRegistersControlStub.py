@@ -37,7 +37,7 @@ class TsRegistersControlStub(Thread):
                 self.da_io.digital_out.update(self.ts_reg.dio_read4(1, False))
                 self.da_io.digital_out.update(self.ts_reg.dio_read4(2, False))
 
-            while os.getppid() != 1:  # Exit when parent thread stops running
+            while True:
                 # This should be done both inside and outside of testing
                 for i in range(len(self.ir_lamp_pwm)):
                     self.ir_lamp_pwm[i].update_waveform_state(self.da_io.digital_out.get_IR_Lamps_pwm_dc(i+1))
@@ -55,8 +55,8 @@ class TsRegistersControlStub(Thread):
                         self.da_io.digital_out.update({"RoughP Start": False})
                     self.da_io.digital_in.update(self.ts_reg.dio_read4(1))
                     self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
-                    self.ts_reg.dac_write(self.da_io.analog_out.dac_counts[2], 2)
-                    self.ts_reg.dac_write(self.da_io.analog_out.dac_counts[3], 3)
+                    self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(2), 2)
+                    self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(3), 3)
                     self.read_analog_in()  # loop period is adc_period * 2 seconds
                 else:
                     debugPrint(4, "Blank loop while testing: PC 104 loop")

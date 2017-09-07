@@ -8,7 +8,6 @@ from DataBaseController.FileCreation import FileCreation
 from DataBaseController.MySql import MySQlConnect
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
-from DataContracts.DigitalOutContract import DigitalOutContract
 from PID.PID import PID
 
 from HouseKeeping.globalVars import debugPrint
@@ -65,7 +64,7 @@ class HardWareControlStub(Thread):
         debugPrint(1,"Running: {} {}".format(self.args, self.kwargs if self.kwargs else ""))
         debugPrint(1,"{}: Current/Goal temp: {}/{}".format(self.args, currentTemp,goalTemp))
         debugPrint(1,"{}: Currently: {}".format(self.args, "Alive" if self.is_alive() else "Dead"))
-        hardwareStatusInstance = HardwareStatusInstance.getInstance()
+        hardwareStatus  = HardwareStatusInstance.getInstance()
         currentTemp = self.zoneProfile.getTemp("Max")
         debugPrint(1,"======{}: currentTemp - {}".format(self.args,currentTemp))
 
@@ -111,8 +110,8 @@ class HardWareControlStub(Thread):
             # hardwareStatusInstance.Thermocouples
 
             # update both lamps...this needs to change
-            d_out.update({self.lamps[0] + " PWM DC": self.dutyCycle})
-            d_out.update({self.lamps[1] + " PWM DC": self.dutyCycle})
+            hardwareStatus.PC_104.digital_out.update({self.lamps[0] + " PWM DC": self.dutyCycle,
+                                                      self.lamps[1] + " PWM DC": self.dutyCycle})
             
             # print("="*100)
             time.sleep(self.updatePeriod)
