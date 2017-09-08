@@ -94,9 +94,9 @@ class ThermoCoupleUpdater(Thread):
               'alarm': tc_alarm
              }
             '''
-            debugPrint(3,"current TC reading")
+            debugPrint(5,"current TC reading")
             for tc in TCs['tcList']:
-                debugPrint(3,"TC {} --> {}c".format(tc['Thermocouple'],tc['temp']))
+                debugPrint(5,"TC {} --> {}c".format(tc['Thermocouple'],tc['temp']))
 
             hwStatus.Thermocouples.update(TCs)
 
