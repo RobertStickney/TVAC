@@ -78,7 +78,7 @@ class TsRegistersControlStub(Thread):
         (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
         while fifo_depth < 16:
             debugPrint(3,"FIFO depth: {:d}".format(fifo_depth))
-            time.sleep(self.adc_period * ((fifo_depth / 2) - 8))
+            time.sleep(self.adc_period * int(8 - (fifo_depth / 2)))
             (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
         d = {}
         for n in range(16):
