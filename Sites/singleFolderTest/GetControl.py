@@ -19,7 +19,7 @@ class GetControl:
     def getAllThermoCoupleData(self):
         debugPrint(2, "Calling: getAllThermoCoupleData")
         hardwareStatusInstance = HardwareStatusInstance.getInstance()
-        json = hardwareStatusInstance.Thermocouples.getJson()
+        json = hardwareStatusInstance.Thermocouples.getJson('C')
         # print(json)
         return json
 

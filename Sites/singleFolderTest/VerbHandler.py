@@ -31,9 +31,10 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getPC104_Digital': control.getPC104_Digital,
                 '/getPC104_Analog': control.getPC104_Analog,
                 '/getLastError' : control.getLastError
-            }[path]
+            }[path]()
 
             debugPrint(1,"Sending results")
+            debugPrint(2,"Sending results")
             self.setHeader()
             self.wfile.write(result.encode())
         except Exception as e:
