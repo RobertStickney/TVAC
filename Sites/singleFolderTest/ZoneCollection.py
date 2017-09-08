@@ -4,7 +4,6 @@ import uuid
 # from DataContracts.ZoneProfileContract import ZoneProfileContract
 #
 # from HouseKeeping.globalVars import debugPrint
-from DataBaseController.MySql import MySQlConnect
 from ZoneProfileContract import ZoneProfileContract
 
 from globalVars import debugPrint
