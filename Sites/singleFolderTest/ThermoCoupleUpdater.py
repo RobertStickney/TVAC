@@ -3,10 +3,11 @@ import os
 import time
 from datetime import datetime
 
-from Keysight_34980A import Kesight_34980A_TC_Scan
+# from Keysight_34980A.Kesight_34980A_TC_Scan import Keysight34980A_TC
 # from HouseKeeping.globalVars import debugPrint
 #
 # from Collections.HardwareStatusInstance import HardwareStatusInstance
+from Kesight_34980A_TC_Scan import Keysight34980A_TC
 from globalVars import debugPrint
 
 from HardwareStatusInstance import HardwareStatusInstance
@@ -40,7 +41,7 @@ class ThermoCoupleUpdater(Thread):
 
         if "root" in userName:
             # Hasn't been tested yet
-            Tharsis = Kesight_34980A_TC_Scan.Keysight34980A_TC(ipAddr_34980A, ChannelList = Channel_List)
+            Tharsis = Keysight34980A_TC(ipAddr_34980A, ChannelList = Channel_List)
             Tharsis.init_sys()
 
         # stop when the program ends
