@@ -5,8 +5,7 @@
 #
 # from HouseKeeping.globalVars import debugPrint
 from HardWareControlStub import HardWareControlStub
-from TSafetyCheck import SafetyCheck
-from TThermoCoupleUpdater import ThermoCoupleUpdater
+from ThermoCoupleUpdater import ThermoCoupleUpdater
 from TsRegistersControlStub import TsRegistersControlStub
 
 from globalVars import debugPrint
@@ -16,13 +15,13 @@ class ThreadCollection:
     def __init__(self):
         self.zoneThreadDict = self.createZoneCollection()
         self.hardwareInterfaceThreadDict = self.createHardwareInterfaces(self)
-        self.safetyThread = SafetyCheck()
+        #self.safetyThread = SafetyCheck()
 
         for thread in self.hardwareInterfaceThreadDict.values():
             thread.daemon = True
             thread.start()
-        self.safetyThread.daemon = True
-        self.safetyThread.start()
+        #self.safetyThread.daemon = True
+        #self.safetyThread.start()
 
 
     def createZoneCollection(self):
