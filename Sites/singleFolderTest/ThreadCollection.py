@@ -42,7 +42,7 @@ class ThreadCollection:
         return {
         # commented out aren't fully tested
         "PC_104" : TsRegistersControlStub(),
-        # "PfeifferGuage" : ThermoCoupleUpdater()
+        # "PfeifferGuage" : ThermoCoupleUpdater(),
         "ThermoCouple" : ThermoCoupleUpdater(parent),
         # "MCC" : PASS
         }

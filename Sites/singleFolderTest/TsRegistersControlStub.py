@@ -70,6 +70,7 @@ class TsRegistersControlStub(Thread):
         except Exception as e:
             # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
             print('Error accessing the PC104 Bus. Error: %s' % e)
+            raise e
         return
 
     def read_analog_in(self):
