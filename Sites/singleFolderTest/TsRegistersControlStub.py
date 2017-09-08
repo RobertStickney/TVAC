@@ -46,14 +46,14 @@ class TsRegistersControlStub(Thread):
                     self.ir_lamp_pwm[i].update_waveform_state(self.da_io.digital_out.get_IR_Lamps_pwm_dc(i+1))
                 if "root" in userName:
                     debugPrint(3,"Reading and writing with PC 104")
-                    self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0,
-                                           self.da_io.digital_out.get_c1_b1,
-                                           self.da_io.digital_out.get_c1_b2,
-                                           self.da_io.digital_out.get_c1_b3], 1)
-                    self.ts_reg.do_write4([self.da_io.digital_out.get_c2_b0,
-                                           self.da_io.digital_out.get_c2_b1,
-                                           self.da_io.digital_out.get_c2_b2,
-                                           self.da_io.digital_out.get_c2_b3], 2)
+                    self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0(),
+                                           self.da_io.digital_out.get_c1_b1(),
+                                           self.da_io.digital_out.get_c1_b2(),
+                                           self.da_io.digital_out.get_c1_b3()], 1)
+                    self.ts_reg.do_write4([self.da_io.digital_out.get_c2_b0(),
+                                           self.da_io.digital_out.get_c2_b1(),
+                                           self.da_io.digital_out.get_c2_b2(),
+                                           self.da_io.digital_out.get_c2_b3()], 2)
                     if self.da_io.digital_out.getVal('RoughP Start'):
                         self.da_io.digital_out.update({'RoughP Start': False})
                     self.da_io.digital_in.update(self.ts_reg.dio_read4(1))
