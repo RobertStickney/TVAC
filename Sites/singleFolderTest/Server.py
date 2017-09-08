@@ -31,7 +31,7 @@ if __name__ == '__main__':
                 globalVars.verbos = arg.count("v")
     debugPrint(1,"Debug on: Level " + str(globalVars.verbos))
 
-    PORT = 8000
+    PORT = 8080
 
     debugPrint(1,"Starting initializing threads and drivers")
     
