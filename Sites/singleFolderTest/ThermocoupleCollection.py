@@ -4,9 +4,9 @@ from datetime import datetime
 # from DataContracts.ThermocoupleContract import ThermocoupleContract
 #
 # from HouseKeeping.globalVars import debugPrint
-from DataContracts.ThermocoupleContract import ThermocoupleContract
+from ThermocoupleContract import ThermocoupleContract
 
-from HouseKeeping.globalVars import debugPrint
+from globalVars import debugPrint
 
 class ThermocoupleCollection:
 
