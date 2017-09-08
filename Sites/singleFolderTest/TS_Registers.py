@@ -143,6 +143,8 @@ class TS_Registers():
         else:
             addr = self.Dio1_Addr(self.DioOutBaseAddr)
         self.pc104.seek(addr)
+        print(bytes[0])
+        print(type(bytes[0]))
         self.pc104.write_byte(bytes[0])
         self.pc104.write_byte(bytes[1])
         self.pc104.write_byte(bytes[2])
