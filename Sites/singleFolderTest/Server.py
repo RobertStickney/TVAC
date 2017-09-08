@@ -43,7 +43,7 @@ if __name__ == '__main__':
     
     debugPrint(1,"Finished initializing threads and drivers")
     
-    httpd = ReuseAddrTCPServer(("", PORT), VerbHandler)
+    httpd = ReuseAddrTCPServer(("192.168.99.1", PORT), VerbHandler)
 
     print("Set up is complete. Starting to server request...")
 
