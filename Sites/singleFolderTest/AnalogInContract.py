@@ -7,7 +7,7 @@ class AnalogInContract:
     def __init__(self):
         self.cabinetTemp1 = 0  # ADC 0 - Cabinet Temperature Sensor 1
         self.cabinetTemp2 = 0  # ADC 1 - Cabinet Temperature Sensor 2
-        self.CabinetTemp3 = 0  # ADC 2 - Cabinet Temperature Sensor 3
+        self.cabinetTemp3 = 0  # ADC 2 - Cabinet Temperature Sensor 3
         self.notUsed1 = 0      # ADC 3 - Unassigned channel 3
         self.fsFrontDoor1 = 0  # ADC 4 - Front Door Force Sensor #1
         self.fsFrontDoor2 = 0  # ADC 5 - Front Door Force Sensor #2
