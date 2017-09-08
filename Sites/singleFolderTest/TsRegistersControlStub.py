@@ -23,6 +23,7 @@ class TsRegistersControlStub(Thread):
         self.ts_reg = TS_Registers()
         self.da_io = PC_104_Instance.getInstance()
         self.adc_period = 0.0125  # adc_clock*8 = 0.1s loop period
+        self.pwm_period = 30 # 30 second pwm period
         self.ir_lamp_pwm = []
 
     def run(self):
@@ -87,7 +88,7 @@ class TsRegistersControlStub(Thread):
         self.ir_lamp_pwm = []
         offsets = [.1,.1, .2,.2, .3,.3, .4,.4, .5,.5, .6,.6, .7,.7, .8,.8]
         for i in range(16):
-            self.ir_lamp_pwm.append(PWM_Square_Wave(self.adc_period*8,
+            self.ir_lamp_pwm.append(PWM_Square_Wave(self.pwm_period,
                                                     offsets[i],
                                                     "IR Lamp "+str(i+1),
                                                     self.da_io.digital_out.update))
