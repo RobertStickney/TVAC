@@ -70,5 +70,6 @@ class ThermocoupleContract:
         message.append('"time":%s,' % self.time)
         message.append('"temp":%s,' % self.getTemp(temp_units))
         message.append('"working":%s}' % self.working)
+        message.append('"alarm":%s}' % self.alarm)
         self.__lock.release()
         return ''.join(message)
