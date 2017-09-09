@@ -36,9 +36,10 @@ class TsRegistersControlStub(Thread):
             self.ir_lamp_pwm_start()
             if "root" in userName:
                 self.ts_reg.open_Registers()
-                self.ts_reg.start_adc(1, 7, int(32e6 * self.adc_period))
                 self.da_io.digital_out.update(self.ts_reg.dio_read4(1, False))
                 self.da_io.digital_out.update(self.ts_reg.dio_read4(2, False))
+                time.sleep(2)
+                self.ts_reg.start_adc(1, 7, int(32e6 * self.adc_period))
 
             while True:
                 # This should be done both inside and outside of testing
