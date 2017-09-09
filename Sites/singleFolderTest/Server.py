@@ -29,7 +29,9 @@ if __name__ == '__main__':
         for arg in sys.argv:
             if arg.startswith("-v"):
                 globalVars.verbos = arg.count("v")
-    print("/n"*2)
+    print("\n"*3+"\033[93m"+
+          "TVAC Starting!\n"+"\033[0m"+
+          "Python Version: {:}".format(sys.version))
     debugPrint(1,"Debug on: Level " + str(globalVars.verbos))
 
     PORT = 8080
@@ -46,6 +48,6 @@ if __name__ == '__main__':
     
     httpd = ReuseAddrTCPServer(("192.168.99.1", PORT), VerbHandler)
 
-    print("\033[94m Set up is complete.\033[0m Starting to server request...")
+    print("\033[93m Set up is complete.\033[0m Starting to server request...")
 
     httpd.serve_forever()
