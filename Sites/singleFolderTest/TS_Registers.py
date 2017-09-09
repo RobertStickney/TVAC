@@ -206,7 +206,7 @@ class TS_Registers():
         self.pc104.seek(self.Adc16Addr(0x08))  # ADCSTAT
         b1 = self.pc104.read_byte()
         b2 = self.pc104.read_byte()
-        debugPrint(4, "ADC FIFO Status: 0x{:x} 0x{:x}".format(b1,b2))
+        debugPrint(6, "ADC FIFO Status: 0x{:x} 0x{:x}".format(b1,b2))
         return ((b1 & 0x3e) >> 1,  # FFHEAD: Channel on head of fifo. It increments to (num_chan*2)+1 then wraps to 0
                 ((b2 & 0xff) << 2) | ((b1 & 0xC0) >> 6))  # Number of elements in fifo
 

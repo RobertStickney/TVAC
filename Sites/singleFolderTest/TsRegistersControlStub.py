@@ -26,6 +26,7 @@ class TsRegistersControlStub(Thread):
         self.pwm_period = 30  # 30 second pwm period
         self.pwm_min_dc = 1  # minimum Duty Cycle of 1 second
         self.ir_lamp_pwm = []
+        self.time_test = time.time()
 
     def run(self):
         debugPrint(2,"Starting TS Registers Control Stub Thread")
@@ -39,6 +40,7 @@ class TsRegistersControlStub(Thread):
                 self.da_io.digital_out.update(self.ts_reg.dio_read4(1, False))
                 self.da_io.digital_out.update(self.ts_reg.dio_read4(2, False))
                 time.sleep(2)
+                self.time_test = time.time()
                 self.ts_reg.start_adc(1, 7, int(32e6 * self.adc_period))
 
             while True:
@@ -46,7 +48,7 @@ class TsRegistersControlStub(Thread):
                 for i in range(len(self.ir_lamp_pwm)):
                     self.ir_lamp_pwm[i].update_waveform_state(self.da_io.digital_out.get_IR_Lamps_pwm_dc(i+1))
                 if "root" in userName:
-                    debugPrint(3,"Reading and writing with PC 104")
+                    debugPrint(5,"Reading and writing with PC 104")
                     self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0(),
                                            self.da_io.digital_out.get_c1_b1(),
                                            self.da_io.digital_out.get_c1_b2(),
@@ -79,13 +81,14 @@ class TsRegistersControlStub(Thread):
         (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
         debugPrint(4, "FIFO depth: {:d};  First Ch: {:d}".format(fifo_depth, first_channel))
         while fifo_depth < 16:
+            self.time_test = time.time()
             debugPrint(4,"FIFO depth: {:d}".format(fifo_depth))
             time.sleep(self.adc_period * int(8 - (fifo_depth / 2)))
             (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
         d = {}
         for n in range(fifo_depth):
             d['ADC ' + str((n + first_channel) % 16)] = self.ts_reg.adc_fifo_read()
-        debugPrint(5,d)
+        debugPrint(6,d)
         # self.da_io.analog_in.update(d)
 
     def ir_lamp_pwm_start(self):
