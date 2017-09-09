@@ -82,7 +82,7 @@ class TsRegistersControlStub(Thread):
             time.sleep(self.adc_period * int(8 - (fifo_depth / 2)))
             (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
         d = {}
-        for n in range(16):
+        for n in fifo_depth:
             d['ADC ' + str((n + first_channel) % 16)] = self.ts_reg.adc_fifo_read()
         debugPrint(5,d)
         # self.da_io.analog_in.update(d)
