@@ -76,14 +76,15 @@ class TsRegistersControlStub(Thread):
 
     def read_analog_in(self):
         (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
+        debugPrint(4, "FIFO depth: {:d};  First Ch: {:d}".format(fifo_depth, first_channel))
         while fifo_depth < 16:
-            debugPrint(3,"FIFO depth: {:d};  First Ch: {:d}".format(fifo_depth, first_channel))
+            debugPrint(4,"FIFO depth: {:d}".format(fifo_depth))
             time.sleep(self.adc_period * int(8 - (fifo_depth / 2)))
             (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
         d = {}
         for n in range(16):
             d['ADC ' + str((n + first_channel) % 16)] = self.ts_reg.adc_fifo_read()
-        debugPrint(3,d)
+        debugPrint(5,d)
         # self.da_io.analog_in.update(d)
 
     def ir_lamp_pwm_start(self):
