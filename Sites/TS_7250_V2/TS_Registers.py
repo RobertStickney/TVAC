@@ -5,8 +5,7 @@ import os
 import sys
 import mmap
 
-# from HouseKeeping.globalVars import debugPrint
-from globalVars import debugPrint
+from HouseKeeping.globalVars import debugPrint
 
 class TS_Registers():
     def __init__(self):
