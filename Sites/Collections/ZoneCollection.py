@@ -1,6 +1,6 @@
 import uuid
 
-from DataBaseController.MySql import MySQlConnect
+#from DataBaseController.MySql import MySQlConnect
 from DataContracts.ZoneProfileContract import ZoneProfileContract
 
 from HouseKeeping.globalVars import debugPrint

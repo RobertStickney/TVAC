@@ -1,6 +1,7 @@
 import time
 import pymysql
 
+
 class MySQlConnect:
 
     @staticmethod
