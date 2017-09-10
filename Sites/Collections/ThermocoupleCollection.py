@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
-import json
+#!/usr/bin/env python3.5
 from datetime import datetime
 
 from DataContracts.ThermocoupleContract import ThermocoupleContract
 
 from HouseKeeping.globalVars import debugPrint
+
 
 class ThermocoupleCollection:
 

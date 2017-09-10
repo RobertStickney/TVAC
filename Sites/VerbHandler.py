@@ -3,7 +3,6 @@ import json
 
 from Controllers.PostControl import PostContol
 from Controllers.GetControl import GetControl
-
 from DataBaseController.FileCreation import FileCreation
 from Collections.ProfileInstance import ProfileInstance
 
@@ -15,11 +14,6 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
         """Respond to a GET request."""
         debugPrint(1,"Received GET Request")
         try:
-            body = self.getBody()
-            if type(body) == type(b'a'):
-                debugPrint(3,"Changing body from bytes to String")
-                body = body.decode("utf-8")
-            contractObj = json.loads(body)
             path = self.path
             debugPrint(3,"On path: '{}'".format(path))
             control = GetControl()
@@ -31,9 +25,10 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getPC104_Digital': control.getPC104_Digital,
                 '/getPC104_Analog': control.getPC104_Analog,
                 '/getLastError' : control.getLastError
-            }[path](contractObj)
+            }[path]()
 
             debugPrint(1,"Sending results")
+            debugPrint(2,"Sending results")
             self.setHeader()
             self.wfile.write(result.encode())
         except Exception as e:

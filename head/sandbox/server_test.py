@@ -1,7 +1,4 @@
-#!/usr/bin/env python3
-# SHI_MCC_Interface
-
-#!/usr/bin/env python3
+#!/usr/bin/env python3.5
 import cgi
 import http.server
 import socketserver

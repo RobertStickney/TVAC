@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.5
 import io
 
 def SHI_MCC_GetChecksum(cmd):    #append the sum of the string's bytes mod 256 + '\r'

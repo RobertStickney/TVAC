@@ -2,6 +2,7 @@ from Collections.ZoneCollection import ZoneCollection
 
 from HouseKeeping.globalVars import debugPrint
 
+
 class ProfileInstance:
     # Here will be the instance stored.
     __instance = None

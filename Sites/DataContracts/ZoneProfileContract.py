@@ -1,9 +1,10 @@
+import threading
+
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from DataContracts.ThermalProfileContract import ThermalProfileContract
 
 from HouseKeeping.globalVars import debugPrint
 
-import threading
 
 class ZoneProfileContract:
     '''

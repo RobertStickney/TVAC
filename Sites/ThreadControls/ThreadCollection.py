@@ -1,5 +1,3 @@
-import random
-
 from ThreadControls.HardWareControlStub import HardWareControlStub
 from ThreadControls.SafetyCheck import SafetyCheck
 from ThreadControls.ThermoCoupleUpdater import ThermoCoupleUpdater
@@ -39,7 +37,7 @@ class ThreadCollection:
         return {
         # commented out aren't fully tested
         "PC_104" : TsRegistersControlStub(),
-        # "PfeifferGuage" : ThermoCoupleUpdater()
+        # "PfeifferGuage" : ThermoCoupleUpdater(),
         "ThermoCouple" : ThermoCoupleUpdater(parent),
         # "MCC" : PASS
         }

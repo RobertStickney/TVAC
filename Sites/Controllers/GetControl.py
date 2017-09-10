@@ -6,19 +6,19 @@ from HouseKeeping.globalVars import debugPrint
 
 class GetControl:
 
-    def checkTreadStatus(self, data):
+    def checkTreadStatus(self):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.checkThreadStatus()
         return "{'result':'success'}"
 
-    def getAllThermoCoupleData(self, filler):
+    def getAllThermoCoupleData(self):
         debugPrint(2, "Calling: getAllThermoCoupleData")
         hardwareStatusInstance = HardwareStatusInstance.getInstance()
-        json = hardwareStatusInstance.Thermocouples.getJson()
+        json = hardwareStatusInstance.Thermocouples.getJson('C')
         # print(json)
         return json
 
-    def getAllZoneData(self, data):
+    def getAllZoneData(self):
         # This doesn't work...
         debugPrint(2, "Calling: getAllZoneData")
         profileInstance = ProfileInstance.getInstance()
@@ -28,7 +28,7 @@ class GetControl:
             print(zones[zone].getJson())
         return "{'result':'success'}"
 
-    def getLastError(self, data):
+    def getLastError(self):
         # data unused
         debugPrint(2,"Calling: Get Last Error")
         errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
@@ -43,12 +43,12 @@ class GetControl:
 
         return str(errorList)
 
-    def getPC104_Digital(self, data):
+    def getPC104_Digital(self):
         pins = HardwareStatusInstance.getInstance().PC_104
         return '{"out":%s,"in":%s}' % (pins.digital_out.getJson(),
                                        pins.digital_in.getJson())
 
-    def getPC104_Analog(self, data):
+    def getPC104_Analog(self):
         pins = HardwareStatusInstance.getInstance().PC_104
         return '{"out":%s,"in":%s}' % (pins.analog_out.getJson(),
                                        pins.analog_in.getJson())

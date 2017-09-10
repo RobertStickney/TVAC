@@ -49,7 +49,7 @@ class AnalogOutContract:
     def getJson(self):
         self.__Lock.acquire()
         message = []
-        #message.append('"notUsed1":%s,' % self.notUsed1) uncomment when this is used
+        message.append('{"notUsed1":%s,' % self.notUsed1)
         message.append('"LN2 Platen":%s,' % self.LN2platen)
         message.append('"LN2 Shroud":%s}' % self.LN2shroud)
         self.__Lock.release()

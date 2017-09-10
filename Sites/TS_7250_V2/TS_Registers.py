@@ -1,10 +1,12 @@
-# !/usr/bin/env python3
+# !/usr/bin/env python3.5
 
 import time
 import os
 import sys
 import mmap
 
+# from HouseKeeping.globalVars import debugPrint
+from globalVars import debugPrint
 
 class TS_Registers():
     def __init__(self):
@@ -194,7 +196,7 @@ class TS_Registers():
         self.pc104.seek(self.Adc16Addr(0x03))  # ADCCFG_MSB
         self.pc104.write_byte(((ext_trig & 0x01) << 1) | (single_ended & 0x01))
 
-        self.pc104.seek(self.Adc16Addr(0x03))  # ADCCFG_LSB Writing to this byte resets the adc state machine.
+        self.pc104.seek(self.Adc16Addr(0x02))  # ADCCFG_LSB Writing to this byte resets the adc state machine.
         self.pc104.write_byte(((input_range & 0x03) << 6) |
                               ((single_ended & 0x01) << 5) |
                               ((num_chan & 0x07) << 1) |
@@ -204,6 +206,7 @@ class TS_Registers():
         self.pc104.seek(self.Adc16Addr(0x08))  # ADCSTAT
         b1 = self.pc104.read_byte()
         b2 = self.pc104.read_byte()
+        debugPrint(6, "ADC FIFO Status: 0x{:x} 0x{:x}".format(b1,b2))
         return ((b1 & 0x3e) >> 1,  # FFHEAD: Channel on head of fifo. It increments to (num_chan*2)+1 then wraps to 0
                 ((b2 & 0xff) << 2) | ((b1 & 0xC0) >> 6))  # Number of elements in fifo
 

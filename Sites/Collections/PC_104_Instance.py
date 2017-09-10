@@ -10,6 +10,7 @@ from DataContracts.AnalogOutContract import AnalogOutContract
 
 from HouseKeeping.globalVars import debugPrint
 
+
 class PC_104_Instance:
     # Here will be the instance stored.
     __instance = None

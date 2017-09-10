@@ -1,6 +1,6 @@
 from Collections.ThermocoupleCollection import ThermocoupleCollection
-from Collections.PfeifferGuageCollection import PfeifferGuageCollection
-#from Collections.ShiCryopumpCollection import ShiCryopumpCollection
+# from Collections.PfeifferGuageCollection import PfeifferGuageCollection
+# from Collections.ShiCryopumpCollection import ShiCryopumpCollection
 from Collections.PC_104_Instance import PC_104_Instance
 
 from HouseKeeping.globalVars import debugPrint

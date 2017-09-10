@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.5
 import socketserver
 import sys
 
@@ -6,7 +6,6 @@ from VerbHandler import VerbHandler
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
-
 
 from HouseKeeping import globalVars
 from HouseKeeping.globalVars import debugPrint
@@ -24,9 +23,12 @@ if __name__ == '__main__':
         for arg in sys.argv:
             if arg.startswith("-v"):
                 globalVars.verbos = arg.count("v")
+    print("\n"*3+"\033[93m"+
+          "TVAC Starting!\n"+"\033[0m"+
+          "Python Version: {:}".format(sys.version))
     debugPrint(1,"Debug on: Level " + str(globalVars.verbos))
 
-    PORT = 8000
+    PORT = 8080
 
     debugPrint(1,"Starting initializing threads and drivers")
     
@@ -38,8 +40,8 @@ if __name__ == '__main__':
     
     debugPrint(1,"Finished initializing threads and drivers")
     
-    httpd = ReuseAddrTCPServer(("", PORT), VerbHandler)
+    httpd = ReuseAddrTCPServer(("192.168.99.1", PORT), VerbHandler)
 
-    print("Set up is complete. Starting to server request...")
+    print("\033[93m Set up is complete.\033[0m Starting to server request...")
 
     httpd.serve_forever()

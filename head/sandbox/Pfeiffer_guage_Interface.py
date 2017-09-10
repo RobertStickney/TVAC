@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.5
 # Pfeiffer_guage_Interface
 import io
 import time

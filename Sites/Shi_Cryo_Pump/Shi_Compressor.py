@@ -1,22 +1,22 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.5
 # He_Compressor_Interface
 import io
 import time
 import pyserial
 
 # Runs on serial port at 9600 8 1  Tout >0.7 sec
-# $TEA<CR> – read all temps
-# $Ten<CR> – read input n = 1 – 4
-# $PRA<CR> – Read all pressures. P1 is compressor return in PSI, P2 is N/A (Most variants)
-# $PRn<CR> – read selected pressure n-1 or 2
-# $STA<CR> – Read Status bits – pretty extensive set of info for this one
-# $ID1<CR> – Read firmware ver and Elapsed Time
-# $ON1<CR> – turn compressor on
-# $OFF<CR> – turn compressor off
-# $RS1<CR> – Reset
-# $CHR<CR> – Cold Head Run
-# $CHP<CR> – Cold Head Pause
-# $POF<CR> – Cold Head Pause off
+# $TEA<CR> ï¿½ read all temps
+# $Ten<CR> ï¿½ read input n = 1 ï¿½ 4
+# $PRA<CR> ï¿½ Read all pressures. P1 is compressor return in PSI, P2 is N/A (Most variants)
+# $PRn<CR> ï¿½ read selected pressure n-1 or 2
+# $STA<CR> ï¿½ Read Status bits ï¿½ pretty extensive set of info for this one
+# $ID1<CR> ï¿½ Read firmware ver and Elapsed Time
+# $ON1<CR> ï¿½ turn compressor on
+# $OFF<CR> ï¿½ turn compressor off
+# $RS1<CR> ï¿½ Reset
+# $CHR<CR> ï¿½ Cold Head Run
+# $CHP<CR> ï¿½ Cold Head Pause
+# $POF<CR> ï¿½ Cold Head Pause off
 
 # Any Malformed or Invalid message from host returns $???, 3278<CR>
 '''
@@ -206,12 +206,12 @@ def Format_Responce(d, error = False, pwrFail = False): # , d_int = 0, d_float =
 
 # MCC Programmers References Guide Rev C 
 
-# 2.4 • Duty Cycle pg:8
+# 2.4 ï¿½ Duty Cycle pg:8
 def Get_DutyCycle(): # Command Ex: "$XOI??_\r"
     #return (int(Send_cmd("XOI??"))/23) * 100 #check for int
     return Send_cmd("XOI??")
 
-# 2.5 • Elapsed Time pg:8
+# 2.5 ï¿½ Elapsed Time pg:8
 def Get_ElapsedTime(): # Command Ex: "$Y?J\r"
     return Send_cmd("Y?")
  

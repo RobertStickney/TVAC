@@ -12,6 +12,7 @@ from PID.PID import PID
 
 from HouseKeeping.globalVars import debugPrint
 
+
 class HardWareControlStub(Thread):
 
     def __init__(self, group=None, target=None, name=None,

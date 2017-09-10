@@ -7,6 +7,7 @@ from Collections.HardwareStatusInstance import HardwareStatusInstance
 
 from HouseKeeping.globalVars import debugPrint
 
+
 class SafetyCheck(Thread):
 	"""
 	SafetyCheck is the thread that runs the sainty and safety checks over the system. 

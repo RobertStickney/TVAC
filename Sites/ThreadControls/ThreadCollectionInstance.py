@@ -2,6 +2,7 @@ from ThreadControls.ThreadCollection import ThreadCollection
 
 from HouseKeeping.globalVars import debugPrint
 
+
 class ThreadCollectionInstance:
     # Here will be the instance stored.
     __instance = None
