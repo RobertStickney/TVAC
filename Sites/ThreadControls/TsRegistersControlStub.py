@@ -87,8 +87,8 @@ class TsRegistersControlStub(Thread):
         d = {}
         for n in range(fifo_depth):
             d['ADC ' + str((n + first_channel) % 16)] = self.ts_reg.adc_fifo_read()
-        debugPrint(6,d)
-        # self.da_io.analog_in.update(d)
+        debugPrint(4,d)
+        self.da_io.analog_in.update(d)
 
     def ir_lamp_pwm_start(self):
         self.ir_lamp_pwm = []
