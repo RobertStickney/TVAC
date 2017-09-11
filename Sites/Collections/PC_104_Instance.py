@@ -8,7 +8,7 @@ from DataContracts.DigitalOutContract import DigitalOutContract
 from DataContracts.AnalogInContract import AnalogInContract
 from DataContracts.AnalogOutContract import AnalogOutContract
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 
 class PC_104_Instance:
@@ -26,7 +26,9 @@ class PC_104_Instance:
         if PC_104_Instance.__instance != None:
             raise Exception("This class is a singleton!")
         else:
-            debugPrint(2, "Creating PC_104_Instance")
+            Logging.logEvent("Debug","Status Update", 
+                {"message": "Creating PC_104_Instance",
+                 "level":2})
             self.digital_in = DigitalInContract()
             self.digital_out = DigitalOutContract()
             self.analog_in = AnalogInContract()

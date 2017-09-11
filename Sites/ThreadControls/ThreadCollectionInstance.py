@@ -1,6 +1,6 @@
 from ThreadControls.ThreadCollection import ThreadCollection
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 
 class ThreadCollectionInstance:
@@ -18,6 +18,8 @@ class ThreadCollectionInstance:
         if ThreadCollectionInstance.__instance != None:
             raise Exception("This class is a singleton!")
         else:
-            debugPrint(2,"Creating ThreadCollectionInstance")
+            Logging.logEvent("Debug","Status Update", 
+                {"message": "Creating ThreadCollectionInstance",
+                 "level":2})
             self.threadCollection = ThreadCollection()
             ThreadCollectionInstance.__instance = self

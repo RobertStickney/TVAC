@@ -7,25 +7,25 @@
       "termalprofiles":
       [
         {
-          "termalsetpoint": 0,
+          "thermalsetpoint": 0,
           "tempgoal": 5,
           "ramp": 30,
           "soakduration": 60
         },
         {
-          "termalsetpoint": 1,
+          "thermalsetpoint": 1,
           "tempgoal": 10,
           "ramp": 60,
           "soakduration": 30
         },
         {
-          "termalsetpoint": 2,
+          "thermalsetpoint": 2,
           "tempgoal": 70,
           "ramp": 300,
           "soakduration": 600
         },
         {
-          "termalsetpoint": 3,
+          "thermalsetpoint": 3,
           "tempgoal": 25,
           "ramp": 600,
           "soakduration": 0

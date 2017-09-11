@@ -6,11 +6,13 @@ from VerbHandler import VerbHandler
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
+from VerbHandler import VerbHandler
 
-from HouseKeeping import globalVars
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
+
+# from Logging.debugPrint import debugPrint
 # Adding verbose level for debug printing
-verbos = 0
+# verbos = 0
 
 class ReuseAddrTCPServer(socketserver.TCPServer):
     allow_reuse_address = True
@@ -18,30 +20,31 @@ class ReuseAddrTCPServer(socketserver.TCPServer):
 
 if __name__ == '__main__':
     # adding debug info
-    globalVars.init()
     if(len(sys.argv)>1):
         for arg in sys.argv:
             if arg.startswith("-v"):
-                globalVars.verbos = arg.count("v")
-    print("\n"*3+"\033[93m"+
-          "TVAC Starting!\n"+"\033[0m"+
-          "Python Version: {:}".format(sys.version))
-    debugPrint(1,"Debug on: Level " + str(globalVars.verbos))
+                Logging.verbos = arg.count("v")
+    Logging.logEvent("Debug","Status Update",
+        {"message": "Debug on: Level {}".format(Logging.verbos),
+         "level":1})
+    PORT = 8000
 
-    PORT = 8080
+    Logging.logEvent("Debug","Status Update",
+        {"message": "Starting initializing threads and drivers",
+         "level":1})
 
-    debugPrint(1,"Starting initializing threads and drivers")
-    
     hardwareStatusInstance = HardwareStatusInstance.getInstance()
     profileInstance = ProfileInstance.getInstance()
     threadInstance = ThreadCollectionInstance.getInstance()
-    
 
-    
-    debugPrint(1,"Finished initializing threads and drivers")
-    
-    httpd = ReuseAddrTCPServer(("192.168.99.1", PORT), VerbHandler)
+    Logging.logEvent("Debug","Status Update",
+        {"message": "Finished initializing threads and drivers",
+         "level":1})
 
-    print("\033[93m Set up is complete.\033[0m Starting to server request...")
+    httpd = ReuseAddrTCPServer(("", PORT), VerbHandler)
+
+    Logging.logEvent("Debug","Status Update",
+        {"message": "Start Up Complete, Server is listening for request...",
+         "level":1})
 
     httpd.serve_forever()

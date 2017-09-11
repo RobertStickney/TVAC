@@ -5,7 +5,7 @@
 			"profileuuid"	:"",
 			"average"		:0,
 			"zoneUUID":"f6e0cf47-e449-4841-89e9-6acc91181416",
-			"termalprofiles":[],
+			"thermalprofiles":[],
 			"thermocouples":[]
 		},
 		{
@@ -13,9 +13,9 @@
 			"profileuuid":"a9ec451b-83da-41f7-8efb-ab35ce581cf2",
 			"average":2,
 			"zoneUUID":"f3d7702b-9772-4534-899a-df0106445374",
-			"termalprofiles": [
+			"thermalprofiles": [
 				{
-				"termalsetpoint":0,
+				"thermalsetpoint":0,
 				"tempgoal":5,
 				"temp":0,
 				"soakduration":1,
@@ -23,7 +23,7 @@
 				"ramp":10
 				},
 				{
-					"termalsetpoint":1,
+					"thermalsetpoint":1,
 					"tempgoal":10,
 					"temp":0,
 					"soakduration":1,
@@ -31,7 +31,7 @@
 					"ramp":5
 				},
 				{
-					"termalsetpoint":2,
+					"thermalsetpoint":2,
 					"tempgoal":5,
 					"temp":0,
 					"soakduration":1,
@@ -77,7 +77,7 @@
 			"profileuuid":"",
 			"average":0,
 			"zoneUUID":"cb60f396-94c6-4803-ae61-7f34b630d7dd",
-			"termalprofiles":[],
+			"thermalprofiles":[],
 			"thermocouples":[]
 		},
 		{
@@ -85,9 +85,9 @@
 			"profileuuid":"a9ec451b-83da-41f7-8efb-ab35ce581cf2",
 			"average":1,
 			"zoneUUID":"62d82ff2-b4b9-4531-8538-73b05fe11478",
-			"termalprofiles":[
+			"thermalprofiles":[
 				{
-					"termalsetpoint":0,
+					"thermalsetpoint":0,
 					"tempgoal":10,
 					"temp":0,
 					"soakduration":1,
@@ -95,7 +95,7 @@
 					"ramp":10
 				},
 				{
-					"termalsetpoint":1,
+					"thermalsetpoint":1,
 					"tempgoal":5,
 					"temp":0,
 					"soakduration":1,
@@ -103,7 +103,7 @@
 					"ramp":5
 				},
 				{
-					"termalsetpoint":2,
+					"thermalsetpoint":2,
 					"tempgoal":7,
 					"temp":0,
 					"soakduration":1,
@@ -149,18 +149,18 @@
 			"profileuuid":"",
 			"average":0,
 			"zoneUUID":"623a2a6b-58fb-423b-9100-a037d5caf34f",
-			"termalprofiles":[],
+			"thermalprofiles":[],
 			"thermocouples":[]
 		},
 		{
 			"zone":0,
 			"profileuuid":"",
-			"average":0,"zoneUUID":"983de019-3496-4cef-84a1-106c85481424","termalprofiles":[],"thermocouples":[]},
+			"average":0,"zoneUUID":"983de019-3496-4cef-84a1-106c85481424","thermalprofiles":[],"thermocouples":[]},
 		{
-			"zone":0,"profileuuid":"","average":0,"zoneUUID":"35321038-18c7-4c51-b4e0-62d6f129c9e0","termalprofiles":[],"thermocouples":[]},
+			"zone":0,"profileuuid":"","average":0,"zoneUUID":"35321038-18c7-4c51-b4e0-62d6f129c9e0","thermalprofiles":[],"thermocouples":[]},
 		{
-			"zone":0,"profileuuid":"","average":0,"zoneUUID":"90d55b7b-4923-4598-b320-4264c4669837","termalprofiles":[],"thermocouples":[]},
+			"zone":0,"profileuuid":"","average":0,"zoneUUID":"90d55b7b-4923-4598-b320-4264c4669837","thermalprofiles":[],"thermocouples":[]},
 		{
-			"zone":0,"profileuuid":"","average":0,"zoneUUID":"fe962fce-f1e2-4e61-93d1-cc9a6926fb14","termalprofiles":[],"thermocouples":[]}
+			"zone":0,"profileuuid":"","average":0,"zoneUUID":"fe962fce-f1e2-4e61-93d1-cc9a6926fb14","thermalprofiles":[],"thermocouples":[]}
 	]
 }

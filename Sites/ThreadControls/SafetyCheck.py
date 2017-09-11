@@ -5,7 +5,7 @@ import os
 
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 
 class SafetyCheck(Thread):
@@ -20,11 +20,13 @@ class SafetyCheck(Thread):
 
 
 
-	def __init__(self):
+	def __init__(self,parent):
 		if SafetyCheck.__instance != None:
 			raise Exception("This class is a singleton!")
 		else:
-			debugPrint(2,"Creating SafetyCheck")
+			Logging.logEvent("Debug","Status Update", 
+				{"message": "Creating SafetyCheck",
+				 "level":2})
 			self.errorList = []
 			self.errorDict = {
 				"System Alarm: High Temperature": False,
@@ -35,7 +37,13 @@ class SafetyCheck(Thread):
 			}
 
 			SafetyCheck.__instance = self
+			self.parent = parent
 			super(SafetyCheck, self).__init__()
+
+			self.heartbeats={
+			"TsRegistersControlStub":time.time(),
+			"ThermoCoupleUpdater":time.time(),
+			}
 
 	def run(self):
 		# some start up stuff here
@@ -55,10 +63,15 @@ class SafetyCheck(Thread):
 		SLEEP_TIME = 1 # in seconds
 		
 		hardwareStatusInstance = HardwareStatusInstance.getInstance()
-		debugPrint(4, "Starting Safety Checker Thread")
+
+		Logging.logEvent("Debug","Status Update", 
+				{"message": "Starting Safety Checker Thread",
+				 "level":3})
 		# stop when the program ends
 		while True: 
-			debugPrint(4, "Running Safety Checker Thread")
+			Logging.logEvent("Debug","Status Update", 
+			{"message": "Running Safety Checker Thread",
+			 "level":4})
 
 			tempErrorDict = {
 				"System Alarm: High Temperature": False,
@@ -162,6 +175,12 @@ class SafetyCheck(Thread):
 			# Check if heaters turned on, start timer, wait 30 (x) seconds and check temp
 			# if no change in temp, send error
 
+			# for hb in self.heartbeats:
+			# 	if time.time() - self.heartbeats[hb] > 5:
+			# 		# self.parent.hardwareInterfaceThreadDict[hb].start()
+			# 		print("ERROR: in {}".format(hb))
+
+
 			time.sleep(SLEEP_TIME)
 		# end of while true loop
 
@@ -179,6 +198,9 @@ class SafetyCheck(Thread):
 			self.errorList.append(error)
 			# print(self.errorList)
 
+		Logging.logEvent("Error","", 
+			{"message": "Running Safety Checker Thread",
+			 "level":3})
 		# Not sure what to do with this
 		if not self.errorDict[error["event"]]:
 			# The error has not been on, and is now on

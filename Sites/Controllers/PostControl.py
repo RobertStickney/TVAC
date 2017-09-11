@@ -2,7 +2,7 @@ from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 
 class PostContol:
@@ -12,8 +12,7 @@ class PostContol:
         profileInstance.zoneProfiles.update(data)
         return "{'result':'success'}"
 
-    def runProfile(self, data):
-        debugPrint(2,"Calling: runProfile")
+    def runProfile(self,data):
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.runAllThreads();
         return "{'result':'success'}"
@@ -62,9 +61,9 @@ class PostContol:
     ## Todo: These functions are for engeering tests only Remove from deliverable.
     def setPC104_Digital(self, data):
         pins = HardwareStatusInstance.getInstance().PC_104
-        debugPrint(3,"POST: setPC104_Digital '%s'" % data)
+        Logging.debugPrint(3,"POST: setPC104_Digital '%s'" % data)
         pins.digital_out.update(data)
-        debugPrint(4,"Digital out data: '%s'" % pins.digital_out.getJson())
+        Logging.debugPrint(4,"Digital out data: '%s'" % pins.digital_out.getJson())
         return "{'result':'success'}"
 
     def setPC104_Analog(self, data):

@@ -2,7 +2,7 @@ from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 class GetControl:
 
@@ -12,7 +12,7 @@ class GetControl:
         return "{'result':'success'}"
 
     def getAllThermoCoupleData(self):
-        debugPrint(2, "Calling: getAllThermoCoupleData")
+        Logging.debugPrint(2, "Calling: getAllThermoCoupleData")  #Todo Change to logEvent()
         hardwareStatusInstance = HardwareStatusInstance.getInstance()
         json = hardwareStatusInstance.Thermocouples.getJson('C')
         # print(json)
@@ -20,7 +20,7 @@ class GetControl:
 
     def getAllZoneData(self):
         # This doesn't work...
-        debugPrint(2, "Calling: getAllZoneData")
+        Logging.debugPrint(2, "Calling: getAllZoneData")  #Todo Change to logEvent()
         profileInstance = ProfileInstance.getInstance()
         zones = profileInstance.zoneProfiles.zoneDict
         json = "{"
@@ -30,7 +30,7 @@ class GetControl:
 
     def getLastError(self):
         # data unused
-        debugPrint(2,"Calling: Get Last Error")
+        Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
         errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
         tempErrorList = []
         for i, error in enumerate(errorList):
