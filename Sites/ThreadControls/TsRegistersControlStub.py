@@ -75,7 +75,7 @@ class TsRegistersControlStub(Thread):
 
     def read_analog_in(self):
         (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
-        debugPrint(4, "FIFO depth: {:d};  First Ch: {:d};  Time: {:0.3f}s".format(fifo_depth,
+        debugPrint(4, "FIFO depth: {:d};  First Ch: {:d};  Time: {:0.6f}s".format(fifo_depth,
                                                                                 first_channel,
                                                                                 time.time()-self.time_test))
         self.time_test = time.time()
