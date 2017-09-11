@@ -3,7 +3,7 @@ from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 class GetControl:
 

@@ -4,16 +4,17 @@ import uuid
 import time
 import datetime
 import os
+import sys
 
 from Collections.PC_104_Instance import PC_104_Instance
 from TS_7250_V2.TS_Registers import TS_Registers
 from TS_7250_V2.PWM_Square_Wave import PWM_Square_Wave
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 
 class TsRegistersControlStub(Thread):
 
-    def __init__(self, group=None, target=None, name=None,
+    def __init__(self,parent=None, group=None, target=None, name=None,
                  args=(), kwargs=None, verbose=None):
         Thread.__init__(self, group=group, target=target, name=name)
         self.args = args
@@ -23,51 +24,92 @@ class TsRegistersControlStub(Thread):
         self.da_io = PC_104_Instance.getInstance()
         self.adc_period = 0.0125  # adc_clock*8 = 0.1s loop period
         self.ir_lamp_pwm = []
+        self.parent = parent
 
     def run(self):
-        debugPrint(2,"Starting TS Registers Control Stub Thread")
-        userName = os.environ['LOGNAME']
+        while True:
+            # While true to restart the thread if it errors out
+            try:
+                # Thread "Start up" stuff goes here
+                Logging.logEvent("Event","Thread Start", 
+                        {"thread": "TS Registers Control Stub"})
+                Logging.logEvent("Debug","Status Update", 
+                {"message": "Starting TS Registers Control Stub Thread",
+                 "level":2})
 
-        try:
-            # This should be done both inside and outside of testing
-            self.ir_lamp_pwm_start()
-            if "root" in userName:
-                self.ts_reg.open_Registers()
-                self.ts_reg.start_adc(1, 7, int(32e6 * self.adc_period))
-                self.da_io.digital_out.update(self.ts_reg.dio_read4(1, False))
-                self.da_io.digital_out.update(self.ts_reg.dio_read4(2, False))
-
-            while os.getppid() != 1:  # Exit when parent thread stops running
-                # This should be done both inside and outside of testing
-                for i in range(len(self.ir_lamp_pwm)):
-                    self.ir_lamp_pwm[i].update_waveform_state(self.da_io.digital_out.get_IR_Lamps_pwm_dc(i+1))
+                
+                self.ir_lamp_pwm_start()
+                
+                userName = os.environ['LOGNAME']
                 if "root" in userName:
-                    debugPrint(3,"Reading and writing with PC 104")
-                    self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0,
-                                           self.da_io.digital_out.get_c1_b1,
-                                           self.da_io.digital_out.get_c1_b2,
-                                           self.da_io.digital_out.get_c1_b3], 1)
-                    self.ts_reg.do_write4([self.da_io.digital_out.get_c2_b0,
-                                           self.da_io.digital_out.get_c2_b1,
-                                           self.da_io.digital_out.get_c2_b2,
-                                           self.da_io.digital_out.get_c2_b3], 2)
-                    if self.da_io.digital_out.RoughP_Start:
-                        self.da_io.digital_out.update({"RoughP Start": False})
-                    self.da_io.digital_in.update(self.ts_reg.dio_read4(1))
-                    self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
-                    self.ts_reg.dac_write(self.da_io.analog_out.dac_counts[2], 2)
-                    self.ts_reg.dac_write(self.da_io.analog_out.dac_counts[3], 3)
-                    self.read_analog_in()  # loop period is adc_period * 2 seconds
-                else:
-                    debugPrint(4, "Blank loop while testing: PC 104 loop")
-                    time.sleep(self.adc_period*8)
+                    # Root is only in live, might need to change in busy box
+                    self.ts_reg.open_Registers()
+                    self.ts_reg.start_adc(1, 7, int(32e6 * self.adc_period))
+                    self.da_io.digital_out.update(self.ts_reg.dio_read4(1, False))
+                    self.da_io.digital_out.update(self.ts_reg.dio_read4(2, False))
 
-            self.ts_reg.close()
-            debugPrint(3,'Closed the mmaps!')
-        except Exception as e:
-            # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
-            print('Error accessing the PC104 Bus. Error: %s' % e)
-        return
+                while True:  
+                    
+                    self.parent.safetyThread.heartbeats["TsRegistersControlStub"] = time.time()
+                    for i in range(len(self.ir_lamp_pwm)):
+                        self.ir_lamp_pwm[i].update_waveform_state(self.da_io.digital_out.get_IR_Lamps_pwm_dc(i+1))
+                    if "root" in userName:
+                        
+                        Logging.logEvent("Debug","Status Update", 
+                           {"message": "Reading and writing with PC 104",
+                             "level":4})
+
+                        self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0,
+                                               self.da_io.digital_out.get_c1_b1,
+                                               self.da_io.digital_out.get_c1_b2,
+                                               self.da_io.digital_out.get_c1_b3], 1)
+                        self.ts_reg.do_write4([self.da_io.digital_out.get_c2_b0,
+                                               self.da_io.digital_out.get_c2_b1,
+                                               self.da_io.digital_out.get_c2_b2,
+                                               self.da_io.digital_out.get_c2_b3], 2)
+                        if self.da_io.digital_out.RoughP_Start:
+                            self.da_io.digital_out.update({"RoughP Start": False})
+                        self.da_io.digital_in.update(self.ts_reg.dio_read4(1))
+                        self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
+                        self.ts_reg.dac_write(self.da_io.analog_out.dac_counts[2], 2)
+                        self.ts_reg.dac_write(self.da_io.analog_out.dac_counts[3], 3)
+
+
+                        # If we want logging cuncomment this and add what you want to log...
+
+                        # Logging.logEvent("Event","TsRegisters Reading", 
+                        #     {"message": "Current TC reading",
+                        #      "time":    TCs['time']})
+                        # Logging.logEvent("Debug","Data Dump", 
+                        #     {"message": "Current TC reading",
+                        #      "level":4})
+
+                        self.read_analog_in()  # loop period is adc_period * 2 seconds
+                    else:
+                        Logging.logEvent("Debug","Status Update", 
+                           {"message": "Test run of PC 104 loop",
+                             "level":4})
+                        time.sleep(self.adc_period*8)
+
+            except Exception as e:
+                # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                Logging.logEvent("Error","Hardware Interface Thread", 
+                        {"type": exc_type,
+                         "filename": fname,
+                         "line": exc_tb.tb_lineno,
+                         "thread": "TsRegistersControlStub"
+                        })
+                Logging.logEvent("Debug","Status Update", 
+                        {"message": "There was a {} error in TsRegistersControlStub. File: {}:{}\n{}".format(exc_type,fname,exc_tb.tb_lineno,e),
+                         "level":2})
+                
+                # nicely close things, to open them back up again...
+                userName = os.environ['LOGNAME']
+                if "root" in userName:
+                    self.ts_reg.close()
+                time.sleep(4)
 
     def read_analog_in(self):
         (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
@@ -78,7 +120,6 @@ class TsRegistersControlStub(Thread):
         d = {}
         for n in range(16):
             d['ADC ' + str((n + first_channel) % 16)] = self.ts_reg.adc_fifo_read()
-        debugPrint(3,d)
         # self.da_io.analog_in.update(d)
 
     def ir_lamp_pwm_start(self):

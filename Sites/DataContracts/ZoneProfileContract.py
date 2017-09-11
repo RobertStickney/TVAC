@@ -1,7 +1,7 @@
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from DataContracts.ThermalProfileContract import ThermalProfileContract
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 import threading
 
@@ -10,7 +10,7 @@ class ZoneProfileContract:
     This is a Class that holds all the data on a given zone, this data includes:
     
     - A list of thermocouples
-    - A list of termalProfiles, this is a list of time points, ramps, soak times, and temps. 
+    - A list of thermalProfiles, this is a list of time points, ramps, soak times, and temps. 
     - The Average temp of all the TC's
     - Zone data number and UUID
     '''
@@ -30,10 +30,10 @@ class ZoneProfileContract:
             self.zone = d['average']
         else:
             self.average = 0
-        if 'termalprofiles' in d:
-            self.termalProfiles = self.setTermalProfiles(d['termalprofiles'])
+        if 'thermalprofiles' in d:
+            self.thermalProfiles = self.setThermalProfiles(d['thermalprofiles'])
         else:
-            self.termalProfiles = ''
+            self.thermalProfiles = ''
         if 'thermocouples' in d:
             self.thermocouples = self.setThermocouples(d['thermocouples'])
         else:
@@ -50,19 +50,20 @@ class ZoneProfileContract:
         self.__lock.release()
         return list
 
-    def setTermalProfiles(self,termalProfiles):
+    def setThermalProfiles(self,thermalProfiles):
         self.__lock.acquire()
         list = []
-        for profile in termalProfiles:
-            debugPrint(4,"T-SP: {}".format(profile['termalsetpoint']))
-            debugPrint(4,profile)
+        for profile in thermalProfiles:
             list.append(ThermalProfileContract(profile))
         self.__lock.release()
         return list
 
     def update(self, d):
         self.__lock.acquire()
-        debugPrint(4, "Updating zone profile with info:\n{}".format(d))
+        Logging.logEvent("Debug","Data Dump",
+            {"message": "Updating a zone profile",
+             "level":4,
+              "dict":d})
         if 'zone' in d:
             self.zone = d['zone']
         if 'profileuuid' in d:
@@ -71,8 +72,8 @@ class ZoneProfileContract:
             self.zoneUUID = d['zoneuuid']
         if 'average' in d:
             self.average = d['average']
-        if 'termalprofiles' in d:
-            self.termalProfiles = self.setTermalProfiles(d['termalprofiles'])
+        if 'thermalprofiles' in d:
+            self.thermalProfiles = self.setThermalProfiles(d['thermalprofiles'])
         if 'thermocouples' in d:
             self.thermocouples = self.setThermocouples(d['thermocouples'])
         self.__lock.release()
@@ -101,10 +102,10 @@ class ZoneProfileContract:
         message.append('"profileuuid":"%s",' % self.profileUUID)
         message.append('"average":%s,' % self.average)
         message.append('"zoneUUID":"%s",' % self.zoneUUID)
-        message.append('"termalprofiles":[')
-        profileLen = len(self.termalProfiles)
+        message.append('"thermalprofiles":[')
+        profileLen = len(self.thermalProfiles)
         count = 0
-        for profile in self.termalProfiles:
+        for profile in self.thermalProfiles:
             message.append(profile.getJson())
             if count < (profileLen - 1):
                 message.append(',')

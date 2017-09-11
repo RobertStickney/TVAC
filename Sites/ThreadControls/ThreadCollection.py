@@ -5,14 +5,14 @@ from ThreadControls.SafetyCheck import SafetyCheck
 from ThreadControls.ThermoCoupleUpdater import ThermoCoupleUpdater
 from ThreadControls.TsRegistersControlStub import TsRegistersControlStub
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 class ThreadCollection:
 
     def __init__(self):
         self.zoneThreadDict = self.createZoneCollection()
         self.hardwareInterfaceThreadDict = self.createHardwareInterfaces(self)
-        self.safetyThread = SafetyCheck()
+        self.safetyThread = SafetyCheck(parent=self)
 
         for thread in self.hardwareInterfaceThreadDict.values():
             thread.daemon = True
@@ -38,9 +38,9 @@ class ThreadCollection:
         # sending parent for testing, getting current profile data to zone instance
         return {
         # commented out aren't fully tested
-        "PC_104" : TsRegistersControlStub(),
+        "TsRegistersControlStub" : TsRegistersControlStub(parent=parent),
         # "PfeifferGuage" : ThermoCoupleUpdater()
-        "ThermoCouple" : ThermoCoupleUpdater(parent),
+        "ThermoCoupleUpdater" : ThermoCoupleUpdater(parent=parent),
         # "MCC" : PASS
         }
 
@@ -50,7 +50,9 @@ class ThreadCollection:
             if self.zoneThreadDict[thread].zoneProfile.zone > 0:
                 if self.zoneThreadDict[thread].handeled:
                     self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
-                print("Zone {} is handled, about the start".format(self.zoneThreadDict[thread].zoneProfile.zone,))
+                Logging.logEvent("Debug","Status Update", 
+                {"message": "Zone {} is handled, about the start".format(self.zoneThreadDict[thread].zoneProfile.zone),
+                 "level":1})
                 self.zoneThreadDict[thread].daemon = True
                 self.zoneThreadDict[thread].start()
 
@@ -62,11 +64,11 @@ class ThreadCollection:
         self.zoneThreadDict[thread].start()
 
     def checkThreadStatus(self):
-        debugPrint(2,"Starting checkThreadStatus:")
+        # Why is this here?
         for thread in self.zoneThreadDict:
             isAlive = self.zoneThreadDict[thread].is_alive()
             handled = self.zoneThreadDict[thread].handeled
-            print("{} is {} and is {} handled".format(thread, "ALIVE" if isAlive else "DEAD", "NOT" if not handled else ""))
+            # print("{} is {} and is {} handled".format(thread, "ALIVE" if isAlive else "DEAD", "NOT" if not handled else ""))
 
     def pause(self,data):
         thread = data['zone']

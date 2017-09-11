@@ -3,7 +3,7 @@ from Collections.PfeifferGuageCollection import PfeifferGuageCollection
 #from Collections.ShiCryopumpCollection import ShiCryopumpCollection
 from Collections.PC_104_Instance import PC_104_Instance
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 
 class HardwareStatusInstance:
@@ -21,7 +21,9 @@ class HardwareStatusInstance:
         if HardwareStatusInstance.__instance != None:
             raise Exception("This class is a singleton!")
         else:
-            debugPrint(2,"Creating HardwareStatusInstance")
+            Logging.logEvent("Debug","Status Update", 
+                {"message": "Creating HardwareStatusInstance",
+                 "level":2})
             self.Thermocouples = ThermocoupleCollection()
             # commented out Weds sep 6, due to merge breaking something
             # self.PfeifferGuages = PfeifferGuageCollection()

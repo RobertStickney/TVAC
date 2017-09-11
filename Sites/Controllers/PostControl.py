@@ -1,7 +1,7 @@
 from Collections.ProfileInstance import ProfileInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 class PostContol:
 
@@ -11,7 +11,6 @@ class PostContol:
         return "{'result':'success'}"
 
     def runProfile(self,data):
-        debugPrint(2,"Calling: runProfile")
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.runAllThreads();
         return "{'result':'success'}"

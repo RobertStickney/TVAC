@@ -1,6 +1,6 @@
 from Collections.ZoneCollection import ZoneCollection
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 class ProfileInstance:
     # Here will be the instance stored.
@@ -17,6 +17,8 @@ class ProfileInstance:
         if ProfileInstance.__instance != None:
             raise Exception("This class is a singleton!")
         else:
-            debugPrint(2,"Creating ProfileInstance")
+            Logging.logEvent("Debug","Status Update", 
+                {"message": "Creating ProfileInstance",
+                 "level":2})
             self.zoneProfiles = ZoneCollection()
             ProfileInstance.__instance = self

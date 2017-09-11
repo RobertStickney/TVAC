@@ -7,39 +7,44 @@ from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 from VerbHandler import VerbHandler
 
+from Logging.Logging import Logging
 
-from HouseKeeping import globalVars
-from HouseKeeping.globalVars import debugPrint
+# from Logging.debugPrint import debugPrint
 # Adding verbose level for debug printing
-verbos = 0
+# verbos = 0
 
 class ReuseAddrTCPServer(socketserver.TCPServer):
     allow_reuse_address = True
 
 
 if __name__ == '__main__':
-    # adding debug info
-    globalVars.init()
-    if(len(sys.argv)>1):
-        for arg in sys.argv:
-            if arg.startswith("-v"):
-                globalVars.verbos = arg.count("v")
-    debugPrint(1,"Debug on: Level " + str(globalVars.verbos))
+	# adding debug info
+	# Logging.init()
+	if(len(sys.argv)>1):
+		for arg in sys.argv:
+			if arg.startswith("-v"):
+				Logging.verbos = arg.count("v")
+	Logging.logEvent("Debug","Status Update", 
+		{"message": "Debug on: Level {}".format(Logging.verbos),
+		 "level":1})
+	PORT = 8000
 
-    PORT = 8000
+	Logging.logEvent("Debug","Status Update", 
+		{"message": "Starting initializing threads and drivers",
+		 "level":1})
 
-    debugPrint(1,"Starting initializing threads and drivers")
+	hardwareStatusInstance = HardwareStatusInstance.getInstance()
+	profileInstance = ProfileInstance.getInstance()
+	threadInstance = ThreadCollectionInstance.getInstance()
     
-    hardwareStatusInstance = HardwareStatusInstance.getInstance()
-    profileInstance = ProfileInstance.getInstance()
-    threadInstance = ThreadCollectionInstance.getInstance()
-    
+	Logging.logEvent("Debug","Status Update", 
+		{"message": "Finished initializing threads and drivers",
+		 "level":1})
 
-    
-    debugPrint(1,"Finished initializing threads and drivers")
-    
-    httpd = ReuseAddrTCPServer(("", PORT), VerbHandler)
+	httpd = ReuseAddrTCPServer(("", PORT), VerbHandler)
 
-    print("Set up is complete. Starting to server request...")
+	Logging.logEvent("Debug","Status Update", 
+		{"message": "Start Up Complete, Server is listening for request...",
+		 "level":1})
 
-    httpd.serve_forever()
+	httpd.serve_forever()

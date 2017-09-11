@@ -1,7 +1,7 @@
 class ThermalProfileContract:
     def __init__(self, d):
-        if 'termalsetpoint' in d:
-            self.termalsetpoint = d['termalsetpoint']
+        if 'thermalsetpoint' in d:
+            self.thermalsetpoint = d['thermalsetpoint']
         else:
             self.zone = 0
         if 'tempgoal' in d:
@@ -36,7 +36,7 @@ class ThermalProfileContract:
 
     def getJson(self):
         message = []
-        message.append('{"termalsetpoint":%s,'% self.termalsetpoint)
+        message.append('{"thermalsetpoint":%s,'% self.thermalsetpoint)
         message.append('"tempgoal":%s,' % self.tempGoal)
         message.append('"temp":%s,'%self.temp)
         message.append('"soakduration":%s,'%self.soakduration)

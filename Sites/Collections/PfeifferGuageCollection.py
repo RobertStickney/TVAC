@@ -1,4 +1,4 @@
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 from PfeifferGuage.PfeifferGuage import PfeifferGuage
 from DataContracts.PfeifferGuageContract import PfeifferGuageContract

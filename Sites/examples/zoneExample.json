@@ -3,9 +3,9 @@
 			"profileuuid":"a9ec451b-83da-41f7-8efb-ab35ce581cf2",
 			"average":2,
 			"zoneUUID":"f3d7702b-9772-4534-899a-df0106445374",
-			"termalprofiles": [
+			"thermalprofiles": [
 				{
-				"termalsetpoint":0,
+				"thermalsetpoint":0,
 				"tempgoal":5,
 				"temp":0,
 				"soakduration":1,
@@ -13,7 +13,7 @@
 				"ramp":10
 				},
 				{
-					"termalsetpoint":1,
+					"thermalsetpoint":1,
 					"tempgoal":10,
 					"temp":0,
 					"soakduration":1,
@@ -21,7 +21,7 @@
 					"ramp":5
 				},
 				{
-					"termalsetpoint":2,
+					"thermalsetpoint":2,
 					"tempgoal":5,
 					"temp":0,
 					"soakduration":1,
