@@ -74,8 +74,8 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             '/releaseHoldZone': control.releaseHoldSingleThread,
             '/abortZone': control.abortSingleThread,
             '/calculateRamp': control.calculateRamp,
-            '/setDigital': control.setPC104_Digital,  #TODO: Remove this Engeering function!
-            '/setAnalog': control.setPC104_Analog  #TODO: Remove this Engeering function!
+            '/setPC104Digital': control.setPC104_Digital,  #TODO: Remove this Engeering function!
+            '/setPC104Analog': control.setPC104_Analog  #TODO: Remove this Engeering function!
         }[path](contractObj)
 
         self.setHeader()

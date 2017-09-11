@@ -62,7 +62,9 @@ class PostContol:
     ## Todo: These functions are for engeering tests only Remove from deliverable.
     def setPC104_Digital(self, data):
         pins = HardwareStatusInstance.getInstance().PC_104
+        debugPrint(3,"POST: setPC104_Digital '%s'" % data)
         pins.digital_out.update(data)
+        debugPrint(4,"Digital out data: '%s'" % pins.digital_out.getJson())
         return "{'result':'success'}"
 
     def setPC104_Analog(self, data):
