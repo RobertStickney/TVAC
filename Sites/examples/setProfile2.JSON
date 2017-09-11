@@ -3,7 +3,7 @@
     {
       "zone": 1,
       "average": "Max",
-      "thermocouples": [1, 2, 3, 4, 5],
+      "thermocouples": [11],
       "termalprofiles":
       [
         {
