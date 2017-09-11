@@ -191,6 +191,10 @@ class TS_Registers():
         self.pc104.seek(self.Adc16Addr(0x06))  # ADCDLY_LSB
         self.pc104.write_byte(adc_delay & 0xFF)
         self.pc104.write_byte((adc_delay & 0xFF00) >> 8)
+        debugPrint(3, "ADC delay: {0:d}; 0x{0:x} '{1:x} {2:x} {3:x}'".format(adc_delay,
+                                                                             (adc_delay & 0xFF0000) >> 16,
+                                                                             (adc_delay & 0xFF00) >> 8,
+                                                                             adc_delay & 0xFF))
 
         self.pc104.seek(self.Adc16Addr(0x03))  # ADCCFG_MSB
         self.pc104.write_byte(((ext_trig & 0x01) << 1) | (single_ended & 0x01))
