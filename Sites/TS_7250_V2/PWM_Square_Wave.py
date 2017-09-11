@@ -26,8 +26,8 @@ class PWM_Square_Wave:
             if self.waveform_state and (duty_cycle < self.duty_cycle):
                 self.time_for_next_edge = self.time_last_rising_edge + round(self.period * duty_cycle, 1)
             self.duty_cycle = duty_cycle
-        if self.update_key == 'IR Lamp 1':
-            debugPrint(4,"Key {:}: {:f}".format(self.update_key, self.duty_cycle))
+        # if self.update_key == 'IR Lamp 1':
+        #     debugPrint(4,"Key {:}: {:f}".format(self.update_key, self.duty_cycle))
         if time.time() >= self.time_for_next_edge:
             if self.next_edge_is_rising:
                 self.time_last_rising_edge = round(time.time(), 1)
