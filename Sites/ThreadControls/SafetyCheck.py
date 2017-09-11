@@ -44,13 +44,13 @@ class SafetyCheck(Thread):
 		# safe at all lower bounds
 		# MIN_OPERATING_TEMP 
 
-		MAX_TOUCH_TEMP = 45
-		MIN_TOUCH_TEMP = -4
+		MAX_TOUCH_TEMP = 318.15
+		MIN_TOUCH_TEMP = 269.15
 
 		# TODO, make this user defined
 		# These are test values, they will change when the code is written to change them
-		MAX_UUT_TEMP = 90 
-		MIN_UUT_TEMP = -49
+		MAX_UUT_TEMP = 363.15 
+		MIN_UUT_TEMP = 224.15
 
 		SLEEP_TIME = 1 # in seconds
 		
