@@ -4,29 +4,29 @@
       "zone": 1,
       "average": "Max",
       "thermocouples": [11],
-      "termalprofiles":
+      "thermalprofiles":
       [
         {
           "thermalsetpoint": 0,
-          "tempgoal": 5,
-          "ramp": 30,
-          "soakduration": 60
+          "tempgoal": 30.85,
+          "ramp": 300,
+          "soakduration": 600
         },
         {
           "thermalsetpoint": 1,
-          "tempgoal": 10,
-          "ramp": 60,
-          "soakduration": 30
+          "tempgoal": 26.85,
+          "ramp": 600,
+          "soakduration": 300
         },
         {
           "thermalsetpoint": 2,
-          "tempgoal": 70,
+          "tempgoal": 76.85,
           "ramp": 300,
           "soakduration": 600
         },
         {
           "thermalsetpoint": 3,
-          "tempgoal": 25,
+          "tempgoal": 26.85,
           "ramp": 600,
           "soakduration": 0
         }

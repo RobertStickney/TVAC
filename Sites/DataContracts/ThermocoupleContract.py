@@ -1,4 +1,5 @@
 import threading
+import json
 
 class ThermocoupleContract:
 
@@ -66,10 +67,10 @@ class ThermocoupleContract:
         self.__lock.acquire()
         # temp_units values: ['K', 'C', 'F']
         message = []
-        message.append('{"thermocouple":%s,' % self.Thermocouple)
-        message.append('"time":%s,' % self.time)
-        message.append('"temp":%s,' % self.getTemp(temp_units))
-        message.append('"working":%s,' % self.working)
-        message.append('"alarm":%s}' % self.alarm)
+        message.append('{"thermocouple":%s,' % json.dumps(self.Thermocouple))
+        message.append('"time":%s,' % json.dumps(self.time))
+        message.append('"temp":%s,' % json.dumps(self.getTemp(temp_units)))
+        message.append('"working":%s,' % json.dumps(self.working))
+        message.append('"alarm":%s}' % json.dumps(self.alarm))
         self.__lock.release()
         return ''.join(message)

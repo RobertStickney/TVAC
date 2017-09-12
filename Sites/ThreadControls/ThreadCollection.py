@@ -2,6 +2,7 @@ from ThreadControls.HardWareControlStub import HardWareControlStub
 from ThreadControls.SafetyCheck import SafetyCheck
 from ThreadControls.ThermoCoupleUpdater import ThermoCoupleUpdater
 from ThreadControls.TsRegistersControlStub import TsRegistersControlStub
+from ThreadControls.LN2Updater import LN2Updater
 
 from Logging.Logging import Logging
 
@@ -22,10 +23,10 @@ class ThreadCollection:
     def createZoneCollection(self):
         return {"zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10}),lamps=['IR Lamp 1','IR Lamp 2']),
             "zone2": HardWareControlStub(args=('zone2',),lamps=['IR Lamp 3','IR Lamp 4']),
-            "zone3": HardWareControlStub(args=('zone3',),lamps=['IR Lamp 5','IR Lamp 6']),
+            "zone3": HardWareControlStub(args=('zone3',),lamps=['IR Lamp 6','IR Lamp 5']),
             "zone4": HardWareControlStub(args=('zone4',),lamps=['IR Lamp 7','IR Lamp 8']),
             "zone5": HardWareControlStub(args=('zone5',),lamps=['IR Lamp 9','IR Lamp 10']),
-            "zone6": HardWareControlStub(args=('zone6',),lamps=['IR Lamp 11','IR Lamp 12']),
+            "zone6": HardWareControlStub(args=('zone6',),lamps=['IR Lamp 12','IR Lamp 11']),
             "zone7": HardWareControlStub(args=('zone7',),lamps=['IR Lamp 13','IR Lamp 14']),
             "zone8": HardWareControlStub(args=('zone8',),lamps=['IR Lamp 15','IR Lamp 16']),
             # zone9 is the platen
@@ -39,7 +40,7 @@ class ThreadCollection:
         "TsRegistersControlStub" : TsRegistersControlStub(parent=parent),
         # "PfeifferGuage" : ThermoCoupleUpdater()
         "ThermoCoupleUpdater" : ThermoCoupleUpdater(parent=parent),
-        # "MCC" : PASS
+        "LN2Updater" : LN2Updater(ThreadCollection=parent)
         }
 
 

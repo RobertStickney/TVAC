@@ -87,7 +87,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             control = PostContol()
             result = {
                 '/setProfile': control.loadProfile,
-                '/runProfiles': control.runProfile,
+                '/runProfile': control.runProfile,
                 '/runSingleProfile': control.runSingleProfile,
                 # '/checkZoneStatus': control.checkTreadStatus,
                 '/pauseZone': control.pauseSingleThread,

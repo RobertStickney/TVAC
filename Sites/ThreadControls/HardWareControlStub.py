@@ -7,11 +7,6 @@ import sys
 import os
 
 
-<<<<<<< HEAD
-# from DataBaseController.FileCreation import FileCreation
-# from DataBaseController.MySql import MySQlConnect
-=======
->>>>>>> f5e9f80b5a75d20e9033b47a00b81f1ea86db182
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from PID.PID import PID
@@ -42,6 +37,7 @@ class HardWareControlStub(Thread):
         self.zoneProfile = profileInstance.zoneProfiles.getZone(self.args[0])
         self.updatePeriod = profileInstance.zoneProfiles.updatePeriod
         self.handeled = False
+        self.running = False
         self.paused = False
         self.thermalProfile = 0
         self.hold = False
@@ -72,25 +68,11 @@ class HardWareControlStub(Thread):
 
 
     def run(self):
-<<<<<<< HEAD
-        # try:
-        debugPrint(2,"Running HW control Thread")
-        goalTemp = self.zoneProfile.termalProfiles[self.termalProfile].tempGoal
-        currentTemp = self.zoneProfile.termalProfiles[self.termalProfile].temp
-        self.event('StartRun')
-        debugPrint(1,"Running: {} {}".format(self.args, self.kwargs if self.kwargs else ""))
-        debugPrint(1,"{}: Current/Goal temp: {}/{}".format(self.args, currentTemp,goalTemp))
-        debugPrint(1,"{}: Currently: {}".format(self.args, "Alive" if self.is_alive() else "Dead"))
-        hardwareStatus  = HardwareStatusInstance.getInstance()
-        currentTemp = self.zoneProfile.getTemp("Max")
-        debugPrint(1,"======{}: currentTemp - {}".format(self.args,currentTemp))
-=======
         try:
             Logging.logEvent("Debug","Status Update", 
             {"message": "{}: Running HW control Thread".format(self.args[0]),
              "level":2})
->>>>>>> f5e9f80b5a75d20e9033b47a00b81f1ea86db182
-
+            self.running = True
             goalTemp = self.zoneProfile.thermalProfiles[self.thermalProfile].tempGoal
             currentTemp = self.zoneProfile.thermalProfiles[self.thermalProfile].temp
             
@@ -99,12 +81,13 @@ class HardWareControlStub(Thread):
             Logging.logEvent("Event","Start Profile", 
                 {'time': datetime.time()})
 
-            hardwareStatusInstance = HardwareStatusInstance.getInstance()
+            hardwareStatus = HardwareStatusInstance.getInstance()
             currentTemp = self.zoneProfile.getTemp("Max")
+            self.zoneProfile.thermalProfiles[self.thermalProfile].temp = currentTemp
 
-            d_out = DigitalOutContract()
+            d_out = hardwareStatus.PC_104.digital_out
 
-            self.updatePeriod = 6
+            self.updatePeriod = 10
             self.maxTempRisePerMin = 10
             self.maxTempRisePerUpdate = (self.maxTempRisePerMin/60)*self.updatePeriod
 
@@ -117,21 +100,12 @@ class HardWareControlStub(Thread):
             self.pid.setKd(derivative_gain)
 
 
-<<<<<<< HEAD
-            # update both lamps...this needs to change
-            hardwareStatus.PC_104.digital_out.update({self.lamps[0] + " PWM DC": self.dutyCycle,
-                                                      self.lamps[1] + " PWM DC": self.dutyCycle})
-            
-            # print("="*100)
-            time.sleep(self.updatePeriod)
-            # print(self.runCount)
-=======
+
             while self.runCount > 0:
 
                 currentTemp = self.zoneProfile.getTemp("Max")
                 
                 self.runProcess()
->>>>>>> f5e9f80b5a75d20e9033b47a00b81f1ea86db182
 
                 self.zoneProfile.thermalProfiles[self.thermalProfile].temp += self.tempChange
                 self.tempGoalTemperature = self.zoneProfile.thermalProfiles[self.thermalProfile].temp
@@ -144,11 +118,12 @@ class HardWareControlStub(Thread):
                     "Setpoint Goal Temp": goalTemp,
                     "Temporary Goal Temp": self.tempGoalTemperature,
                     "Assumed Max Temp Raise per Update": self.maxTempRisePerUpdate,
-                    "Percent of current duty cycle":self.dutyCycle
+                    "Percent of current duty cycle":self.dutyCycle,
+                    "Run Count":self.runCount,
                 }
                 Logging.logEvent("Debug","Data Dump", 
-                        {"message": "Current profile Status (in c)",
-                         "level":4,
+                        {"message": "Current profile Status (in k)",
+                         "level":1,
                          "dict":status})
 
                 # update both lamps...this needs to change
@@ -158,8 +133,12 @@ class HardWareControlStub(Thread):
 
                 time.sleep(self.updatePeriod)
 
-            # self.event('EndRun')
-            Logging.logEvent("Event","End Profile")
+            # turning off lamps at the end of test
+            d_out.update({self.lamps[1] + " PWM DC": 0})
+            d_out.update({self.lamps[0] + " PWM DC": 0})
+
+            Logging.logEvent("Event","End Profile", 
+                {'time': datetime.time()})
 
             self.handeled = True
         except Exception as e:
@@ -168,9 +147,9 @@ class HardWareControlStub(Thread):
             print("Error: {} in file {}:{}".format(exc_type, fname, exc_tb.tb_lineno))
 
             # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
-
+            self.running = False
             raise e
-
+        self.running = False
         return
 
     def runProcess(self):

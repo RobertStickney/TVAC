@@ -194,7 +194,7 @@ class SafetyCheck(Thread):
 						errorInList = True
 
 		if not errorInList: 
-			debugPrint(1, error["details"])
+			# debugPrint(1, error["details"])
 			self.errorList.append(error)
 			# print(self.errorList)
 

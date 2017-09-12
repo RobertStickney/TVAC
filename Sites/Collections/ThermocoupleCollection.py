@@ -62,13 +62,13 @@ class ThermocoupleCollection:
         # temp_units values: ['K', 'C', 'F']
         # whichTCs values: ['all', 'Working', 'NotWorking']
         message = []
-        message.append('{"time":%s,' % self.time)
+        message.append('{"time":"%s",' % self.time)
         if whichTCs == 'Working':
-            message.append('TCs:[%s]' %','.join([tc.getJson(temp_units) for tc in self.ValidTCs]))
+            message.append('"TCs":[%s]' %','.join([tc.getJson(temp_units) for tc in self.ValidTCs]))
         elif whichTCs == 'NotWorking':
-            message.append('TCs:[%s]' %','.join([tc.getJson(temp_units) for tc in self.InvalidTCs]))
+            message.append('"TCs":[%s]' %','.join([tc.getJson(temp_units) for tc in self.InvalidTCs]))
         else:
-            message.append('TCs:[%s]' %','.join([tc.getJson(temp_units) for tc in self.tcList]))
+            message.append('"TCs":[%s]' %','.join([tc.getJson(temp_units) for tc in self.tcList]))
         message.append('}')
         return ''.join(message)
 

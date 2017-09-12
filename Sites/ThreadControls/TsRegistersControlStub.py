@@ -21,7 +21,7 @@ class TsRegistersControlStub(Thread):
         self.ts_reg = TS_Registers()
         self.da_io = PC_104_Instance.getInstance()
         self.adc_period = 0.0125  # adc_clock*8 = 0.1s loop period
-        self.pwm_period = 30  # 30 second pwm period
+        self.pwm_period = 10  # 30 second pwm period
         # self.pwm_min_dc_sec = 1  # minimum Duty Cycle of 1 second
         self.ir_lamp_pwm = []
         self.time_test = time.time()
@@ -90,7 +90,7 @@ class TsRegistersControlStub(Thread):
                         Logging.logEvent("Debug","Status Update", 
                            {"message": "Test run of PC 104 loop",
                              "level":4})
-                        time.sleep(self.adc_period * 8)
+                        time.sleep(5)
 
             except Exception as e:
                 # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
@@ -111,10 +111,11 @@ class TsRegistersControlStub(Thread):
                 if "root" in userName:
                     self.ts_reg.close()
                 time.sleep(4)
+                raise (e)
 
     def read_analog_in(self):
         (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
-        debugPrint(6, "FIFO depth: {:d};  First Ch: {:d};  Time: {:0.6f}s".format(fifo_depth,
+        Logging.debugPrint(6, "FIFO depth: {:d};  First Ch: {:d};  Time: {:0.6f}s".format(fifo_depth,
                                                                                 first_channel,
                                                                                 time.time()-self.time_test))
         self.time_test = time.time()

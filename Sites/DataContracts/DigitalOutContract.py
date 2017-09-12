@@ -1,7 +1,7 @@
 import threading
 import json
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 
 class DigitalOutContract:
@@ -560,10 +560,10 @@ class DigitalOutContract:
                 self.c2_b3 &= ~0x80
         if 'IR Lamp 1 PWM DC' in d:
             self.IR_Lamps_pwm_dc[0] = d['IR Lamp 1 PWM DC']
-            debugPrint(4,"IR Lamp 1 PWM DC: {:f}".format(self.IR_Lamps_pwm_dc[0]))
+            Logging.debugPrint(4,"IR Lamp 1 PWM DC: {:f}".format(self.IR_Lamps_pwm_dc[0]))
         if 'IR Lamp 2 PWM DC' in d:
             self.IR_Lamps_pwm_dc[1] = d['IR Lamp 2 PWM DC']
-            debugPrint(4, "IR Lamp 2 PWM DC: {:f}".format(self.IR_Lamps_pwm_dc[1]))
+            Logging.debugPrint(4, "IR Lamp 2 PWM DC: {:f}".format(self.IR_Lamps_pwm_dc[1]))
         if 'IR Lamp 3 PWM DC' in d:
             self.IR_Lamps_pwm_dc[2] = d['IR Lamp 3 PWM DC']
         if 'IR Lamp 4 PWM DC' in d:

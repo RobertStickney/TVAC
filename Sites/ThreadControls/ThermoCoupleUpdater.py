@@ -78,7 +78,7 @@ class ThermoCoupleUpdater(Thread):
                             'time': datetime.now(),
                             'tcList': [
                             # (random.uniform(0,10)-5)
-                                {'Thermocouple': 1,'working':True, 'temp':hwStatus.Thermocouples.getTC(1).getTemp() + currentPID + 0},
+                                {'Thermocouple': 11,'working':True, 'temp':hwStatus.Thermocouples.getTC(11).getTemp() + currentPID + 0},
                                 # {'Thermocouple': 5, 'temp': hwStatus.Thermocouples.getTC(5).getTemp() + 50},
                                 # {'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 50},
                                 # {'Thermocouple': 3, 'temp': hwStatus.Thermocouples.getTC(3).getTemp() - 50,

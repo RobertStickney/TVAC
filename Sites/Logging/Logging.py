@@ -64,8 +64,9 @@ class Logging(object):
 		}
 		'''
 		print("LOG: This is the current ThermoCouple Reading")
-		for tc in data['tcList']:
-			print("LOG: TC: {} == {}(c)".format(tc['Thermocouple'],tc['temp']))
+		print("commented out because it was too much data")
+		# for tc in data['tcList']:
+		# 	print("LOG: TC: {} == {}(c)".format(tc['Thermocouple'],tc['temp']))
 
 	@staticmethod
 	def logThermalProfile(data):

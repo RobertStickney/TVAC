@@ -5,7 +5,7 @@ import os
 import sys
 import mmap
 
-from HouseKeeping.globalVars import debugPrint
+from Logging.Logging import Logging
 
 class TS_Registers():
     def __init__(self):
@@ -191,7 +191,7 @@ class TS_Registers():
         self.pc104.seek(self.Adc16Addr(0x06))  # ADCDLY_LSB
         self.pc104.write_byte(adc_delay & 0xFF)
         self.pc104.write_byte((adc_delay & 0xFF00) >> 8)
-        debugPrint(3, "ADC delay: {0:d}; 0x{0:x} '{1:x} {2:x} {3:x}'".format(adc_delay,
+        Logging.debugPrint(3, "ADC delay: {0:d}; 0x{0:x} '{1:x} {2:x} {3:x}'".format(adc_delay,
                                                                              (adc_delay & 0xFF0000) >> 16,
                                                                              (adc_delay & 0xFF00) >> 8,
                                                                              adc_delay & 0xFF))
@@ -201,7 +201,7 @@ class TS_Registers():
         b2 = self.pc104.read_byte()
         b3 = self.pc104.read_byte()
         b4 = self.pc104.read_byte()
-        debugPrint(3, "Read ADC delay: '{:x} {:x} {:x} {:x}'".format(b2, b1, b4, b3))
+        Logging.debugPrint(3, "Read ADC delay: '{:x} {:x} {:x} {:x}'".format(b2, b1, b4, b3))
         self.pc104.seek(self.Adc16Addr(0x03))  # ADCCFG_MSB
         self.pc104.write_byte(((ext_trig & 0x01) << 1) | (single_ended & 0x01))
 
@@ -215,7 +215,7 @@ class TS_Registers():
         self.pc104.seek(self.Adc16Addr(0x08))  # ADCSTAT
         b1 = self.pc104.read_byte()
         b2 = self.pc104.read_byte()
-        debugPrint(6, "ADC FIFO Status: 0x{:x} 0x{:x}".format(b1,b2))
+        Logging.debugPrint(6, "ADC FIFO Status: 0x{:x} 0x{:x}".format(b1,b2))
         return ((b1 & 0x3e) >> 1,  # FFHEAD: Channel on head of fifo. It increments to (num_chan*2)+1 then wraps to 0
                 ((b2 & 0xff) << 2) | ((b1 & 0xC0) >> 6))  # Number of elements in fifo
 
