@@ -35,11 +35,10 @@ class ThermalProfileContract:
 
 
     def getJson(self):
-        message = []
-        message.append('{"thermalsetpoint":%s,'% self.thermalsetpoint)
-        message.append('"tempgoal":%s,' % self.tempGoal)
-        message.append('"temp":%s,'%self.temp)
-        message.append('"soakduration":%s,'%self.soakduration)
-        message.append('"duration":%s,'%self.duration)
-        message.append('"ramp":%s}'%self.ramp)
+        message = ['{"thermalsetpoint":%s,'% self.thermalsetpoint,
+                   '"tempgoal":%s,' % self.tempGoal,
+                   '"temp":%s,'%self.temp,
+                   '"soakduration":%s,'%self.soakduration,
+                   '"duration":%s,'%self.duration,
+                   '"ramp":%s}'%self.ramp]
         return ''.join(message)

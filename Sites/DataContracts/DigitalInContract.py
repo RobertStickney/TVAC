@@ -217,36 +217,35 @@ class DigitalInContract:
 
     def getJson(self):
         self.__lock.acquire()
-        message = []
-        message.append('{"PG-SW-RoughP-Relay 1":%s,' % json.dumps(self.pgRoughPumpRelay1))
-        message.append('"PG-SW-RoughP-Relay 2":%s,' % json.dumps(self.pgRoughPumpRelay2))
-        message.append('"PG-SW-CryoP-Relay 1":%s,' % json.dumps(self.pgCryoPumpRelay1))
-        message.append('"PG-SW-CryoP-Relay 2":%s,' % json.dumps(self.pgCryoPumpRelay2))
-        message.append('"PG-SW-Chamber-Relay 1":%s,' % json.dumps(self.pgChamberRelay1))
-        message.append('"PG-SW-Chamber-Relay 2":%s,' % json.dumps(self.pgChamberRelay2))
-        message.append('"LN2-P-Sol-Open: NC":%s,' % json.dumps(self.LN2_P_Sol_Open_NC))
-        message.append('"LN2-P-Sol-Open: O":%s,' % json.dumps(self.LN2_P_Sol_Open_O))
-        message.append('"LN2-P-Sol-Closed: NC":%s,' % json.dumps(self.LN2_P_Sol_Closed_NC))
-        message.append('"LN2-P-Sol-Closed: O":%s,' % json.dumps(self.LN2_P_Sol_Closed_O))
-        message.append('"LN2-S-Sol-Open: NC":%s,' % json.dumps(self.LN2_S_Sol_Open_NC))
-        message.append('"LN2-S-Sol-Open: O":%s,' % json.dumps(self.LN2_S_Sol_Open_O))
-        message.append('"LN2-S-Sol-Closed: NC":%s,' % json.dumps(self.LN2_S_Sol_Closed_NC))
-        message.append('"LN2-S-Sol-Closed: O":%s,' % json.dumps(self.LN2_S_Sol_Closed_O))
-        message.append('"CryoP-GV-Open: NC":%s,' % json.dumps(self.CryoP_GV_Open_NC))
-        message.append('"CryoP-GV-Open: O":%s,' % json.dumps(self.CryoP_GV_Open_O))
-        message.append('"CryoP-GV-Closed: NC":%s,' % json.dumps(self.CryoP_GV_Closed_NC))
-        message.append('"CryoP-GV-Closed: O":%s,' % json.dumps(self.CryoP_GV_Closed_O))
-        message.append('"RoughP-GV-Open":%s,' % json.dumps(self.RoughP_GV_Open))
-        message.append('"RoughP-GV-Closed":%s,' % json.dumps(self.RoughP_GV_Closed))
-        message.append('"RoughP-Pwr: NC":%s,' % json.dumps(self.RoughP_Pwr_NC))
-        message.append('"RoughP-Pwr: O":%s,' % json.dumps(self.RoughP_Pwr_O))
-        message.append('"RoughP-On: NC":%s,' % json.dumps(self.RoughP_On_NC))
-        message.append('"RoughP-On: O":%s,' % json.dumps(self.RoughP_On_O))
-        #message.append('"notUsed1":%s,' % json.dumps(self.notUsed1)) uncomment when this is used
-        message.append('"Air supply LN2 OK":%s,' % json.dumps(self.LN2AirOK))
-        message.append('"Air supply OK":%s,' % json.dumps(self.AirOK))
-        #message.append('"t20":%s,' % json.dumps(self.t20)) uncomment when this is used
-        #message.append('"notUsed7":%s,' % json.dumps(self.notUsed7)) uncomment when this is used
-        message.append('"LN2-en":%s}' % json.dumps(self.LN2en))
+        message = ['{"PG-SW-RoughP-Relay 1":%s,' % json.dumps(self.pgRoughPumpRelay1),
+                   '"PG-SW-RoughP-Relay 2":%s,' % json.dumps(self.pgRoughPumpRelay2),
+                   '"PG-SW-CryoP-Relay 1":%s,' % json.dumps(self.pgCryoPumpRelay1),
+                   '"PG-SW-CryoP-Relay 2":%s,' % json.dumps(self.pgCryoPumpRelay2),
+                   '"PG-SW-Chamber-Relay 1":%s,' % json.dumps(self.pgChamberRelay1),
+                   '"PG-SW-Chamber-Relay 2":%s,' % json.dumps(self.pgChamberRelay2),
+                   '"LN2-P-Sol-Open: NC":%s,' % json.dumps(self.LN2_P_Sol_Open_NC),
+                   '"LN2-P-Sol-Open: O":%s,' % json.dumps(self.LN2_P_Sol_Open_O),
+                   '"LN2-P-Sol-Closed: NC":%s,' % json.dumps(self.LN2_P_Sol_Closed_NC),
+                   '"LN2-P-Sol-Closed: O":%s,' % json.dumps(self.LN2_P_Sol_Closed_O),
+                   '"LN2-S-Sol-Open: NC":%s,' % json.dumps(self.LN2_S_Sol_Open_NC),
+                   '"LN2-S-Sol-Open: O":%s,' % json.dumps(self.LN2_S_Sol_Open_O),
+                   '"LN2-S-Sol-Closed: NC":%s,' % json.dumps(self.LN2_S_Sol_Closed_NC),
+                   '"LN2-S-Sol-Closed: O":%s,' % json.dumps(self.LN2_S_Sol_Closed_O),
+                   '"CryoP-GV-Open: NC":%s,' % json.dumps(self.CryoP_GV_Open_NC),
+                   '"CryoP-GV-Open: O":%s,' % json.dumps(self.CryoP_GV_Open_O),
+                   '"CryoP-GV-Closed: NC":%s,' % json.dumps(self.CryoP_GV_Closed_NC),
+                   '"CryoP-GV-Closed: O":%s,' % json.dumps(self.CryoP_GV_Closed_O),
+                   '"RoughP-GV-Open":%s,' % json.dumps(self.RoughP_GV_Open),
+                   '"RoughP-GV-Closed":%s,' % json.dumps(self.RoughP_GV_Closed),
+                   '"RoughP-Pwr: NC":%s,' % json.dumps(self.RoughP_Pwr_NC),
+                   '"RoughP-Pwr: O":%s,' % json.dumps(self.RoughP_Pwr_O),
+                   '"RoughP-On: NC":%s,' % json.dumps(self.RoughP_On_NC),
+                   '"RoughP-On: O":%s,' % json.dumps(self.RoughP_On_O),
+                   '"notUsed1":%s,' % json.dumps(self.notUsed1),
+                   '"Air supply LN2 OK":%s,' % json.dumps(self.LN2AirOK),
+                   '"Air supply OK":%s,' % json.dumps(self.AirOK),
+                   '"t20":%s,' % json.dumps(self.t20),
+                   '"notUsed7":%s,' % json.dumps(self.notUsed7),
+                   '"LN2-en":%s}' % json.dumps(self.LN2en)]
         self.__lock.release()
         return ''.join(message)

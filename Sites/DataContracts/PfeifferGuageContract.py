@@ -1,5 +1,5 @@
 class PfeifferGuageContract:
-    def __init__(self, Address, ParmDict, PressureDict):
+    def __init__(self, Address):
         self.PfeifferGuage = Address
         self.parm41 = None  # Thinking for this is -> assign none so that if it does not update and
         self.parm49 = None  # an attempt is made to collect a value and add it to the json

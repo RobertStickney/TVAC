@@ -1,8 +1,6 @@
 import threading
 import json
 
-from HouseKeeping.globalVars import debugPrint
-
 
 class DigitalOutContract:
 
@@ -560,10 +558,8 @@ class DigitalOutContract:
                 self.c2_b3 &= ~0x80
         if 'IR Lamp 1 PWM DC' in d:
             self.IR_Lamps_pwm_dc[0] = d['IR Lamp 1 PWM DC']
-            debugPrint(4,"IR Lamp 1 PWM DC: {:f}".format(self.IR_Lamps_pwm_dc[0]))
         if 'IR Lamp 2 PWM DC' in d:
             self.IR_Lamps_pwm_dc[1] = d['IR Lamp 2 PWM DC']
-            debugPrint(4, "IR Lamp 2 PWM DC: {:f}".format(self.IR_Lamps_pwm_dc[1]))
         if 'IR Lamp 3 PWM DC' in d:
             self.IR_Lamps_pwm_dc[2] = d['IR Lamp 3 PWM DC']
         if 'IR Lamp 4 PWM DC' in d:
@@ -762,59 +758,58 @@ class DigitalOutContract:
 
     def getJson(self):
         self.__lock.acquire()
-        message = []
-        message.append('{"LN2-P EN":%s,' % json.dumps(self.LN2_P_EN))
-        message.append('"LN2-S EN":%s,' % json.dumps(self.LN2_S_EN))
-        message.append('"LN2-Sol EN":%s,' % json.dumps(self.LN2_Sol_EN))
-        #message.append('"notUsed1":%s,' % json.dumps(self.notUsed1)) uncomment when this is used
-        message.append('"IR Lamp 1":%s,' % json.dumps(self.IR_Lamp_1))
-        message.append('"IR Lamp 2":%s,' % json.dumps(self.IR_Lamp_2))
-        message.append('"IR Lamp 3":%s,' % json.dumps(self.IR_Lamp_3))
-        message.append('"IR Lamp 4":%s,' % json.dumps(self.IR_Lamp_4))
-        message.append('"IR Lamp 5":%s,' % json.dumps(self.IR_Lamp_5))
-        message.append('"IR Lamp 6":%s,' % json.dumps(self.IR_Lamp_6))
-        message.append('"IR Lamp 7":%s,' % json.dumps(self.IR_Lamp_7))
-        message.append('"IR Lamp 8":%s,' % json.dumps(self.IR_Lamp_8))
-        message.append('"IR Lamp 9":%s,' % json.dumps(self.IR_Lamp_9))
-        message.append('"IR Lamp 10":%s,' % json.dumps(self.IR_Lamp_10))
-        message.append('"IR Lamp 11":%s,' % json.dumps(self.IR_Lamp_11))
-        message.append('"IR Lamp 12":%s,' % json.dumps(self.IR_Lamp_12))
-        message.append('"IR Lamp 13":%s,' % json.dumps(self.IR_Lamp_13))
-        message.append('"IR Lamp 14":%s,' % json.dumps(self.IR_Lamp_14))
-        message.append('"IR Lamp 15":%s,' % json.dumps(self.IR_Lamp_15))
-        message.append('"IR Lamp 16":%s,' % json.dumps(self.IR_Lamp_16))
-        message.append('"Heater SSR 1":%s,' % json.dumps(self.Heater_1))
-        message.append('"Heater SSR 2":%s,' % json.dumps(self.Heater_2))
-        message.append('"Heater SSR 3":%s,' % json.dumps(self.Heater_3))
-        message.append('"Heater SSR 4":%s,' % json.dumps(self.Heater_4))
-        message.append('"Heater SSR 5":%s,' % json.dumps(self.Heater_5))
-        message.append('"Heater SSR 6":%s,' % json.dumps(self.Heater_6))
-        message.append('"Heater SSR 7":%s,' % json.dumps(self.Heater_7))
-        message.append('"Heater SSR 8":%s,' % json.dumps(self.Heater_8))
-        message.append('"Heater SSR 9":%s,' % json.dumps(self.Heater_9))
-        message.append('"Heater SSR 10":%s,' % json.dumps(self.Heater_10))
-        message.append('"Heater SSR 11":%s,' % json.dumps(self.Heater_11))
-        message.append('"Heater SSR 12":%s,' % json.dumps(self.Heater_12))
-        message.append('"Heater SSR 13":%s,' % json.dumps(self.Heater_13))
-        message.append('"Heater SSR 14":%s,' % json.dumps(self.Heater_14))
-        message.append('"Heater SSR 15":%s,' % json.dumps(self.Heater_15))
-        message.append('"Heater SSR 16":%s,' % json.dumps(self.Heater_16))
-        message.append('"Heater SSR 17":%s,' % json.dumps(self.Heater_17))
-        message.append('"Heater SSR 18":%s,' % json.dumps(self.Heater_18))
-        message.append('"Heater SSR 19":%s,' % json.dumps(self.Heater_19))
-        message.append('"Heater SSR 20":%s,' % json.dumps(self.Heater_20))
-        message.append('"Heater SSR 21":%s,' % json.dumps(self.Heater_21))
-        message.append('"MCC Power":%s,' % json.dumps(self.MCC_Power))
-        message.append('"MCC2 Power":%s,' % json.dumps(self.MCC2_Power))
-        message.append('"RoughP GateValve":%s,' % json.dumps(self.RoughP_GateValve))
-        message.append('"RoughP Start":%s,' % json.dumps(self.RoughP_Start))
-        message.append('"CryoP GateValve":%s,' % json.dumps(self.CryoP_GateValve))
-        message.append('"RoughP PurgeGass":%s,' % json.dumps(self.RoughP_PurgeGass))
-        message.append('"LN2-S Sol":%s,' % json.dumps(self.LN2_S_Sol))
-        message.append('"LN2-P Sol":%s,' % json.dumps(self.LN2_P_Sol))
-        message.append('"CryoP Pwr Relay 1":%s,' % json.dumps(self.CryoP1_PwrRelay))
-        message.append('"CryoP Pwr Relay 2":%s,' % json.dumps(self.CryoP2_PwrRelay))
-        message.append('"RoughP Pwr Relay":%s,' % json.dumps(self.RoughP_PwrRelay))
-        message.append('"IR_Lamps_pwm_dc":%s}' % json.dumps(self.IR_Lamps_pwm_dc))
+        message = ['{"LN2-P EN":%s,' % json.dumps(self.LN2_P_EN),
+                   '"LN2-S EN":%s,' % json.dumps(self.LN2_S_EN),
+                   '"LN2-Sol EN":%s,' % json.dumps(self.LN2_Sol_EN),
+                   '"notUsed1":%s,' % json.dumps(self.notUsed1),
+                   '"IR Lamp 1":%s,' % json.dumps(self.IR_Lamp_1),
+                   '"IR Lamp 2":%s,' % json.dumps(self.IR_Lamp_2),
+                   '"IR Lamp 3":%s,' % json.dumps(self.IR_Lamp_3),
+                   '"IR Lamp 4":%s,' % json.dumps(self.IR_Lamp_4),
+                   '"IR Lamp 5":%s,' % json.dumps(self.IR_Lamp_5),
+                   '"IR Lamp 6":%s,' % json.dumps(self.IR_Lamp_6),
+                   '"IR Lamp 7":%s,' % json.dumps(self.IR_Lamp_7),
+                   '"IR Lamp 8":%s,' % json.dumps(self.IR_Lamp_8),
+                   '"IR Lamp 9":%s,' % json.dumps(self.IR_Lamp_9),
+                   '"IR Lamp 10":%s,' % json.dumps(self.IR_Lamp_10),
+                   '"IR Lamp 11":%s,' % json.dumps(self.IR_Lamp_11),
+                   '"IR Lamp 12":%s,' % json.dumps(self.IR_Lamp_12),
+                   '"IR Lamp 13":%s,' % json.dumps(self.IR_Lamp_13),
+                   '"IR Lamp 14":%s,' % json.dumps(self.IR_Lamp_14),
+                   '"IR Lamp 15":%s,' % json.dumps(self.IR_Lamp_15),
+                   '"IR Lamp 16":%s,' % json.dumps(self.IR_Lamp_16),
+                   '"Heater SSR 1":%s,' % json.dumps(self.Heater_1),
+                   '"Heater SSR 2":%s,' % json.dumps(self.Heater_2),
+                   '"Heater SSR 3":%s,' % json.dumps(self.Heater_3),
+                   '"Heater SSR 4":%s,' % json.dumps(self.Heater_4),
+                   '"Heater SSR 5":%s,' % json.dumps(self.Heater_5),
+                   '"Heater SSR 6":%s,' % json.dumps(self.Heater_6),
+                   '"Heater SSR 7":%s,' % json.dumps(self.Heater_7),
+                   '"Heater SSR 8":%s,' % json.dumps(self.Heater_8),
+                   '"Heater SSR 9":%s,' % json.dumps(self.Heater_9),
+                   '"Heater SSR 10":%s,' % json.dumps(self.Heater_10),
+                   '"Heater SSR 11":%s,' % json.dumps(self.Heater_11),
+                   '"Heater SSR 12":%s,' % json.dumps(self.Heater_12),
+                   '"Heater SSR 13":%s,' % json.dumps(self.Heater_13),
+                   '"Heater SSR 14":%s,' % json.dumps(self.Heater_14),
+                   '"Heater SSR 15":%s,' % json.dumps(self.Heater_15),
+                   '"Heater SSR 16":%s,' % json.dumps(self.Heater_16),
+                   '"Heater SSR 17":%s,' % json.dumps(self.Heater_17),
+                   '"Heater SSR 18":%s,' % json.dumps(self.Heater_18),
+                   '"Heater SSR 19":%s,' % json.dumps(self.Heater_19),
+                   '"Heater SSR 20":%s,' % json.dumps(self.Heater_20),
+                   '"Heater SSR 21":%s,' % json.dumps(self.Heater_21),
+                   '"MCC Power":%s,' % json.dumps(self.MCC_Power),
+                   '"MCC2 Power":%s,' % json.dumps(self.MCC2_Power),
+                   '"RoughP GateValve":%s,' % json.dumps(self.RoughP_GateValve),
+                   '"RoughP Start":%s,' % json.dumps(self.RoughP_Start),
+                   '"CryoP GateValve":%s,' % json.dumps(self.CryoP_GateValve),
+                   '"RoughP PurgeGass":%s,' % json.dumps(self.RoughP_PurgeGass),
+                   '"LN2-S Sol":%s,' % json.dumps(self.LN2_S_Sol),
+                   '"LN2-P Sol":%s,' % json.dumps(self.LN2_P_Sol),
+                   '"CryoP Pwr Relay 1":%s,' % json.dumps(self.CryoP1_PwrRelay),
+                   '"CryoP Pwr Relay 2":%s,' % json.dumps(self.CryoP2_PwrRelay),
+                   '"RoughP Pwr Relay":%s,' % json.dumps(self.RoughP_PwrRelay),
+                   '"IR_Lamps_pwm_dc":%s}' % json.dumps(self.IR_Lamps_pwm_dc)]
         self.__lock.release()
         return ''.join(message)
