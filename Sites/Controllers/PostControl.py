@@ -9,7 +9,7 @@ class PostContol:
 
     def loadProfile(self, data):
         profileInstance = ProfileInstance.getInstance()
-        profileInstance.zoneProfiles.update(data)
+        profileInstance.zoneProfiles.update(data,ThreadCollectionInstance)
         return "{'result':'success'}"
 
     def runProfile(self,data):

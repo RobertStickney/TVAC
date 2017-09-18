@@ -22,6 +22,62 @@ class HardWareControlStub(Thread):
     It controls if we are in a ramp, hold, soak, or paused. 
     '''
 
+    def createExpectedValues(self, setPoints,startTime=None):
+        intervalTime = self.updatePeriod
+        if startTime:
+            currentTime = int(startTime)
+        else:
+            currentTime = int(time.time())
+        
+        # TODO: Change don't let this be hardcoded to Max
+        currentTemp = self.zoneProfile.getTemp("Max")
+
+        expected_temp_values = []
+        expected_time_values = []
+        for setPoint in setPoints:
+            goalTemp = setPoint.tempGoal
+            rampTime = setPoint.ramp
+            soakTime = setPoint.soakduration
+            print("setpoint: {}".format(setPoint.thermalsetpoint))
+            print("currentTime: {}".format(currentTime))
+
+            if rampTime:
+                TempDelta = goalTemp-currentTemp
+                numberOfJumps = rampTime/intervalTime
+                intervalTemp = TempDelta/numberOfJumps
+                rampEndTime = currentTime+rampTime
+
+                # Debug prints
+                print("rampTime: {}".format(rampTime))
+                print("TempDelta: {}".format(TempDelta))
+                print("numberOfJumps: {}".format(numberOfJumps))
+                print("intervalTemp: {}".format(intervalTemp))
+
+                # setting all values all for ramp
+                for i, tempSetPoint in enumerate(range(currentTime,rampEndTime, intervalTime)):
+                    x = tempSetPoint
+                    y = currentTemp + (i*intervalTemp)
+                    expected_time_values.append(tempSetPoint)
+                    expected_temp_values.append(y)
+                    print("{},{}".format(x,y))
+            else:
+                rampEndTime = currentTime
+
+            print("soakTime: {}".format(soakTime))
+            #Setting all soak values
+            for tempSetPoint in range(rampEndTime, rampEndTime+soakTime, intervalTime):
+                x = tempSetPoint
+                y = goalTemp
+                expected_time_values.append(tempSetPoint)
+                expected_temp_values.append(y)
+                print("{},{}".format(x,y))
+
+
+            currentTime = rampEndTime+soakTime
+            currentTemp = goalTemp
+
+        return expected_temp_values, expected_time_values
+
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs=None, verbose=None, lamps=None):
 
@@ -39,8 +95,8 @@ class HardWareControlStub(Thread):
         self.handeled = False
         self.running = False
         self.paused = False
-        self.thermalProfile = 0
-        self.hold = False
+        self.setPoint = 0
+        self.inHold = False
         self.inRamp = True
         self.inSoak = False
         self.soakComplete = False
@@ -58,13 +114,7 @@ class HardWareControlStub(Thread):
 
         self.maxTempRisePerMin = 10
         self.maxTempRisePerUpdate = (self.maxTempRisePerMin/60)*self.updatePeriod
-    
-    def getState(self):
-        '''
-        This will be a simple debug medthod that will give 
-        the current state of the hardware Thread
-        '''
-        pass
+
 
 
     def run(self):
@@ -73,22 +123,20 @@ class HardWareControlStub(Thread):
             {"message": "{}: Running HW control Thread".format(self.args[0]),
              "level":2})
             self.running = True
-            goalTemp = self.zoneProfile.thermalProfiles[self.thermalProfile].tempGoal
-            currentTemp = self.zoneProfile.thermalProfiles[self.thermalProfile].temp
+
             
 
             # self.event('StartRun')
             Logging.logEvent("Event","Start Profile", 
                 {'time': datetime.time()})
 
-            hardwareStatus = HardwareStatusInstance.getInstance()
             currentTemp = self.zoneProfile.getTemp("Max")
-            self.zoneProfile.thermalProfiles[self.thermalProfile].temp = currentTemp
+            # self.zoneProfile.thermalProfiles[self.setPoint].temp = currentTemp
 
-            d_out = hardwareStatus.PC_104.digital_out
+            d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
 
             self.updatePeriod = 10
-            self.maxTempRisePerMin = 10
+            self.maxTempRisePerMin = 6.4
             self.maxTempRisePerUpdate = (self.maxTempRisePerMin/60)*self.updatePeriod
 
             self.pid = PID()
@@ -99,39 +147,106 @@ class HardWareControlStub(Thread):
             self.pid.setKi(integral_gain)
             self.pid.setKd(derivative_gain)
 
+            # local temp variables for checking state
+            inHoldFlag = False
+            self.startTime = int(time.time())
+            # Generate the expected values at a given time
+            self.expected_temp_values, self.expected_time_values = self.createExpectedValues(self.zoneProfile.thermalProfiles)
 
+            # continue until we break out
+            while True:
+                # get current time
+                currentTime = time.time()
 
-            while self.runCount > 0:
+                while self.inHold:
+                    if not inHoldFlag:
+                        # first time through hold loop
+                        print("in hold for first time")
+                        startHoldTime = int(time.time())
+                        inHoldFlag = True
+                if inHoldFlag:
+                    print("Just now leaving hold")
+                    endHoldTime = int(time.time())
+                    holdTime = endHoldTime - startHoldTime
+                    startTime = startTime + holdTime
+                    # regenerate expected time, moving things forward to account for hold
+                    self.expected_temp_values, self.expected_time_values = self.createExpectedValues(self.zoneProfile.thermalProfiles, startTime=startTime)
+                    inHoldFlag = False
+                    currentTime = time.time()
 
-                currentTemp = self.zoneProfile.getTemp("Max")
-                
-                self.runProcess()
+                # if there is no more expected time values, break out of while True loop
+                if len(self.expected_time_values) <= 0:
+                    break
 
-                self.zoneProfile.thermalProfiles[self.thermalProfile].temp += self.tempChange
-                self.tempGoalTemperature = self.zoneProfile.thermalProfiles[self.thermalProfile].temp
-                self.pid.SetPoint = self.tempGoalTemperature
-                self.pid.update(currentTemp)
+                # this will find the time value matching the current time
+                # and give us the temp value it should be at that time. 
+                while currentTime > self.expected_time_values[0]:
+                    print("At time {} temp should be: {}".format(self.expected_time_values[0],self.expected_temp_values[0]))
+                    temp_temp = self.expected_temp_values[0]
+                    self.expected_temp_values = self.expected_temp_values[1:]
+                    self.expected_time_values = self.expected_time_values[1:]
+
+                    if len(self.expected_time_values) <= 0:
+                        break
+                # With the temp goal tempurture picked, make the duty cycle 
+                self.pid.SetPoint = temp_temp
+                # TODO: Don't leave this hardcoded
+                self.pid.update(self.zoneProfile.getTemp("Max"))
                 self.dutyCycle = self.pid.error_value/self.maxTempRisePerUpdate
 
-                status = {
-                    "Current Temp": currentTemp,
-                    "Setpoint Goal Temp": goalTemp,
-                    "Temporary Goal Temp": self.tempGoalTemperature,
-                    "Assumed Max Temp Raise per Update": self.maxTempRisePerUpdate,
-                    "Percent of current duty cycle":self.dutyCycle,
-                    "Run Count":self.runCount,
-                }
-                Logging.logEvent("Debug","Data Dump", 
-                        {"message": "Current profile Status (in k)",
-                         "level":1,
-                         "dict":status})
-
-                # update both lamps...this needs to change
+                # TODO: pick what lamp you want to use
                 d_out.update({self.lamps[1] + " PWM DC": self.dutyCycle})
                 d_out.update({self.lamps[0] + " PWM DC": self.dutyCycle})
+
+                # sleep until the next time around
+                time.sleep(self.updatePeriod)
+
+
+            # while self.runCount > 0:
+
+            #     currentTemp = self.zoneProfile.getTemp("Max")
+                
+            #     self.runProcess()
+
+            #     self.zoneProfile.thermalProfiles[self.setPoint].temp += self.tempChange
+            #     self.tempGoalTemperature = self.zoneProfile.thermalProfiles[self.setPoint].temp
+            #     self.pid.SetPoint = self.tempGoalTemperature
+            #     self.pid.update(currentTemp)
+            #     self.dutyCycle = self.pid.error_value/self.maxTempRisePerUpdate
+            #     goalTemp = self.zoneProfile.thermalProfiles[self.setPoint].tempGoal
+            #     soakduration = self.zoneProfile.thermalProfiles[self.setPoint].soakduration
+            #     if self.inRamp:
+            #         self.state = "Ramp"
+            #     elif self.inSoak:
+            #         self.state = "Soak"
+            #     else:
+            #         self.state = "Other"
+            #     status = {
+            #         "Soak duration": soakduration,
+            #         "Current State": self.state,
+            #         "Current Temp": currentTemp,
+            #         "Setpoint Goal Temp": goalTemp,
+            #         "Temporary Goal Temp": self.tempGoalTemperature,
+            #         "Assumed Max Temp Raise per Update": self.maxTempRisePerUpdate,
+            #         "Percent of current duty cycle":self.dutyCycle,
+            #         "Run Count":self.runCount,
+            #         "Set point": self.setPoint
+            #     }
+            #     Logging.logEvent("Debug","Data Dump", 
+            #             {"message": "Current profile Status for {} (in k)".format(self.args[0]),
+            #              "level":1,
+            #              "dict":status})
+            #     # for testing...
+            #     print("{}: {} Percent DC".format(self.args[0],self.dutyCycle))
+            #     with open('./TempLog.txt','a') as filer:
+            #         filer.write("{},{},{}\n".format(datetime.time(),self.args[0],self.dutyCycle))
+
+            #     # update both lamps...this needs to change
+            #     d_out.update({self.lamps[1] + " PWM DC": self.dutyCycle})
+            #     d_out.update({self.lamps[0] + " PWM DC": self.dutyCycle})
                 
 
-                time.sleep(self.updatePeriod)
+            #     time.sleep(self.updatePeriod)
 
             # turning off lamps at the end of test
             d_out.update({self.lamps[1] + " PWM DC": 0})
@@ -172,31 +287,31 @@ class HardWareControlStub(Thread):
             self.timerOn = False
 
     def checkHold(self):
-        tempHold = self.zoneProfile.thermalProfiles[self.thermalProfile].hold
+        tempHold = self.zoneProfile.thermalProfiles[self.setPoint].hold
 
-        if self.hold and not tempHold:
+        if self.inHold and not tempHold:
             # Hold is just turning on
-            self.zoneProfile.thermalProfiles[self.thermalProfile].heldTemp = self.zoneProfile.thermalProfiles[self.thermalProfile].tempGoal
-            self.zoneProfile.thermalProfiles[self.thermalProfile].tempGoal = self.zoneProfile.thermalProfiles[self.thermalProfile].temp
-            self.zoneProfile.thermalProfiles[self.thermalProfile].hold = True
+            self.zoneProfile.thermalProfiles[self.setPoint].heldTemp = self.zoneProfile.thermalProfiles[self.setPoint].tempGoal
+            self.zoneProfile.thermalProfiles[self.setPoint].tempGoal = self.zoneProfile.thermalProfiles[self.setPoint].temp
+            self.zoneProfile.thermalProfiles[self.setPoint].hold = True
             tempHold = True
             while not self.timeStartForHold:
                 self.timeStartForHold = int(time.time())
             self.event('starthold')
 
-        if not self.hold and tempHold:
-            self.zoneProfile.thermalProfiles[self.thermalProfile].tempGoal = self.zoneProfile.thermalProfiles[self.thermalProfile].heldTemp
-            self.zoneProfile.thermalProfiles[self.thermalProfile].heldTemp = 0
-            self.zoneProfile.thermalProfiles[self.thermalProfile].hold = False
+        if not self.inHold and tempHold:
+            self.zoneProfile.thermalProfiles[self.setPoint].tempGoal = self.zoneProfile.thermalProfiles[self.setPoint].heldTemp
+            self.zoneProfile.thermalProfiles[self.setPoint].heldTemp = 0
+            self.zoneProfile.thermalProfiles[self.setPoint].hold = False
             if self.inSoak:
                 self.releaseHold()
             self.timerOn = False
             self.event('endhold')
 
-        if self.hold and tempHold:
-            self.tempChange = self.zoneProfile.thermalProfiles[self.thermalProfile].tempGoal - self.zoneProfile.thermalProfiles[
-                self.thermalProfile].temp
-            self.zoneProfile.thermalProfiles[self.thermalProfile].temp += self.tempChange
+        if self.inHold and tempHold:
+            self.tempChange = self.zoneProfile.thermalProfiles[self.setPoint].tempGoal - self.zoneProfile.thermalProfiles[
+                self.setPoint].temp
+            self.zoneProfile.thermalProfiles[self.setPoint].temp += self.tempChange
             time.sleep(.5)
             # This might cause a stack overflow...
             self.checkHold()
@@ -207,8 +322,8 @@ class HardWareControlStub(Thread):
                 self.timer = time.time()
                 self.timerOn = True
 
-            tempDelta = self.zoneProfile.thermalProfiles[self.thermalProfile].tempGoal - self.zoneProfile.thermalProfiles[self.thermalProfile].temp
-            rampDuration = self.zoneProfile.thermalProfiles[self.thermalProfile].ramp
+            tempDelta = self.zoneProfile.thermalProfiles[self.setPoint].tempGoal - self.zoneProfile.thermalProfiles[self.setPoint].temp
+            rampDuration = self.zoneProfile.thermalProfiles[self.setPoint].ramp
             rampRunTime = time.time() - self.timer
             rampDuration = (rampDuration - rampRunTime) / 60
             changePerMin = tempDelta / rampDuration
@@ -248,22 +363,24 @@ class HardWareControlStub(Thread):
         if not self.inRamp and not self.inSoak and not self.soakComplete:
             self.inSoak = True
             if (self.updatePeriod > 0):
-                self.runCount = (self.zoneProfile.thermalProfiles[self.thermalProfile].soakduration) /  self.updatePeriod
+                self.runCount = (self.zoneProfile.thermalProfiles[self.setPoint].soakduration) /  self.updatePeriod
             else:
                 self.inSoak = False
                 self.soakComplete = True
 
         if self.inSoak:
-            self.tempChange = self.zoneProfile.thermalProfiles[self.thermalProfile].tempGoal - self.zoneProfile.thermalProfiles[self.thermalProfile].temp
+            self.tempChange = self.zoneProfile.thermalProfiles[self.setPoint].tempGoal - self.zoneProfile.thermalProfiles[self.setPoint].temp
             self.runCount -= 1
             self.event('soak')
             if self.runCount <= 0:
                 thermalProfileCount = len(self.zoneProfile.thermalProfiles) - 1
-                if self.thermalProfile < thermalProfileCount:
-                    self.thermalProfile += 1
+                if self.setPoint < thermalProfileCount:
+                    self.setPoint += 1
                     self.inRamp = True
                     self.inSoak = False
                     self.runCount = 1
+                    # self.zoneProfile.thermalProfiles[self.setPoint].temp = self.zoneProfile.getTemp("Max")
+                    print("Moving onto next setpoint")
                 else:
                     self.reset()
 
@@ -275,9 +392,10 @@ class HardWareControlStub(Thread):
         d = divmod(diff, 86400)  # days
         h = divmod(d[1], 3600)  # hours
         m = divmod(h[1], 60)  # minutes
-        self.zoneProfile.thermalProfiles[self.thermalProfile].soakduration += m[1]
+        self.zoneProfile.thermalProfiles[self.setPoint].soakduration += m[1]
 
     def reset(self):
+        print("DEBUG: HW control reset")
         self.inRamp = False
         self.inSoak = False
         self.soakComplete = True
@@ -290,7 +408,7 @@ class HardWareControlStub(Thread):
 
     def event(self,eventName):
         eventCreated = '{"event":"%s","profileuuid":"%s","zoneuuid":"%s","Zone":"%s","ChangeSteps":"%s", "Temp":"%s", "inRamp":"%s", "insoak":"%s" }'%\
-               (eventName,self.zoneProfile.profileUUID,self.zoneProfile.zoneUUID,self.args[0] ,self.runCount,(self.zoneProfile.thermalProfiles[self.thermalProfile].temp),self.inRamp,self.inSoak)
+               (eventName,self.zoneProfile.profileUUID,self.zoneProfile.zoneUUID,self.args[0] ,self.runCount,(self.zoneProfile.thermalProfiles[self.setPoint].temp),self.inRamp,self.inSoak)
 
         # MySQlConnect.pushEvent(eventCreated)
         # print(eventCreated)

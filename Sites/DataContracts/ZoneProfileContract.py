@@ -41,6 +41,7 @@ class ZoneProfileContract:
             self.thermocouples = []
 
         self.zoneUUID = ''
+        self.fresh = True
 
     def setThermocouples(self, thermocouples):
         self.__lock.acquire()
@@ -59,7 +60,7 @@ class ZoneProfileContract:
         self.__lock.release()
         return list
 
-    def update(self, d):
+    def update(self, d, ThreadCollectionInstance=None):
         self.__lock.acquire()
         Logging.logEvent("Debug","Data Dump",
             {"message": "Updating a zone profile",
@@ -75,8 +76,15 @@ class ZoneProfileContract:
             self.average = d['average']
         if 'thermalprofiles' in d:
             self.thermalProfiles = self.setThermalProfiles(d['thermalprofiles'])
+            print("New instance? {}".format(self.fresh))
+            if not self.fresh:
+                tc_instance =  ThreadCollectionInstance.getInstance()
+                hwControl = tc_instance.threadCollection.zoneThreadDict["zone"+str(self.zone)]
+                hwControl.createExpectedValues(self.thermalProfiles,hwControl.startTime)
+            self.fresh = False
         if 'thermocouples' in d:
             self.thermocouples = self.setThermocouples(d['thermocouples'])
+        
         self.__lock.release()
 
 

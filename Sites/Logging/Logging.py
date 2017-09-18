@@ -44,8 +44,10 @@ class Logging(object):
 					elif type(dictionary) == type([]):
 						print("{}  {}".format(prefix,entry))
 			else:
-				for line in string.split("\n"):
-					print("{}{}".format(prefix,line))
+				with open('./debugLog.txt','a') as filer:
+					for line in string.split("\n"):
+						filer.write("{}{}".format(prefix,line)+"\n")
+						print("{}{}".format(prefix,line))
 
 	@staticmethod
 	def logThermoCouples(data):
@@ -63,10 +65,19 @@ class Logging(object):
 		'alarm': tc_alarm
 		}
 		'''
-		print("LOG: This is the current ThermoCouple Reading")
-		print("commented out because it was too much data")
+		testList = [7,9,10,11,12,91,92,100,105,110,115,120]
+		with open('./TempLog.txt','a') as filer:
+			for tc in data['tcList']:
+				if tc['working']:
+					output = ("LOG: TIME {} TC-{}: {} (k)".format(data["time"].time(),tc["Thermocouple"], tc["temp"]))
+					filer.write("{},{},{}".format(data["time"].time(),tc["Thermocouple"],tc["temp"])+"\n")
+					if tc["Thermocouple"] in testList:
+						print("TC-{}: {} (k)".format(tc["Thermocouple"], tc["temp"]))
+		filer.close()
+		# print("LOG: This is the current ThermoCouple Reading")
+		# print("commented out because it was too much data")
 		# for tc in data['tcList']:
-		# 	print("LOG: TC: {} == {}(c)".format(tc['Thermocouple'],tc['temp']))
+		# 	print("LOG: TC: {} == {}(k)".format(tc['Thermocouple'],tc['temp']))
 
 	@staticmethod
 	def logThermalProfile(data):

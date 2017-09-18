@@ -5,7 +5,7 @@ import os
 
 from Controllers.PostControl import PostContol
 from Controllers.GetControl import GetControl
-from Collections.ProfileInstance import ProfileInstance
+# from Collections.ProfileInstance import ProfileInstance
 
 from Logging.Logging import Logging
 
@@ -40,7 +40,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                  "level":1})
             Logging.logEvent("Debug","Status Update", 
                 {"message": "GET Results: {}".format(result.encode()),
-                 "level":2})
+                 "level":4})
 
             # Out the results back to the server
             self.setHeader()
@@ -142,9 +142,9 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-type", "application/json".encode())
         self.end_headers()
 
-    def displayZones(self):
-        profileInstance = ProfileInstance.getInstance()
-        self.wfile.write(profileInstance.zoneProfiles.getJson().encode())
+    # def displayZones(self):
+    #     profileInstance = ProfileInstance.getInstance()
+    #     self.wfile.write(profileInstance.zoneProfiles.getJson().encode())
 
 
 

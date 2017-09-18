@@ -26,14 +26,14 @@ class ZoneCollection:
                 "zone8":ZoneProfileContract(zoneDictEmpty),
                 "zone9":ZoneProfileContract(zoneDictEmpty)}
 
-    def update(self,d):
+    def update(self,d,ThreadCollectionInstance=None):
         Logging.debugPrint(4, "Updating zone with info:\n{}".format(d))
         self.profileUUID = uuid.uuid4()
         for zoneProfile in d['profiles']:
             zoneProfile['profileuuid'] = self.profileUUID
             zoneName = "zone"+str(zoneProfile['zone'])
             Logging.debugPrint(4,"zone: {}".format(zoneName))
-            self.zoneDict[zoneName].update(zoneProfile)
+            self.zoneDict[zoneName].update(zoneProfile,ThreadCollectionInstance)
         # commenting out while testing
         # MySQlConnect.pushProfile()
 

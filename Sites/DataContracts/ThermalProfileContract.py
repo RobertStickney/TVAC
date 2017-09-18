@@ -23,6 +23,7 @@ class ThermalProfileContract:
         self.temp = 0
         self.hold = False
         self.heldTemp = 0
+        
 
     def update(self, d):
         if 'tempgoal' in d: # all temperatures are in Kelven
@@ -33,6 +34,7 @@ class ThermalProfileContract:
             self.ramp = d['ramp']
         if 'temp' in d:  # Derived value - all temperatures are in Kelven
             self.temp = d['temp']
+            print("="*100+"\n{}\n".format(self.temp))
         if 'duration' in d:  # Derived value
             self.duration = d['duration']
 

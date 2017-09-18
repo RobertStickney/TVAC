@@ -14,7 +14,7 @@ class GetControl:
     def getAllThermoCoupleData(self):
         Logging.debugPrint(2, "Calling: getAllThermoCoupleData")  #Todo Change to logEvent()
         hardwareStatusInstance = HardwareStatusInstance.getInstance()
-        json = hardwareStatusInstance.Thermocouples.getJson('C')
+        json = hardwareStatusInstance.Thermocouples.getJson('K')
         # print(json)
         return json
 

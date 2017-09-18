@@ -78,7 +78,7 @@ class ThermoCoupleUpdater(Thread):
                             'time': datetime.now(),
                             'tcList': [
                             # (random.uniform(0,10)-5)
-                                {'Thermocouple': 11,'working':True, 'temp':hwStatus.Thermocouples.getTC(11).getTemp() + currentPID + 0},
+                                {'Thermocouple': 11,'working':True, 'temp':hwStatus.Thermocouples.getTC(11).getTemp() + currentPID + 0}
                                 # {'Thermocouple': 5, 'temp': hwStatus.Thermocouples.getTC(5).getTemp() + 50},
                                 # {'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 50},
                                 # {'Thermocouple': 3, 'temp': hwStatus.Thermocouples.getTC(3).getTemp() - 50,
@@ -145,7 +145,6 @@ class ThermoCoupleUpdater(Thread):
                          "level":2})
 
                 # If you want to cleanly close things, do it here
-
                 time.sleep(self.SLEEP_TIME)
                 # raise e
             # end of try/except

@@ -40,7 +40,7 @@ class ThreadCollection:
         "TsRegistersControlStub" : TsRegistersControlStub(parent=parent),
         # "PfeifferGuage" : ThermoCoupleUpdater()
         "ThermoCoupleUpdater" : ThermoCoupleUpdater(parent=parent),
-        "LN2Updater" : LN2Updater(ThreadCollection=parent)
+        # "LN2Updater" : LN2Updater(ThreadCollection=parent)
         }
 
 
@@ -79,11 +79,11 @@ class ThreadCollection:
 
     def holdThread(self,data):
         thread = data['zone']
-        self.zoneThreadDict[thread].hold = True
+        self.zoneThreadDict[thread].inHold = True
 
     def releaseHoldThread(self,data):
         thread = data['zone']
-        self.zoneThreadDict[thread].hold = False
+        self.zoneThreadDict[thread].inHold = False
 
     def abortThread(self,data):
         thread = data['zone']
