@@ -1,4 +1,4 @@
-import json
+#import json
 import time
 
 
@@ -94,11 +94,11 @@ class ShiMcc:
                 "Regen Param_C": self.Get_RegenParam_C,  # 2.19
                 "Regen Param_G": self.Get_RegenParam_G,  # 2.19
                 "Regen Param_z": self.Get_RegenParam_z,  # 2.19
-                "Regeneration Start Delay": self.Get_RegenStartDelay,  # 2.21
-                "Regeneration Step Timer": self.Get_RegenStepTimer,  # 2.22
+                "Regen Start Delay": self.Get_RegenStartDelay,  # 2.21
+                "Regen Step Timer": self.Get_RegenStepTimer,  # 2.22
                 "Regen Time": self.Get_RegenTime,  # 2.23
                 "Second Stage Temp CTL": self.Get_SecondStageTempCTL,  # 2.27
-                "TcPressureState": self.Get_TcPressureState}  # 2.29
+                "Tc Pressure State": self.Get_TcPressureState}  # 2.29
         return self.run_GetFunctions(FunS)
 
     def run_GetFunctions(self, Functions):

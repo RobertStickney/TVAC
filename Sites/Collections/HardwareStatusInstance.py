@@ -1,5 +1,5 @@
 from Collections.ThermocoupleCollection import ThermocoupleCollection
-# from Collections.PfeifferGuageCollection import PfeifferGuageCollection
+# from Collections.PfeifferGaugeCollection import PfeifferGaugeCollection
 # from Collections.ShiCryopumpCollection import ShiCryopumpCollection
 from Collections.PC_104_Instance import PC_104_Instance
 
@@ -26,7 +26,7 @@ class HardwareStatusInstance:
                  "level":2})
             self.Thermocouples = ThermocoupleCollection()
             # commented out Weds sep 6, due to merge breaking something
-            # self.PfeifferGuages = PfeifferGuageCollection()
+            # self.PfeifferGuages = PfeifferGaugeCollection()
             
             #self.ShiCryopump = ShiCryopumpCollection()
 

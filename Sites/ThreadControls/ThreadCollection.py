@@ -37,7 +37,7 @@ class ThreadCollection:
         return {
         # commented out aren't fully tested
         "TsRegistersControlStub" : TsRegistersControlStub(parent=parent),
-        # "PfeifferGuage" : ThermoCoupleUpdater()
+        # "PfeifferGauge" : ThermoCoupleUpdater()
         "ThermoCoupleUpdater" : ThermoCoupleUpdater(parent=parent),
         # "MCC" : PASS
         }

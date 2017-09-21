@@ -12,7 +12,7 @@ class ThermocoupleCollection:
     def __init__(self, num = 120):
         Logging.logEvent("Debug","Status Update", 
                 {"message": "Creating ThermocoupleCollection",
-                 "level":2})
+                 "level": 2})
         self.tcList = self.buildCollection(num)
         self.time = datetime.now()
         self.ValidTCs = []

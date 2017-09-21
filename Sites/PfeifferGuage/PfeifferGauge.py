@@ -3,7 +3,7 @@ import time
 import math
 
 
-class PfeifferGuage:
+class PfeifferGauge:
 
     def GetChecksum(self, cmd):  # append the sum of the string's bytes mod 256 + '\r'
         return sum(cmd.encode()) % 256
@@ -53,8 +53,8 @@ class PfeifferGuage:
                 return p * 0.75006  # hPa to Torr
             else:  ## Return in hPa gauge default.
                 return p
-        print('Data: ' + buff + '')
-        return 0
+        else:
+            raise ValueError("Convert_Str2Press value in: %s" % buff)
 
     def Convert_Press2Str(self, pressure, inTorr=True):
         if inTorr:
@@ -85,8 +85,50 @@ class PfeifferGuage:
         p_gauge.close()
         return Resp[10:-3]
 
-    def GetPressure(self, Address, inTorr=True):  # Pfeifer returns pressure in hPa
-        return self.Convert_Str2Press(self.SendReceive(Address, 740), inTorr)
+    def GetCCstate(self, Address):  # Is the Cold Cathode Sensor on
+        buff = self.SendReceive(Address, 41)
+        if buff == '0':
+            return False
+        elif buff == '1':
+            return True
+        else:
+            raise ValueError("GetCCstate value not 0 or 1: %s" % buff)
+
+    def SetCCstate(self, Address, CC_on):  # Set the Cold Cathode Sensor to on.
+        if CC_on == False:
+            resp = self.SendReceive(Address, 41, '0')
+            if resp != '0':
+                raise ValueError("SetCCstate value not set to 0: %s" % resp)
+        else:
+            resp = self.SendReceive(Address, 41, '1')
+            if resp != '1':
+                raise ValueError("SetCCstate value not set to 1: %s" % resp)
+
+    def GetSwMode(self, Address):  # Get Cold Cathode switching range
+        buff = self.SendReceive(Address, 49)
+        if buff.isdigit:
+            return int(buff)
+        else:
+            raise ValueError("GetSwMode value not 0 or 1: %s" % buff)
+
+    def SetSwMode(self, Address, CC_on):  # Set the Cold Cathode switching range to trans_LO.
+        if CC_on == False:
+            resp = self.SendReceive(Address, 49, '000')  # switch
+            if resp != '000':
+                raise ValueError("GetSwMode value not set to 0: %s" % resp)
+        else:
+            resp = self.SendReceive(Address, 49, '001')  # trans_LO
+            if resp != '001':
+                raise ValueError("GetSwMode value not set to 1: %s" % resp)
+
+    def GetError(self, Address):  # Pfeifer returns an error in the gauge
+        return self.SendReceive(Address, 303)
+
+    def GetSofwareV(self, Address):  # Returns gauge's software version
+        return self.SendReceive(Address, 312)
+
+    def GetModelName(self, Address):  # Returns gauge's model name
+        return self.SendReceive(Address, 349)
 
     def GetSwPressure(self, Address, sw2=False, inTorr=True):
         if sw2:
@@ -94,12 +136,57 @@ class PfeifferGuage:
         else:
             return self.Convert_Str2Press(self.SendReceive(Address, 730), inTorr)
 
-    def SetSwPressure(self, Pressure, Address, sw2=False, inTorr=True):
+    def SetSwPressure(self, Address, Pressure, sw2=False, inTorr=True):
         dataStr = self.Convert_Press2Str(Pressure, inTorr)
         if sw2:
             resp = self.SendReceive(Address, 732, dataStr)
         else:
             resp = self.SendReceive(Address, 730, dataStr)
         if dataStr != resp:
-            print("Error Setting Switch pressure.")
+            raise  ValueError("Error Setting Switch pressure. sent: '{}'; resp '{}'".format(dataStr,resp))
+
+    def GetPressure(self, Address, inTorr=True):  # Pfeifer gauge returns pressure in hPa or Torr
+        return self.Convert_Str2Press(self.SendReceive(Address, 740), inTorr)
+
+    def SetPressure(self, Address, inTorr=True):  # Set pressure in hPa or Torr for callibraton.
+        dataStr = self.Convert_Press2Str(Pressure, inTorr)
+        resp = self.SendReceive(Address, 740, dataStr)
+        if dataStr != resp:
+            raise  ValueError("Error Setting pressure. Sent: '{}'; Resp: '{}'".format(dataStr,resp))
+
+    def SetPressureSp(self, Address, value):
+        if value > 999:
+            value = 999
+        elif value < 0
+            value = 0
+        dataStr = "{:03d}".format(int(value))
+        resp = self.SendReceive(Address, 741, dataStr)
+        if dataStr != resp:
+            raise  ValueError("Error Setting pressure. Sent: '{}'; Resp: '{}'".format(dataStr,resp))
+
+    def GetCorrPir(self, Address):  # Get Pirani Correction Value
+        return float(self.SendReceive(Address, 742))
+
+    def SetCorrPir(self, Address, value):  # Setting Pirani Correction Value
+        if value > 8.0:
+            value = 8.0
+        elif value < 0.2:
+            value = 0.2
+        dataStr = "{:06d}".format(int(value*100))
+        resp = self.SendReceive(Address, 742, dataStr)
+        if dataStr != resp:
+            raise  ValueError("Error Setting Pirani Correction Value. Sent: '{}'; Resp: '{}'".format(dataStr,resp))
+
+    def GetCorrCC(self, Address):  # Get Cold Cathode Correction Value
+        return float(self.SendReceive(Address, 742))
+
+    def SetCorrCC(self, Address, value):  # Setting Cold Cathode Correction Value
+        if value > 8.0:
+            value = 8.0
+        elif value < 0.2:
+            value = 0.2
+        dataStr = "{:06d}".format(int(value*100))
+        resp = self.SendReceive(Address, 742, dataStr)
+        if dataStr != resp:
+            raise  ValueError("Error Setting Cold Cathode Correction Value. Sent: '{}'; Resp: '{}'".format(dataStr,resp))
 

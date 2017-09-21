@@ -1,7 +1,7 @@
 import threading
 
 
-class AnalogOutContract:
+class Shi_Compressor_Contract:
 
     __Lock = threading.RLock()
 

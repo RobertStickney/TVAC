@@ -12,7 +12,7 @@ class ShiMCC_StatusContract:
         self.CryoPump = {'Motor On': False, 'Ready': False}
         self.PurgeValveState = False
         self.RegenError = ''
-        self.RegenStep = 'Cryopump is stopped after warm up cycle is completed.'
+        self.RegenStep = ''
         self.RoughingValveState = False
         self.RoughingInterlock = {'Roughing Permission': False,
                                   'Roughing Needed': False,
@@ -38,38 +38,40 @@ class ShiMCC_StatusContract:
             self.PurgeValveState = d['Purge Valve State'] == '1'
         if 'Regen Error' in d:
             self.RegenError = {
-                '@': "No Error",
-                'B': "Warm up Timeout - Did not reach room temperature within 60 minutes. Normally an indication of lack or purge flow and/or external heater.",
-                'C': "Cool down Timeout - Did not cool down within 5 hours.",
-                'D': "Roughing error - Repurge cycle limit exceeded. Check cryopump vessel for leakage to chamber or atmosphere.",
-                'E': "Rate of rise limit exceeded - Rate of rise cycle limit was exceeded. Check cryopump vessel for leakage to chamber or atmosphere.",
-                'F': "Manual Abort - Regeneration was intentionally aborted.",
-                'G': "Rough valve timeout - Rough valve was open longer than 60 minutes.",
-                'H': "Illegal system state - Redundant software checks prevent unexpected software operation. Contact service center."
+                '@': "@: No Error",
+                'B': "B: Warm up Timeout - Did not reach room temperature within 60 minutes. Normally an indication of lack or purge flow and/or external heater.",
+                'C': "C: Cool down Timeout - Did not cool down within 5 hours.",
+                'D': "D: Roughing error - Repurge cycle limit exceeded. Check cryopump vessel for leakage to chamber or atmosphere.",
+                'E': "E: Rate of rise limit exceeded - Rate of rise cycle limit was exceeded. Check cryopump vessel for leakage to chamber or atmosphere.",
+                'F': "F: Manual Abort - Regeneration was intentionally aborted.",
+                'G': "G: Rough valve timeout - Rough valve was open longer than 60 minutes.",
+                'H': "H: Illegal system state - Redundant software checks prevent unexpected software operation. Contact service center."
                 }[d['Regen Error']]
         if 'Regen Step' in d:
             self.RegenStep = {
-                'Z': "Start Delay",
-                'A': "20 second cancellation delay.",
-                'B': "Cryopump Warm up - B",
-                'C': "Cryopump Warm up - C",
-                'D': "Cryopump Warm up - D",
-                'E': "Cryopump Warm up - E",
-                'H': "Extended Purge / Repurge Cycle",
-                'J': "Waiting for roughing clearance",
-                'L': "Rate Of Rise",
-                'M': "Cool down",
-                'P': "Regeneration Completed",
-                'T': "Roughing",
-                'W': "Restart Delay",
-                'V': "Regeneration Aborted",
-                'z': "Pump is ready for operation but in stand-by mode.",
-                's': "Cryopump is stopped after warm up cycle is completed.",
+                'Z': "Z: Start Delay",
+                'A': "A: 20 second cancellation delay.",
+                'B': "B: Cryopump Warm up",
+                'C': "C: Cryopump Warm up",
+                'D': "D: Cryopump Warm up",
+                'E': "E: Cryopump Warm up",
+                'H': "H: Extended Purge / Repurge Cycle",
+                'J': "J: Waiting for roughing clearance",
+                'L': "L: Rate Of Rise",
+                'M': "M: Cool down",
+                'P': "P: Regeneration Completed",
+                'T': "T: Roughing",
+                'W': "W: Restart Delay",
+                'V': "V: Regeneration Aborted",
+                'z': "z: Pump is ready for operation but in stand-by mode.",
+                's': "s: Cryopump is stopped after warm up cycle is completed.",
                 }[d['Regen Step']]
         if 'Roughing Valve State' in d:
-            self.RoughingValveState = d['Roughing Valve State']
+            self.RoughingValveState = d['Roughing Valve State'] == 1
         if 'Roughing Interlock' in d:
-            self.RoughingInterlock = d['Roughing Interlock']
+            self.RoughingInterlock['Roughing Permission'] = (d['Roughing Interlock'] & 0x01) > 0  # Bit 0
+            self.RoughingInterlock['Roughing Needed'    ] = (d['Roughing Interlock'] & 0x02) > 0  # Bit 0
+            self.RoughingInterlock['Cryopump is running'] = (d['Roughing Interlock'] & 0x04) > 0  # Bit 0
         if 'Stage 2 Temp' in d:
             self.SecondStageTemp = d['Stage 2 Temp']
         if 'Status' in d:
@@ -89,43 +91,23 @@ class ShiMCC_StatusContract:
         elif name == 'Stage 1 Temp':
             val = self.FirstStageTemp
         elif name == 'Cryo Pump Ready State':
-            val = self.CryoPump
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
-        elif name == '':
-            val = self.
+            val = self.CryoPump.copy()
+        elif name == 'Purge Valve State':
+            val = self.PurgeValveState
+        elif name == 'Regen Error':
+            val = self.RegenError
+        elif name == 'Regen Step':
+            val = self.RegenStep
+        elif name == 'Roughing Valve State':
+            val = self.RoughingValveState
+        elif name == 'Roughing Interlock':
+            val = self.RoughingInterlock.copy()
+        elif name == 'Stage 2 Temp':
+            val = self.SecondStageTemp
+        elif name == 'Status':
+            val = self.Status.copy()
+        elif name == 'Tc Pressure':
+            val = self.TcPressure
         else:  # Unknown Value!
             val = None
         self.__Lock.release()
@@ -133,16 +115,16 @@ class ShiMCC_StatusContract:
 
     def getJson(self):
         self.__Lock.acquire()
-        message = ['{"Duty Cycle":%s,' % self.DutyCycle,
-                   '"Temp Stage1":%s,' % self.FirstStageTemp,
-                   '"Cryo Pump Ready State":%s,' % self.CryoPumpRdyState,
-                   '"Purge Valve State":%s,' % self.PurgeValveState,
+        message = ['{"Duty Cycle":%s,' % json.dumps(self.DutyCycle),
+                   '"Stage 1 Temp":%s,' % json.dumps(self.FirstStageTemp),
+                   '"Cryo Pump Ready State":%s,' % json.dumps(self.CryoPump),
+                   '"Purge Valve State":%s,' % json.dumps(self.PurgeValveState),
                    '"Regen Error":%s,' % self.RegenError,
                    '"Regen Step":%s,' % self.RegenStep,
-                   '"Roughing Valve State":%s,' % self.RoughingValveState,
-                   '"Roughing Interlock":%s,' % self.RoughingInterlock,
-                   '"Temp Stage2":%s,' % self.SecondStageTemp,
-                   '"Status":%s,' % self.Status,
-                   '"Tc Pressure":%s}' % self.TcPressure]
+                   '"Roughing Valve State":%s,' % json.dumps(self.RoughingValveState),
+                   '"Roughing Interlock":%s,' % json.dumps(self.RoughingInterlock),
+                   '"Stage 2 Temp":%s,' % json.dumps(self.SecondStageTemp),
+                   '"Status":%s,' % json.dumps(self.Status),
+                   '"Tc Pressure":%s}' % json.dumps(self.TcPressure)]
         self.__Lock.release()
         return ''.join(message)
