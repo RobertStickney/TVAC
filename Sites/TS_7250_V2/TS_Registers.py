@@ -225,6 +225,7 @@ class TS_Registers():
         return (self.pc104.read_byte() << 8) | b  # read ADCFIFO_MSB
 
 # Command lines testing of driver
+# TODO: Remove these lines
 if __name__ == '__main__':
     ts = TS_Registers()
     ts.open_Registers()

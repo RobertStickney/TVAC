@@ -21,7 +21,7 @@ class TsRegistersControlStub(Thread):
         self.ts_reg = TS_Registers()
         self.da_io = PC_104_Instance.getInstance()
         self.adc_period = 0.0125  # adc_clock*8 = 0.1s loop period
-        self.pwm_period = 10  # 30 second pwm period
+        self.pwm_period = 10  # 10 second pwm period
         # self.pwm_min_dc_sec = 1  # minimum Duty Cycle of 1 second
         self.ir_lamp_pwm = []
         self.time_test = time.time()

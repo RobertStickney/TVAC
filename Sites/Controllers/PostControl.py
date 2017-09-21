@@ -7,15 +7,13 @@ from Logging.Logging import Logging
 
 class PostContol:
 
-    def loadProfile(self, data):
+    def loadProfile(self,data):
         profileInstance = ProfileInstance.getInstance()
-        profileInstance.zoneProfiles.update(data,ThreadCollectionInstance)
-        return "{'result':'success'}"
+        return profileInstance.zoneProfiles.loadProfile(data["profile_name"])
 
-    def runProfile(self,data):
-        threadInstance = ThreadCollectionInstance.getInstance()
-        threadInstance.threadCollection.runAllThreads();
-        return "{'result':'success'}"
+    def saveProfile(self, data):
+        profileInstance = ProfileInstance.getInstance()
+        return profileInstance.zoneProfiles.saveProfile(data)
 
     def runSingleProfile(self, data):
         threadInstance = ThreadCollectionInstance.getInstance()
@@ -31,12 +29,6 @@ class PostContol:
         threadInstance = ThreadCollectionInstance.getInstance()
         threadInstance.threadCollection.removePause(data)
         return "{'result':'success'}"
-
-    # def checkTreadStatus(self,data):
-    #     # Why is this a POST and not a GET?
-    #     threadInstance = ThreadCollectionInstance.getInstance()
-    #     threadInstance.threadCollection.checkThreadStatus()
-    #     return "{'result':'success'}"
 
     def holdSingleThread(self, data):
         threadInstance = ThreadCollectionInstance.getInstance()

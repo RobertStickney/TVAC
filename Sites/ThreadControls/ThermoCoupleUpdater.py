@@ -6,6 +6,8 @@ import sys
 
 from Keysight_34980A.Kesight_34980A_TC_Scan import Keysight34980A_TC
 from Collections.HardwareStatusInstance import HardwareStatusInstance
+from Collections.ProfileInstance import ProfileInstance
+
 
 from Logging.Logging import Logging
 
@@ -117,6 +119,7 @@ class ThermoCoupleUpdater(Thread):
                         {"message": "Current TC reading",
                          "time":	TCs['time'],
                          "tcList":	TCs['tcList'],
+                         "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID
                          }
                     )
 
@@ -143,7 +146,7 @@ class ThermoCoupleUpdater(Thread):
                 Logging.logEvent("Debug","Status Update",
                         {"message": "There was a {} error in ThermoCoupleUpdater. File: {}:{}".format(exc_type,fname,exc_tb.tb_lineno),
                          "level":2})
-
+                raise e
                 # If you want to cleanly close things, do it here
                 time.sleep(self.SLEEP_TIME)
                 # raise e

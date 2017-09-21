@@ -1,0 +1,24 @@
+{
+  "profiles": [
+    {
+      "zone": 1,
+      "average": "Max",
+      "thermocouples": [11],
+      "thermalprofiles":
+      [
+        {
+          "thermalsetpoint": 0,
+          "tempgoal": 9.369,
+          "ramp": 0,
+          "soakduration": 30
+        },
+        {
+          "thermalsetpoint": 1,
+          "tempgoal": -25,
+          "ramp": 60,
+          "soakduration": 30
+        }
+      ]
+    }
+  ]
+}

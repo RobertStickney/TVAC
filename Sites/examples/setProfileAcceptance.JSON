@@ -1,0 +1,72 @@
+{
+  "profiles": [
+    {
+      "zone": 1,
+      "average": "Max",
+      "thermocouples": [11],
+      "thermalprofiles":
+      [
+        {
+          "thermalsetpoint": 0,
+          "tempgoal": 23,
+          "ramp": 0,
+          "soakduration": 300
+        },
+        {
+          "thermalsetpoint": 1,
+          "tempgoal": 70,
+          "ramp": 3384,
+          "soakduration": 900
+        },
+        {
+          "thermalsetpoint": 2,
+          "tempgoal": -50,
+          "ramp": 8640,
+          "soakduration": 3600
+        },
+        {
+          "thermalsetpoint": 3,
+          "tempgoal": 150,
+          "ramp": 14400,
+          "soakduration": 600
+        },
+        {
+          "thermalsetpoint": 4,
+          "tempgoal": 23,
+          "ramp": 9144,
+          "soakduration": 600
+        },
+        {
+          "thermalsetpoint": 5,
+          "tempgoal": 37,
+          "ramp": 1008,
+          "soakduration": 600
+        },
+        {
+          "thermalsetpoint": 4,
+          "tempgoal": 23,
+          "ramp": 1008,
+          "soakduration": 600
+        },
+        {
+          "thermalsetpoint": 6,
+          "tempgoal": 37,
+          "ramp": 1008,
+          "soakduration": 600
+        },
+        {
+          "thermalsetpoint": 7,
+          "tempgoal": 23,
+          "ramp": 1008,
+          "soakduration": 600
+        },
+        {
+          "thermalsetpoint": 8,
+          "tempgoal": 37,
+          "ramp": 1008,
+          "soakduration": 600
+        }
+      ]
+    }
+  ]
+}

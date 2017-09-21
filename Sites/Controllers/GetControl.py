@@ -52,3 +52,8 @@ class GetControl:
         pins = HardwareStatusInstance.getInstance().PC_104
         return '{"out":%s,"in":%s}' % (pins.analog_out.getJson(),
                                        pins.analog_in.getJson())
+
+    def runProfile(self):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        result = threadInstance.threadCollection.runProfile();
+        return result

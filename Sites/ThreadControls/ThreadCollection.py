@@ -1,9 +1,14 @@
+import uuid
+
 from ThreadControls.HardWareControlStub import HardWareControlStub
 from ThreadControls.SafetyCheck import SafetyCheck
 from ThreadControls.ThermoCoupleUpdater import ThermoCoupleUpdater
 from ThreadControls.TsRegistersControlStub import TsRegistersControlStub
 from ThreadControls.LN2Updater import LN2Updater
 
+from Collections.ProfileInstance import ProfileInstance
+
+from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
 
 class ThreadCollection:
@@ -13,11 +18,46 @@ class ThreadCollection:
         self.hardwareInterfaceThreadDict = self.createHardwareInterfaces(self)
         self.safetyThread = SafetyCheck(parent=self)
 
-        for thread in self.hardwareInterfaceThreadDict.values():
-            thread.daemon = True
-            thread.start()
-        self.safetyThread.daemon = True
-        self.safetyThread.start()
+        self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
+
+        if not self.zoneProfiles.activeProfile:
+            # TODO: Check if there are any half finished profiles in DB
+            profileName, startTime = self.returnActiveProfile()
+            # If there is one
+            if profileName:
+                self.zoneProfiles.activeProfile = True
+                # load up ram (zone collection) with info from the database and the given start time
+                self.zoneProfiles.loadProfile(profileName,startTime)
+                # after it's in memory, run it!
+                self.runProfile(firstStart = False)
+            else:
+                # If there is an error, it's stored here so return it
+                if startTime:
+                    return startTime
+                #No error
+            # End of If profile found
+        # end if no active profile
+    #end of function 
+
+
+    def returnActiveProfile(self):
+        '''
+        A helper function that will look in the DB to see if there is any half finished profile instances
+        Returns the profile profile_name and Profile ID if there is, False, False if not
+        '''
+        sql = "SELECT profile_name, startTime FROM tvac.Profile_Instance WHERE endTime IS NULL;"
+        mysql = MySQlConnect()
+        try:
+            mysql.cur.execute(sql)
+            mysql.conn.commit()
+        except Exception as e:
+            return False, e
+
+        result = mysql.cur.fetchone()
+        if not result:
+            return False, False
+        return result['profile_name'], result['startTime']
+        
 
 
     def createZoneCollection(self):
@@ -41,33 +81,80 @@ class ThreadCollection:
         # "PfeifferGuage" : ThermoCoupleUpdater()
         "ThermoCoupleUpdater" : ThermoCoupleUpdater(parent=parent),
         # "LN2Updater" : LN2Updater(ThreadCollection=parent)
-        }
+    }
 
 
-    def runAllThreads(self):
+    def addProfileInstancetoBD(self):
+        '''
+        This is a helper function of runProfile that adds the new profile Instance to the DB
+        '''
+
+        coloums = "( profile_name, profile_I_ID )"
+        values = "( \"{}\",\"{}\" )".format(self.zoneProfiles.profileName,self.zoneProfiles.profileUUID)
+        sql = "INSERT INTO tvac.Profile_Instance {} VALUES {};".format(coloums, values)
+        # print(sql)
+        mysql = MySQlConnect()
+        try:
+            mysql.cur.execute(sql)
+            mysql.conn.commit()
+        except Exception as e:
+            return e
+
+        return True
+
+
+    def runProfile(self, firstStart=True):
+        '''
+        This assumes a profile is already loaded in RAM, it will start the profile
+        Also making an entry in the DB
+        '''
+
+        # Check to make sure there is an active profile in memory
+        if not self.zoneProfiles.profileName:
+            return "{'Error':'No Profile loaded in memory'}"
+    
+        if firstStart:
+            result = self.addProfileInstancetoBD()
+            if result != True:
+                return result
+
+        # Starts all the hw threads
+        for thread in self.hardwareInterfaceThreadDict.values():
+            thread.daemon = True
+            thread.start()
+        self.safetyThread.daemon = True
+        self.safetyThread.start()
+
+        # starts all the HWcontrol threads
         for thread in self.zoneThreadDict:
             if self.zoneThreadDict[thread].zoneProfile.zone > 0:
-                if self.zoneThreadDict[thread].handeled:
-                    self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
                 Logging.logEvent("Debug","Status Update", 
                 {"message": "Zone {} is handled, about the start".format(self.zoneThreadDict[thread].zoneProfile.zone),
                  "level":1})
+                self.zoneThreadDict[thread].running = True
                 self.zoneThreadDict[thread].daemon = True
                 self.zoneThreadDict[thread].start()
 
-    def runSingleThread(self,data):
-        thread = data['zone']
-        if self.zoneThreadDict[thread].handeled:
-            self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
-        self.zoneThreadDict[thread].daemon = True
-        self.zoneThreadDict[thread].start()
+        return "{'result':'success'}"
+        
 
-    def checkThreadStatus(self):
-        # Why is this here?
-        for thread in self.zoneThreadDict:
-            isAlive = self.zoneThreadDict[thread].is_alive()
-            handled = self.zoneThreadDict[thread].handeled
-            # print("{} is {} and is {} handled".format(thread, "ALIVE" if isAlive else "DEAD", "NOT" if not handled else ""))
+
+    # TODO: Check to see if we need this?
+    # commenting this out because I don't think we need it
+    # def runSingleThread(self,data):
+    #     thread = data['zone']
+    #     if self.zoneThreadDict[thread].handeled:
+    #         self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
+    #     self.zoneThreadDict[thread].running = True
+    #     self.zoneThreadDict[thread].daemon = True
+    #     self.zoneThreadDict[thread].start()
+
+    # TODO Why is this here?
+    # def checkThreadStatus(self):
+    #     for thread in self.zoneThreadDict:
+    #         isAlive = self.zoneThreadDict[thread].is_alive()
+    #         handled = self.zoneThreadDict[thread].handeled
+    #         # print("{} is {} and is {} handled".format(thread, "ALIVE" if isAlive else "DEAD", "NOT" if not handled else ""))
 
     def pause(self,data):
         thread = data['zone']
@@ -90,6 +177,7 @@ class ThreadCollection:
         self.zoneThreadDict[thread].terminate()
         self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
 
-    def calculateRamp(self,data):
-        thread = data['zone']
-        self.zoneThreadDict[thread].calculateRamp()
+    # TODO Why is this here?
+    # def calculateRamp(self,data):
+    #     thread = data['zone']
+    #     self.zoneThreadDict[thread].calculateRamp()
