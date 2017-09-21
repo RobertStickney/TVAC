@@ -92,24 +92,24 @@ class PfeifferGaugeControlStub(Thread):
 
     def read_all_params(self):
         paramslist = [{'addr': 1,
-                       'CC sw mode': self.Pgauge.GetSwMode(1),
-                       'Software Vir': self.Pgauge.GetSofwareV(1),
                        'Model Name': self.Pgauge.GetModelName(1),
+                       'Software Vir': self.Pgauge.GetSofwareV(1),
+                       'CC sw mode': self.Pgauge.GetSwMode(1),
                        'Pressure SP 1': self.Pgauge.GetSwPressure(1, True),
                        'Pressure SP 2': self.Pgauge.GetSwPressure(1, False),
                        'Pirani Correction': self.Pgauge.GetCorrPir(1),
                        'CC Correction': self.Pgauge.GetCorrCC(1)},
                       {'addr': 2,
-                       'CC sw mode': self.Pgauge.GetSwMode(2),
-                       'Software Vir': self.Pgauge.GetSofwareV(2),
                        'Model Name': self.Pgauge.GetModelName(2),
+                       'Software Vir': self.Pgauge.GetSofwareV(2),
+                       'CC sw mode': self.Pgauge.GetSwMode(2),
                        'Pressure SP 1': self.Pgauge.GetSwPressure(2, True),
                        'Pressure SP 2': self.Pgauge.GetSwPressure(2, False),
                        'Pirani Correction': self.Pgauge.GetCorrPir(2),
                        'CC Correction': self.Pgauge.GetCorrCC(2)},
                       {'addr': 3,
-                       'Software Vir': self.Pgauge.GetSofwareV(3),
                        'Model Name': self.Pgauge.GetModelName(3),
+                       'Software Vir': self.Pgauge.GetSofwareV(3),
                        'Pressure SP 1': self.Pgauge.GetSwPressure(3, True),
                        'Pressure SP 2': self.Pgauge.GetSwPressure(3, False),
                        'Pirani Correction': self.Pgauge.GetCorrPir(3)}]
@@ -122,3 +122,9 @@ if __name__ == '__main__':
     thread = PfeifferGaugeControlStub()
     thread.daemon = True
     thread.start()
+
+    p = PfeifferGaugeInstance.getInstance()
+    while True:
+        time.sleep(2)
+        print(p.gauges.getJson)
+

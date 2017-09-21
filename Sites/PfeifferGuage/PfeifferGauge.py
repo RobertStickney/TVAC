@@ -148,7 +148,7 @@ class PfeifferGauge:
     def GetPressure(self, Address, inTorr=True):  # Pfeifer gauge returns pressure in hPa or Torr
         return self.Convert_Str2Press(self.SendReceive(Address, 740), inTorr)
 
-    def SetPressure(self, Address, inTorr=True):  # Set pressure in hPa or Torr for callibraton.
+    def SetPressure(self, Address, Pressure, inTorr=True):  # Set pressure in hPa or Torr for calibration.
         dataStr = self.Convert_Press2Str(Pressure, inTorr)
         resp = self.SendReceive(Address, 740, dataStr)
         if dataStr != resp:
@@ -157,7 +157,7 @@ class PfeifferGauge:
     def SetPressureSp(self, Address, value):
         if value > 999:
             value = 999
-        elif value < 0
+        elif value < 0:
             value = 0
         dataStr = "{:03d}".format(int(value))
         resp = self.SendReceive(Address, 741, dataStr)
