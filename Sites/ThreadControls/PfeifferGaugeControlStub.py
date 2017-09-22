@@ -61,7 +61,7 @@ class PfeifferGaugeControlStub(Thread):
                                 self.pressure.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
                                                                          'cc on': self.Pgauge.GetCCstate(1)},
                                                              {'addr': 2, 'error': self.Pgauge.GetError(2),
-                                                                         'cc on': self.Pgauge.GetCCstate(3)},
+                                                                         'cc on': self.Pgauge.GetCCstate(2)},
                                                              {'addr': 3, 'error': self.Pgauge.GetError(3)}])
                                 next_param_read_time = time.time() + self.param_period
                         except ValueError as err:
