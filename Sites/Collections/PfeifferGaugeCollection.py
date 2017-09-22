@@ -43,6 +43,7 @@ class PfeifferGaugeCollection:
     def getPG(self, n):
         for pg in self.pfGuageList:
             if pg.GetAddress() == n:
+                print("Address {:d} Found!".format(n))
                 return pg
         raise RuntimeError('Pfeiffer gauge #: %s is out of range' % n)
 
