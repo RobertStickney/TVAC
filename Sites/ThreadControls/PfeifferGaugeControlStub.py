@@ -6,8 +6,7 @@ import os
 
 if __name__ == '__main__':
     import sys
-    print(os.getcwd())
-    sys.path.insert(0, '../')
+    sys.path.insert(0, os.getcwd())
 
 from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
 from PfeifferGuage.PfeifferGauge import PfeifferGauge
@@ -132,5 +131,5 @@ if __name__ == '__main__':
     p = PfeifferGaugeInstance.getInstance()
     while True:
         time.sleep(2)
-        print(p.gauges.getJson)
+        print(p.gauges.getJson())
 
