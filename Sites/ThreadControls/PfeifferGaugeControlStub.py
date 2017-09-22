@@ -6,7 +6,7 @@ import os
 
 if __name__ == '__main__':
     import sys
-    print(os.chdir)
+    print(os.getcwd())
     sys.path.insert(0, '../')
 
 from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
