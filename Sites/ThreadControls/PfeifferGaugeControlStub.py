@@ -3,6 +3,10 @@ import time
 
 import os
 
+if __name__ == '__main__':
+    import sys
+    sys.path.insert(0, '../')
+
 from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
 from PfeifferGuage.PfeifferGauge import PfeifferGauge
 
