@@ -46,7 +46,8 @@ class PfeifferGaugeControlStub(Thread):
 
                 next_param_read_time = time.time()
                 while True:
-                    self.parent.safetyThread.heartbeats["TsRegistersControlStub"] = time.time()
+                    if __name__ != '__main__':
+                        self.parent.safetyThread.heartbeats["TsRegistersControlStub"] = time.time()
                     next_pressure_read_time = time.time() + self.pressure_read_peroid
                     if "root" in userName:
                         try:
@@ -121,8 +122,6 @@ class PfeifferGaugeControlStub(Thread):
         self.pressure.gauges.update(paramslist)
 
 if __name__ == '__main__':
-    import sys
-
     # adding debug info
     if(len(sys.argv)>1):
         for arg in sys.argv:
