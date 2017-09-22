@@ -51,8 +51,8 @@ class PfeifferGaugeControlStub(Thread):
                     if "root" in userName:
                         try:
                             Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Reading and writing with PC 104",
-                                              "level": 5})
+                                             {"message": "Reading and writing with PfeifferGaugeControlStub.",
+                                              "level": 4})
                             self.pressure.gauges.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
                                                          {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
                                                          {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
@@ -123,7 +123,14 @@ class PfeifferGaugeControlStub(Thread):
 if __name__ == '__main__':
     import sys
 
-    sys.path.insert(0, '../')
+    # adding debug info
+    if(len(sys.argv)>1):
+        for arg in sys.argv:
+            if arg.startswith("-v"):
+                Logging.verbos = arg.count("v")
+    Logging.logEvent("Debug","Status Update",
+        {"message": "Debug on: Level {}".format(Logging.verbos),
+         "level":1})
     thread = PfeifferGaugeControlStub()
     thread.daemon = True
     thread.start()
