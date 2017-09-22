@@ -1,3 +1,7 @@
+from Logging.MySql import MySQlConnect
+
+import datetime
+
 class Logging(object):
 	"""
 	Logging is a static class that will take and filter every kind of
@@ -18,11 +22,20 @@ class Logging(object):
 			if "Thread Start" in logType:
 				print("Event- {}: {}".format(logType,data.get("thread")))
 			elif "ThermoCouple Reading" in logType:
-				Logging.logThermoCouples(data)
+				Logging.logLiveTempertureData(data)
+			elif "Expected Temp Update" in logType:
+				Logging.logExpectedTempertureData(data)
 			elif "Thermal Profile Update" in logType:
 				Logging.logThermalProfile(data)
-			else:
-				print("Event- {}: {}".format(logType,data.get("message")))
+
+
+			coloums = "( event_type, details )"
+			values = "( \"{}\",\"{}\" )".format(category,logType)
+			sql = "INSERT INTO tvac.Event {} VALUES {};".format(coloums, values)
+			# print(sql)
+			mysql = MySQlConnect()
+			mysql.cur.execute(sql)
+			mysql.conn.commit()
 		elif category is "Debug":
 			if "Status Update" in logType:
 				Logging.debugPrint(data["level"],data['message'])
@@ -44,15 +57,62 @@ class Logging(object):
 					elif type(dictionary) == type([]):
 						print("{}  {}".format(prefix,entry))
 			else:
-				for line in string.split("\n"):
-					print("{}{}".format(prefix,line))
+				coloums = "( message )"
+				values = "( \"{}\" )".format("{}{}".format(prefix,string))
+				sql = "INSERT INTO tvac.Debug {} VALUES {};".format(coloums, values)
+				# print(sql)
+				mysql = MySQlConnect()
+				try:
+					mysql.cur.execute(sql)
+					mysql.conn.commit()
+				except Exception as e:
+					pass
+				with open('./debugLog.txt','a') as filer:
+					for line in string.split("\n"):
+						filer.write("{}{}".format(prefix,line)+"\n")
+						print("{}{}".format(prefix,line))
 
 	@staticmethod
-	def logThermoCouples(data):
+	def logExpectedTempertureData(data):
+		'''
+		data = {
+	  		 "expected_temp_values": expected_temp_values,
+	         "expected_time_values": expected_time_values,
+	         "Zone"                : self.args[0],
+	         "profileUUID"         : self.zoneProfile.profileUUID,
+		'''
+		expected_temp_values = data["expected_temp_values"]
+		expected_time_values = data["expected_time_values"]
+		zone 				 = data["zone"]
+		profile 			 = data["profileUUID"]
+
+		print("expected_temp_values")
+		coloums = "( profile_I_ID, time, zone, temperture )"
+		values = ""
+		for i in range(len(expected_temp_values)):
+			time = expected_time_values[i]
+			time = datetime.datetime.fromtimestamp(time / 1e3)
+
+			temperture = expected_temp_values[i]
+			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), int(zone[4:]), temperture)
+
+		sql = "INSERT INTO tvac.Expected_Temperture {} VALUES {};".format(coloums, values[:-2])
+
+		mysql = MySQlConnect()
+		try:
+			mysql.cur.execute(sql)
+			mysql.conn.commit()
+		except Exception as e:
+			raise e
+
+
+	@staticmethod
+	def logLiveTempertureData(data):
 		'''
 		data = {
 			"time":		TCs['time'],
 			"tcList":	TCs['tcList'],
+			"ProfileUUID": ProfileUUID,
 		}
 		TCs is a list of dicitations ordered like this....
 		{
@@ -63,16 +123,36 @@ class Logging(object):
 		'alarm': tc_alarm
 		}
 		'''
-		print("LOG: This is the current ThermoCouple Reading")
+		testList = [7,9,10,11,12,91,92,100,105,110,115,120]
+
+		time = data["time"]
+		profile = data["profileUUID"]
+		coloums = "( profile_I_ID, time, thermocouple, temperture )"
+		values = ""
+
 		for tc in data['tcList']:
-			print("LOG: TC: {} == {}(c)".format(tc['Thermocouple'],tc['temp']))
+			thermocouple = tc["Thermocouple"]
+			temperture = tc["temp"]
+
+			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), thermocouple, temperture)
+		sql = "INSERT INTO tvac.Real_Temperture {} VALUES {};".format(coloums, values[:-2])
+		
+		
+		mysql = MySQlConnect()
+		try:
+			mysql.cur.execute(sql)
+			mysql.conn.commit()
+		except Exception as e:
+			raise e
+
 
 	@staticmethod
 	def logThermalProfile(data):
 		'''
 		{
+			"name": "demo"
 			"zone": 1,
-			"average": 1,
+			"average": Maz,
 			"thermocouples": [1, 2, 3, 4, 5],
 			"thermalprofiles":
 			[
@@ -122,13 +202,10 @@ class Logging(object):
 		}
 		'''
 		# Prints are here for testing
-		print("LOG: This is the current ThermalProfile")
-		for zone in data['profiles']:
-			print("LOG: zone {}".format(zone['zone']))
-			print("LOG: thermocouples {}".format(zone['thermocouples']))
-			print("LOG: thermalprofiles...")
-			for setpoint in zone['thermalprofiles']:
-				print("LOG: setpoint: {}".format(setpoint))
+		# print(data["zoneProfile"])
+		# print(data["profileUUID"])
+		# for i in data:
+		# 	print(i)
+		# print("LOG: This is the current ThermalProfile")
 
-        # commenting out while testing
-        # MySQlConnect.pushProfile()
+		

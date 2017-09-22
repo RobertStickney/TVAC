@@ -1,43 +1,39 @@
 import time
 import pymysql
 
+from warnings import filterwarnings
 
 class MySQlConnect:
 
-    @staticmethod
-    def pushProfile():
-        from DataContracts.ProfileInstance import ProfileInstance
-        profile = ProfileInstance.getInstance()
-        conn = pymysql.connect(host='localhost', user='root', passwd='mysql', db='Cryogenics')
-        cur = conn.cursor()
-        sql = "insert into profiles (jdoc,profileUUID) values ('%s','%s');"%(profile.zoneProfiles.getJson(),profile.zoneProfiles.profileUUID)
-        cur.execute(sql)
-        conn.commit()
-        cur.close()
-        conn.close()
 
-    @staticmethod
-    def pushEvent(data):
-        from DataContracts.ProfileInstance import ProfileInstance
-        profile = ProfileInstance.getInstance()
-        conn = pymysql.connect(host='localhost', user='root', passwd='mysql', db='Cryogenics')
-        cur = conn.cursor()
-        sql = "insert into events (jdoc) values ('%s');" % data
+    def __init__(self):
+        user = "tvac_user"
+        host = "localhost"
+        password = "Go2Mars!"
+        database = "tvac"
 
-        cur.execute(sql)
-        conn.commit()
-        cur.close()
-        conn.close()
+        filterwarnings('ignore', category = pymysql.Warning)
+        self.conn = pymysql.connect(host=host, user=user, passwd=password, db=database)
+        self.cur = self.conn.cursor(pymysql.cursors.DictCursor)
 
-    @staticmethod
-    def pushError(data):
-        from DataContracts.ProfileInstance import ProfileInstance
-        profile = ProfileInstance.getInstance()
-        conn = pymysql.connect(host='localhost', user='root', passwd='mysql', db='Cryogenics')
-        cur = conn.cursor()
-        sql = "insert into errors (jdoc) values ('%s');" % data
+        
 
-        cur.execute(sql)
-        conn.commit()
-        cur.close()
-        conn.close()
+if __name__ == '__main__':
+    mysql = MySQlConnect()
+
+
+    sql = "SELECT * FROM tvac.Real_Temperture ORDER BY time DESC LIMIT 1;"
+    # print(sql)
+
+    mysql.cur.execute(sql)
+    mysql.conn.commit()
+
+    # Profile_Instance
+    # print(mysql.cur.fetchone()["profile_I_ID"])
+    profile_I_ID = mysql.cur.fetchone()["profile_I_ID"]
+    sql = "SELECT * FROM tvac.Real_Temperture WHERE profile_I_ID=\"{}\";".format(profile_I_ID)
+
+    mysql.cur.execute(sql)
+    mysql.conn.commit()
+    for row in mysql.cur:
+        print("{},{},{},zone".format(row["time"],row["thermocouple"],row["temperture"]))

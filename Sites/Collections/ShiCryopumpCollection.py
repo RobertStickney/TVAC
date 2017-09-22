@@ -1,8 +1,8 @@
 import threading
 from datetime import datetime
 
-from DataContracts.Shi_MCC_Status_Contract import ShiMCC_StatusContract
-from DataContracts.Shi_MCC_Params_Contract import ShiMCC_ParamsContract
+from DataContracts.Shi_MCC_Status_Contract import Shi_MCC_Status_Contract
+from DataContracts.Shi_MCC_Params_Contract import Shi_MCC_Params_Contract
 from DataContracts.Shi_Compressor_Contract import Shi_Compressor_Contract
 
 from Logging.Logging import Logging

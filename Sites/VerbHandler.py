@@ -5,7 +5,7 @@ import os
 
 from Controllers.PostControl import PostContol
 from Controllers.GetControl import GetControl
-from Collections.ProfileInstance import ProfileInstance
+# from Collections.ProfileInstance import ProfileInstance
 
 from Logging.Logging import Logging
 
@@ -23,16 +23,16 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 {"message": "GET Request Path: {}".format(path),
                  "level":2})
 
-
             # Based on the path we are given, do different functions
             control = GetControl()
             result = {
+                '/runProfile': control.runProfile,
                 '/checkZoneStatus': control.checkTreadStatus,
                 '/getAllThermoCoupleData': control.getAllThermoCoupleData,
                 '/getAllZoneData': control.getAllZoneData,
                 '/getPC104_Digital': control.getPC104_Digital,
                 '/getPC104_Analog': control.getPC104_Analog,
-                '/getLastError' : control.getLastError
+                '/getLastError' : control.getLastError,
             }[path]()
 
             Logging.logEvent("Debug","Status Update",
@@ -40,7 +40,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                  "level":1})
             Logging.logEvent("Debug","Status Update", 
                 {"message": "GET Results: {}".format(result.encode()),
-                 "level":2})
+                 "level":4})
 
             # Out the results back to the server
             self.setHeader()
@@ -64,6 +64,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             self.setHeader()
             output = '{"Error":"%s"}\n'%(e)
             self.wfile.write(output.encode())
+            raise e
 
     def do_POST(self):
         """Respond to a POST request."""
@@ -86,10 +87,9 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             # Based on the path we are given, do different functions
             control = PostContol()
             result = {
-                '/setProfile': control.loadProfile,
-                '/runProfiles': control.runProfile,
+                '/saveProfile': control.saveProfile,
+                '/loadProfile' : control.loadProfile,
                 '/runSingleProfile': control.runSingleProfile,
-                # '/checkZoneStatus': control.checkTreadStatus,
                 '/pauseZone': control.pauseSingleThread,
                 '/pauseRemoveZone': control.removePauseSingleThread,
                 '/holdZone': control.holdSingleThread,
@@ -104,14 +104,12 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 {"message": "Sending POST Results",
                  "level":1})
             Logging.logEvent("Debug","Status Update", 
-                {"message": "POST Results: {}".format(result.encode()),
+                {"message": "POST Results: {}".format(result.replace("\"","'").encode()),
                  "level":2})
 
             self.setHeader()
             self.wfile.write(result.encode())
         except Exception as e:
-            # print("There has been an error")
-            # FileCreation.pushFile("Error","Post",'{"errorMessage":"%s"}\n'%(e))
 
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -142,9 +140,9 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-type", "application/json".encode())
         self.end_headers()
 
-    def displayZones(self):
-        profileInstance = ProfileInstance.getInstance()
-        self.wfile.write(profileInstance.zoneProfiles.getJson().encode())
+    # def displayZones(self):
+    #     profileInstance = ProfileInstance.getInstance()
+    #     self.wfile.write(profileInstance.zoneProfiles.getJson().encode())
 
 
 

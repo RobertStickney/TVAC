@@ -2,7 +2,7 @@ import threading
 import json
 
 
-class ShiMCC_StatusContract:
+class Shi_MCC_Status_Contract:
 
     __Lock = threading.RLock()
 

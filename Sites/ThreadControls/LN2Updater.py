@@ -3,15 +3,12 @@ import os
 import time
 from datetime import datetime
 
-from HouseKeeping.globalVars import debugPrint
-from ThreadControls.ThreadCollection import ThreadCollection
-from DataContracts.AnalogOutContract import AnalogOutContract
-from DataContracts.AnalogInContract import AnalogInContract
+
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 
+from Logging.Logging import Logging
 # used for testing
 import random
-
 
 class LN2Updater(Thread):
     """
@@ -23,45 +20,72 @@ class LN2Updater(Thread):
         if LN2Updater.__instance != None: # correct to carry over from TCU.py?
             raise Exception("This class is a singleton!")
         else:
-            debugPrint(2, "Creating ThermoCoupleUpdater")
+            Logging.logEvent("Debug","Status Update", 
+            {"message": "Creating ThermoCoupleUpdater",
+             "level":2})
             LN2Updater.__instance = self
             self.ThreadCollection = ThreadCollection
-            self.hardwareStatusInstance = HardwareStatusInstance
+            self.hardwareStatus = HardwareStatusInstance
+            self.SLEEP_TIME = 5  # will be 30 seconds
             super(LN2Updater, self).__init__()
 
     def run(self):
         # some start up stuff here
-        SLEEP_TIME = 5  # will be 30 seconds
-        ln2_min = 10  # to be replaced with real value
-        hwStatus = self.hardwareStatusInstance.getInstance()
+        ln2_min = 0  
+        time.sleep(5)
+        # hwStatus = self.hardwareStatus.getInstance()
         userName = os.environ['LOGNAME']
 
-        # Not sure how much of this is relevant... Especially Kesight
-        if "root" in userName:
-            # Hasn't been tested yet
-            AnalogOut = AnalogOutContract.AnalogOutContract()  # todo: better variable name?
+        a_out = self.hardwareStatus.getInstance().PC_104.analog_out  # todo: better variable name?
+        d_out = self.hardwareStatus.getInstance().PC_104.digital_out
+
+        # if "root" in userName:
+        #     # Hasn't been tested yet
 
         # stop when the program ends
         while True:
             if "root" in userName:
-                debugPrint(4, "Pulling live data for LN2") #carry over from TCUpdater - What does this do/is it needed?
+                Logging.debugPrint(4, "Pulling live data for LN2") #carry over from TCUpdater - What does this do/is it needed?
                 # Hasn't been tested yet
                 # LN2Platen = LN2Out.getLN2platen() for now use shroud
-                LN2Shroud = AnalogOut.getLN2shroud()  # is this current LN2 val needed?
+                LN2Shroud = a_out.getLN2shroud()  # is this current LN2 val needed?
             else:
-                debugPrint(4, "Generating test data for TC")
-                # currentTestTemp = hwStatus.Thermocouples.getTC(1).getTemp()
-                dutycyclelist = [self.ThreadCollection.zoneThreadDict["zone1"].dutycycle,
-                                 self.ThreadCollection.zoneThreadDict["zone2"].dutycycle,
-                                 self.ThreadCollection.zoneThreadDict["zone3"].dutycycle,
-                                 self.ThreadCollection.zoneThreadDict["zone4"].dutycycle,
-                                 self.ThreadCollection.zoneThreadDict["zone5"].dutycycle,
-                                 self.ThreadCollection.zoneThreadDict["zone6"].dutycycle,
-                                 self.ThreadCollection.zoneThreadDict["zone7"].dutycycle,
-                                 self.ThreadCollection.zoneThreadDict["zone8"].dutycycle,
-                                 self.ThreadCollection.zoneThreadDict["zone9"].dutycycle]
-                dutycyclemin = min(dutycyclelist)
+                Logging.debugPrint(4, "Generating test data for TC")
 
-                if dutycyclemin < arb_value: # todo: arb_value to be determined
-                    AnalogInContract.update()
+            dutycyclelist = []
+            for zoneStr in self.ThreadCollection.zoneThreadDict:
+                zone = self.ThreadCollection.zoneThreadDict[zoneStr]
+                if zone.running:
+                    # print("Zone {} is {} running".format(zoneStr, "" if zone.running else "not"))
+                    dutycyclelist.append(zone.dutyCycle)
+
+            if dutycyclelist:
+                dutycyclemin = min(dutycyclelist)
+                Logging.debugPrint(4,"Min Duty Cycle: {}".format(dutycyclemin))
+
+                if dutycyclemin < ln2_min: # todo: arb_value to be determined
+                    # throw safety up
+                    Logging.debugPrint(4,"The LN2 should be on")
+                    # What's the difference between this and...
+                    d_out.update({'LN2-S Sol': True, 'LN2-P Sol': True, })
+                    # this
+                    # d_out.update({"LN2-S EN":True})
+                    # d_out.update({"LN2-Sol EN":True})
+
+
+                    # 2500 is the point the valve should be opened too
+                    a_out.update({'LN2 Shroud': 4095, 'LN2 Platen': 4095}) 
+                   
+                else:
+                    Logging.debugPrint(4,"The LN2 should be off")
+                    # What's the difference between this and...
+                    d_out.update({'LN2-S Sol': False, 'LN2-P Sol': False, })
+                    # this
+                    # d_out.update({"LN2-S EN":False})
+                    # d_out.update({"LN2-Sol EN":False})
+
+
+                    # 2500 is the point the valve should be opened too
+                    a_out.update({'LN2 Shroud': 0, 'LN2 Platen': 0})
                     #how to update LN2 (assuming this is in AnalogInContract) --> What is the structure of the dictionary? d['ADC 15'] --> LN@Shroud
+            time.sleep(self.SLEEP_TIME)

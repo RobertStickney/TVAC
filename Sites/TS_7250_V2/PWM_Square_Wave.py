@@ -1,8 +1,7 @@
 #!/usr/bin/env python3.5
 import time
 
-from HouseKeeping.globalVars import debugPrint
-
+from Logging.Logging import Logging
 
 class PWM_Square_Wave:
 

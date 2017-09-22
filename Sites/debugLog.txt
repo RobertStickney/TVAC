@@ -1,0 +1,1498 @@
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 3 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"(1062, 'Duplicate entry 'demoProfile-1' for key 'profile_name'')"
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mThere was a <class 'RuntimeError'> error in Server (GET Handler). File: VerbHandler.py:36
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 3 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 3 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 3 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 3 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 3 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 3 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 3 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 3 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 333.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 323.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"(1062, 'Duplicate entry 'shortProfile-1' for key 'profile_name'')"
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.0
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 0.0
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.34999999999997
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.34999999999997
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mThere was a <class 'AttributeError'> error in ThermoCoupleUpdater. File: ThermoCoupleUpdater.py:63
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.0
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 0.0
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.34999999999997
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.34999999999997
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mThere was a <class 'AttributeError'> error in ThermoCoupleUpdater. File: ThermoCoupleUpdater.py:64
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.0
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 0.0
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.34999999999997
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.34999999999997
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mThere was a <class 'RuntimeError'> error in Server (GET Handler). File: VerbHandler.py:36
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mzone3: Running HW control Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.34999999999997
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.34999999999997
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 58.669999999999995
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.34999999999997
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 310.2725599999999
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.15
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mzone3: Running HW control Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone3
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.15
+  [94mdebug-2: [0mzone3: Temp Goal Temperture is 293.34999999999997
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 293.34999999999997
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.0
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.029314999999999997
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.058629999999999995
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.087945
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.11725999999999999
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.14657499999999998
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.17589
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.20520499999999997
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.23451999999999998
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.263835
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.32246499999999995
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mThere was a <class 'FileNotFoundError'> error in PfeifferGaugeControlStub. File: PfeifferGaugeControlStub.py:37
+  [94mdebug-2: [0m[Errno 2] No such file or directory: '/dev/ttyxuart2'
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.46903999999999996
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mThere was a <class 'FileNotFoundError'> error in PfeifferGaugeControlStub. File: PfeifferGaugeControlStub.py:37
+  [94mdebug-2: [0m[Errno 2] No such file or directory: '/dev/ttyxuart2'
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.52767
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mzone1: Running HW control Thread
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 1.34849
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mzone1: Running HW control Thread
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 1.7589
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 1.7882149999999999
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection

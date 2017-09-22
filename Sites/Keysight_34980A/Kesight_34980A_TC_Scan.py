@@ -32,9 +32,9 @@ class Keysight34980A_TC(Telnet):
         Telnet.open(self, host, port, timeout)
         print(self.read(timeout,True)) ## Chech "telnet_prompt" correctly configured
     
-    def read(self, timeout=1, try_fix_prompt = False):
+    def read(self, timeout=5, try_fix_prompt = False):
         try:
-            responce = self.read_until(self.telnet_prompt.encode(), timeout).decode()
+            responce = self.read_until(self.telnet_prompt.encode(), 5).decode()
         except:
             pass ## TODO: Write excemption handeler to recover from comm errors
         if responce.endswith(self.telnet_prompt):
@@ -49,7 +49,7 @@ class Keysight34980A_TC(Telnet):
                         self.telnet_prompt, responce))
         return responce.strip()
     
-    def send(self, cmd: str, timeout=1, appendLF=True, printR=False):
+    def send(self, cmd: str, timeout=5, appendLF=True, printR=False):
         if appendLF:
             cmd += '\n'
         self.write(cmd.encode())

@@ -14,7 +14,7 @@ class GetControl:
     def getAllThermoCoupleData(self):
         Logging.debugPrint(2, "Calling: getAllThermoCoupleData")  #Todo Change to logEvent()
         hardwareStatusInstance = HardwareStatusInstance.getInstance()
-        json = hardwareStatusInstance.Thermocouples.getJson('C')
+        json = hardwareStatusInstance.Thermocouples.getJson('K')
         # print(json)
         return json
 
@@ -52,3 +52,8 @@ class GetControl:
         pins = HardwareStatusInstance.getInstance().PC_104
         return '{"out":%s,"in":%s}' % (pins.analog_out.getJson(),
                                        pins.analog_in.getJson())
+
+    def runProfile(self):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        result = threadInstance.threadCollection.runProfile();
+        return result

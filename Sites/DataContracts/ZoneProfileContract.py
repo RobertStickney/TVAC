@@ -41,6 +41,7 @@ class ZoneProfileContract:
             self.thermocouples = []
 
         self.zoneUUID = ''
+        self.activeZoneProfile = False
 
     def setThermocouples(self, thermocouples):
         self.__lock.acquire()
@@ -77,6 +78,7 @@ class ZoneProfileContract:
             self.thermalProfiles = self.setThermalProfiles(d['thermalprofiles'])
         if 'thermocouples' in d:
             self.thermocouples = self.setThermocouples(d['thermocouples'])
+        
         self.__lock.release()
 
 

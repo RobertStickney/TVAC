@@ -3,9 +3,9 @@ from threading import Thread
 import time
 
 import os
+import sys
 
 if __name__ == '__main__':
-    import sys
     sys.path.insert(0, os.getcwd())
 
 from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
@@ -25,7 +25,7 @@ class PfeifferGaugeControlStub(Thread):
         self.Pgauge = PfeifferGauge()
         self.pressure = PfeifferGaugeInstance.getInstance()
         self.pressure_read_peroid = 0.5  # 0.5s loop period
-        self.param_period = 5  # 10 second period
+        self.param_period = 10  # 10 second period
 
     def run(self):
         while True:
@@ -38,16 +38,14 @@ class PfeifferGaugeControlStub(Thread):
                                  {"message": "Starting Pfeiffer Guage Control Stub Thread",
                                   "level": 2})
 
-                self.read_all_params()
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
-                    # Root is only in live, might need to change in busy box
-                    pass
+                    self.read_all_params()
+                next_pressure_read_time = time.time() + self.pressure_read_peroid
+                next_param_read_time = time.time() + self.param_period
 
                 next_param_read_time = time.time()
                 while True:
-                    if __name__ != '__main__':
-                        self.parent.safetyThread.heartbeats["TsRegistersControlStub"] = time.time()
                     next_pressure_read_time = time.time() + self.pressure_read_peroid
                     if "root" in userName:
                         try:
@@ -72,6 +70,7 @@ class PfeifferGaugeControlStub(Thread):
                         Logging.logEvent("Debug", "Status Update",
                                          {"message": "Test run of Pfeiffer Guages loop",
                                           "level": 4})
+
                     if time.time() < next_pressure_read_time:
                         time.sleep(next_pressure_read_time - time.time())
 
@@ -93,6 +92,7 @@ class PfeifferGaugeControlStub(Thread):
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
                     pass
+                raise e
                 time.sleep(4)
 
     def read_all_params(self):

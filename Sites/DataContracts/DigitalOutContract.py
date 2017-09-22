@@ -1,6 +1,9 @@
 import threading
 import json
 
+from Logging.Logging import Logging
+
+
 
 class DigitalOutContract:
 
