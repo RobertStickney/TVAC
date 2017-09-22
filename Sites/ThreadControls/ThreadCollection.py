@@ -5,7 +5,9 @@ from ThreadControls.SafetyCheck import SafetyCheck
 from ThreadControls.ThermoCoupleUpdater import ThermoCoupleUpdater
 from ThreadControls.TsRegistersControlStub import TsRegistersControlStub
 from ThreadControls.LN2Updater import LN2Updater
-from ThreadControls.EngineeringInterface import EngineeringInterface
+from ThreadControls.PfeifferGaugeControlStub import PfeifferGaugeControlStub
+from ThreadControls.VacuumControlStub import VacuumControlStub
+
 
 from Collections.ProfileInstance import ProfileInstance
 
@@ -75,12 +77,11 @@ class ThreadCollection:
     def createHardwareInterfaces(self,parent):
         # sending parent for testing, getting current profile data to zone instance
         return {
-        # commented out aren't fully tested
         "TsRegistersControlStub" : TsRegistersControlStub(parent=parent),
-        # "PfeifferGuage" : ThermoCoupleUpdater()
+        "PfeifferGauge" : PfeifferGaugeControlStub(),
         "ThermoCoupleUpdater" : ThermoCoupleUpdater(parent=parent),
-        # "LN2Updater" : LN2Updater(ThreadCollection=parent)
-        "EngineeringInterface": EngineeringInterface()
+        "LN2Updater" : LN2Updater(ThreadCollection=parent)
+        "VacuumControlStub": VacuumControlStub()
     }
 
 

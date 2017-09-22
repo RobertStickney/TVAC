@@ -156,22 +156,21 @@ class AnalogInContract:
 
     def getJson(self):
         self.__Lock.acquire()
-        message = []
-        message.append('{"Cabinet Temp 1":%s,' % self.cabinetTemp1)
-        message.append('"Cabinet Temp 2":%s,' % self.cabinetTemp2)
-        message.append('"Cabinet Temp 3":%s,' % self.cabinetTemp3)
-        message.append('"notUsed1":%s,' % self.notUsed1)
-        message.append('"fs Front Door 1":%s,' % self.fsFrontDoor1)
-        message.append('"fs Front Door 2":%s,' % self.fsFrontDoor2)
-        message.append('"fs Front Door 3":%s,' % self.fsFrontDoor3)
-        message.append('"fs Back Door 1":%s,' % self.fsBackDoor1)
-        message.append('"fs Back Door 2":%s,' % self.fsBackDoor2)
-        message.append('"fs Back Door 3":%s,' % self.fsBackDoor3)
-        message.append('"Rough Pump Temp":%s,' % self.pgRoughTemp)
-        message.append('"pg Chamber":%s,' % self.pgChamber)
-        message.append('"pg Cryo Pump":%s,' % self.pgCryoPump)
-        message.append('"pg Rough Pump":%s,' % self.pgRoughPump)
-        message.append('"LN2 platen":%s,' % self.LN2platen)
-        message.append('"LN2 shroud":%s}' % self.LN2shroud)
+        message = ['{"Cabinet Temp 1":%s,' % self.cabinetTemp1,
+                   '"Cabinet Temp 2":%s,' % self.cabinetTemp2,
+                   '"Cabinet Temp 3":%s,' % self.cabinetTemp3,
+                   '"notUsed1":%s,' % self.notUsed1,
+                   '"fs Front Door 1":%s,' % self.fsFrontDoor1,
+                   '"fs Front Door 2":%s,' % self.fsFrontDoor2,
+                   '"fs Front Door 3":%s,' % self.fsFrontDoor3,
+                   '"fs Back Door 1":%s,' % self.fsBackDoor1,
+                   '"fs Back Door 2":%s,' % self.fsBackDoor2,
+                   '"fs Back Door 3":%s,' % self.fsBackDoor3,
+                   '"Rough Pump Temp":%s,' % self.pgRoughTemp,
+                   '"pg Chamber":%s,' % self.pgChamber,
+                   '"pg Cryo Pump":%s,' % self.pgCryoPump,
+                   '"pg Rough Pump":%s,' % self.pgRoughPump,
+                   '"LN2 platen":%s,' % self.LN2platen,
+                   '"LN2 shroud":%s}' % self.LN2shroud]
         self.__Lock.release()
         return ''.join(message)

@@ -100,12 +100,11 @@ class ZoneProfileContract:
 
     def getJson(self):
         self.__lock.acquire()
-        message = []
-        message.append('{"zone":%s,' % self.zone)
-        message.append('"profileuuid":"%s",' % self.profileUUID)
-        message.append('"average":%s,' % self.average)
-        message.append('"zoneUUID":"%s",' % self.zoneUUID)
-        message.append('"thermalprofiles":[')
+        message = ['{"zone":%s,' % self.zone,
+                   '"profileuuid":"%s",' % self.profileUUID,
+                   '"average":%s,' % self.average,
+                   '"zoneUUID":"%s",' % self.zoneUUID,
+                   '"thermalprofiles":[']
         profileLen = len(self.thermalProfiles)
         count = 0
         for profile in self.thermalProfiles:
@@ -125,6 +124,5 @@ class ZoneProfileContract:
                 count = count + 1
 
         message.append(']}')
-        test = ''.join(message)
         self.__lock.release()
-        return test
+        return ''.join(message)

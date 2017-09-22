@@ -1,6 +1,6 @@
 from Collections.ThermocoupleCollection import ThermocoupleCollection
-# from Collections.PfeifferGuageCollection import PfeifferGuageCollection
-# from Collections.ShiCryopumpCollection import ShiCryopumpCollection
+from Collections.PfeifferGaugeCollection import PfeifferGaugeCollection
+from Collections.ShiCryopumpCollection import ShiCryopumpCollection
 from Collections.PC_104_Instance import PC_104_Instance
 
 from Logging.Logging import Logging
@@ -26,9 +26,9 @@ class HardwareStatusInstance:
                  "level":2})
             self.Thermocouples = ThermocoupleCollection()
             # commented out Weds sep 6, due to merge breaking something
-            # self.PfeifferGuages = PfeifferGuageCollection()
+            self.PfeifferGuages = PfeifferGaugeCollection()
             
-            #self.ShiCryopump = ShiCryopumpCollection()
+            self.ShiCryopump = ShiCryopumpCollection()
 
             self.PC_104 = PC_104_Instance.getInstance()
             HardwareStatusInstance.__instance = self

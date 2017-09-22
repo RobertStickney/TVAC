@@ -1,7 +1,7 @@
 import threading
 
 
-class AnalogOutContract:
+class Shi_Compressor_Contract:
 
     __Lock = threading.RLock()
 
@@ -48,8 +48,9 @@ class AnalogOutContract:
 
     def getJson(self):
         self.__Lock.acquire()
-        message = ['{"notUsed1":%s,' % self.notUsed1,
-                   '"LN2 Platen":%s,' % self.LN2platen,
-                   '"LN2 Shroud":%s}' % self.LN2shroud]
+        message = []
+        message.append('{"notUsed1":%s,' % self.notUsed1)
+        message.append('"LN2 Platen":%s,' % self.LN2platen)
+        message.append('"LN2 Shroud":%s}' % self.LN2shroud)
         self.__Lock.release()
         return ''.join(message)
