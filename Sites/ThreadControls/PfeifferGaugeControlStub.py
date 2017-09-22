@@ -73,7 +73,6 @@ class PfeifferGaugeControlStub(Thread):
                                          {"message": "Test run of Pfeiffer Guages loop",
                                           "level": 4})
                     if time.time() < next_pressure_read_time:
-                        print(next_pressure_read_time - time.time())
                         time.sleep(next_pressure_read_time - time.time())
 
             except Exception as e:
