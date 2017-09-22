@@ -53,11 +53,11 @@ class PfeifferGaugeControlStub(Thread):
                             Logging.logEvent("Debug", "Status Update",
                                              {"message": "Reading and writing with PC 104",
                                               "level": 5})
-                            self.pressure.guages.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
+                            self.pressure.gauges.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
                                                          {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
                                                          {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
                             if time.time() < next_param_read_time:
-                                self.pressure.guages.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
+                                self.pressure.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
                                                                          'cc on': self.Pgauge.GetCCstate(1)},
                                                              {'addr': 2, 'error': self.Pgauge.GetError(2),
                                                                          'cc on': self.Pgauge.GetCCstate(3)},
