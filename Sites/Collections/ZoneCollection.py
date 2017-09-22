@@ -12,7 +12,6 @@ class ZoneCollection:
         self.zoneDict = self.buildCollection()
         self.updatePeriod = 10
         self.profileUUID = uuid.uuid4()
-        self.activeProfile = False
         self.profileName = None
 
     def buildCollection(self):
@@ -44,6 +43,16 @@ class ZoneCollection:
         #     })
 
 
+    def getActiveProfileStatus(self):
+        '''
+        This loops through all the zones in the profile, if they are all inactive it will return False
+        if any of them are active, it returns true
+        '''
+        for zone in self.zoneDict:
+            if self.zoneDict[zone].activeZoneProfile:
+                return True
+        return False
+        
 
     def loadThermoCouples(self, profileName, zone):
         '''
@@ -111,7 +120,7 @@ class ZoneCollection:
         self.profileUUID = uuid.uuid4()
         self.profileName = profileName
         self.startTime = startTime
-        
+
         for result in results:
             zoneProfile = {}
             zoneName = "zone"+str(result['zone'])
@@ -132,6 +141,7 @@ class ZoneCollection:
 
             # After you have all the data on the zone, add it to the instance
             self.zoneDict[zoneName].update(zoneProfile)
+            self.zoneDict[zoneName].activeZoneProfile = True
 
         return "{'result':'success'}"
         
@@ -168,8 +178,6 @@ class ZoneCollection:
             mysql.conn.commit()
         except Exception as e:
             return e
-
-
 
         #Saving the TC as well 
 

@@ -60,79 +60,78 @@ class ThermoCoupleUpdater(Thread):
                     Tharsis.init_sys()
 
                 while True:
-                    if "root" in userName:
-                        Logging.logEvent("Debug","Status Update",
-                        {"message": "Pulling live data for TC",
-                         "level":4})
-                        # Hasn't been tested yet
-                        TCs = Tharsis.getTC_Values()
-                    else:
-                        # We are in a test enviorment, so give it fake data
+                    if ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus():
+                        if "root" in userName:
+                            Logging.logEvent("Debug","Status Update",
+                            {"message": "Pulling live data for TC",
+                             "level":4})
+                            # Hasn't been tested yet
+                            TCs = Tharsis.getTC_Values()
+                        else:
+                            # We are in a test enviorment, so give it fake data
 
-                        Logging.logEvent("Debug","Status Update",
-                        {"message": "Generating test data for TC",
-                         "level":4})
+                            Logging.logEvent("Debug","Status Update",
+                            {"message": "Generating test data for TC",
+                             "level":4})
 
-                        currentTestTemp = self.parent.zoneThreadDict["zone1"].tempGoalTemperature
-                        currentPID = self.parent.zoneThreadDict["zone1"].pid.error_value
-                        # if currentTestTemp < 5:
-                        TCs = {
-                            'time': datetime.now(),
-                            'tcList': [
-                            # (random.uniform(0,10)-5)
-                                {'Thermocouple': 11,'working':True, 'temp':hwStatus.Thermocouples.getTC(11).getTemp() + currentPID + 0}
-                                # {'Thermocouple': 5, 'temp': hwStatus.Thermocouples.getTC(5).getTemp() + 50},
-                                # {'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 50},
-                                # {'Thermocouple': 3, 'temp': hwStatus.Thermocouples.getTC(3).getTemp() - 50,
-                                # 'userDefined':True},
-                                # {'Thermocouple': 4, 'temp': hwStatus.Thermocouples.getTC(4).getTemp() + 50,
-                                # 'userDefined':True},
-                            ]
-                            }
-                        # elif currentTestTemp < 10:
-                        # 	TCs = {
-                        # 		'time': datetime.now(),
-                        # 		'tcList': [
-                        # 			{'Thermocouple': 1,'working':True, 'temp': currentTestTemp + 2},
-                        # 		]
-                        # 	}
-                        # else:
-                        # 	TCs = {
-                        # 		'time': datetime.now(),
-                        # 		'tcList': [
-                        # 			{'Thermocouple': 1,'working':True, 'temp': currentTestTemp},
-                        # 		]
-                        # 	}
+                            currentTestTemp = self.parent.zoneThreadDict["zone1"].tempGoalTemperature
+                            currentPID = self.parent.zoneThreadDict["zone1"].pid.error_value
+                            # if currentTestTemp < 5:
+                            TCs = {
+                                'time': datetime.now(),
+                                'tcList': [
+                                # (random.uniform(0,10)-5)
+                                    {'Thermocouple': 11,'working':True, 'temp':hwStatus.Thermocouples.getTC(11).getTemp() + currentPID + 0}
+                                    # {'Thermocouple': 5, 'temp': hwStatus.Thermocouples.getTC(5).getTemp() + 50},
+                                    # {'Thermocouple': 2, 'temp': hwStatus.Thermocouples.getTC(2).getTemp() + 50},
+                                    # {'Thermocouple': 3, 'temp': hwStatus.Thermocouples.getTC(3).getTemp() - 50,
+                                    # 'userDefined':True},
+                                    # {'Thermocouple': 4, 'temp': hwStatus.Thermocouples.getTC(4).getTemp() + 50,
+                                    # 'userDefined':True},
+                                ]
+                                }
+                            # elif currentTestTemp < 10:
+                            # 	TCs = {
+                            # 		'time': datetime.now(),
+                            # 		'tcList': [
+                            # 			{'Thermocouple': 1,'working':True, 'temp': currentTestTemp + 2},
+                            # 		]
+                            # 	}
+                            # else:
+                            # 	TCs = {
+                            # 		'time': datetime.now(),
+                            # 		'tcList': [
+                            # 			{'Thermocouple': 1,'working':True, 'temp': currentTestTemp},
+                            # 		]
+                            # 	}
 
-                    '''
-                    TCs is a list of dicitations ordered like this....
-                    {
-                    'Thermocouple': tc_num,
-                    'time': tc_time_offset,
-                    'temp': tc_tempK,
-                    'working': tc_working,
-                    'alarm': tc_alarm
-                    }
-                    '''
+                        '''
+                        TCs is a list of dicitations ordered like this....
+                        {
+                        'Thermocouple': tc_num,
+                        'time': tc_time_offset,
+                        'temp': tc_tempK,
+                        'working': tc_working,
+                        'alarm': tc_alarm
+                        }
+                        '''
 
-                    Logging.logEvent("Event","ThermoCouple Reading",
-                        {"message": "Current TC reading",
-                         "time":	TCs['time'],
-                         "tcList":	TCs['tcList'],
-                         "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID
-                         }
-                    )
+                        Logging.logEvent("Event","ThermoCouple Reading",
+                            {"message": "Current TC reading",
+                             "time":	TCs['time'],
+                             "tcList":	TCs['tcList'],
+                             "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID
+                             }
+                        )
 
-                    Logging.logEvent("Debug","Data Dump",
-                        {"message": "Current TC reading",
-                         "level":4,
-                         "dict":TCs['tcList']})
+                        Logging.logEvent("Debug","Data Dump",
+                            {"message": "Current TC reading",
+                             "level":4,
+                             "dict":TCs['tcList']})
 
-                    hwStatus.Thermocouples.update(TCs)
+                        hwStatus.Thermocouples.update(TCs)
 
-                    # Send a heartbeat to the safety Thread
-                    self.parent.safetyThread.heartbeats["ThermoCoupleUpdater"] = time.time()
-                    time.sleep(self.SLEEP_TIME)
+                        time.sleep(self.SLEEP_TIME)
 
             except Exception as e:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -149,7 +148,8 @@ class ThermoCoupleUpdater(Thread):
                 raise e
                 # If you want to cleanly close things, do it here
                 time.sleep(self.SLEEP_TIME)
-                # raise e
-            # end of try/except
+                    # raise e
+                # end of try/except
+            # end of running check
         # end of while True
     # end of run()

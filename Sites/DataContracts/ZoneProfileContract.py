@@ -41,7 +41,7 @@ class ZoneProfileContract:
             self.thermocouples = []
 
         self.zoneUUID = ''
-        self.fresh = True
+        self.activeZoneProfile = False
 
     def setThermocouples(self, thermocouples):
         self.__lock.acquire()

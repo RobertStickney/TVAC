@@ -5,6 +5,7 @@ from ThreadControls.SafetyCheck import SafetyCheck
 from ThreadControls.ThermoCoupleUpdater import ThermoCoupleUpdater
 from ThreadControls.TsRegistersControlStub import TsRegistersControlStub
 from ThreadControls.LN2Updater import LN2Updater
+from ThreadControls.EngineeringInterface import EngineeringInterface
 
 from Collections.ProfileInstance import ProfileInstance
 
@@ -20,12 +21,12 @@ class ThreadCollection:
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
 
-        if not self.zoneProfiles.activeProfile:
-            # TODO: Check if there are any half finished profiles in DB
+        # if there is a half finished profile in the database
+        if not self.zoneProfiles.getActiveProfileStatus():
             profileName, startTime = self.returnActiveProfile()
             # If there is one
             if profileName:
-                self.zoneProfiles.activeProfile = True
+                # self.zoneProfiles.activeProfile = True
                 # load up ram (zone collection) with info from the database and the given start time
                 self.zoneProfiles.loadProfile(profileName,startTime)
                 # after it's in memory, run it!
@@ -58,8 +59,6 @@ class ThreadCollection:
             return False, False
         return result['profile_name'], result['startTime']
         
-
-
     def createZoneCollection(self):
         return {"zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10}),lamps=['IR Lamp 1','IR Lamp 2']),
             "zone2": HardWareControlStub(args=('zone2',),lamps=['IR Lamp 3','IR Lamp 4']),
@@ -81,6 +80,7 @@ class ThreadCollection:
         # "PfeifferGuage" : ThermoCoupleUpdater()
         "ThermoCoupleUpdater" : ThermoCoupleUpdater(parent=parent),
         # "LN2Updater" : LN2Updater(ThreadCollection=parent)
+        "EngineeringInterface": EngineeringInterface()
     }
 
 
@@ -118,22 +118,33 @@ class ThreadCollection:
             if result != True:
                 return result
 
+
+        # TODO: I have no idea where, but when it restarts and loads a profile instance from memory, tkae the uuid and set it
+
         # Starts all the hw threads
-        for thread in self.hardwareInterfaceThreadDict.values():
-            thread.daemon = True
-            thread.start()
-        self.safetyThread.daemon = True
-        self.safetyThread.start()
+        try:
+            for thread in self.hardwareInterfaceThreadDict.values():
+                thread.daemon = True
+                thread.start()
+            self.safetyThread.daemon = True
+            self.safetyThread.start()
+        except Exception as e:
+            pass
+            # if it fails to start, it's fine because they are already started?
+
 
         # starts all the HWcontrol threads
-        for thread in self.zoneThreadDict:
-            if self.zoneThreadDict[thread].zoneProfile.zone > 0:
-                Logging.logEvent("Debug","Status Update", 
-                {"message": "Zone {} is handled, about the start".format(self.zoneThreadDict[thread].zoneProfile.zone),
-                 "level":1})
-                self.zoneThreadDict[thread].running = True
-                self.zoneThreadDict[thread].daemon = True
-                self.zoneThreadDict[thread].start()
+        try:
+            for thread in self.zoneThreadDict:
+                if self.zoneThreadDict[thread].zoneProfile.zone > 0:
+                    self.zoneThreadDict[thread].running = True
+                    self.zoneThreadDict[thread].daemon = True
+                    self.zoneThreadDict[thread].start()
+                    Logging.logEvent("Debug","Status Update", 
+                    {"message": "Zone {} is handled, about the start".format(self.zoneThreadDict[thread].zoneProfile.zone),
+                     "level":1})
+        except Exception as e:
+            pass
 
         return "{'result':'success'}"
         

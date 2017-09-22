@@ -76,8 +76,8 @@ def generateJSON(fileName):
 				setpoints.append(tempSetpoint)
 
 				if i > 0:
-					rampRatePerMin = (float(oldGoalTemp) + float(goalTemp))/float(rampTime) * 60
-					if rampRatePerMin > 1.2:
+					rampRatePerMin = (float(oldGoalTemp) - float(goalTemp))/float(rampTime) * 60
+					if abs(rampRatePerMin) > 1.2:
 						popupError("Zone {}, Setpoint {} has ramp rate over 1.2 C per minute. ({}c/min)".format(zone, setPoint, rampRatePerMin))
 				i += 1
 	except (OSError) as e:

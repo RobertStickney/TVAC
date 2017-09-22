@@ -11,6 +11,7 @@ from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from PID.PID import PID
 
+from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
 
 
@@ -105,12 +106,6 @@ class HardWareControlStub(Thread):
             currentTemp = goalTemp
         # end of for loop, end generating outputs
 
-        Logging.logEvent("Event","Expected Temp Update",
-        {"expected_temp_values": expected_temp_values,
-         "expected_time_values": expected_time_values,
-         "zone"                : self.args[0],
-         "profileUUID"         : self.zoneProfile.profileUUID,
-        })
 
         return expected_temp_values, expected_time_values
 
@@ -147,6 +142,7 @@ class HardWareControlStub(Thread):
 
 
     def run(self):
+        # TODO: You can't run more than one test, it will need to updated a bit to make that work
         # Always run this thread
         while True:
             if self.running:
@@ -201,9 +197,12 @@ class HardWareControlStub(Thread):
 
                             if len(self.expected_time_values) <= 0:
                                 break
+                        # print(self.expected_time_values[0])
                         # With the temp goal tempurture picked, make the duty cycle 
                         self.updateDutyCycle()
 
+                        if len(self.expected_time_values) <= 0:
+                            break
                         # sleep until the next time around
                         time.sleep(self.updatePeriod)
                     # end of inner while True
@@ -218,7 +217,9 @@ class HardWareControlStub(Thread):
                     Logging.logEvent("Event","End Profile", 
                         {'time': datetime.time()})
 
+                    self.updateDBwithEndTime()
                     self.running = False
+                    self.zoneProfile.activeZoneProfile = False
                 except Exception as e:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -226,17 +227,29 @@ class HardWareControlStub(Thread):
 
                     # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
                     self.running = False
+                    ProfileInstance.getInstance().zoneProfiles.activeProfile = False
                     raise e
                 # end of try, catch
             # end of running check
         # end of outter while True
     # end of run()
 
+    def updateDBwithEndTime(self):
+        sql = "update tvac.Profile_Instance set endTime=\"{}\" where endTime is null;".format(datetime.datetime.fromtimestamp(time.time() / 1e3))
+
+        mysql = MySQlConnect()
+        try:
+            mysql.cur.execute(sql)
+            mysql.conn.commit()
+        except Exception as e:
+            raise e
+
     def updateDutyCycle(self):
         '''
         Given that temp_temperture is assigned to a value, this will 
         update the duty cycle for the lamps
         '''
+
         Logging.logEvent("Debug","Status Update", 
             {"message": "{}: Temp Goal Temperture is {}".format(self.args[0],self.temp_temperture),
             "level":2})
@@ -248,6 +261,13 @@ class HardWareControlStub(Thread):
         # TODO: pick what lamp you want to use
         self.d_out.update({self.lamps[1] + " PWM DC": self.dutyCycle})
         self.d_out.update({self.lamps[0] + " PWM DC": self.dutyCycle})
+
+        Logging.logEvent("Event","Expected Temp Update",
+        {"expected_temp_values": [self.temp_temperture],
+         "expected_time_values": [time.time()],
+         "zone"                : self.args[0],
+         "profileUUID"         : self.zoneProfile.profileUUID,
+        })
 
 
 
