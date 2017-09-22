@@ -39,15 +39,15 @@ class PfeifferGaugeControlStub(Thread):
                                   "level": 2})
 
                 self.read_all_params()
-                next_pressure_read_time = time.time() + self.pressure_read_peroid
-                next_param_read_time = time.time() + self.param_period
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
                     # Root is only in live, might need to change in busy box
                     pass
 
+                next_param_read_time = time.time()
                 while True:
                     self.parent.safetyThread.heartbeats["TsRegistersControlStub"] = time.time()
+                    next_pressure_read_time = time.time() + self.pressure_read_peroid
                     if "root" in userName:
                         try:
                             Logging.logEvent("Debug", "Status Update",
@@ -56,7 +56,7 @@ class PfeifferGaugeControlStub(Thread):
                             self.pressure.gauges.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
                                                          {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
                                                          {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
-                            if time.time() < next_param_read_time:
+                            if time.time() > next_param_read_time:
                                 self.pressure.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
                                                                          'cc on': self.Pgauge.GetCCstate(1)},
                                                              {'addr': 2, 'error': self.Pgauge.GetError(2),
@@ -72,8 +72,8 @@ class PfeifferGaugeControlStub(Thread):
                                          {"message": "Test run of Pfeiffer Guages loop",
                                           "level": 4})
                     if time.time() < next_pressure_read_time:
+                        print(next_pressure_read_time - time.time())
                         time.sleep(next_pressure_read_time - time.time())
-                        next_pressure_read_time = time.time() + self.pressure_read_peroid
 
             except Exception as e:
                 # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
