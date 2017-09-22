@@ -118,7 +118,6 @@ class PfeifferGaugeControlStub(Thread):
                        'Pressure SP 1': self.Pgauge.GetSwPressure(3, True),
                        'Pressure SP 2': self.Pgauge.GetSwPressure(3, False),
                        'Pirani Correction': self.Pgauge.GetCorrPir(3)}]
-        print(paramslist)
         self.pressure.gauges.update(paramslist)
 
 if __name__ == '__main__':
