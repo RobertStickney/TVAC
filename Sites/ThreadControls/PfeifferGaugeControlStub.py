@@ -1,8 +1,12 @@
+#!/usr/bin/env python3.5
 from threading import Thread
 import time
 
 import os
 import sys
+
+if __name__ == '__main__':
+    sys.path.insert(0, os.getcwd())
 
 from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
 from PfeifferGuage.PfeifferGauge import PfeifferGauge
@@ -33,26 +37,29 @@ class PfeifferGaugeControlStub(Thread):
                 Logging.logEvent("Debug", "Status Update",
                                  {"message": "Starting Pfeiffer Guage Control Stub Thread",
                                   "level": 2})
+
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
-                  self.read_all_params()
+                    self.read_all_params()
                 next_pressure_read_time = time.time() + self.pressure_read_peroid
                 next_param_read_time = time.time() + self.param_period
 
+                next_param_read_time = time.time()
                 while True:
+                    next_pressure_read_time = time.time() + self.pressure_read_peroid
                     if "root" in userName:
                         try:
                             Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Reading and writing with PC 104",
-                                              "level": 5})
-                            self.pressure.guages.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
+                                             {"message": "Reading and writing with PfeifferGaugeControlStub.",
+                                              "level": 4})
+                            self.pressure.gauges.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
                                                          {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
                                                          {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
-                            if time.time() < next_param_read_time:
-                                self.pressure.guages.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
+                            if time.time() > next_param_read_time:
+                                self.pressure.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
                                                                          'cc on': self.Pgauge.GetCCstate(1)},
                                                              {'addr': 2, 'error': self.Pgauge.GetError(2),
-                                                                         'cc on': self.Pgauge.GetCCstate(3)},
+                                                                         'cc on': self.Pgauge.GetCCstate(2)},
                                                              {'addr': 3, 'error': self.Pgauge.GetError(3)}])
                                 next_param_read_time = time.time() + self.param_period
                         except ValueError as err:
@@ -66,7 +73,6 @@ class PfeifferGaugeControlStub(Thread):
 
                     if time.time() < next_pressure_read_time:
                         time.sleep(next_pressure_read_time - time.time())
-                        next_pressure_read_time = time.time() + self.pressure_read_peroid
 
             except Exception as e:
                 # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
@@ -91,33 +97,44 @@ class PfeifferGaugeControlStub(Thread):
 
     def read_all_params(self):
         paramslist = [{'addr': 1,
-                       'CC sw mode': self.Pgauge.GetSwMode(1),
-                       'Software Vir': self.Pgauge.GetSofwareV(1),
                        'Model Name': self.Pgauge.GetModelName(1),
+                       'Software Vir': self.Pgauge.GetSofwareV(1),
+                       'CC sw mode': self.Pgauge.GetSwMode(1),
                        'Pressure SP 1': self.Pgauge.GetSwPressure(1, True),
                        'Pressure SP 2': self.Pgauge.GetSwPressure(1, False),
                        'Pirani Correction': self.Pgauge.GetCorrPir(1),
                        'CC Correction': self.Pgauge.GetCorrCC(1)},
                       {'addr': 2,
-                       'CC sw mode': self.Pgauge.GetSwMode(2),
-                       'Software Vir': self.Pgauge.GetSofwareV(2),
                        'Model Name': self.Pgauge.GetModelName(2),
+                       'Software Vir': self.Pgauge.GetSofwareV(2),
+                       'CC sw mode': self.Pgauge.GetSwMode(2),
                        'Pressure SP 1': self.Pgauge.GetSwPressure(2, True),
                        'Pressure SP 2': self.Pgauge.GetSwPressure(2, False),
                        'Pirani Correction': self.Pgauge.GetCorrPir(2),
                        'CC Correction': self.Pgauge.GetCorrCC(2)},
                       {'addr': 3,
-                       'Software Vir': self.Pgauge.GetSofwareV(3),
                        'Model Name': self.Pgauge.GetModelName(3),
+                       'Software Vir': self.Pgauge.GetSofwareV(3),
                        'Pressure SP 1': self.Pgauge.GetSwPressure(3, True),
                        'Pressure SP 2': self.Pgauge.GetSwPressure(3, False),
                        'Pirani Correction': self.Pgauge.GetCorrPir(3)}]
-        self.pressure.guages.update(paramslist)
+        self.pressure.gauges.update(paramslist)
 
 if __name__ == '__main__':
-    import sys
-
-    sys.path.insert(0, '../')
+    # adding debug info
+    if(len(sys.argv)>1):
+        for arg in sys.argv:
+            if arg.startswith("-v"):
+                Logging.verbos = arg.count("v")
+    Logging.logEvent("Debug","Status Update",
+        {"message": "Debug on: Level {}".format(Logging.verbos),
+         "level":1})
     thread = PfeifferGaugeControlStub()
     thread.daemon = True
     thread.start()
+
+    p = PfeifferGaugeInstance.getInstance()
+    while True:
+        time.sleep(2)
+        print(p.gauges.getJson())
+

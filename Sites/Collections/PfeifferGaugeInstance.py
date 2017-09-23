@@ -25,7 +25,7 @@ class PfeifferGaugeInstance:
             raise Exception("This class is a singleton!")
         else:
             Logging.logEvent("Debug","Status Update", 
-                {"message": "Creating PC_104_Instance",
+                {"message": "Creating PfeifferGaugeInstance",
                  "level":2})
             self.gauges = PfeifferGaugeCollection()
             PfeifferGaugeInstance.__instance = self

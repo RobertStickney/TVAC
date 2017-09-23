@@ -148,7 +148,7 @@ class PfeifferGauge:
     def GetPressure(self, Address, inTorr=True):  # Pfeifer gauge returns pressure in hPa or Torr
         return self.Convert_Str2Press(self.SendReceive(Address, 740), inTorr)
 
-    def SetPressure(self, Address, inTorr=True):  # Set pressure in hPa or Torr for callibraton.
+    def SetPressure(self, Address, Pressure, inTorr=True):  # Set pressure in hPa or Torr for calibration.
         dataStr = self.Convert_Press2Str(Pressure, inTorr)
         resp = self.SendReceive(Address, 740, dataStr)
         if dataStr != resp:
@@ -190,3 +190,12 @@ class PfeifferGauge:
         if dataStr != resp:
             raise  ValueError("Error Setting Cold Cathode Correction Value. Sent: '{}'; Resp: '{}'".format(dataStr,resp))
 
+if __name__ == '__main__':
+    import sys
+
+    sys.path.insert(0, '../')
+    pg = PfeifferGauge()
+    for i in range(1, 3+1):
+        print("Addr {:d}, {}, Pressure: {:f} torr.".format(i,
+                                                           pg.GetModelName(i),
+                                                           pg.GetPressure(i)))
