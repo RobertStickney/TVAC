@@ -1,4 +1,4 @@
-#import json
+import json
 import time
 
 
@@ -110,7 +110,7 @@ class ShiMcc:
             er |= val['Error']
             pf |= val['PowerFailure']
             vals[key] = val['Data']
-        return self.Format_Responce(json.dumps(vals), er, pf)
+        return self.Format_Responce(vals, er, pf)
 
     # MCC Programmers References Guide Rev C
 

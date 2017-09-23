@@ -15,28 +15,30 @@ class ShiCryopumpCollection:
         Logging.logEvent("Debug","Status Update",
                 {"message": "Creating ThermocoupleCollection",
                  "level": 2})
-        self.pfGuageList = self.buildCollection(addr_locations)
+        self.mcc_status = Shi_MCC_Status_Contract()
+        self.mcc_params = Shi_MCC_Params_Contract()
+        self.compressor = Shi_Compressor_Contract()
         self.time = datetime.now()
 
     def update(self, d):
         self.__lock.acquire()
         self.time = datetime.now()
         self.__lock.release()
-        for updatePG in d['pgList']:
-            tc = self.getPG(updatePG['PG'])
-            tc.update(updatePG)
+        if 'MCC Status' in d:
+            self.mcc_status.update(d['MCC Status'])
+        if 'MCC Params' in d:
+            self.mcc_params.update(d['MCC Params'])
+        if 'Compressor' in d:
+            self.compressor.update(d['Compressor'])
 
-    def getPG(self, n):
-        for pg in self.pfGuageList:
-            if pg.GetAddress() == n:
-                return pg
-        raise RuntimeError('Thermocouple #: %s is out of range' % n)
+    def get_mcc_status(self, name):
+        return self.mcc_status.getVal(name)
 
-    def buildCollection(self, addr_locations):
-        guages = []
-        for a_l in addr_locations:
-            guages.append(PfeifferGuageContract(a_l['addr'], a_l['loc']))
-        return guages
+    def get_mcc_params(self, name):
+        return self.mcc_params.getVal(name)
+
+    def get_compressor(self, name):
+        return self.compressor.getVal(name)
 
     def getJson(self, temp_units = 'K', whichTCs = 'all'):
         # temp_units values: ['K', 'C', 'F']
@@ -45,6 +47,7 @@ class ShiCryopumpCollection:
         self.__lock.acquire()
         message.append('{"time":%s,' % self.time)
         self.__lock.release()
-        message.append('PGs:[%s]' %','.join([pg.getJson() for pg in self.pfGuageList]))
-        message.append('}')
+        message.append('"MCC Status":%s,' % self.mcc_status.getJson())
+        message.append('"MCC Params":%s,' % self.mcc_params.getJson())
+        message.append('"Compressor":%s}' % self.compressor.getJson())
         return ''.join(message)

@@ -25,7 +25,7 @@ class PfeifferGaugeControlStub(Thread):
         self.Pgauge = PfeifferGauge()
         self.pressure = PfeifferGaugeInstance.getInstance()
         self.pressure_read_peroid = 0.5  # 0.5s loop period
-        self.param_period = 10  # 10 second period
+        self.param_period = 5  # 5 second period
 
     def run(self):
         while True:
@@ -41,9 +41,6 @@ class PfeifferGaugeControlStub(Thread):
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
                     self.read_all_params()
-                next_pressure_read_time = time.time() + self.pressure_read_peroid
-                next_param_read_time = time.time() + self.param_period
-
                 next_param_read_time = time.time()
                 while True:
                     next_pressure_read_time = time.time() + self.pressure_read_peroid
@@ -63,9 +60,14 @@ class PfeifferGaugeControlStub(Thread):
                                                              {'addr': 3, 'error': self.Pgauge.GetError(3)}])
                                 next_param_read_time = time.time() + self.param_period
                         except ValueError as err:
-                            Logging.logEvent("Debug", "Status Update",
-                                             {"message": 'Error in PfeifferGaugeControlStub reading values: "%s"' % err,
-                                              "level": 2})
+                            exc_type, exc_obj, exc_tb = sys.exc_info()
+                            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                            Logging.logEvent("Error", 'Error in PfeifferGaugeControlStub reading values: "%s"' % err,
+                                             {"type": exc_type,
+                                              "filename": fname,
+                                              "line": exc_tb.tb_lineno,
+                                              "thread": "PfeifferGaugeControlStub"
+                                              })
                     else:
                         Logging.logEvent("Debug", "Status Update",
                                          {"message": "Test run of Pfeiffer Guages loop",
