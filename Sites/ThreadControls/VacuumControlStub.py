@@ -8,6 +8,7 @@ import os
 
 
 from Collections.ProfileInstance import ProfileInstance
+from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from PID.PID import PID
 
@@ -33,50 +34,77 @@ class HardWareControlStub(Thread):
         self.kwargs = kwargs
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
-        # self.zoneProfile = self.zoneProfiles.getZone(self.args[0])
-        # self.updatePeriod = self.zoneProfiles.updatePeriod
-        # self.d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
+        self.gauges = PfeifferGaugeInstance.getInstance().gauges
+        self.state = None
 
-
-
-        self.tempGoalTemperature = 0
-        self.pid = PID()
-
-        self.maxTempRisePerMin = 10
-        self.maxTempRisePerUpdate = (self.maxTempRisePerMin/60)*self.updatePeriod
 
 
 
     def run(self):
-        # TODO: You can't run more than one test, it will need to updated a bit to make that work
         # Always run this thread
         while True:
             if self.zoneProfiles.activeProfile:
+                # With an active profile, we start putting the system under pressure
                 try:
                     Logging.logEvent("Debug","Status Update", 
                     {"message": "{}: Running HW control Thread".format(self.args[0]),
                      "level":2})
          
-                    Logging.logEvent("Event","Start Profile", 
-                        {'time': datetime.time()})
-
                     # Setup code is here
+                    if self.state:
+                        self.oldState = self.state
+
                     # connection to the MCC
+                    # JK, it's already done in the MCC control stub
+
                     # Reading of pressure gauges, to figure out where the system is
+
+                    # When you know what the pressure is, you know what to do go get into pressure
+                    self.cryoPumpPressure = self.gauges.get_pressure_cryopump()
+                    self.chamberPressure = self.gauges.get_pressure_chamber()
+                    self.roughPumpPressure = self.gauges.get_pressure_roughpump()
+                    # TODO: Is this pressure result in torr?
+
                     # learning from Zoneprofiles what vacuum state the system needs to be in
+                    # If it's here, you want the vacuum to be on
+                    
                     # calculations to get from here to there
+                    if self.chamberPressure > 300: #torr?
+                        # use the roughing pump to achive Rough vacuum
+                        # Wait until 0.0.041 tor
+                        self.state = "Atmosphere"
+                    if self.chamberPressure < 0.041 and self.roughPumpPressure < self.cryoPumpPressure:
+                        # open Cryopump-Roughing gate valve
+                        # Alert the user they should close o-ring seal 
+                        # Wait until 0.005 tor
+                        self.state = "Rough Cacuum"
+                    if self.chamberPressure < 0.005: #torr?
+                        # Use CryoPump to achive Cryo Vacuum
+                        # Start the cryopump
+                        # Close the rough gate valve
+                        # Open the cryopump gate valve
+                        # Wait until 10e-6 tor
+                        self.state = "Cryo Vacuum"
+                    if self.chamberPressure < 0.00001: #torr?
+                        # Wait for nothing, either the program will end, or be stopped by the safety checker
+                        self.state = "Operational Vacuum"
 
-                    # Program loop is here
-                    while True:
+                        
 
-                        # Reading of pressure gauges
-                        # switch case (ish thing) saying what you need to do to get to the point you need to be at
-                        # Makin sure this still needs to be running (is there an active profile)
+                    result = {
+                        'Atmosphere': self.atmosphere,
+                        'Rough Vacuum': self.roughVacuum,
+                        'Cryo Vacuum': self.cryoVacuum,
+                        'Operational Vacuum': self.operationalVacuum,
+                    }[self.state]()
 
-                        # sleep until the next time around
-                        time.sleep(self.updatePeriod)
-                    # end of inner while True
-                    # end of test
+
+                    # switch case (ish thing) saying what you need to do to get to the point you need to be at
+                    # Makin sure this still needs to be running (is there an active profile)
+
+                    # sleep until the next time around
+                    time.sleep(self.updatePeriod)
+
 
                     # TODO: Is there some safe way of taking the chamber out of vacuum?
                 except Exception as e:
@@ -93,4 +121,32 @@ class HardWareControlStub(Thread):
             # end of running check
         # end of outter while True
     # end of run()
+
+    def atmosphere(self):
+        '''
+        It enters this state everytime you are at atmosphere pressure
+        '''
+        # TODO: Read coldwater value from Compressor
+        if self.oldState != self.state:
+            # The system has just crossed over to a new point
+
+            # Close Cryopump gate Valve 
+            # Turn on Roughing Pump
+            # Open roughing pump valve
+
+    def roughVacuum(self):
+        if self.oldState != self.state:
+            # The system has just crossed over to a new point
+            pass
+        pass
+    def cryoVacuum(self):
+        if self.oldState != self.state:
+            # The system has just crossed over to a new point
+            pass
+        pass
+    def operationalVacuum(self):
+        if self.oldState != self.state:
+            # The system has just crossed over to a new point
+            pass
+        pass
 
