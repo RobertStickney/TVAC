@@ -11,7 +11,7 @@ class ShiCryopumpCollection:
 
     __lock = threading.RLock()
 
-    def __init__(self, addr_locations):
+    def __init__(self):
         Logging.logEvent("Debug","Status Update",
                 {"message": "Creating ThermocoupleCollection",
                  "level": 2})

@@ -11,13 +11,13 @@ from Collections.ProfileInstance import ProfileInstance
 from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from PID.PID import PID
-from Shi_Cryo_Pump.Shi_Mcc import ShiMcc
+from Shi_Cryo_Pump.Shi_Mcc import Shi_Mcc
 
 from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
 
 
-class HardWareControlStub(Thread):
+class VacuumControlStub(Thread):
     '''
     This class contains the main inteligences for getting and keeping the test chaber under vacuum,
     '''
@@ -26,7 +26,7 @@ class HardWareControlStub(Thread):
                  args=(), kwargs=None, verbose=None):
 
         Logging.logEvent("Debug","Status Update", 
-        {"message": "Creating HardWareControlStub: {}".format(args[0]),
+        {"message": "Creating VacuumControlStub: {}",
          "level":3})
 
         Thread.__init__(self, group=group, target=target, name=name)
@@ -35,9 +35,13 @@ class HardWareControlStub(Thread):
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.gauges = PfeifferGaugeInstance.getInstance().gauges
+        self.hwStatus = HardwareStatusInstance.getInstance()
         self.state = None
+        self.oldState = True
 
-        self.ShiMcc = ShiMcc()
+        self.ShiMcc = Shi_Mcc()
+
+        self.updatePeriod = 2
 
 
 
@@ -45,11 +49,11 @@ class HardWareControlStub(Thread):
     def run(self):
         # Always run this thread
         while True:
-            if self.zoneProfiles.activeProfile:
+            if self.hwStatus.vacuum:
                 # With an active profile, we start putting the system under pressure
                 try:
                     Logging.logEvent("Debug","Status Update", 
-                    {"message": "{}: Running HW control Thread".format(self.args[0]),
+                    {"message": "{}: Running Vacuum Control Stub",
                      "level":2})
          
                     # Setup code is here
@@ -70,6 +74,10 @@ class HardWareControlStub(Thread):
                     # learning from Zoneprofiles what vacuum state the system needs to be in
                     # If it's here, you want the vacuum to be on
                     
+                    Logging.logEvent("Debug","Status Update", 
+                    {"message": "Current chamber pressure: {}".format(self.chamberPressure),
+                     "level":2})
+
                     # calculations to get from here to there
                     if self.chamberPressure > 300: #torr?
                         # use the roughing pump to achive Rough vacuum
@@ -83,7 +91,7 @@ class HardWareControlStub(Thread):
                         # Alert the user they should close o-ring seal 
                         # Start the cryopump
                         self.state = "Cryo Vacuum"
-                    if self.chamberPressure < 0.005 and self.ShiMcc.Get_SecondStageTemp() < 15: #torr?
+                    if self.chamberPressure < 0.005 and self.ShiMcc.Get_SecondStageTemp()['data'] < 15: #torr?
                         # Close the rough gate valve
                         # Open the cryopump gate valve
                         # Wait until 10e-6 tor
@@ -92,7 +100,9 @@ class HardWareControlStub(Thread):
                         # Wait for nothing, either the program will end, or be stopped by the safety checker
                         self.state = "Operational Vacuum"
 
-                        
+                    Logging.logEvent("Debug","Status Update", 
+                    {"message": "Current chamber state: {}".format(self.state),
+                     "level":2})
 
                     result = {
                         'Atmosphere': self.atmosphere,
@@ -113,9 +123,9 @@ class HardWareControlStub(Thread):
                     # TODO: Is there some safe way of taking the chamber out of vacuum?
                 except Exception as e:
 
-                    # exc_type, exc_obj, exc_tb = sys.exc_info()
-                    # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                    # print("Error: {} in file {}:{}".format(exc_type, fname, exc_tb.tb_lineno))
+                    exc_type, exc_obj, exc_tb = sys.exc_info()
+                    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                    print("Error: {} in file {}:{}".format(exc_type, fname, exc_tb.tb_lineno))
 
                     # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
                     self.running = False
@@ -132,19 +142,23 @@ class HardWareControlStub(Thread):
         '''
         if self.oldState != self.state:
             # The system has just crossed over to a new point
+            userName = os.environ['LOGNAME']
+            if "root" in userName:
+                # TODO: Read coldwater value from Compressor
+        
+                # Close Cryopump gate Valve 
+                # I can't find cryopump, but I found this?
+                self.ShiMcc.Close_PurgeValve() #line 237 Shi_MCC.py
 
-            # TODO: Read coldwater value from Compressor
-    
-            # Close Cryopump gate Valve 
-            # I can't find cryopump, but I found this?
-            self.ShiMcc.Close_PurgeValve() #line 237 Shi_MCC.py
+                # Turn on Roughing Pump
+                # TODO: Can you turn the roughing pump on via Shi_mcc.py? of Software??
+                # Do we send an alart to the user, if they need to do this phycisally?
 
-            # Turn on Roughing Pump
-            # TODO: Can you turn the roughing pump on via Shi_mcc.py? of Software??
-            # Do we send an alart to the user, if they need to do this phycisally?
+                # Open roughing pump valve
+                self.ShiMcc.Open_RoughingValve() #line 407 Shi_MCC.py
+            else:
+                print("in Atomo")
 
-            # Open roughing pump valve
-            self.ShiMcc.Open_RoughingValve() #line 407 Shi_MCC.py
 
     def roughVacuum(self):
         '''
@@ -152,10 +166,13 @@ class HardWareControlStub(Thread):
         '''
         if self.oldState != self.state:
             # The system has just crossed over to a new point
-
-            # open Cryopump-Roughing gate valve
-            # TODO: What command is this in Shi_Mcc.py
-            pass
+            userName = os.environ['LOGNAME']
+            if "root" in userName:
+                # open Cryopump-Roughing gate valve
+                # TODO: What command is this in Shi_Mcc.py
+                pass
+            else:
+                print("in rough vacuum")
 
 
     def cryoVacuum(self):
@@ -164,11 +181,14 @@ class HardWareControlStub(Thread):
         '''
         if self.oldState != self.state:
             # The system has just crossed over to a new point
-            
-            #TODO: Alert the user they should close o-ring seal 
+            userName = os.environ['LOGNAME']
+            if "root" in userName:
+                #TODO: Alert the user they should close o-ring seal 
 
-            #TODO: starts the cryopump
-            self.ShiMcc.Turn_CryoPumpOn() #line 220 ShiMcc.py
+                #TODO: starts the cryopump
+                self.ShiMcc.Turn_CryoPumpOn() #line 220 ShiMcc.py
+            else:
+                print("In Cryo Vacuum")
 
     def strongCryoVacuum(self):
         '''
@@ -176,18 +196,22 @@ class HardWareControlStub(Thread):
         '''
         if self.oldState != self.state:
             # The system has just crossed over to a new point
+            userName = os.environ['LOGNAME']
+            if "root" in userName:
 
-            # Close the rough gate valve
-            self.ShiMcc.Close_RoughingValve()
+                # Close the rough gate valve
+                self.ShiMcc.Close_RoughingValve()
 
-            # wait here until the valve is closed
-            # This assumes it gives a True and False
-            while self.ShiMcc.Get_RoughingValveState():
-                pass
+                # wait here until the valve is closed
+                # This assumes it gives a True and False
+                while self.ShiMcc.Get_RoughingValveState():
+                    pass
 
-            # Open the cryopump gate valve
-            # I can't find cryopump, but I found this?
-            self.ShiMcc.Open_PurgeValve() #line 234 Shi_MCC.py
+                # Open the cryopump gate valve
+                # I can't find cryopump, but I found this?
+                self.ShiMcc.Open_PurgeValve() #line 234 Shi_MCC.py
+            else:
+                print("In Strong Cryo Vacuum")
         
     def operationalVacuum(self):
         '''

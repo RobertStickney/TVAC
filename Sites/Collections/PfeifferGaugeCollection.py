@@ -1,5 +1,6 @@
 import threading
 from datetime import datetime
+import os
 
 from DataContracts.PfeifferGaugeContract import PfeifferGaugeContract
 
@@ -17,6 +18,11 @@ class PfeifferGaugeCollection:
         self.pfGuageList = self.buildCollection()
         self.time = datetime.now()
 
+        # for testing
+        self.testCryoPressure = 5000
+        self.testChamberPressure = 5000
+        self.testRoughPressure = 500
+
     def buildCollection(self):
         guages = [PfeifferGaugeContract(1, 'Cryopump'),
                   PfeifferGaugeContract(2, 'Chamber'),
@@ -24,13 +30,29 @@ class PfeifferGaugeCollection:
         return guages
 
     def get_pressure_cryopump(self):
-        return self.pfGuageList[0].getPressure()
+        userName = os.environ['LOGNAME']
+        if "root" in userName:
+            return self.pfGuageList[0].getPressure()
+        else:
+            self.testCryoPressure -= (self.testCryoPressure/2) 
+            return self.testCryoPressure
+
 
     def get_pressure_chamber(self):
-        return self.pfGuageList[1].getPressure()
+        userName = os.environ['LOGNAME']
+        if "root" in userName:
+            return self.pfGuageList[1].getPressure()
+        else:
+            self.testChamberPressure -= (self.testChamberPressure/2)
+            return self.testChamberPressure
 
     def get_pressure_roughpump(self):
-        return self.pfGuageList[2].getPressure()
+        userName = os.environ['LOGNAME']
+        if "root" in userName:
+            return self.pfGuageList[2].getPressure()
+        else:
+            self.testRoughPressure -= (self.testRoughPressure/2)
+            return self.testRoughPressure
 
     def update(self, pgList):
         self.__lock.acquire()

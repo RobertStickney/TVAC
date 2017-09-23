@@ -1,6 +1,6 @@
 import json
 import time
-
+import os
 
 class Shi_Mcc:
 
@@ -424,7 +424,11 @@ class Shi_Mcc:
     # 2.26 • Second Stage Temperature pg:20
     def Get_SecondStageTemp(self):  # Command Ex: "$K:\r"
         # return self.Send_cmd("K")
-        val = self.Send_cmd("K")
+        userName = os.environ['LOGNAME']
+        if "root" in userName:
+            val = self.Send_cmd("K")
+        else:
+            val = {'Error':False,'Response':14.0}
         if not val['Error']:
             val['data'] = float(val['Response'])
         return val

@@ -18,6 +18,11 @@ class GetControl:
         # print(json)
         return json
 
+        
+    def putUnderVacuum(self):
+        HardwareStatusInstance.getInstance().vacuum = True
+        return "{'result':'success'}"
+
     def getAllZoneData(self):
         # This doesn't work...
         Logging.debugPrint(2, "Calling: getAllZoneData")  #Todo Change to logEvent()
