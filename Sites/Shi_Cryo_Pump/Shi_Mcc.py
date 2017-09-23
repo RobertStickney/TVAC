@@ -2,7 +2,7 @@
 import time
 
 
-class ShiMcc:
+class Shi_Mcc:
 
     def Send_cmd(self, Command):
         MCC = open('/dev/ttyxuart0', 'r+b', buffering=0)

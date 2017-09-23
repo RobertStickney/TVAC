@@ -11,6 +11,7 @@ from Collections.ProfileInstance import ProfileInstance
 from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from PID.PID import PID
+from Shi_Cryo_Pump.Shi_Mcc import ShiMcc
 
 from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
@@ -19,7 +20,6 @@ from Logging.Logging import Logging
 class HardWareControlStub(Thread):
     '''
     This class contains the main inteligences for getting and keeping the test chaber under vacuum,
-
     '''
 
     def __init__(self, group=None, target=None, name=None,
@@ -36,6 +36,8 @@ class HardWareControlStub(Thread):
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.gauges = PfeifferGaugeInstance.getInstance().gauges
         self.state = None
+
+        self.ShiMcc = ShiMcc()
 
 
 
@@ -73,18 +75,19 @@ class HardWareControlStub(Thread):
                         # use the roughing pump to achive Rough vacuum
                         # Wait until 0.0.041 tor
                         self.state = "Atmosphere"
-                    if self.chamberPressure < 0.041 and self.roughPumpPressure < self.cryoPumpPressure:
+                    if self.chamberPressure < 300 and self.roughPumpPressure < self.cryoPumpPressure:
                         # open Cryopump-Roughing gate valve
+                        # Wait until 0.041 tor
+                        self.state = "Rough Vacuum"
+                    if self.chamberPressure < 0.041:
                         # Alert the user they should close o-ring seal 
-                        # Wait until 0.005 tor
-                        self.state = "Rough Cacuum"
-                    if self.chamberPressure < 0.005: #torr?
-                        # Use CryoPump to achive Cryo Vacuum
                         # Start the cryopump
+                        self.state = "Cryo Vacuum"
+                    if self.chamberPressure < 0.005 and self.ShiMcc.Get_SecondStageTemp() < 15: #torr?
                         # Close the rough gate valve
                         # Open the cryopump gate valve
                         # Wait until 10e-6 tor
-                        self.state = "Cryo Vacuum"
+                        self.state = "Strong Cryo Vacuum"
                     if self.chamberPressure < 0.00001: #torr?
                         # Wait for nothing, either the program will end, or be stopped by the safety checker
                         self.state = "Operational Vacuum"
@@ -95,6 +98,7 @@ class HardWareControlStub(Thread):
                         'Atmosphere': self.atmosphere,
                         'Rough Vacuum': self.roughVacuum,
                         'Cryo Vacuum': self.cryoVacuum,
+                        'Strong Cryo Vacuum': self.strongCryoVacuum,
                         'Operational Vacuum': self.operationalVacuum,
                     }[self.state]()
 
@@ -126,27 +130,76 @@ class HardWareControlStub(Thread):
         '''
         It enters this state everytime you are at atmosphere pressure
         '''
-        # TODO: Read coldwater value from Compressor
         if self.oldState != self.state:
             # The system has just crossed over to a new point
 
+            # TODO: Read coldwater value from Compressor
+    
             # Close Cryopump gate Valve 
+            # I can't find cryopump, but I found this?
+            self.ShiMcc.Close_PurgeValve() #line 237 Shi_MCC.py
+
             # Turn on Roughing Pump
+            # TODO: Can you turn the roughing pump on via Shi_mcc.py? of Software??
+            # Do we send an alart to the user, if they need to do this phycisally?
+
             # Open roughing pump valve
+            self.ShiMcc.Open_RoughingValve() #line 407 Shi_MCC.py
 
     def roughVacuum(self):
+        '''
+        It enters this state everytime you are between 0.041 torr and 0.005 torr
+        '''
         if self.oldState != self.state:
             # The system has just crossed over to a new point
-            pass
-        pass
-    def cryoVacuum(self):
-        if self.oldState != self.state:
-            # The system has just crossed over to a new point
-            pass
-        pass
-    def operationalVacuum(self):
-        if self.oldState != self.state:
-            # The system has just crossed over to a new point
-            pass
-        pass
 
+            # open Cryopump-Roughing gate valve
+            # TODO: What command is this in Shi_Mcc.py
+            pass
+
+
+    def cryoVacuum(self):
+        '''
+        It enters this state everytime you are between 0.041 torr and 0.005
+        '''
+        if self.oldState != self.state:
+            # The system has just crossed over to a new point
+            
+            #TODO: Alert the user they should close o-ring seal 
+
+            #TODO: starts the cryopump
+            self.ShiMcc.Turn_CryoPumpOn() #line 220 ShiMcc.py
+
+    def strongCryoVacuum(self):
+        '''
+        It enters this state everytime you are between 0.005 torr and 0.00001
+        '''
+        if self.oldState != self.state:
+            # The system has just crossed over to a new point
+
+            # Close the rough gate valve
+            self.ShiMcc.Close_RoughingValve()
+
+            # wait here until the valve is closed
+            # This assumes it gives a True and False
+            while self.ShiMcc.Get_RoughingValveState():
+                pass
+
+            # Open the cryopump gate valve
+            # I can't find cryopump, but I found this?
+            self.ShiMcc.Open_PurgeValve() #line 234 Shi_MCC.py
+        
+    def operationalVacuum(self):
+        '''
+        It enters this state everytime you are lower than 0.00001 torr
+        '''
+        if self.oldState != self.state:
+            # The system has just crossed over to a new point
+            
+            pass
+            # Bakes ban happen here.
+            # Thermal Profiles can start here
+
+
+
+    # TODO: Write a wrapper around opening valves to make one final check of the pressures before we open them
