@@ -7179,3 +7179,87 @@
     [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0
     [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0
     [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating ShiCryopumpInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mZone 3 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mThere was a <class 'AttributeError'> error in TsRegistersControlStub. File: TsRegistersControlStub.py:55
+  [94mdebug-2: [0m'SafetyCheck' object has no attribute 'heartbeats'
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating ShiCryopumpInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating SafetyCheck
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mZone 3 is handled, about the start
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+[94mdebug-1: [0mFinished initializing threads and drivers
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
