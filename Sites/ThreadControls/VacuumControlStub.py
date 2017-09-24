@@ -26,7 +26,7 @@ class VacuumControlStub(Thread):
                  args=(), kwargs=None, verbose=None):
 
         Logging.logEvent("Debug","Status Update", 
-        {"message": "Creating VacuumControlStub: {}",
+        {"message": "Creating VacuumControlStub:",
          "level":3})
 
         Thread.__init__(self, group=group, target=target, name=name)
@@ -41,7 +41,7 @@ class VacuumControlStub(Thread):
 
         self.ShiMcc = Shi_Mcc()
 
-        self.updatePeriod = 2
+        self.updatePeriod = 10
 
 
 
@@ -49,13 +49,13 @@ class VacuumControlStub(Thread):
     def run(self):
         # Always run this thread
         while True:
-            if self.hwStatus.vacuum:
+            if ProfileInstance.getInstance().activeProfile:
                 # With an active profile, we start putting the system under pressure
                 try:
-                    Logging.logEvent("Debug","Status Update", 
-                    {"message": "{}: Running Vacuum Control Stub",
-                     "level":2})
          
+                    # Logging.logEvent("Debug","Status Update", 
+                    # {"message": "Running Vacuum Control Stub",
+                    #  "level":2})
                     # Setup code is here
                     if self.state:
                         self.oldState = self.state
@@ -112,9 +112,12 @@ class VacuumControlStub(Thread):
                         'Operational Vacuum': self.operationalVacuum,
                     }[self.state]()
 
+                    if "Operational Vacuum" in self.state:  
+                        HardwareStatusInstance.getInstance().OperationalVacuum = True
+                    else:
+                        HardwareStatusInstance.getInstance().OperationalVacuum = False
 
-                    # switch case (ish thing) saying what you need to do to get to the point you need to be at
-                    # Makin sure this still needs to be running (is there an active profile)
+                    
 
                     # sleep until the next time around
                     time.sleep(self.updatePeriod)

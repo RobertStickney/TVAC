@@ -24,6 +24,38 @@ class HardWareControlStub(Thread):
     It also generates the expected temp values at the given time 
     '''
 
+
+    def __init__(self, group=None, target=None, name=None,
+                 args=(), kwargs=None, verbose=None, lamps=None):
+
+        Logging.logEvent("Debug","Status Update", 
+        {"message": "Creating HardWareControlStub: {}".format(args[0]),
+         "level":3})
+
+        Thread.__init__(self, group=group, target=target, name=name)
+        self.args = args
+        self.kwargs = kwargs
+
+        self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
+        self.zoneProfile = self.zoneProfiles.getZone(self.args[0])
+        self.updatePeriod = self.zoneProfiles.updatePeriod
+        self.d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
+
+        self.running = False
+        self.paused = False
+        self.inHold = False
+        self.zoneUUID = uuid.uuid4()
+        self.zoneProfile.update(json.loads('{"zoneuuid":"%s"}'%self.zoneUUID))
+        self.timeStartForHold = None
+        self.lamps = lamps
+
+        self.tempGoalTemperature = 0
+        self.pid = PID()
+
+        self.maxTempRisePerMin = 10
+        self.maxTempRisePerUpdate = (self.maxTempRisePerMin/60)*self.updatePeriod
+
+
     def createExpectedValues(self, setPoints,startTime=None):
         '''
         This is a helper function that given a list of setpoints
@@ -47,6 +79,8 @@ class HardWareControlStub(Thread):
 
         expected_temp_values = []
         expected_time_values = []
+        self.setpoint_ramp_start_time = []
+        self.setpoint_soak_start_time = []
         for setPoint in setPoints:
             # get values out from setpoint
             goalTemp = setPoint.tempGoal
@@ -82,6 +116,7 @@ class HardWareControlStub(Thread):
                     expected_temp_values.append(y)
             else:
                 rampEndTime = currentTime
+            self.setpoint_ramp_start_time.append(currentTime)
 
             # Debug prints
             debugStatus = {
@@ -94,6 +129,7 @@ class HardWareControlStub(Thread):
                  "dict":debugStatus})
 
             #Setting all soak values
+            self.setpoint_soak_start_time.append(rampEndTime)
             for tempSetPoint in range(rampEndTime, rampEndTime+soakTime, intervalTime):
                 x = tempSetPoint
                 y = goalTemp
@@ -109,43 +145,13 @@ class HardWareControlStub(Thread):
 
         return expected_temp_values, expected_time_values
 
-    def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs=None, verbose=None, lamps=None):
-
-        Logging.logEvent("Debug","Status Update", 
-        {"message": "Creating HardWareControlStub: {}".format(args[0]),
-         "level":3})
-
-        Thread.__init__(self, group=group, target=target, name=name)
-        self.args = args
-        self.kwargs = kwargs
-
-        self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
-        self.zoneProfile = self.zoneProfiles.getZone(self.args[0])
-        self.updatePeriod = self.zoneProfiles.updatePeriod
-        self.d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
-
-        self.running = False
-        self.paused = False
-        self.inHold = False
-        self.zoneUUID = uuid.uuid4()
-        self.zoneProfile.update(json.loads('{"zoneuuid":"%s"}'%self.zoneUUID))
-        self.timeStartForHold = None
-        self.lamps = lamps
-
-        self.tempGoalTemperature = 0
-        self.pid = PID()
-
-        self.maxTempRisePerMin = 10
-        self.maxTempRisePerUpdate = (self.maxTempRisePerMin/60)*self.updatePeriod
-
-
 
     def run(self):
-        # TODO: You can't run more than one test, it will need to updated a bit to make that work
         # Always run this thread
         while True:
-            if self.running:
+            # Check to make sure there is an active profile
+            # and that we are sitting in an operational vacuum
+            if ProfileInstance.getInstance().activeProfile and HardwareStatusInstance.getInstance().OperationalVacuum:
                 try:
                     Logging.logEvent("Debug","Status Update", 
                     {"message": "{}: Running HW control Thread".format(self.args[0]),
@@ -158,6 +164,7 @@ class HardWareControlStub(Thread):
 
                     self.updatePeriod = 10
                     self.maxTempRisePerMin = 6.4
+                    self.setpoint = 0
                     self.maxTempRisePerUpdate = (self.maxTempRisePerMin/60)*self.updatePeriod
 
                     self.pid = PID()
@@ -172,12 +179,11 @@ class HardWareControlStub(Thread):
                     self.startTime = int(time.time())
                     # Generate the expected values at a given time
                     self.expected_temp_values, self.expected_time_values = self.createExpectedValues(self.zoneProfile.thermalProfiles, startTime=self.zoneProfiles.startTime)
-
+                    justChangedSetpoint = True
                     # Program loop is here
                     while True:
 
                         # You might need to stay is pause
-                        # TODO: I just thought, I think this will keep the PID value the same, it needs to set to 0 on pause
                         self.checkPause()
                         self.checkHold()
 
@@ -197,9 +203,18 @@ class HardWareControlStub(Thread):
 
                             if len(self.expected_time_values) <= 0:
                                 break
-                        # print(self.expected_time_values[0])
                         # With the temp goal tempurture picked, make the duty cycle 
                         self.updateDutyCycle()
+
+                        if currentTime > self.setpoint_ramp_start_time[self.setpoint]:
+                            if justChangedSetpoint: 
+                                justChangedSetpoint = False
+                                print("Starting ramp for setpoint: {} at time {}".format(self.setpoint,time.time()))
+
+                        if currentTime > self.setpoint_soak_start_time[self.setpoint]:
+                            print("Starting Soak for setpoint: {} at time {}".format(self.setpoint,time.time()))
+                            self.setpoint += 1
+                            justChangedSetpoint = True
 
                         if len(self.expected_time_values) <= 0:
                             break
@@ -219,7 +234,9 @@ class HardWareControlStub(Thread):
 
                     self.updateDBwithEndTime()
                     self.running = False
-                    self.zoneProfile.activeZoneProfile = False
+                    # self.zoneProfile.activeZoneProfile = False
+                    # This assumes all zones have the same end time
+                    ProfileInstance.getInstance().activeProfile = False
                 except Exception as e:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -235,7 +252,7 @@ class HardWareControlStub(Thread):
     # end of run()
 
     def updateDBwithEndTime(self):
-        sql = "update tvac.Profile_Instance set endTime=\"{}\" where endTime is null;".format(datetime.datetime.fromtimestamp(time.time() / 1e3))
+        sql = "update tvac.Profile_Instance set endTime=\"{}\" where endTime is null;".format(datetime.datetime.fromtimestamp(time.time()))
 
         mysql = MySQlConnect()
         try:

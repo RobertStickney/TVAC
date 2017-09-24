@@ -29,7 +29,8 @@ class HardwareStatusInstance:
             self.ShiCryopump = ShiCryopumpCollection()
             self.PC_104 = PC_104_Instance.getInstance()
 
-            self.vacuum = False
+            # System Wide Stats
+            self.OperationalVacuum = False
 
 
             HardwareStatusInstance.__instance = self

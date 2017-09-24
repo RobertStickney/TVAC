@@ -42,6 +42,7 @@ def generateJSON(fileName):
 			header = f.readline().strip()
 			averages = f.readline().strip().split(",")
 			thermocouples = f.readline().strip().split(",")
+			heatErrors = f.readline().strip().split(",")
 			# Skip any blank lines
 			tempString = ""
 			while not tempString:
@@ -92,13 +93,19 @@ def generateJSON(fileName):
 		if averages[zone] == "":
 			continue
 
-		output += "    {\n      \"zone\": "
-		output += str(zone+1) +",\n"
+		output += "    {\n"
+		output += "      \"zone\": {},\n".format(zone+1)
 		output += "      \"average\": \"{}\",\n".format(averages[zone])
+		if heatErrors[zone] == "":
+			popupError("Missing Heat Error on zone {}".format(zone+1))
+		output += "      \"heatError\": \"{}\",\n".format(heatErrors[zone])
+		if thermocouples[zone] == "":
+			popupError("Missing Thermo Couples on zone {}".format(zone+1))
 		output += "      \"thermocouples\": [{}],\n".format(thermocouples[zone].replace(" ",","))
 		output += "      \"thermalprofiles\":\n"
 		output += "      [\n"
 		for setPoint in setpoints:
+			# Why is this here?
 			if int(setPoint["zone"]) != int(zone)+1:
 				continue
 			output += "        {\n"

@@ -118,11 +118,9 @@ class ThreadCollection:
     
         if firstStart:
             result = self.addProfileInstancetoBD()
+            # If there is an error connenting to the DB, return it
             if result != True:
                 return result
-
-
-        # TODO: I have no idea where, but when it restarts and loads a profile instance from memory, tkae the uuid and set it
 
         # Starts all the hw threads
         try:
@@ -148,6 +146,8 @@ class ThreadCollection:
                      "level":1})
         except Exception as e:
             pass
+
+        ProfileInstance.getInstance().activeProfile = True
 
         return "{'result':'success'}"
         

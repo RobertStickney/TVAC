@@ -5,6 +5,7 @@ from datetime import datetime
 
 
 from Collections.HardwareStatusInstance import HardwareStatusInstance
+from Collections.ProfileInstance import ProfileInstance
 
 from Logging.Logging import Logging
 # used for testing
@@ -30,62 +31,67 @@ class LN2Updater(Thread):
             super(LN2Updater, self).__init__()
 
     def run(self):
-        # some start up stuff here
-        ln2_min = 0  
-        time.sleep(5)
-        # hwStatus = self.hardwareStatus.getInstance()
-        userName = os.environ['LOGNAME']
-
-        a_out = self.hardwareStatus.getInstance().PC_104.analog_out  # todo: better variable name?
-        d_out = self.hardwareStatus.getInstance().PC_104.digital_out
-
-        # if "root" in userName:
-        #     # Hasn't been tested yet
-
-        # stop when the program ends
+        # Always run this thread
         while True:
-            if "root" in userName:
-                Logging.debugPrint(4, "Pulling live data for LN2") #carry over from TCUpdater - What does this do/is it needed?
-                # Hasn't been tested yet
-                # LN2Platen = LN2Out.getLN2platen() for now use shroud
-                LN2Shroud = a_out.getLN2shroud()  # is this current LN2 val needed?
-            else:
-                Logging.debugPrint(4, "Generating test data for TC")
+            # Check to make sure there is an active profile
+            # and that we are sitting in an operational vacuum
+            if ProfileInstance.getInstance().activeProfile and HardwareStatusInstance.getInstance().OperationalVacuum:
+                # some start up stuff here
+                ln2_min = 0  
+                time.sleep(5)
+                # hwStatus = self.hardwareStatus.getInstance()
+                userName = os.environ['LOGNAME']
 
-            dutycyclelist = []
-            for zoneStr in self.ThreadCollection.zoneThreadDict:
-                zone = self.ThreadCollection.zoneThreadDict[zoneStr]
-                if zone.running:
-                    # print("Zone {} is {} running".format(zoneStr, "" if zone.running else "not"))
-                    dutycyclelist.append(zone.dutyCycle)
+                a_out = self.hardwareStatus.getInstance().PC_104.analog_out  # todo: better variable name?
+                d_out = self.hardwareStatus.getInstance().PC_104.digital_out
 
-            if dutycyclelist:
-                dutycyclemin = min(dutycyclelist)
-                Logging.debugPrint(4,"Min Duty Cycle: {}".format(dutycyclemin))
+                # if "root" in userName:
+                #     # Hasn't been tested yet
 
-                if dutycyclemin < ln2_min: # todo: arb_value to be determined
-                    # throw safety up
-                    Logging.debugPrint(4,"The LN2 should be on")
-                    # What's the difference between this and...
-                    d_out.update({'LN2-S Sol': True, 'LN2-P Sol': True, })
-                    # this
-                    # d_out.update({"LN2-S EN":True})
-                    # d_out.update({"LN2-Sol EN":True})
+                # stop when the program ends
+                while True:
+                    if "root" in userName:
+                        Logging.debugPrint(4, "Pulling live data for LN2") #carry over from TCUpdater - What does this do/is it needed?
+                        # Hasn't been tested yet
+                        # LN2Platen = LN2Out.getLN2platen() for now use shroud
+                        LN2Shroud = a_out.getLN2shroud()  # is this current LN2 val needed?
+                    else:
+                        Logging.debugPrint(4, "Generating test data for TC")
+
+                    dutycyclelist = []
+                    for zoneStr in self.ThreadCollection.zoneThreadDict:
+                        zone = self.ThreadCollection.zoneThreadDict[zoneStr]
+                        if zone.running:
+                            # print("Zone {} is {} running".format(zoneStr, "" if zone.running else "not"))
+                            dutycyclelist.append(zone.dutyCycle)
+
+                    if dutycyclelist:
+                        dutycyclemin = min(dutycyclelist)
+                        Logging.debugPrint(4,"Min Duty Cycle: {}".format(dutycyclemin))
+
+                        if dutycyclemin < ln2_min: # todo: arb_value to be determined
+                            # throw safety up
+                            Logging.debugPrint(4,"The LN2 should be on")
+                            # What's the difference between this and...
+                            d_out.update({'LN2-S Sol': True, 'LN2-P Sol': True, })
+                            # this
+                            # d_out.update({"LN2-S EN":True})
+                            # d_out.update({"LN2-Sol EN":True})
 
 
-                    # 2500 is the point the valve should be opened too
-                    a_out.update({'LN2 Shroud': 4095, 'LN2 Platen': 4095}) 
-                   
-                else:
-                    Logging.debugPrint(4,"The LN2 should be off")
-                    # What's the difference between this and...
-                    d_out.update({'LN2-S Sol': False, 'LN2-P Sol': False, })
-                    # this
-                    # d_out.update({"LN2-S EN":False})
-                    # d_out.update({"LN2-Sol EN":False})
+                            # 2500 is the point the valve should be opened too
+                            a_out.update({'LN2 Shroud': 4095, 'LN2 Platen': 4095}) 
+                           
+                        else:
+                            Logging.debugPrint(4,"The LN2 should be off")
+                            # What's the difference between this and...
+                            d_out.update({'LN2-S Sol': False, 'LN2-P Sol': False, })
+                            # this
+                            # d_out.update({"LN2-S EN":False})
+                            # d_out.update({"LN2-Sol EN":False})
 
 
-                    # 2500 is the point the valve should be opened too
-                    a_out.update({'LN2 Shroud': 0, 'LN2 Platen': 0})
-                    #how to update LN2 (assuming this is in AnalogInContract) --> What is the structure of the dictionary? d['ADC 15'] --> LN@Shroud
-            time.sleep(self.SLEEP_TIME)
+                            # 2500 is the point the valve should be opened too
+                            a_out.update({'LN2 Shroud': 0, 'LN2 Platen': 0})
+                            #how to update LN2 (assuming this is in AnalogInContract) --> What is the structure of the dictionary? d['ADC 15'] --> LN@Shroud
+                    time.sleep(self.SLEEP_TIME)

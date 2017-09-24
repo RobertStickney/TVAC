@@ -21,4 +21,9 @@ class ProfileInstance:
                 {"message": "Creating ProfileInstance",
                  "level":2})
             self.zoneProfiles = ZoneCollection()
+
+
+            # System Wide stats
+            self.activeProfile = False
+            
             ProfileInstance.__instance = self
