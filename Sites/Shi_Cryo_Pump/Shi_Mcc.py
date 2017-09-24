@@ -334,9 +334,9 @@ class Shi_Mcc:
             val['data'] = int(val['Response'])
         return val
 
-    def Set_RegenParam(self, Param, Value):  # expected call: Set_RegenParam(chr(int), int)
+    def Set_RegenParam(self, Param='', Value=0):  # expected call: Set_RegenParam(chr(int), int)
         if (Param not in ['0', '1', '2', '3', '4', '5', '6', 'A', 'C', 'G', 'z']):
-            return self.Format_Responce("Parameter out of range: " + str(Param), error=True)
+            return self.Format_Responce("Parameter unknown: " + str(Param), error=True)
         elif (Param == '0') & ((Value < 0) | (Value > 59994)):
             return self.Format_Responce("RegenParam: Pump Restart Delay out of range: " + str(Value), error=True)
         elif (Param == '1') & ((Value < 0) | (Value > 9990)):

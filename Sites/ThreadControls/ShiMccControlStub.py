@@ -48,9 +48,21 @@ class ShiMccControlStub(Thread):
                     self.hw.PC_104.digital_out.update({'MCC2 Power': True})
                     if not startup_delay:
                         time.sleep(5)
-
                     # Now send some initialization commands
-
+                    # The maximum second stage temperature the cryopump may start to restart after a power failure.
+                    val = self.mcc.Set_RegenParam('6', 65)
+                    if val['Error']:
+                        Logging.logEvent("Debug", "Shi MCC Error",
+                                         {"message": "Set_RegenParam: %s" % val['Response'],
+                                          "level": 3})
+                        raise Exception("Shi MCC Error with Set_RegenParam: %s" % val['Response'])
+                    # 2: Power failure recovery enabled only when T2 is less than the limit set point.
+                    val = self.mcc.Set_PowerFailureRecovery(2)
+                    if val['Error']:
+                        Logging.logEvent("Debug", "Shi MCC Error",
+                                         {"message": "Set_RegenParam: %s" % val['Response'],
+                                          "level": 3})
+                        raise Exception("Shi MCC Error with Set_RegenParam: %s" % val['Response'])
 
                 next_param_read_time = time.time()
                 while True:
