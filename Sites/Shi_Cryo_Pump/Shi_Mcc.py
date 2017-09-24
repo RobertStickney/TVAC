@@ -372,7 +372,7 @@ class Shi_Mcc:
     # 2.21 • Regeneration Start Delay pg.18
     def Get_RegenStartDelay(self):  # Command Ex: "$j?[\r"
         # return self.Send_cmd("j?")
-        val = self.Send_cmd("j")
+        val = self.Send_cmd("j?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
