@@ -46,9 +46,7 @@ class PfeifferGaugeCollection:
                 return pg
         raise RuntimeError('Pfeiffer gauge #: %s is out of range' % n)
 
-    def getJson(self, temp_units = 'K', whichTCs = 'all'):
-        # temp_units values: ['K', 'C', 'F']
-        # whichTCs values: ['all', 'Working', 'NotWorking']
+    def getJson(self):
         message = []
         self.__lock.acquire()
         message.append('{"time":%s,' % self.time)

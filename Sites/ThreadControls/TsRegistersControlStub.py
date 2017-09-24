@@ -1,7 +1,9 @@
 from threading import Thread
 import time
 import os
-import sys
+if __name__ == '__main__':
+    import sys
+    sys.path.insert(0, os.getcwd())
 
 from Collections.PC_104_Instance import PC_104_Instance
 from TS_7250_V2.TS_Registers import TS_Registers
@@ -134,17 +136,22 @@ class TsRegistersControlStub(Thread):
         offsets = [.1,.1, .2,.2, .3,.3, .4,.4, .5,.5, .6,.6, .7,.7, .8,.8]
         for i in range(16):
             self.ir_lamp_pwm.append(PWM_Square_Wave(self.pwm_period,
-                                                    offsets[i],
-                                                    0,
+                                                    offsets[i], 0,
                                                     "IR Lamp "+str(i+1),
                                                     self.da_io.digital_out.update))
 
     def ir_lamp_pwm_stop(self):
         self.ir_lamp_pwm = []
 
+
 if __name__ == '__main__':
-    import sys
-    sys.path.insert(0, '../')
+
+    # adding debug info
+    if(len(sys.argv)>1):
+        for arg in sys.argv:
+            if arg.startswith("-v"):
+                Logging.verbos = arg.count("v")
+
     thread = TsRegistersControlStub()
     thread.daemon = True
     thread.start()
