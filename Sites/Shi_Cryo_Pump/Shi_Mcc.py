@@ -119,7 +119,7 @@ class Shi_Mcc:
         # return self.Send_cmd("XOI??")
         val = self.Send_cmd("XOI??")
         if not val['Error']:
-            val['data'] = (int(val['Response'])/23) * 100
+            val['Data'] = (int(val['Response'])/23) * 100
         return val
 
     # 2.5 • Elapsed Time pg:8
@@ -127,7 +127,7 @@ class Shi_Mcc:
         # return self.Send_cmd("Y?")
         val = self.Send_cmd("Y?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.6 • Failed Rate Of Rise Cycles pg:8
@@ -135,7 +135,7 @@ class Shi_Mcc:
         # return self.Send_cmd("m")
         val = self.Send_cmd("m")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.7 • Failed Repurge Cycles pg:9
@@ -143,7 +143,7 @@ class Shi_Mcc:
         # return self.Send_cmd("l")
         val = self.Send_cmd("l")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.8 • First Stage Temperature pg:9
@@ -151,7 +151,7 @@ class Shi_Mcc:
         # return self.Send_cmd("J")
         val = self.Send_cmd("J")
         if not val['Error']:
-            val['data'] = float(val['Response'])
+            val['Data'] = float(val['Response'])
         return val
 
     # 2.9 • First Stage Temperature Control pg:10
@@ -159,7 +159,7 @@ class Shi_Mcc:
         # return self.Send_cmd("H?")
         val = self.Send_cmd("J")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Set_FirstStageTempCTL(self, temp=0, method=0):
@@ -169,7 +169,7 @@ class Shi_Mcc:
         if (method < 0) | (method > 3):
             print('First stage control method is out of range (0-3): {:d}'.format(method))
             return self.Format_Responce("Temp out of range: " + str(method), error=True)
-        # add convert to real data
+        # add convert to real Data
         return self.Send_cmd("H{0:d},{1:d}".format(temp, method))
 
     # 2.10 • Last Rate Of Rise Value pg:11
@@ -177,7 +177,7 @@ class Shi_Mcc:
         # return self.Send_cmd("n")
         val = self.Send_cmd("n")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.11 • Module Version pg:11
@@ -189,7 +189,7 @@ class Shi_Mcc:
         # return self.Send_cmd("i?")
         val = self.Send_cmd("i?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Set_PowerFailureRecovery(self, method=2):  # Command Ex: "$i2H\r"
@@ -199,7 +199,7 @@ class Shi_Mcc:
         if (method < 0) | (method > 2):
             print('Not a Valid Power recovery mode (0-2): {:d}'.format(method))
             return self.Format_Responce("Not a Valid Power recovery mode (0-2): " + str(method), error=True)
-        # add convert to real data
+        # add convert to real Data
         return self.Send_cmd("i{0:d}".format(method))
 
     # 2.13 • Power Failure Recovery Status pg:12
@@ -207,7 +207,7 @@ class Shi_Mcc:
         # return self.Send_cmd("t?")
         val = self.Send_cmd("t?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.14 • Pump On/Off/Query pg:13
@@ -228,7 +228,7 @@ class Shi_Mcc:
         # return self.Send_cmd("E?")
         val = self.Send_cmd("E?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Open_PurgeValve(self):
@@ -249,7 +249,7 @@ class Shi_Mcc:
         # return self.Send_cmd("Z?")
         val = self.Send_cmd("Z?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.18 • Regeneration Error pg:15
@@ -261,77 +261,77 @@ class Shi_Mcc:
         # return self.Send_cmd("P0?")
         val = self.Send_cmd("P0?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_1(self):
         # return self.Send_cmd("P1?")
         val = self.Send_cmd("P1?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_2(self):
         # return self.Send_cmd("P2?")
         val = self.Send_cmd("P2?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_3(self):
         # return self.Send_cmd("P3?")
         val = self.Send_cmd("P3?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_4(self):
         # return self.Send_cmd("P4?")
         val = self.Send_cmd("P4?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_5(self):
         # return self.Send_cmd("P5?")
         val = self.Send_cmd("P5?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_6(self):
         # return self.Send_cmd("P6?")
         val = self.Send_cmd("P6?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_A(self):
         # return self.Send_cmd("PA?")
         val = self.Send_cmd("PA?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_C(self):
         # return self.Send_cmd("PC?")
         val = self.Send_cmd("PC?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_G(self):
         # return self.Send_cmd("PG?")
         val = self.Send_cmd("PG?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_z(self):
         # return self.Send_cmd("Pz?")
         val = self.Send_cmd("Pz?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Set_RegenParam(self, Param='', Value=0):  # expected call: Set_RegenParam(chr(int), int)
@@ -371,7 +371,7 @@ class Shi_Mcc:
         # return self.Send_cmd("j?")
         val = self.Send_cmd("j")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Set_RegenStartDelay(self, delay):
@@ -385,7 +385,7 @@ class Shi_Mcc:
         # return self.Send_cmd("k")
         val = self.Send_cmd("k")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.23 • Regeneration Time pg:19
@@ -393,7 +393,7 @@ class Shi_Mcc:
         # return self.Send_cmd("a")
         val = self.Send_cmd("a")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.24 • Rough On/Off/Query pg:19
@@ -401,7 +401,7 @@ class Shi_Mcc:
         # return self.Send_cmd("D?")
         val = self.Send_cmd("D?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Open_RoughingValve(self):  # Command Ex: "$D1d\r"
@@ -415,7 +415,7 @@ class Shi_Mcc:
         # return self.Send_cmd("Q?")
         val = self.Send_cmd("Q?")
         if not val['Error']:
-            val['data'] = int(val['Response']) - 0x30
+            val['Data'] = int(val['Response']) - 0x30
         return val
 
     def Clear_RoughingInterlock(self):  # Command Ex: "$Q?B\r"
@@ -430,7 +430,7 @@ class Shi_Mcc:
         else:
             val = {'Error':False,'Response':14.0}
         if not val['Error']:
-            val['data'] = float(val['Response'])
+            val['Data'] = float(val['Response'])
         return val
 
     # 2.27 • Second Stage Temperature Control pg:21
@@ -438,7 +438,7 @@ class Shi_Mcc:
         # return self.Send_cmd("I?")
         val = self.Send_cmd("I?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Set_SecondStageTempCTL(self, temp):  # Command Ex: "$I?:\r"
@@ -452,7 +452,7 @@ class Shi_Mcc:
         # return self.Send_cmd("S1")
         val = self.Send_cmd("S1")
         if not val['Error']:
-            val['data'] = int(val['Response']) - 0x20
+            val['Data'] = int(val['Response']) - 0x20
         return val
 
     # 2.29 • TC On/Off/Query pg:22
@@ -460,7 +460,7 @@ class Shi_Mcc:
         # return self.Send_cmd("B?")
         val = self.Send_cmd("B?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Turn_TcPressureOn(self):  # Command Ex: "$B1b\r"
@@ -474,5 +474,5 @@ class Shi_Mcc:
         # return self.Send_cmd("L")
         val = self.Send_cmd("L")
         if not val['Error']:
-            val['data'] = float(val['Response']) / 1000  # Change to Torr
+            val['Data'] = float(val['Response']) / 1000  # Change to Torr
         return val
