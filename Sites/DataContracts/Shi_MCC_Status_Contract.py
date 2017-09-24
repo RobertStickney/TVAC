@@ -75,6 +75,7 @@ class Shi_MCC_Status_Contract:
         if 'Stage 2 Temp' in d:
             self.SecondStageTemp = d['Stage 2 Temp']
         if 'Status' in d:
+            print('>--- Status value = {:d} ---<'.format(d['Status']))
             self.Status['Pump On'               ] = (d['Status'] & 0x01) > 0  # Bit 0
             self.Status['Rough Open'            ] = (d['Status'] & 0x02) > 0  # Bit 1
             self.Status['Purge Open'            ] = (d['Status'] & 0x04) > 0  # Bit 2
