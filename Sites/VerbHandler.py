@@ -33,6 +33,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getPC104_Digital': control.getPC104_Digital,
                 '/getPC104_Analog': control.getPC104_Analog,
                 '/getLastError' : control.getLastError,
+                '/putUnderVacuum':control.putUnderVacuum,
             }[path]()
 
             Logging.logEvent("Debug","Status Update",

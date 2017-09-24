@@ -7,6 +7,7 @@ from ThreadControls.TsRegistersControlStub import TsRegistersControlStub
 from ThreadControls.LN2Updater import LN2Updater
 from ThreadControls.PfeifferGaugeControlStub import PfeifferGaugeControlStub
 from ThreadControls.VacuumControlStub import VacuumControlStub
+from ThreadControls.ShiMccControlStub import ShiMccControlStub
 
 
 from Collections.ProfileInstance import ProfileInstance
@@ -80,8 +81,9 @@ class ThreadCollection:
         "TsRegistersControlStub" : TsRegistersControlStub(parent=parent),
         "PfeifferGauge" : PfeifferGaugeControlStub(),
         "ThermoCoupleUpdater" : ThermoCoupleUpdater(parent=parent),
-        "LN2Updater" : LN2Updater(ThreadCollection=parent)
-        "VacuumControlStub": VacuumControlStub()
+        "LN2Updater" : LN2Updater(ThreadCollection=parent),
+        "VacuumControlStub": VacuumControlStub(),
+        "ShiMccControlStub": ShiMccControlStub()
     }
 
 
