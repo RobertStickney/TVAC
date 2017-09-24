@@ -9,8 +9,10 @@ if __name__ == '__main__':
     sys.path.insert(0, os.getcwd())
 
 from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
+from Collections.ProfileInstance import ProfileInstance
 from PfeifferGuage.PfeifferGauge import PfeifferGauge
 
+from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
 
 
@@ -22,12 +24,32 @@ class PfeifferGaugeControlStub(Thread):
         self.kwargs = kwargs
         self.parent = parent
 
+        self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.Pgauge = PfeifferGauge()
         self.pressure = PfeifferGaugeInstance.getInstance()
         self.pressure_read_peroid = 0.5  # 0.5s loop period
         self.param_period = 5  # 5 second period
 
+    def logPressureData(self):
+        coloums = "( profile_I_ID, guage, pressure )"
+        values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 1, self.pressure.gauges.get_pressure_cryopump())
+        values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 2, self.pressure.gauges.get_pressure_chamber())
+        values += "( \"{}\",{},{} )".format(self.zoneProfiles.profileUUID, 3, self.pressure.gauges.get_pressure_roughpump())
+        sql = "INSERT INTO tvac.Pressure {} VALUES {};".format(coloums, values)
+        # print(sql)
+        mysql = MySQlConnect()
+        try:
+            mysql.cur.execute(sql)
+            mysql.conn.commit()
+        except Exception as e:
+            raise e
+            return e
+
     def run(self):
+        '''
+        '''
+        # used for testing
+        first = True
         while True:
             # While true to restart the thread if it errors out
             try:
@@ -72,6 +94,24 @@ class PfeifferGaugeControlStub(Thread):
                         Logging.logEvent("Debug", "Status Update",
                                          {"message": "Test run of Pfeiffer Guages loop",
                                           "level": 4})
+                        if first:
+                            # TODO: Test the system at differnt starting pressures, it could restart at any point
+                            # What happens when pressure in roughing  is more than cryo?
+                            self.pressure.gauges.update([{'addr': 1, 'Pressure': 1000},
+                                                             {'addr': 2, 'Pressure': 1},
+                                                             {'addr': 3, 'Pressure': 999}])
+                            first = False
+                        else:
+                            self.pressure.gauges.update([{'addr': 1, 'Pressure': self.pressure.gauges.get_pressure_cryopump()/2.5},
+                                                         {'addr': 2, 'Pressure': self.pressure.gauges.get_pressure_chamber()/5},
+                                                         {'addr': 3, 'Pressure': self.pressure.gauges.get_pressure_roughpump()/3}])
+                        # Just to see the screen for longer
+                        time.sleep(5)
+
+                    Logging.logEvent("Debug", "Status Update",
+                     {"message": "Current Pressure in Chamber is {}".format(self.pressure.gauges.get_pressure_chamber()),
+                      "level": 3})
+                    self.logPressureData()
 
                     if time.time() < next_pressure_read_time:
                         time.sleep(next_pressure_read_time - time.time())

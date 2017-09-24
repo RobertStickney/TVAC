@@ -54,7 +54,6 @@ class TsRegistersControlStub(Thread):
                     self.ts_reg.start_adc(1, 7, 4000000)
 
                 while True:
-                    self.parent.safetyThread.heartbeats["TsRegistersControlStub"] = time.time()
                     for i in range(len(self.ir_lamp_pwm)):
                         self.ir_lamp_pwm[i].update_waveform_state(self.da_io.digital_out.get_IR_Lamps_pwm_dc(i + 1))
                     if "root" in userName:

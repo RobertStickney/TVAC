@@ -18,10 +18,6 @@ class PfeifferGaugeCollection:
         self.pfGuageList = self.buildCollection()
         self.time = datetime.now()
 
-        # for testing
-        self.testCryoPressure = 5000
-        self.testChamberPressure = 5000
-        self.testRoughPressure = 500
 
     def buildCollection(self):
         guages = [PfeifferGaugeContract(1, 'Cryopump'),
@@ -30,35 +26,23 @@ class PfeifferGaugeCollection:
         return guages
 
     def get_pressure_cryopump(self):
-        userName = os.environ['LOGNAME']
-        if "root" in userName:
-            return self.pfGuageList[0].getPressure()
-        else:
-            self.testCryoPressure -= (self.testCryoPressure/2) 
-            return self.testCryoPressure
+        return self.pfGuageList[0].getPressure()
 
 
     def get_pressure_chamber(self):
-        userName = os.environ['LOGNAME']
-        if "root" in userName:
-            return self.pfGuageList[1].getPressure()
-        else:
-            self.testChamberPressure -= (self.testChamberPressure/2)
-            return self.testChamberPressure
+        return self.pfGuageList[1].getPressure()
+
 
     def get_pressure_roughpump(self):
-        userName = os.environ['LOGNAME']
-        if "root" in userName:
-            return self.pfGuageList[2].getPressure()
-        else:
-            self.testRoughPressure -= (self.testRoughPressure/2)
-            return self.testRoughPressure
+        return self.pfGuageList[2].getPressure()
+
 
     def update(self, pgList):
         self.__lock.acquire()
         self.time = datetime.now()
         self.__lock.release()
         for updatePG in pgList:
+            # Why is this tc? should this be Guage?
             tc = self.getPG(updatePG['addr'])
             tc.update(updatePG)
 

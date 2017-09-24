@@ -18,6 +18,14 @@ CREATE TABLE tvac.Real_Temperture(
 	temperture decimal(10,4) NOT NULL
 );
 
+DROP TABLE IF EXISTS tvac.Pressure;
+CREATE TABLE tvac.Pressure(
+	profile_I_ID varchar(36) NOT NULL,
+	time DATETIME DEFAULT CURRENT_TIMESTAMP,
+	guage tinyint unsigned NOT NULL,
+	pressure float NOT NULL
+);
+
 DROP TABLE IF EXISTS tvac.Event;
 CREATE TABLE tvac.Event(
 	event_type varchar(256) NOT NULL,
@@ -52,6 +60,7 @@ CREATE TABLE tvac.Thermal_Zone_Profile(
 	zone tinyint unsigned NOT NULL,
 	average varchar(10) NOT NULL,
 	created timestamp NOT NULL,
+	heat_error decimal(10,4) NOT NULL,
 	UNIQUE KEY(profile_name,zone)
 );
 

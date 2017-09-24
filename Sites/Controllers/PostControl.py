@@ -17,7 +17,7 @@ class PostContol:
 
     def runSingleProfile(self, data):
         threadInstance = ThreadCollectionInstance.getInstance()
-        threadInstance.threadCollection.runSingleThread(data);
+        threadInstance.threadCollection.runSingleThread(data)
         return "{'result':'success'}"
 
     def pauseSingleThread(self, data):

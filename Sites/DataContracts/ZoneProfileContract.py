@@ -42,6 +42,7 @@ class ZoneProfileContract:
 
         self.zoneUUID = ''
         self.activeZoneProfile = False
+        self.heatError = None
 
     def setThermocouples(self, thermocouples):
         self.__lock.acquire()
@@ -78,7 +79,8 @@ class ZoneProfileContract:
             self.thermalProfiles = self.setThermalProfiles(d['thermalprofiles'])
         if 'thermocouples' in d:
             self.thermocouples = self.setThermocouples(d['thermocouples'])
-        
+        if 'heatError' in d: 
+            self.heatError = float(d['heatError']) + 273.15 #to convert c to k
         self.__lock.release()
 
 
@@ -94,9 +96,6 @@ class ZoneProfileContract:
             temp = max(self.thermocouples, key=lambda x: x.getTemp()).getTemp()
         self.__lock.release()
         return temp
-
-
-        
 
     def getJson(self):
         self.__lock.acquire()
