@@ -42,7 +42,7 @@ class ShiMccControlStub(Thread):
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
                     Logging.logEvent("Debug", "Status Update",
-                                     {"message": "Power on restart of  Shi Mcc Control Stub Thread",
+                                     {"message": "Power on the Shi Mcc",
                                       "level": 3})
                     startup_delay = self.hw.PC_104.digital_out.getVal('MCC2 Power')
                     self.hw.PC_104.digital_out.update({'MCC2 Power': True})
@@ -74,16 +74,16 @@ class ShiMccControlStub(Thread):
                                               "level": 4})
                             val = self.mcc.get_Status()
                             if val['Error']:
-                                Logging.logEvent("Debug", "Shi MCC",
-                                                 {"message": "response: %s" % val['Response'],
+                                Logging.logEvent("Debug", "Shi MCC Error",
+                                                 {"message": "Response: %s" % val['Response'],
                                                   "level": 4})
                             else:
                                 self.hw.ShiCryopump.update({'MCC Params': val['Response']})
                             if time.time() > next_param_read_time:
                                 val = self.mcc.get_ParamValues()
                                 if val['Error']:
-                                    Logging.logEvent("Debug", "Shi MCC",
-                                                     {"message": "response: %s" % val['Response'],
+                                    Logging.logEvent("Debug", "Shi MCC Error",
+                                                     {"message": "Response: %s" % val['Response'],
                                                       "level": 4})
                                 else:
                                     self.hw.ShiCryopump.update({'MCC Params': val['Response']})
@@ -122,8 +122,8 @@ class ShiMccControlStub(Thread):
                 # nicely close things, to open them back up again...
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
-                    pass
-                # raise e
+                    raise e
+                    # pass
                 time.sleep(4)
 
 
