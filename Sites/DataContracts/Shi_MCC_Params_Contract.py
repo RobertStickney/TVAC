@@ -54,12 +54,12 @@ class Shi_MCC_Params_Contract:
             self.PowerFailureRecovery = d['Power Failure Recovery']
         if 'Power Failure Recovery Status' in d:
             self.PowerFailureRecoveryStatus = {
-                '0': "0: No power failure recovery in progress.",
-                '1': "1: Cool down in progress.",
-                '2': "2: Regeneration in progress.",
-                '3': "3: Attempting to cool pump to 17K.",
-                '4': "4: Recovered pump to less than 17K.",
-                '5': "5: Pump second stage temperature (T2) not recovering well.",
+                0: "0: No power failure recovery in progress.",
+                1: "1: Cool down in progress.",
+                2: "2: Regeneration in progress.",
+                3: "3: Attempting to cool pump to 17K.",
+                4: "4: Recovered pump to less than 17K.",
+                5: "5: Pump second stage temperature (T2) not recovering well.",
                 }[d['Power Failure Recovery Status']]
         if 'Regen Cycles' in d:
             self.RegenCycles = d['Regen Cycles']
