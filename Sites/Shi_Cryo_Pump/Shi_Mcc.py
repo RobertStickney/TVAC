@@ -109,7 +109,10 @@ class Shi_Mcc:
             val = Functions[key]()
             er |= val['Error']
             pf |= val['PowerFailure']
-            vals[key] = val['Data']
+            if 'Data' in val:
+                vals[key] = val['Data']
+            else:
+                vals[key] = val['Response']
         return self.Format_Responce(vals, er, pf)
 
     # MCC Programmers References Guide Rev C
