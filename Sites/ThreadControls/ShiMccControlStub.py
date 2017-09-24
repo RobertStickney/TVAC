@@ -23,12 +23,13 @@ class ShiMccControlStub(Thread):
         self.parent = parent
 
         self.mcc = Shi_Mcc()
-        self.shi = ShiCryopumpInstance.getInstance()
+        self.hw = HardwareStatusInstance.getInstance()
         self.mcc_read_period = 0.5  # 0.5s loop period
         self.param_period = 30  # 10 second period
 
     def run(self):
         while True:
+
             # While true to restart the thread if it errors out
             try:
                 # Thread "Start up" stuff goes here
@@ -40,7 +41,16 @@ class ShiMccControlStub(Thread):
 
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
-                    pass
+                    Logging.logEvent("Debug", "Status Update",
+                                     {"message": "Power on restart of  Shi Mcc Control Stub Thread",
+                                      "level": 3})
+                    startup_delay = self.hw.PC_104.digital_out.getVal('MCC2 Power')
+                    self.hw.PC_104.digital_out.update({'MCC2 Power': True})
+                    if not startup_delay:
+                        time.sleep(5)
+
+                    # Now send some initialization commands
+
 
                 next_param_read_time = time.time()
                 while True:

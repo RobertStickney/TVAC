@@ -77,7 +77,6 @@ class TsRegistersControlStub(Thread):
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
                         self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(2), 2)
                         self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(3), 3)
-
                         self.read_analog_in()  # loop period is adc_period * 2 seconds
                     else:
                         Logging.logEvent("Debug","Status Update", 
