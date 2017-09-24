@@ -8,7 +8,7 @@ import sys
 if __name__ == '__main__':
     sys.path.insert(0, os.getcwd())
 
-from Collections.ShiCryopumpInstance import ShiCryopumpInstance
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 from Shi_Cryo_Pump.Shi_Mcc import Shi_Mcc
 
 from Logging.Logging import Logging
@@ -78,7 +78,7 @@ class ShiMccControlStub(Thread):
                                                  {"message": "response: %s" % val['Response'],
                                                   "level": 4})
                             else:
-                                self.shi.cryopump.update({'MCC Params': val['Response']})
+                                self.hw.ShiCryopump.update({'MCC Params': val['Response']})
                             if time.time() > next_param_read_time:
                                 val = self.mcc.get_ParamValues()
                                 if val['Error']:
@@ -86,7 +86,7 @@ class ShiMccControlStub(Thread):
                                                      {"message": "response: %s" % val['Response'],
                                                       "level": 4})
                                 else:
-                                    self.shi.cryopump.update({'MCC Params': val['Response']})
+                                    self.hw.ShiCryopump.update({'MCC Params': val['Response']})
                                 next_param_read_time = time.time() + self.param_period
                         except ValueError as err:
                             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -139,8 +139,8 @@ if __name__ == '__main__':
     thread.daemon = True
     thread.start()
 
-    shi_cp = ShiCryopumpInstance.getInstance()
+    shi_cp = HardwareStatusInstance.getInstance().ShiCryopump
     while True:
         time.sleep(2)
-        print(shi_cp.cryopump.getJson())
+        print(shi_cp.getJson())
 
