@@ -126,6 +126,7 @@ class ShiMccControlStub(Thread):
                 # raise e
                 time.sleep(4)
 
+
 if __name__ == '__main__':
     # adding debug info
     if(len(sys.argv)>1):
@@ -135,12 +136,15 @@ if __name__ == '__main__':
     Logging.logEvent("Debug","Status Update",
         {"message": "Debug on: Level {}".format(Logging.verbos),
          "level":1})
+
+    hw_status = HardwareStatusInstance.getInstance()
+    hw_status.PC_104.digital_out.update({'MCC2 Power': True})
+
     thread = ShiMccControlStub()
     thread.daemon = True
     thread.start()
 
-    shi_cp = HardwareStatusInstance.getInstance().ShiCryopump
     while True:
-        time.sleep(2)
-        print(shi_cp.getJson())
+        time.sleep(5)
+        print(hw_status.ShiCryopump.getJson())
 
