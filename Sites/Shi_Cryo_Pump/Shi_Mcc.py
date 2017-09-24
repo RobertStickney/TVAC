@@ -59,46 +59,46 @@ class Shi_Mcc:
 
     def get_Status(self):
         # Create Dict of Functions
-        FunS = {"Duty Cycle": self.Get_DutyCycle,  # 2.4
-                "Stage 1 Temp": self.Get_FirstStageTemp,  # 2.8
-                "Cryo Pump Ready State": self.Get_CryoPumpRdyState,  # 2.14
-                "Purge Valve State": self.Get_PurgeValveState,  # 2.15
-                "Regen Error": self.Get_RegenError,  # 2.18
-                "Regen Step": self.Get_RegenStep,  # 2.20
-                "Roughing Valve State": self.Get_RoughingValveState,  # 2.24
-                "Roughing Interlock": self.Get_RoughingInterlock,  # 2.25
-                "Stage 2 Temp": self.Get_SecondStageTemp,  # 2.26
-                "Status": self.Get_Status,  # 2.28
-                "Tc Pressure": self.Get_TcPressure}  # 2.30
+        FunS = {"Duty Cycle": self.Get_DutyCycle,  # 2.4 ------------------- Ex: "$XOI??_\r"
+                "Stage 1 Temp": self.Get_FirstStageTemp,  # 2.8 ------------ Ex: "$J;\r"
+                "Cryo Pump Ready State": self.Get_CryoPumpRdyState,  # 2.14  Ex: "$A?2\r"
+                "Purge Valve State": self.Get_PurgeValveState,  # 2.15 ----- Ex: "$E?6\r"
+                "Regen Error": self.Get_RegenError,  # 2.18 ---------------- Ex: "$eT\r"
+                "Regen Step": self.Get_RegenStep,  # 2.20 ------------------ Ex: "$O>\r"
+                "Roughing Valve State": self.Get_RoughingValveState,  # 2.24 Ex: "$D?3\r"
+                "Roughing Interlock": self.Get_RoughingInterlock,  # 2.25 -- Ex: "$Q?B\r"
+                "Stage 2 Temp": self.Get_SecondStageTemp,  # 2.26 ---------- Ex: "$K:\r"
+                "Status": self.Get_Status,  # 2.28 ------------------------- Ex: "$S16\r"
+                "Tc Pressure": self.Get_TcPressure}  # 2.30 ---------------- Ex: "$L=\r"
         return self.run_GetFunctions(FunS)
 
     def get_ParamValues(self):
         # Create Dict of Functions
-        FunS = {"Elapsed Time": self.Get_ElapsedTime,  # 2.5
-                "Failed Rate Of Rise Cycles": self.Get_Failed_RateOfRise_Cycles,  # 2.6
-                "Failed Repurge Cycles": self.Get_FailedRepurgeCycles,  # 2.7
-                "First Stage Temp CTL": self.Get_FirstStageTempCTL,  # 2.9-
-                "Last Rate Of Rise Value": self.Get_LastRateOfRiseValue,  # 2.10
-                "MCC Version": self.Get_ModuleVersion,  # 2.11
-                "Power Failure Recovery": self.Get_PowerFailureRecovery,  # 2.12-
-                "Power Failure Recovery Status": self.Get_PowerFailureRecoveryStatus,  # 2.13
-                "Regen Cycles": self.Get_RegenCycles,  # 2.17
-                "Regen Param_0": self.Get_RegenParam_0,  # 2.19
-                "Regen Param_1": self.Get_RegenParam_1,  # 2.19
-                "Regen Param_2": self.Get_RegenParam_2,  # 2.19
-                "Regen Param_3": self.Get_RegenParam_3,  # 2.19
-                "Regen Param_4": self.Get_RegenParam_4,  # 2.19
-                "Regen Param_5": self.Get_RegenParam_5,  # 2.19
-                "Regen Param_6": self.Get_RegenParam_6,  # 2.19
-                "Regen Param_A": self.Get_RegenParam_A,  # 2.19
-                "Regen Param_C": self.Get_RegenParam_C,  # 2.19
-                "Regen Param_G": self.Get_RegenParam_G,  # 2.19
-                "Regen Param_z": self.Get_RegenParam_z,  # 2.19
-                "Regen Start Delay": self.Get_RegenStartDelay,  # 2.21
-                "Regen Step Timer": self.Get_RegenStepTimer,  # 2.22
-                "Regen Time": self.Get_RegenTime,  # 2.23
-                "Second Stage Temp CTL": self.Get_SecondStageTempCTL,  # 2.27
-                "Tc Pressure State": self.Get_TcPressureState}  # 2.29
+        FunS = {"Elapsed Time": self.Get_ElapsedTime,  # 2.5 -------------------------- Ex: "$Y?J\r"
+                "Failed Rate Of Rise Cycles": self.Get_Failed_RateOfRise_Cycles,  # 2.6 Ex: "$m\\r"
+                "Failed Repurge Cycles": self.Get_FailedRepurgeCycles,  # 2.7 --------- Ex: "$l]\r"
+                "First Stage Temp CTL": self.Get_FirstStageTempCTL,  # 2.9 ------------ Ex: "$H?5\r"
+                "Last Rate Of Rise Value": self.Get_LastRateOfRiseValue,  # 2.10 ------ Ex: "$n_\r"
+                "MCC Version": self.Get_ModuleVersion,  # 2.11 ------------------------ Ex: "$@1\r"
+                "Power Failure Recovery": self.Get_PowerFailureRecovery,  # 2.12 ------ Ex: "$i?H\r"
+                "Power Failure Recovery Status": self.Get_PowerFailureRecoveryStatus,  # 2.13 Ex: "$t?a\r"
+                "Regen Cycles": self.Get_RegenCycles,  # 2.17 - Ex: "$Z?K\r"
+                "Regen Param_0": self.Get_RegenParam_0,  # 2.19 Ex: "P0?"
+                "Regen Param_1": self.Get_RegenParam_1,  # 2.19 Ex: "P1?"
+                "Regen Param_2": self.Get_RegenParam_2,  # 2.19 Ex: "P2?"
+                "Regen Param_3": self.Get_RegenParam_3,  # 2.19 Ex: "P3?"
+                "Regen Param_4": self.Get_RegenParam_4,  # 2.19 Ex: "P4?"
+                "Regen Param_5": self.Get_RegenParam_5,  # 2.19 Ex: "P5?"
+                "Regen Param_6": self.Get_RegenParam_6,  # 2.19 Ex: "P6?"
+                "Regen Param_A": self.Get_RegenParam_A,  # 2.19 Ex: "PA?"
+                "Regen Param_C": self.Get_RegenParam_C,  # 2.19 Ex: "PC?"
+                "Regen Param_G": self.Get_RegenParam_G,  # 2.19 Ex: "PG?"
+                "Regen Param_z": self.Get_RegenParam_z,  # 2.19 Ex: "Pz?"
+                "Regen Start Delay": self.Get_RegenStartDelay,  # 2.21 ------ Ex: "$j?[\r"
+                "Regen Step Timer": self.Get_RegenStepTimer,  # 2.22 -------- Ex: "$kZ\r"
+                "Regen Time": self.Get_RegenTime,  # 2.23 ------------------- Ex: "$aP\r"
+                "Second Stage Temp CTL": self.Get_SecondStageTempCTL,  # 2.27 Ex: "$I?:\r"
+                "Tc Pressure State": self.Get_TcPressureState}  # 2.29 ------ Ex: "$B?3\r"
         return self.run_GetFunctions(FunS)
 
     def run_GetFunctions(self, Functions):

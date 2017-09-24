@@ -97,6 +97,7 @@ class ShiMccControlStub(Thread):
                                               "line": exc_tb.tb_lineno,
                                               "thread": "ShiMccControlStub"
                                               })
+                            raise err
                     else:
                         Logging.logEvent("Debug", "Status Update",
                                          {"message": "Test run of Shi MCC loop",
