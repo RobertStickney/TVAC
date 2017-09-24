@@ -160,7 +160,7 @@ class Shi_Mcc:
     # 2.9 • First Stage Temperature Control pg:10
     def Get_FirstStageTempCTL(self):  # Command Ex: "$H?5\r"
         # return self.Send_cmd("H?")
-        val = self.Send_cmd("J")
+        val = self.Send_cmd("H?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
