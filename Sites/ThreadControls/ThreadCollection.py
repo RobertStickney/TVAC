@@ -63,7 +63,8 @@ class ThreadCollection:
         return result['profile_name'], result['startTime']
         
     def createZoneCollection(self):
-        return {"zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10}),lamps=['IR Lamp 1','IR Lamp 2']),
+        return {
+            "zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10}),lamps=['IR Lamp 1','IR Lamp 2']),
             "zone2": HardWareControlStub(args=('zone2',),lamps=['IR Lamp 3','IR Lamp 4']),
             "zone3": HardWareControlStub(args=('zone3',),lamps=['IR Lamp 6','IR Lamp 5']),
             "zone4": HardWareControlStub(args=('zone4',),lamps=['IR Lamp 7','IR Lamp 8']),
@@ -78,13 +79,14 @@ class ThreadCollection:
     def createHardwareInterfaces(self,parent):
         # sending parent for testing, getting current profile data to zone instance
         return {
-        "TsRegistersControlStub" : TsRegistersControlStub(parent=parent),
-        "PfeifferGauge" : PfeifferGaugeControlStub(),
-        "ThermoCoupleUpdater" : ThermoCoupleUpdater(parent=parent),
-        "LN2Updater" : LN2Updater(ThreadCollection=parent),
-        "VacuumControlStub": VacuumControlStub(),
-        "ShiMccControlStub": ShiMccControlStub()
-    }
+            1: TsRegistersControlStub(parent=parent),
+            2: ThermoCoupleUpdater(parent=parent),
+            3: PfeifferGaugeControlStub(),
+            4: ShiMccControlStub(),
+            # 5: ShiCompressorControlStub)(),
+            6: LN2Updater(ThreadCollection=parent),
+            7: VacuumControlStub(),
+            }
 
 
     def addProfileInstancetoBD(self):
@@ -126,9 +128,9 @@ class ThreadCollection:
 
         # Starts all the hw threads
         try:
-            for thread in self.hardwareInterfaceThreadDict.values():
-                thread.daemon = True
-                thread.start()
+            for key in sorted(self.hardwareInterfaceThreadDict.keys()):
+                self.hardwareInterfaceThreadDict[key].daemon = True
+                self.hardwareInterfaceThreadDict[key].start()
             self.safetyThread.daemon = True
             self.safetyThread.start()
         except Exception as e:
