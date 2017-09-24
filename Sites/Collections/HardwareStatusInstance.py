@@ -31,5 +31,4 @@ class HardwareStatusInstance:
 
             self.vacuum = False
 
-
             HardwareStatusInstance.__instance = self

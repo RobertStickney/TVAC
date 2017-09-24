@@ -89,6 +89,20 @@ class ThreadCollection:
             }
 
 
+    def runHardwareInterfaces(self):
+        # Starts all the hw threads
+        try:
+            for key in sorted(self.hardwareInterfaceThreadDict.keys()):
+                self.hardwareInterfaceThreadDict[key].daemon = True
+                self.hardwareInterfaceThreadDict[key].start()
+            self.safetyThread.daemon = True
+            self.safetyThread.start()
+        except Exception as e:
+            raise e
+            # TODO: Add an error logger to this error
+
+
+
     def addProfileInstancetoBD(self):
         '''
         This is a helper function of runProfile that adds the new profile Instance to the DB
@@ -125,18 +139,6 @@ class ThreadCollection:
 
 
         # TODO: I have no idea where, but when it restarts and loads a profile instance from memory, tkae the uuid and set it
-
-        # Starts all the hw threads
-        try:
-            for key in sorted(self.hardwareInterfaceThreadDict.keys()):
-                self.hardwareInterfaceThreadDict[key].daemon = True
-                self.hardwareInterfaceThreadDict[key].start()
-            self.safetyThread.daemon = True
-            self.safetyThread.start()
-        except Exception as e:
-            pass
-            # if it fails to start, it's fine because they are already started?
-
 
         # starts all the HWcontrol threads
         try:

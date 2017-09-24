@@ -37,6 +37,8 @@ if __name__ == '__main__':
     profileInstance = ProfileInstance.getInstance()
     threadInstance = ThreadCollectionInstance.getInstance()
 
+    threadInstance.threadCollection.runHardwareInterfaces()
+
     Logging.logEvent("Debug","Status Update",
         {"message": "Finished initializing threads and drivers",
          "level":1})
