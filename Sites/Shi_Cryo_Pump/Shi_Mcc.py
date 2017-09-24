@@ -454,7 +454,7 @@ class Shi_Mcc:
     def Get_Status(self):  # Command Ex: "$S16\r"
         # return self.Send_cmd("S1")
         val = self.Send_cmd("S1")
-        if not val['Error'] & len(val['Response']=1):
+        if (not val['Error']) & (len(val['Response']) == 1):
             val['Data'] = ord(val['Response']) - 0x20
         return val
 
