@@ -44,9 +44,9 @@ class ShiMccControlStub(Thread):
                     Logging.logEvent("Debug", "Status Update",
                                      {"message": "Power on the Shi Mcc",
                                       "level": 3})
-                    startup_delay = self.hw.PC_104.digital_out.getVal('MCC2 Power')
+                    Currently_powered = self.hw.PC_104.digital_out.getVal('MCC2 Power')
                     self.hw.PC_104.digital_out.update({'MCC2 Power': True})
-                    if not startup_delay:
+                    if not Currently_powered:
                         time.sleep(5)
                     # Now send some initialization commands
                     # The maximum second stage temperature the cryopump may start to restart after a power failure.
