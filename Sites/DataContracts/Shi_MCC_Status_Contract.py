@@ -26,6 +26,7 @@ class Shi_MCC_Status_Contract:
         self.TcPressure = 0
 
     def update(self, d):
+        print(d)
         self.__Lock.acquire()
         if 'Duty Cycle' in d:
             self.DutyCycle = d['Duty Cycle']

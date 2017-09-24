@@ -78,7 +78,7 @@ class ShiMccControlStub(Thread):
                                                  {"message": "Response: %s" % val['Response'],
                                                   "level": 4})
                             else:
-                                self.hw.ShiCryopump.update({'MCC Params': val['Response']})
+                                self.hw.ShiCryopump.update({'MCC Status': val['Response']})
                             if time.time() > next_param_read_time:
                                 val = self.mcc.get_ParamValues()
                                 if val['Error']:

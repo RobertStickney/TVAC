@@ -42,7 +42,7 @@ class Shi_MCC_Params_Contract:
         if 'Failed Repurge Cycles' in d:
             self.FailedRepurgeCycles = d['Failed Repurge Cycles']
         if 'First Stage Temp CTL' in d:
-            (m,t) = divmod(d['First Stage Temp CTL'], 400)
+            (m, t) = divmod(d['First Stage Temp CTL'], 400)
             self.FirstStageTempCTL['method'] = m
             self.FirstStageTempCTL['temp'] = t
         if 'Last Rate Of Rise Value' in d:
