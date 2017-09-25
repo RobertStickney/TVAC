@@ -32,8 +32,8 @@ class PfeifferGaugeControlStub(Thread):
 
     def logPressureData(self):
         coloums = "( profile_I_ID, guage, pressure )"
-        values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 1, self.gauges.get_pressure_cryopump())
-        values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 2, self.gauges.get_pressure_chamber())
+        values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 1, self.gauges.get_pressure_chamber())
+        values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 2, self.gauges.get_pressure_cryopump())
         values += "( \"{}\",{},{} )".format(self.zoneProfiles.profileUUID, 3, self.gauges.get_pressure_roughpump())
         sql = "INSERT INTO tvac.Pressure {} VALUES {};".format(coloums, values)
         # print(sql)
