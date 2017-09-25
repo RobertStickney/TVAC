@@ -6,7 +6,6 @@ from VerbHandler import VerbHandler
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
-from VerbHandler import VerbHandler
 
 from Logging.Logging import Logging
 
@@ -36,6 +35,8 @@ if __name__ == '__main__':
     hardwareStatusInstance = HardwareStatusInstance.getInstance()
     profileInstance = ProfileInstance.getInstance()
     threadInstance = ThreadCollectionInstance.getInstance()
+
+    threadInstance.threadCollection.runHardwareInterfaces()
 
     Logging.logEvent("Debug","Status Update",
         {"message": "Finished initializing threads and drivers",

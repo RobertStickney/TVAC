@@ -1,7 +1,9 @@
 from threading import Thread
 import time
 import os
-import sys
+if __name__ == '__main__':
+    import sys
+    sys.path.insert(0, os.getcwd())
 
 from Collections.PC_104_Instance import PC_104_Instance
 from TS_7250_V2.TS_Registers import TS_Registers
@@ -52,7 +54,6 @@ class TsRegistersControlStub(Thread):
                     self.ts_reg.start_adc(1, 7, 4000000)
 
                 while True:
-                    self.parent.safetyThread.heartbeats["TsRegistersControlStub"] = time.time()
                     for i in range(len(self.ir_lamp_pwm)):
                         self.ir_lamp_pwm[i].update_waveform_state(self.da_io.digital_out.get_IR_Lamps_pwm_dc(i + 1))
                     if "root" in userName:
@@ -75,16 +76,6 @@ class TsRegistersControlStub(Thread):
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
                         self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(2), 2)
                         self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(3), 3)
-
-                        # If we want logging cuncomment this and add what you want to log...
-
-                        # Logging.logEvent("Event","TsRegisters Reading", 
-                        #     {"message": "Current TC reading",
-                        #      "time":    TCs['time']})
-                        # Logging.logEvent("Debug","Data Dump", 
-                        #     {"message": "Current TC reading",
-                        #      "level":4})
-
                         self.read_analog_in()  # loop period is adc_period * 2 seconds
                     else:
                         Logging.logEvent("Debug","Status Update", 
@@ -134,17 +125,22 @@ class TsRegistersControlStub(Thread):
         offsets = [.1,.1, .2,.2, .3,.3, .4,.4, .5,.5, .6,.6, .7,.7, .8,.8]
         for i in range(16):
             self.ir_lamp_pwm.append(PWM_Square_Wave(self.pwm_period,
-                                                    offsets[i],
-                                                    0,
+                                                    offsets[i], 0,
                                                     "IR Lamp "+str(i+1),
                                                     self.da_io.digital_out.update))
 
     def ir_lamp_pwm_stop(self):
         self.ir_lamp_pwm = []
 
+
 if __name__ == '__main__':
-    import sys
-    sys.path.insert(0, '../')
+
+    # adding debug info
+    if(len(sys.argv)>1):
+        for arg in sys.argv:
+            if arg.startswith("-v"):
+                Logging.verbos = arg.count("v")
+
     thread = TsRegistersControlStub()
     thread.daemon = True
     thread.start()

@@ -1,5 +1,6 @@
 import threading
 from datetime import datetime
+import os
 
 from DataContracts.PfeifferGaugeContract import PfeifferGaugeContract
 
@@ -17,6 +18,7 @@ class PfeifferGaugeCollection:
         self.pfGuageList = self.buildCollection()
         self.time = datetime.now()
 
+
     def buildCollection(self):
         guages = [PfeifferGaugeContract(1, 'Cryopump'),
                   PfeifferGaugeContract(2, 'Chamber'),
@@ -26,17 +28,21 @@ class PfeifferGaugeCollection:
     def get_pressure_cryopump(self):
         return self.pfGuageList[0].getPressure()
 
+
     def get_pressure_chamber(self):
         return self.pfGuageList[1].getPressure()
 
+
     def get_pressure_roughpump(self):
         return self.pfGuageList[2].getPressure()
+
 
     def update(self, pgList):
         self.__lock.acquire()
         self.time = datetime.now()
         self.__lock.release()
         for updatePG in pgList:
+            # Why is this tc? should this be Guage?
             tc = self.getPG(updatePG['addr'])
             tc.update(updatePG)
 
@@ -46,9 +52,7 @@ class PfeifferGaugeCollection:
                 return pg
         raise RuntimeError('Pfeiffer gauge #: %s is out of range' % n)
 
-    def getJson(self, temp_units = 'K', whichTCs = 'all'):
-        # temp_units values: ['K', 'C', 'F']
-        # whichTCs values: ['all', 'Working', 'NotWorking']
+    def getJson(self):
         message = []
         self.__lock.acquire()
         message.append('{"time":%s,' % self.time)

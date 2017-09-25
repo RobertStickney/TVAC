@@ -34,6 +34,7 @@ class Shi_MCC_Params_Contract:
         self.TcPressureState = False
 
     def update(self, d):
+        print(d)
         self.__Lock.acquire()
         if 'Elapsed Time' in d:
             self.ElapsedTime = d['Elapsed Time']
@@ -42,7 +43,7 @@ class Shi_MCC_Params_Contract:
         if 'Failed Repurge Cycles' in d:
             self.FailedRepurgeCycles = d['Failed Repurge Cycles']
         if 'First Stage Temp CTL' in d:
-            (m,t) = divmod(d['First Stage Temp CTL'], 400)
+            (m, t) = divmod(d['First Stage Temp CTL'], 400)
             self.FirstStageTempCTL['method'] = m
             self.FirstStageTempCTL['temp'] = t
         if 'Last Rate Of Rise Value' in d:
@@ -53,12 +54,12 @@ class Shi_MCC_Params_Contract:
             self.PowerFailureRecovery = d['Power Failure Recovery']
         if 'Power Failure Recovery Status' in d:
             self.PowerFailureRecoveryStatus = {
-                '0': "0: No power failure recovery in progress.",
-                '1': "1: Cool down in progress.",
-                '2': "2: Regeneration in progress.",
-                '3': "3: Attempting to cool pump to 17K.",
-                '4': "4: Recovered pump to less than 17K.",
-                '5': "5: Pump second stage temperature (T2) not recovering well.",
+                0: "0: No power failure recovery in progress.",
+                1: "1: Cool down in progress.",
+                2: "2: Regeneration in progress.",
+                3: "3: Attempting to cool pump to 17K.",
+                4: "4: Recovered pump to less than 17K.",
+                5: "5: Pump second stage temperature (T2) not recovering well.",
                 }[d['Power Failure Recovery Status']]
         if 'Regen Cycles' in d:
             self.RegenCycles = d['Regen Cycles']
@@ -142,7 +143,7 @@ class Shi_MCC_Params_Contract:
                    '"Last Rate Of Rise Value":%s,' % self.LastRateOfRiseValue,
                    '"MCC Version":%s,' % self.ModuleVersion,
                    '"Power Failure Recovery":%s,' % self.PowerFailureRecovery,
-                   '"Power Failure Recovery Status":%s,' % self.PowerFailureRecoveryStatus,
+                   '"Power Failure Recovery Status":"%s",' % self.PowerFailureRecoveryStatus,
                    '"Regen Cycles":%s,' % self.RegenCycles,
                    '"Regen Param":%s,' % json.dumps(self.RegenParam),
                    '"Regen Start Delay":%s,' % self.RegenStartDelay,

@@ -7,6 +7,7 @@ from ThreadControls.TsRegistersControlStub import TsRegistersControlStub
 from ThreadControls.LN2Updater import LN2Updater
 from ThreadControls.PfeifferGaugeControlStub import PfeifferGaugeControlStub
 from ThreadControls.VacuumControlStub import VacuumControlStub
+from ThreadControls.ShiMccControlStub import ShiMccControlStub
 
 
 from Collections.ProfileInstance import ProfileInstance
@@ -62,7 +63,8 @@ class ThreadCollection:
         return result['profile_name'], result['startTime']
         
     def createZoneCollection(self):
-        return {"zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10}),lamps=['IR Lamp 1','IR Lamp 2']),
+        return {
+            "zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10}),lamps=['IR Lamp 1','IR Lamp 2']),
             "zone2": HardWareControlStub(args=('zone2',),lamps=['IR Lamp 3','IR Lamp 4']),
             "zone3": HardWareControlStub(args=('zone3',),lamps=['IR Lamp 6','IR Lamp 5']),
             "zone4": HardWareControlStub(args=('zone4',),lamps=['IR Lamp 7','IR Lamp 8']),
@@ -77,12 +79,28 @@ class ThreadCollection:
     def createHardwareInterfaces(self,parent):
         # sending parent for testing, getting current profile data to zone instance
         return {
-        "TsRegistersControlStub" : TsRegistersControlStub(parent=parent),
-        "PfeifferGauge" : PfeifferGaugeControlStub(),
-        "ThermoCoupleUpdater" : ThermoCoupleUpdater(parent=parent),
-        "LN2Updater" : LN2Updater(ThreadCollection=parent)
-        "VacuumControlStub": VacuumControlStub()
-    }
+            1: TsRegistersControlStub(parent=parent),
+            2: ThermoCoupleUpdater(parent=parent),
+            3: PfeifferGaugeControlStub(),
+            4: ShiMccControlStub(),
+            # 5: ShiCompressorControlStub)(),
+            6: LN2Updater(ThreadCollection=parent),
+            7: VacuumControlStub(),
+            }
+
+
+    def runHardwareInterfaces(self):
+        # Starts all the hw threads
+        try:
+            for key in sorted(self.hardwareInterfaceThreadDict.keys()):
+                self.hardwareInterfaceThreadDict[key].daemon = True
+                self.hardwareInterfaceThreadDict[key].start()
+            self.safetyThread.daemon = True
+            self.safetyThread.start()
+        except Exception as e:
+            raise e
+            # TODO: Add an error logger to this error
+
 
 
     def addProfileInstancetoBD(self):
@@ -116,23 +134,9 @@ class ThreadCollection:
     
         if firstStart:
             result = self.addProfileInstancetoBD()
+            # If there is an error connenting to the DB, return it
             if result != True:
                 return result
-
-
-        # TODO: I have no idea where, but when it restarts and loads a profile instance from memory, tkae the uuid and set it
-
-        # Starts all the hw threads
-        try:
-            for thread in self.hardwareInterfaceThreadDict.values():
-                thread.daemon = True
-                thread.start()
-            self.safetyThread.daemon = True
-            self.safetyThread.start()
-        except Exception as e:
-            pass
-            # if it fails to start, it's fine because they are already started?
-
 
         # starts all the HWcontrol threads
         try:
@@ -146,6 +150,8 @@ class ThreadCollection:
                      "level":1})
         except Exception as e:
             pass
+
+        ProfileInstance.getInstance().activeProfile = True
 
         return "{'result':'success'}"
         

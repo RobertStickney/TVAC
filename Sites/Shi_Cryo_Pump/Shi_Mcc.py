@@ -1,8 +1,8 @@
-#import json
+import json
 import time
+import os
 
-
-class ShiMcc:
+class Shi_Mcc:
 
     def Send_cmd(self, Command):
         MCC = open('/dev/ttyxuart0', 'r+b', buffering=0)
@@ -59,46 +59,46 @@ class ShiMcc:
 
     def get_Status(self):
         # Create Dict of Functions
-        FunS = {"Duty Cycle": self.Get_DutyCycle,  # 2.4
-                "Stage 1 Temp": self.Get_FirstStageTemp,  # 2.8
-                "Cryo Pump Ready State": self.Get_CryoPumpRdyState,  # 2.14
-                "Purge Valve State": self.Get_PurgeValveState,  # 2.15
-                "Regen Error": self.Get_RegenError,  # 2.18
-                "Regen Step": self.Get_RegenStep,  # 2.20
-                "Roughing Valve State": self.Get_RoughingValveState,  # 2.24
-                "Roughing Interlock": self.Get_RoughingInterlock,  # 2.25
-                "Stage 2 Temp": self.Get_SecondStageTemp,  # 2.26
-                "Status": self.Get_Status,  # 2.28
-                "Tc Pressure": self.Get_TcPressure}  # 2.30
+        FunS = {"Duty Cycle": self.Get_DutyCycle,  # 2.4 ------------------- Ex: "$XOI??_\r"
+                "Stage 1 Temp": self.Get_FirstStageTemp,  # 2.8 ------------ Ex: "$J;\r"
+                "Cryo Pump Ready State": self.Get_CryoPumpRdyState,  # 2.14  Ex: "$A?2\r"
+                "Purge Valve State": self.Get_PurgeValveState,  # 2.15 ----- Ex: "$E?6\r"
+                "Regen Error": self.Get_RegenError,  # 2.18 ---------------- Ex: "$eT\r"
+                "Regen Step": self.Get_RegenStep,  # 2.20 ------------------ Ex: "$O>\r"
+                "Roughing Valve State": self.Get_RoughingValveState,  # 2.24 Ex: "$D?3\r"
+                "Roughing Interlock": self.Get_RoughingInterlock,  # 2.25 -- Ex: "$Q?B\r"
+                "Stage 2 Temp": self.Get_SecondStageTemp,  # 2.26 ---------- Ex: "$K:\r"
+                "Status": self.Get_Status,  # 2.28 ------------------------- Ex: "$S16\r"
+                "Tc Pressure": self.Get_TcPressure}  # 2.30 ---------------- Ex: "$L=\r"
         return self.run_GetFunctions(FunS)
 
     def get_ParamValues(self):
         # Create Dict of Functions
-        FunS = {"Elapsed Time": self.Get_ElapsedTime,  # 2.5
-                "Failed Rate Of Rise Cycles": self.Get_Failed_RateOfRise_Cycles,  # 2.6
-                "Failed Repurge Cycles": self.Get_FailedRepurgeCycles,  # 2.7
-                "First Stage Temp CTL": self.Get_FirstStageTempCTL,  # 2.9-
-                "Last Rate Of Rise Value": self.Get_LastRateOfRiseValue,  # 2.10
-                "MCC Version": self.Get_ModuleVersion,  # 2.11
-                "Power Failure Recovery": self.Get_PowerFailureRecovery,  # 2.12-
-                "Power Failure Recovery Status": self.Get_PowerFailureRecoveryStatus,  # 2.13
-                "Regen Cycles": self.Get_RegenCycles,  # 2.17
-                "Regen Param_0": self.Get_RegenParam_0,  # 2.19
-                "Regen Param_1": self.Get_RegenParam_1,  # 2.19
-                "Regen Param_2": self.Get_RegenParam_2,  # 2.19
-                "Regen Param_3": self.Get_RegenParam_3,  # 2.19
-                "Regen Param_4": self.Get_RegenParam_4,  # 2.19
-                "Regen Param_5": self.Get_RegenParam_5,  # 2.19
-                "Regen Param_6": self.Get_RegenParam_6,  # 2.19
-                "Regen Param_A": self.Get_RegenParam_A,  # 2.19
-                "Regen Param_C": self.Get_RegenParam_C,  # 2.19
-                "Regen Param_G": self.Get_RegenParam_G,  # 2.19
-                "Regen Param_z": self.Get_RegenParam_z,  # 2.19
-                "Regen Start Delay": self.Get_RegenStartDelay,  # 2.21
-                "Regen Step Timer": self.Get_RegenStepTimer,  # 2.22
-                "Regen Time": self.Get_RegenTime,  # 2.23
-                "Second Stage Temp CTL": self.Get_SecondStageTempCTL,  # 2.27
-                "Tc Pressure State": self.Get_TcPressureState}  # 2.29
+        FunS = {"Elapsed Time": self.Get_ElapsedTime,  # 2.5 -------------------------- Ex: "$Y?J\r"
+                "Failed Rate Of Rise Cycles": self.Get_Failed_RateOfRise_Cycles,  # 2.6 Ex: "$m\\r"
+                "Failed Repurge Cycles": self.Get_FailedRepurgeCycles,  # 2.7 --------- Ex: "$l]\r"
+                "First Stage Temp CTL": self.Get_FirstStageTempCTL,  # 2.9 ------------ Ex: "$H?5\r"
+                "Last Rate Of Rise Value": self.Get_LastRateOfRiseValue,  # 2.10 ------ Ex: "$n_\r"
+                "MCC Version": self.Get_ModuleVersion,  # 2.11 ------------------------ Ex: "$@1\r"
+                "Power Failure Recovery": self.Get_PowerFailureRecovery,  # 2.12 ------ Ex: "$i?H\r"
+                "Power Failure Recovery Status": self.Get_PowerFailureRecoveryStatus,  # 2.13 Ex: "$t?a\r"
+                "Regen Cycles": self.Get_RegenCycles,  # 2.17 - Ex: "$Z?K\r"
+                "Regen Param_0": self.Get_RegenParam_0,  # 2.19 Ex: "P0?"
+                "Regen Param_1": self.Get_RegenParam_1,  # 2.19 Ex: "P1?"
+                "Regen Param_2": self.Get_RegenParam_2,  # 2.19 Ex: "P2?"
+                "Regen Param_3": self.Get_RegenParam_3,  # 2.19 Ex: "P3?"
+                "Regen Param_4": self.Get_RegenParam_4,  # 2.19 Ex: "P4?"
+                "Regen Param_5": self.Get_RegenParam_5,  # 2.19 Ex: "P5?"
+                "Regen Param_6": self.Get_RegenParam_6,  # 2.19 Ex: "P6?"
+                "Regen Param_A": self.Get_RegenParam_A,  # 2.19 Ex: "PA?"
+                "Regen Param_C": self.Get_RegenParam_C,  # 2.19 Ex: "PC?"
+                "Regen Param_G": self.Get_RegenParam_G,  # 2.19 Ex: "PG?"
+                "Regen Param_z": self.Get_RegenParam_z,  # 2.19 Ex: "Pz?"
+                "Regen Start Delay": self.Get_RegenStartDelay,  # 2.21 ------ Ex: "$j?[\r"
+                "Regen Step Timer": self.Get_RegenStepTimer,  # 2.22 -------- Ex: "$kZ\r"
+                "Regen Time": self.Get_RegenTime,  # 2.23 ------------------- Ex: "$aP\r"
+                "Second Stage Temp CTL": self.Get_SecondStageTempCTL,  # 2.27 Ex: "$I?:\r"
+                "Tc Pressure State": self.Get_TcPressureState}  # 2.29 ------ Ex: "$B?3\r"
         return self.run_GetFunctions(FunS)
 
     def run_GetFunctions(self, Functions):
@@ -109,8 +109,11 @@ class ShiMcc:
             val = Functions[key]()
             er |= val['Error']
             pf |= val['PowerFailure']
-            vals[key] = val['Data']
-        return self.Format_Responce(json.dumps(vals), er, pf)
+            if 'Data' in val:
+                vals[key] = val['Data']
+            else:
+                vals[key] = val['Response']
+        return self.Format_Responce(vals, er, pf)
 
     # MCC Programmers References Guide Rev C
 
@@ -119,7 +122,7 @@ class ShiMcc:
         # return self.Send_cmd("XOI??")
         val = self.Send_cmd("XOI??")
         if not val['Error']:
-            val['data'] = (int(val['Response'])/23) * 100
+            val['Data'] = (int(val['Response'])/23) * 100
         return val
 
     # 2.5 • Elapsed Time pg:8
@@ -127,7 +130,7 @@ class ShiMcc:
         # return self.Send_cmd("Y?")
         val = self.Send_cmd("Y?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.6 • Failed Rate Of Rise Cycles pg:8
@@ -135,7 +138,7 @@ class ShiMcc:
         # return self.Send_cmd("m")
         val = self.Send_cmd("m")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.7 • Failed Repurge Cycles pg:9
@@ -143,7 +146,7 @@ class ShiMcc:
         # return self.Send_cmd("l")
         val = self.Send_cmd("l")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.8 • First Stage Temperature pg:9
@@ -151,15 +154,15 @@ class ShiMcc:
         # return self.Send_cmd("J")
         val = self.Send_cmd("J")
         if not val['Error']:
-            val['data'] = float(val['Response'])
+            val['Data'] = float(val['Response'])
         return val
 
     # 2.9 • First Stage Temperature Control pg:10
     def Get_FirstStageTempCTL(self):  # Command Ex: "$H?5\r"
         # return self.Send_cmd("H?")
-        val = self.Send_cmd("J")
+        val = self.Send_cmd("H?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Set_FirstStageTempCTL(self, temp=0, method=0):
@@ -169,7 +172,7 @@ class ShiMcc:
         if (method < 0) | (method > 3):
             print('First stage control method is out of range (0-3): {:d}'.format(method))
             return self.Format_Responce("Temp out of range: " + str(method), error=True)
-        # add convert to real data
+        # add convert to real Data
         return self.Send_cmd("H{0:d},{1:d}".format(temp, method))
 
     # 2.10 • Last Rate Of Rise Value pg:11
@@ -177,7 +180,7 @@ class ShiMcc:
         # return self.Send_cmd("n")
         val = self.Send_cmd("n")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.11 • Module Version pg:11
@@ -189,7 +192,7 @@ class ShiMcc:
         # return self.Send_cmd("i?")
         val = self.Send_cmd("i?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Set_PowerFailureRecovery(self, method=2):  # Command Ex: "$i2H\r"
@@ -199,7 +202,7 @@ class ShiMcc:
         if (method < 0) | (method > 2):
             print('Not a Valid Power recovery mode (0-2): {:d}'.format(method))
             return self.Format_Responce("Not a Valid Power recovery mode (0-2): " + str(method), error=True)
-        # add convert to real data
+        # add convert to real Data
         return self.Send_cmd("i{0:d}".format(method))
 
     # 2.13 • Power Failure Recovery Status pg:12
@@ -207,7 +210,7 @@ class ShiMcc:
         # return self.Send_cmd("t?")
         val = self.Send_cmd("t?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.14 • Pump On/Off/Query pg:13
@@ -228,7 +231,7 @@ class ShiMcc:
         # return self.Send_cmd("E?")
         val = self.Send_cmd("E?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Open_PurgeValve(self):
@@ -249,7 +252,7 @@ class ShiMcc:
         # return self.Send_cmd("Z?")
         val = self.Send_cmd("Z?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.18 • Regeneration Error pg:15
@@ -261,82 +264,82 @@ class ShiMcc:
         # return self.Send_cmd("P0?")
         val = self.Send_cmd("P0?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_1(self):
         # return self.Send_cmd("P1?")
         val = self.Send_cmd("P1?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_2(self):
         # return self.Send_cmd("P2?")
         val = self.Send_cmd("P2?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_3(self):
         # return self.Send_cmd("P3?")
         val = self.Send_cmd("P3?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_4(self):
         # return self.Send_cmd("P4?")
         val = self.Send_cmd("P4?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_5(self):
         # return self.Send_cmd("P5?")
         val = self.Send_cmd("P5?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_6(self):
         # return self.Send_cmd("P6?")
         val = self.Send_cmd("P6?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_A(self):
         # return self.Send_cmd("PA?")
         val = self.Send_cmd("PA?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_C(self):
         # return self.Send_cmd("PC?")
         val = self.Send_cmd("PC?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_G(self):
         # return self.Send_cmd("PG?")
         val = self.Send_cmd("PG?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_z(self):
         # return self.Send_cmd("Pz?")
         val = self.Send_cmd("Pz?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
-    def Set_RegenParam(self, Param, Value):  # expected call: Set_RegenParam(chr(int), int)
+    def Set_RegenParam(self, Param='', Value=0):  # expected call: Set_RegenParam(chr(int), int)
         if (Param not in ['0', '1', '2', '3', '4', '5', '6', 'A', 'C', 'G', 'z']):
-            return self.Format_Responce("Parameter out of range: " + str(Param), error=True)
+            return self.Format_Responce("Parameter unknown: " + str(Param), error=True)
         elif (Param == '0') & ((Value < 0) | (Value > 59994)):
             return self.Format_Responce("RegenParam: Pump Restart Delay out of range: " + str(Value), error=True)
         elif (Param == '1') & ((Value < 0) | (Value > 9990)):
@@ -369,9 +372,9 @@ class ShiMcc:
     # 2.21 • Regeneration Start Delay pg.18
     def Get_RegenStartDelay(self):  # Command Ex: "$j?[\r"
         # return self.Send_cmd("j?")
-        val = self.Send_cmd("j")
+        val = self.Send_cmd("j?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Set_RegenStartDelay(self, delay):
@@ -385,7 +388,7 @@ class ShiMcc:
         # return self.Send_cmd("k")
         val = self.Send_cmd("k")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.23 • Regeneration Time pg:19
@@ -393,7 +396,7 @@ class ShiMcc:
         # return self.Send_cmd("a")
         val = self.Send_cmd("a")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     # 2.24 • Rough On/Off/Query pg:19
@@ -401,7 +404,7 @@ class ShiMcc:
         # return self.Send_cmd("D?")
         val = self.Send_cmd("D?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Open_RoughingValve(self):  # Command Ex: "$D1d\r"
@@ -415,7 +418,7 @@ class ShiMcc:
         # return self.Send_cmd("Q?")
         val = self.Send_cmd("Q?")
         if not val['Error']:
-            val['data'] = int(val['Response']) - 0x30
+            val['Data'] = int(val['Response']) - 0x30
         return val
 
     def Clear_RoughingInterlock(self):  # Command Ex: "$Q?B\r"
@@ -424,9 +427,13 @@ class ShiMcc:
     # 2.26 • Second Stage Temperature pg:20
     def Get_SecondStageTemp(self):  # Command Ex: "$K:\r"
         # return self.Send_cmd("K")
-        val = self.Send_cmd("K")
+        userName = os.environ['LOGNAME']
+        if "root" in userName:
+            val = self.Send_cmd("K")
+        else:
+            val = {'Error':False,'Response':14.0}
         if not val['Error']:
-            val['data'] = float(val['Response'])
+            val['Data'] = float(val['Response'])
         return val
 
     # 2.27 • Second Stage Temperature Control pg:21
@@ -434,7 +441,7 @@ class ShiMcc:
         # return self.Send_cmd("I?")
         val = self.Send_cmd("I?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Set_SecondStageTempCTL(self, temp):  # Command Ex: "$I?:\r"
@@ -447,8 +454,8 @@ class ShiMcc:
     def Get_Status(self):  # Command Ex: "$S16\r"
         # return self.Send_cmd("S1")
         val = self.Send_cmd("S1")
-        if not val['Error']:
-            val['data'] = int(val['Response']) - 0x20
+        if (not val['Error']) & (len(val['Response']) == 1):
+            val['Data'] = ord(val['Response']) - 0x20
         return val
 
     # 2.29 • TC On/Off/Query pg:22
@@ -456,7 +463,7 @@ class ShiMcc:
         # return self.Send_cmd("B?")
         val = self.Send_cmd("B?")
         if not val['Error']:
-            val['data'] = int(val['Response'])
+            val['Data'] = int(val['Response'])
         return val
 
     def Turn_TcPressureOn(self):  # Command Ex: "$B1b\r"
@@ -470,5 +477,5 @@ class ShiMcc:
         # return self.Send_cmd("L")
         val = self.Send_cmd("L")
         if not val['Error']:
-            val['data'] = float(val['Response']) / 1000  # Change to Torr
+            val['Data'] = float(val['Response']) / 1000  # Change to Torr
         return val

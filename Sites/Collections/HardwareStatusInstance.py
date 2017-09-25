@@ -25,10 +25,11 @@ class HardwareStatusInstance:
                 {"message": "Creating HardwareStatusInstance",
                  "level":2})
             self.Thermocouples = ThermocoupleCollection()
-            # commented out Weds sep 6, due to merge breaking something
             self.PfeifferGuages = PfeifferGaugeCollection()
-            
             self.ShiCryopump = ShiCryopumpCollection()
-
             self.PC_104 = PC_104_Instance.getInstance()
+
+            # System Wide Stats
+            self.OperationalVacuum = False
+
             HardwareStatusInstance.__instance = self

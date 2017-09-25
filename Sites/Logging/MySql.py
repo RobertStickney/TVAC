@@ -7,9 +7,9 @@ class MySQlConnect:
 
 
     def __init__(self):
-        user = "tvac_user"
-        host = "localhost"
-        password = "Go2Mars!"
+        user = "TVAC_Admin"
+        host = "192.168.99.10"
+        password = "People 2 Space"
         database = "tvac"
 
         filterwarnings('ignore', category = pymysql.Warning)

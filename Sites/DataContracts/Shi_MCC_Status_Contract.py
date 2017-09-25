@@ -26,6 +26,7 @@ class Shi_MCC_Status_Contract:
         self.TcPressure = 0
 
     def update(self, d):
+        print(d)
         self.__Lock.acquire()
         if 'Duty Cycle' in d:
             self.DutyCycle = d['Duty Cycle']
@@ -75,6 +76,7 @@ class Shi_MCC_Status_Contract:
         if 'Stage 2 Temp' in d:
             self.SecondStageTemp = d['Stage 2 Temp']
         if 'Status' in d:
+            print('>--- Status value = {:d} ---<'.format(d['Status']))
             self.Status['Pump On'               ] = (d['Status'] & 0x01) > 0  # Bit 0
             self.Status['Rough Open'            ] = (d['Status'] & 0x02) > 0  # Bit 1
             self.Status['Purge Open'            ] = (d['Status'] & 0x04) > 0  # Bit 2
