@@ -69,12 +69,16 @@ class PfeifferGaugeControlStub(Thread):
                     next_pressure_read_time += self.pressure_read_peroid
                     if "root" in userName:
                         try:
-                            Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Reading and writing with PfeifferGaugeControlStub.",
-                                              "level": 4})
                             self.gauges.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
                                                 {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
                                                 {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
+                            Logging.logEvent("Debug", "Status Update",
+                                             {"message": "Reading and writing with PfeifferGaugeControlStub.\n1: {:f}; 2: {:f}; 3: {:f}; ".format(
+                                                 self.Pgauge.GetPressure(1),
+                                                 self.Pgauge.GetPressure(2),
+                                                 self.Pgauge.GetPressure(3)
+                                             ),
+                                              "level": 4})
                             if time.time() > next_param_read_time:
                                 self.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
                                                                 'cc on': self.Pgauge.GetCCstate(1)},
@@ -180,5 +184,7 @@ if __name__ == '__main__':
     p = HardwareStatusInstance.getInstance().PfeifferGuages
     while True:
         time.sleep(2)
-        print(p.getJson())
-
+        # print(p.getJson())
+        print("1:{:f}".format(p.get_pressure_chamber()))
+        print("2:{:f}".format(p.get_pressure_cryopump()))
+        print("3:{:f}".format(p.get_pressure_roughpump()))
