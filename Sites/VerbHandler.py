@@ -41,7 +41,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                  "level":1})
             Logging.logEvent("Debug","Status Update", 
                 {"message": "GET Results: {}".format(result.encode()),
-                 "level":4})
+                 "level": 5})
 
             # Out the results back to the server
             self.setHeader()
