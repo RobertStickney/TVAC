@@ -1,6 +1,7 @@
 zone1,zone2,zone3,zone4,zone5,zone6,zone7,zone8
 Max,,Max,,,,,
 11 90,,12,,,,,
+100,,95,,,,,
 ,,,,,,,
 zone,sp,rampTime,SoakTime,GoalTemp,,,
 1,1,600,500,60,,,

@@ -53,6 +53,13 @@ class ZoneCollection:
                 return True
         return False
         
+    def getHotestThermalCouple(self):
+        hottest = 0
+        for zone in self.zoneDict:
+            if self.zoneDict[zone].activeZoneProfile:
+                if self.zoneDict[zone].getTemp("Max") > hottest:
+                    hottest = self.zoneDict[zone].getTemp("Max")
+        return hottest
 
     def loadThermoCouples(self, profileName, zone):
         '''
@@ -105,7 +112,7 @@ class ZoneCollection:
         this is the startTime of the profileInstance that was/will be ran by the ThreadCollection
         '''
 
-        sql = "SELECT zone, average FROM tvac.Thermal_Zone_Profile WHERE profile_name=\"{}\";".format(profileName)
+        sql = "SELECT zone, average, heat_error FROM tvac.Thermal_Zone_Profile WHERE profile_name=\"{}\";".format(profileName)
         mysql = MySQlConnect()
         try:
             mysql.cur.execute(sql)
@@ -124,15 +131,16 @@ class ZoneCollection:
         for result in results:
             zoneProfile = {}
             zoneName = "zone"+str(result['zone'])
-            
+            # TODO: This is where I fix the bug where each zone has it's own ID and gets a new one on reload
             zoneProfile['profileuuid'] = self.profileUUID
             zoneProfile['zone'] = result['zone']
             zoneProfile['zoneuuid'] = uuid.uuid4()
             zoneProfile['average'] = result['average']
+            zoneProfile['heatError'] = result['heat_error']
             try:
                 zoneProfile['thermalprofiles'] = self.loadThermalProfiles(profileName,result['zone'])
             except Exception as e:
-                return e
+                raise e
             
             try:
                 zoneProfile["thermocouples"] = self.loadThermoCouples(profileName, result['zone'])
@@ -146,13 +154,17 @@ class ZoneCollection:
         return "{'result':'success'}"
         
 
-
     def saveZone(self, name, zoneProfile):
+        '''
+        This is a helper functiont for saveProfile. It saves the data needed for each zone into the DB
+        '''
         average = zoneProfile["average"]
         zone = zoneProfile["zone"]
+        heatError = zoneProfile["heatError"]
 
-        coloums = "( profile_name, zone, average )"
-        values = "( \"{}\",{},\"{}\" )".format(name,zone,average)
+        coloums = "( profile_name, zone, average, heat_error )"
+        print(heatError)
+        values = "( \"{}\",{},\"{}\",{} )".format(name,zone,average, heatError)
         sql = "INSERT INTO tvac.Thermal_Zone_Profile {} VALUES {};".format(coloums, values)
         # print(sql)
         mysql = MySQlConnect()

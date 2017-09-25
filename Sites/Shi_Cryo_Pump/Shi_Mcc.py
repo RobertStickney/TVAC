@@ -9,7 +9,7 @@ class Shi_Mcc:
         for tries in range(3):
             MCC.write(self.GenCmd(Command).encode())
             time.sleep(0.10 * (tries + 1))
-            print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
+            # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
             resp = MCC.read(64).decode()
             if self.ResponceGood(resp):
                 if resp[1] == 'A':  # Responce Good!
@@ -23,9 +23,9 @@ class Shi_Mcc:
                 else:
                     Data = self.Format_Responce("R--" + resp + "-- unknown", error=True)
                 break
-            print("Try number: " + str(tries))
+                # TODO: Change to error event print("Try number: " + str(tries))
         else:
-            print("No more tries! Something is wrong!")
+            # TODO: Change to error event print("No more tries! Something is wrong!")
             Data = self.Format_Responce('Timeout!', error=True)
         MCC.close()
         return Data
@@ -41,16 +41,16 @@ class Shi_Mcc:
         return "${0}{1:c}\r".format(cmd, self.get_checksum(cmd))
 
     def ResponceGood(self, Responce):
-        print("R:--" + Responce.replace('\r', r'\r') + "---")
+        # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
         if Responce[-1] != '\r':
-            print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
+            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
             return False
         # print("Checksum: '" + Responce[-2] + "' Data: '" + Responce[1:-2] + "' Calc cksum: '" + chr(get_checksum(Responce[1:-2])) + "'")
         if Responce[-2] != chr(self.get_checksum(Responce[1:-2])):
-            print("R:--" + Responce.replace('\r', r'\r') + "---", "Checksum: " + chr(self.get_checksum(Responce[1:-2])))
+            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "Checksum: " + chr(self.get_checksum(Responce[1:-2])))
             return False
         if Responce[0] != '$':
-            print("R:--" + Responce.replace('\r', r'\r') + "---", "'$' is not the first byte!")
+            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "'$' is not the first byte!")
             return False
         return True  # Yea!! responce seems ok
 
@@ -167,10 +167,10 @@ class Shi_Mcc:
 
     def Set_FirstStageTempCTL(self, temp=0, method=0):
         if (temp < 0) | (temp > 320):
-            print('First stage Temperature out is of range (0-320): {:d}'.format(temp))
+            # TODO: Change to error event print('First stage Temperature out is of range (0-320): {:d}'.format(temp))
             return self.Format_Responce("Temp out of range: " + str(temp), error=True)
         if (method < 0) | (method > 3):
-            print('First stage control method is out of range (0-3): {:d}'.format(method))
+            # TODO: Change to error event print('First stage control method is out of range (0-3): {:d}'.format(method))
             return self.Format_Responce("Temp out of range: " + str(method), error=True)
         # add convert to real Data
         return self.Send_cmd("H{0:d},{1:d}".format(temp, method))
@@ -218,7 +218,7 @@ class Shi_Mcc:
         return self.Send_cmd("A?")
 
     def Get_CryoPumpRdyState(self):  # Command Ex: "$A??m\r"
-        return self.Send_cmd("A??")
+        return self.Send_cmd("A??")  # Use this one for the Contract
 
     def Turn_CryoPumpOn(self):  # Command Ex: "$A1c\r"
         return self.Send_cmd("A1")
@@ -243,7 +243,7 @@ class Shi_Mcc:
     # 2.16 • Regeneration pg:14
     def Start_Regen(self, num):
         if (num < 0) | (num > 4):
-            print('First stage control method is out of range (0-4): {:d}'.format(num))
+            # TODO: Change to error event print('First stage control method is out of range (0-4): {:d}'.format(num))
             return self.Format_Responce("Temp out of range: " + str(num), error=True)
         return self.Send_cmd("N{0:d}".format(num))
 
@@ -260,6 +260,14 @@ class Shi_Mcc:
         return self.Send_cmd("e")
 
     # 2.19 • Regeneration Parameters pg:16
+    def Get_RegenParam(self, Param=''):  # expected call: Get_RegenParam(chr(int))
+        if (Param not in ['0', '1', '2', '3', '4', '5', '6', 'A', 'C', 'G', 'z']):
+            return self.Format_Responce("Parameter unknown: " + str(Param), error=True)
+        val = self.Send_cmd("P" + str(Param) + "?")
+        if not val['Error']:
+            val['Data'] = int(val['Response'])
+        return val
+
     def Get_RegenParam_0(self):
         # return self.Send_cmd("P0?")
         val = self.Send_cmd("P0?")
@@ -379,7 +387,7 @@ class Shi_Mcc:
 
     def Set_RegenStartDelay(self, delay):
         if (delay < 0) | (delay > 59994):
-            print('Regeneration Start Delay out is of range (0-59994): {:d}'.format(delay))
+            # TODO: Change to error event print('Regeneration Start Delay out is of range (0-59994): {:d}'.format(delay))
             return self.Format_Responce("Regeneration Start Delay out of range: " + str(delay), error=True)
         return self.Send_cmd("j{0:d}".format(delay))
 
@@ -446,7 +454,7 @@ class Shi_Mcc:
 
     def Set_SecondStageTempCTL(self, temp):  # Command Ex: "$I?:\r"
         if (temp < 0) | (temp > 320):
-            print('Second stage Temperature out is of range (0-320): {:d}'.format(temp))
+            # TODO: Change to error event print('Second stage Temperature out is of range (0-320): {:d}'.format(temp))
             return self.Format_Responce("Temp out of range: " + str(temp), error=True)
         return self.Send_cmd("I{0:d}".format(temp))
 
