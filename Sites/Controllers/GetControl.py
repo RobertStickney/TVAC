@@ -63,8 +63,9 @@ class GetControl:
         self.chamberPressure = self.gauges.get_pressure_chamber()
         self.roughPumpPressure = self.gauges.get_pressure_roughpump()
         resp = dict(Pressure = [])
-        for gauge in gauges:
-            resp['Pressure'].append(gauges[gauge])
+        resp['Pressure'].append(self.cryoPumpPressure)
+        resp['Pressure'].append(self.chamberPressure)
+        resp['Pressure'].append(self.roughPumpPressure)
         buff = json.dumps(resp)    
         return buff            
 
