@@ -1,5 +1,5 @@
 from Logging.MySql import MySQlConnect
-
+import math
 import datetime
 
 class Logging(object):
@@ -133,7 +133,8 @@ class Logging(object):
 		for tc in data['tcList']:
 			thermocouple = tc["Thermocouple"]
 			temperture = tc["temp"]
-
+			if math.isnan(tc["temp"]):
+				continue
 			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), thermocouple, temperture)
 		sql = "INSERT INTO tvac.Real_Temperture {} VALUES {};".format(coloums, values[:-2])
 		
