@@ -35,7 +35,7 @@ class VacuumControlStub(Thread):
         self.state = None
         self.oldState = True
 
-        self.updatePeriod = 5
+        self.updatePeriod = 2
 
 
 
@@ -85,11 +85,11 @@ class VacuumControlStub(Thread):
                         # Alert the user they should close o-ring seal 
                         # Start the cryopump
                         self.state = "Crossover Vacuum"
-                    if self.chamberPressure < 0.005 and self.ShiMcc.get_mcc_status('Stage 1 Temp') < 15:
+                    if self.chamberPressure < 0.005 and self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') < 15:
                         # Close the rough gate valve
                         # Open the cryopump gate valve
                         # Wait until 10e-6 tor
-                        self.state = "Strong Cryo Vacuum"
+                        self.state = "Cryo Vacuum"
                     if self.chamberPressure < 0.00001: #torr?
                         # Wait for nothing, either the program will end, or be stopped by the safety checker
                         self.state = "Operational Vacuum"
@@ -102,14 +102,14 @@ class VacuumControlStub(Thread):
                         'Atmosphere': self.atmosphere,
                         'Rough Vacuum': self.roughVacuum,
                         'Crossover Vacuum': self.crossoverVacuum,
-                        'Strong Cryo Vacuum': self.strongCryoVacuum,
+                        'Cryo Vacuum': self.CryoVacuum,
                         'Operational Vacuum': self.operationalVacuum,
                     }[self.state]()
 
-                    if "Operational Vacuum" in self.state:  
-                        HardwareStatusInstance.getInstance().OperationalVacuum = True
+                    if "Operational Vacuum" in self.state:
+                        self.hw.OperationalVacuum = True
                     else:
-                        HardwareStatusInstance.getInstance().OperationalVacuum = False
+                        self.hw.OperationalVacuum = False
 
                     
 
@@ -147,15 +147,19 @@ class VacuumControlStub(Thread):
                 # TODO: Read coldwater value from Compressor
         
                 # Close Cryopump gate Valve 
-                # I can't find cryopump, but I found this?
-                self.ShiMcc.Close_PurgeValve() #line 237 Shi_MCC.py
-
+                self.hw.PC_104.digital_out.update({'CryoP GateValve': False})
+                # TODO: Add check for CryoP GateValve closed state.
+                # Prep the on Roughing Pump
+                self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
+                time.sleep(0.2)
+                self.hw.PC_104.digital_out.update({'RoughP GateValve': True})
+                time.sleep(0.2)
+                self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
+                time.sleep(1)  # TODO: replace sleep with Roughing pump Gate valve check and power check
                 # Turn on Roughing Pump
-                # TODO: Can you turn the roughing pump on via Shi_mcc.py? of Software??
+                self.hw.PC_104.digital_out.update({'RoughP Start': True})
                 # Do we send an alart to the user, if they need to do this phycisally?
 
-                # Open roughing pump valve
-                self.ShiMcc.Open_RoughingValve() #line 407 Shi_MCC.py
             else:
                 print("in Atomo")
 
@@ -169,8 +173,11 @@ class VacuumControlStub(Thread):
             userName = os.environ['LOGNAME']
             if "root" in userName:
                 # open Cryopump-Roughing gate valve
-                # TODO: What command is this in Shi_Mcc.py
-                pass
+                self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
+                time.sleep(2)
+                self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
+                self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
+                self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 12])
             else:
                 print("in rough vacuum")
 
@@ -184,13 +191,16 @@ class VacuumControlStub(Thread):
             userName = os.environ['LOGNAME']
             if "root" in userName:
                 #TODO: Alert the user they should close o-ring seal 
-
-                #TODO: starts the cryopump
-                self.ShiMcc.Turn_CryoPumpOn() #line 220 ShiMcc.py
+                self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
+                time.sleep(2)
+                # Starting the Cryppump:
+                #TODO: starts the Compressor
+                # self.hw.Shi_compressor_Cmds.append([''])
+                self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
             else:
                 print("In Crossover Vacuum")
 
-    def strongCryoVacuum(self):
+    def CryoVacuum(self):
         '''
         It enters this state everytime you are between 0.005 torr and 0.00001
         '''
@@ -200,16 +210,20 @@ class VacuumControlStub(Thread):
             if "root" in userName:
 
                 # Close the rough gate valve
-                self.ShiMcc.Close_RoughingValve()
+                self.hw.PC_104.digital_out.update({'RoughP GateValve': False})
 
                 # wait here until the valve is closed
-                # This assumes it gives a True and False
-                while self.ShiMcc.Get_RoughingValveState():
-                    pass
+                # TODO Replace Sleep with a check of the Gate valve switches
+                time.sleep(4)
 
                 # Open the cryopump gate valve
-                # I can't find cryopump, but I found this?
-                self.ShiMcc.Open_PurgeValve() #line 234 Shi_MCC.py
+                self.hw.PC_104.digital_out.update({'CryoP GateValve': True})
+                # TODO Add a check of the Gate valve switches - Keep Sleep
+                time.sleep(4)
+
+                # Open the cryopump gate valve
+                self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
+
             else:
                 print("In Strong Cryo Vacuum")
         

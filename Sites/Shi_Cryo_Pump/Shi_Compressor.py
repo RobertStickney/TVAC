@@ -2,7 +2,6 @@
 # He_Compressor_Interface
 import io
 import time
-import pyserial
 
 # Runs on serial port at 9600 8 1  Tout >0.7 sec
 # $TEA<CR> � read all temps
@@ -107,61 +106,61 @@ Response: $STA,status bits,<crc-16><cr>
 # Bit 8 - 1 = Solenoid on. 0 = Solenoid off.
 
 #Status = concantenation of 4 Bytes
-Stat0 = Status and 1
-Stat1 = Status and 2
-Stat2 = Status and 3
-Stat3 = Status and 4
-Stat4 = Status and 5
-Stat5 = Status and 6
-Stat6 = Status and 7
-Stat7 = Status and 8
-Stat8 = Status and 9
-Stat9 = Status and A
-Stat10 = Status and B
-Stat11 = Status and C
-Stat15 = Status and F
-Stat_Comb = Stat9 orStat10 or Stat11
-
-if stat0 = 1 then System = ON
-if stat0 = 0 then System = OFF
-
-if stat1 = 1 then Motor_Temperature_alarm = ON
-if stat1 = 0 then Motor_Temperature_alarm = OFF
-
-if stat2 = 1 then Phase_Sequence/Fuse_alarm = ON
-if stat2 = 0 then Phase_Sequence/Fuse_alarm = OFF
-
-if stat3 = 1 then Helium_Temperature_alarm = ON
-if stat3 = 0 then Helium_Temperature_alarm = OFF
-
-if stat4 = 1 then Water_Temperature_alarm = ON
-if stat4 = 0 then Water_Temperature_alarm = OFF
-
-if stat5 = 1 then Water_Flow_alarm = ON
-if stat5 = 0 then Water_Flow_alarm = OFF
-
-if stat6 = 1 then Oil_Level_alarm = ON
-if stat6 = 0 then Oil_Level-alarm = OFF
-
-if stat7 = 1 then Pressure_alarm = ON
-if stat7 = 0 then Pressure_alarm = OFF
-
-if stat8 = 1 then Solenoid = ON
-if stat8 = 0 then Solenoid = OFF
-
-# Decode Status Word - 4 Bytes
-if Stat_Comb  = 0 then Local_Off
-     elif Stat_Comb = 1 then Local_On
-     elif Stat_Comb = 2 then Remote_Off
-     elif Stat_Comb = 3 then Remote_On
-     elif Stat_Comb = 4 then Cold_Head_Run
-     elif Stat_Comb = 5 then Cold_Head_Pause
-     elif Stat_Comb = 6 then Fault_Off
-     elif Stat_Comb = 7 then Oil_Fault_Off
-
-# Bit 15 - 0 = Configuration 1
-if stat15 = 1 then Configuration = 2 
-if stat15 = 0 then Configuration = 1
+# Stat0 = Status and 1
+# Stat1 = Status and 2
+# Stat2 = Status and 3
+# Stat3 = Status and 4
+# Stat4 = Status and 5
+# Stat5 = Status and 6
+# Stat6 = Status and 7
+# Stat7 = Status and 8
+# Stat8 = Status and 9
+# Stat9 = Status and A
+# Stat10 = Status and B
+# Stat11 = Status and C
+# Stat15 = Status and F
+# Stat_Comb = Stat9 orStat10 or Stat11
+#
+# if stat0 = 1 then System = ON
+# if stat0 = 0 then System = OFF
+#
+# if stat1 = 1 then Motor_Temperature_alarm = ON
+# if stat1 = 0 then Motor_Temperature_alarm = OFF
+#
+# if stat2 = 1 then Phase_Sequence/Fuse_alarm = ON
+# if stat2 = 0 then Phase_Sequence/Fuse_alarm = OFF
+#
+# if stat3 = 1 then Helium_Temperature_alarm = ON
+# if stat3 = 0 then Helium_Temperature_alarm = OFF
+#
+# if stat4 = 1 then Water_Temperature_alarm = ON
+# if stat4 = 0 then Water_Temperature_alarm = OFF
+#
+# if stat5 = 1 then Water_Flow_alarm = ON
+# if stat5 = 0 then Water_Flow_alarm = OFF
+#
+# if stat6 = 1 then Oil_Level_alarm = ON
+# if stat6 = 0 then Oil_Level-alarm = OFF
+#
+# if stat7 = 1 then Pressure_alarm = ON
+# if stat7 = 0 then Pressure_alarm = OFF
+#
+# if stat8 = 1 then Solenoid = ON
+# if stat8 = 0 then Solenoid = OFF
+#
+# # Decode Status Word - 4 Bytes
+# if Stat_Comb  = 0 then Local_Off
+#      elif Stat_Comb = 1 then Local_On
+#      elif Stat_Comb = 2 then Remote_Off
+#      elif Stat_Comb = 3 then Remote_On
+#      elif Stat_Comb = 4 then Cold_Head_Run
+#      elif Stat_Comb = 5 then Cold_Head_Pause
+#      elif Stat_Comb = 6 then Fault_Off
+#      elif Stat_Comb = 7 then Oil_Fault_Off
+#
+# # Bit 15 - 0 = Configuration 1
+# if stat15 = 1 then Configuration = 2
+# if stat15 = 0 then Configuration = 1
 
 # Example response $STA,0301,2ED1<cr> corresponds to binary 0000001100000001 or :
 # Local ON, solenoid ON, System ON, and no alarms.

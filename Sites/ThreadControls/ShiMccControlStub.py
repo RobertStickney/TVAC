@@ -24,7 +24,7 @@ class ShiMccControlStub(Thread):
 
         self.mcc = Shi_Mcc()
         self.hw = HardwareStatusInstance.getInstance()
-        self.mcc_read_period = 0.5  # 0.5s loop period
+        self.mcc_read_period = 1  # 0.5s loop period
         self.param_period = 30  # 10 second period
 
     def run(self):
