@@ -42,6 +42,7 @@ class VacuumControlStub(Thread):
 
     def run(self):
         # Always run this thread
+        time.sleep(2)
         while True:
             if ProfileInstance.getInstance().activeProfile:
                 # With an active profile, we start putting the system under pressure
