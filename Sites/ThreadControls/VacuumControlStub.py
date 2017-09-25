@@ -42,6 +42,7 @@ class VacuumControlStub(Thread):
 
     def run(self):
         # Always run this thread
+        time.sleep(2)
         while True:
             if ProfileInstance.getInstance().activeProfile and \
                     self.hw.PfeifferGuages.get_pressure_chamber() is not None:
