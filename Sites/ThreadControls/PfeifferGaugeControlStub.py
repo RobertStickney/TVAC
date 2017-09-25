@@ -183,4 +183,5 @@ if __name__ == '__main__':
 
     p = HardwareStatusInstance.getInstance().PfeifferGuages
     while True:
+        time.sleep(5)
         print(p.getJson())
