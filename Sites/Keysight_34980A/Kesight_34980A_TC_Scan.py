@@ -34,7 +34,9 @@ class Keysight34980A_TC(Telnet):
     
     def read(self, timeout=5, try_fix_prompt = False):
         try:
-            responce = self.read_until(self.telnet_prompt.encode(), 5).decode()
+            #print("Trying to read keysight")
+            responce = self.read_until(self.telnet_prompt.encode(), 10).decode()
+            #print("read it")
         except:
             pass ## TODO: Write excemption handeler to recover from comm errors
         if responce.endswith(self.telnet_prompt):
@@ -91,8 +93,10 @@ class Keysight34980A_TC(Telnet):
 
     def getTC_Values(self, print_raw_values = False):
         ## tc_list formating from "DataContracts.ThermocoupleCollection"
+        print("Getting TC data")
         tc_list = {'time':datetime.now(), 'tcList': []}
         values = self.send("READ?",6).split(',')
+        print("after the send")
         v1 = values[0:len(values):4]
         v2 = values[1:len(values):4]
         v3 = values[2:len(values):4]
