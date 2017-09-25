@@ -183,8 +183,4 @@ if __name__ == '__main__':
 
     p = HardwareStatusInstance.getInstance().PfeifferGuages
     while True:
-        time.sleep(2)
-        # print(p.getJson())
-        print("1:{:f}".format(p.get_pressure_chamber()))
-        print("2:{:f}".format(p.get_pressure_cryopump()))
-        print("3:{:f}".format(p.get_pressure_roughpump()))
+        print(p.getJson())
