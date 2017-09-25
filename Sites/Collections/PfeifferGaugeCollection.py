@@ -20,22 +20,19 @@ class PfeifferGaugeCollection:
 
 
     def buildCollection(self):
-        guages = [PfeifferGaugeContract(1, 'Cryopump'),
-                  PfeifferGaugeContract(2, 'Chamber'),
+        guages = [PfeifferGaugeContract(1, 'Chamber'),
+                  PfeifferGaugeContract(2, 'Cryopump'),
                   PfeifferGaugeContract(3, 'Roughing Pump')]
         return guages
 
-    def get_pressure_cryopump(self):
+    def get_pressure_chamber(self):
         return self.pfGuageList[0].getPressure()
 
-
-    def get_pressure_chamber(self):
+    def get_pressure_cryopump(self):
         return self.pfGuageList[1].getPressure()
-
 
     def get_pressure_roughpump(self):
         return self.pfGuageList[2].getPressure()
-
 
     def update(self, pgList):
         self.__lock.acquire()

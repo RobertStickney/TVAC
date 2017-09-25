@@ -29,6 +29,7 @@ class PfeifferGaugeContract:
         return self.address
 
     def update(self, d):
+        print('{}: {}'.format(self.system_locationd))
         self.__lock.acquire()
         if 'Model Name' in d:
             self.model_name = d['Model Name']
