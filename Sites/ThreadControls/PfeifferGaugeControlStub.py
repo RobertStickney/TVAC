@@ -32,9 +32,15 @@ class PfeifferGaugeControlStub(Thread):
 
     def logPressureData(self):
         coloums = "( profile_I_ID, guage, pressure )"
-        values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 1, self.gauges.get_pressure_chamber())
-        values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 2, self.gauges.get_pressure_cryopump())
-        values += "( \"{}\",{},{} )".format(self.zoneProfiles.profileUUID, 3, self.gauges.get_pressure_roughpump())
+        values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID,
+                                               self.gauges.get_cryopump_address(),
+                                               self.gauges.get_cryopump_pressure())
+        values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID,
+                                               self.gauges.get_chamber_address(),
+                                               self.gauges.get_chamber_pressure())
+        values += "( \"{}\",{},{} )".format(self.zoneProfiles.profileUUID,
+                                            self.gauges.get_roughpump_address(),
+                                            self.gauges.get_roughpump_pressure())
         sql = "INSERT INTO tvac.Pressure {} VALUES {};".format(coloums, values)
         # print(sql)
         mysql = MySQlConnect()
@@ -73,10 +79,10 @@ class PfeifferGaugeControlStub(Thread):
                                                 {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
                                                 {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
                             Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Reading and writing with PfeifferGaugeControlStub.\n1: {:f}; 2: {:f}; 3: {:f}; ".format(
-                                                 self.Pgauge.GetPressure(1),
-                                                 self.Pgauge.GetPressure(2),
-                                                 self.Pgauge.GetPressure(3)
+                                             {"message": "Reading and writing with PfeifferGaugeControlStub.\nCryopump: {:f}; Chamber: {:f}; RoughPump: {:f}\n".format(
+                                                 self.gauges.get_cryopump_pressure(),
+                                                 self.gauges.get_chamber_pressure(),
+                                                 self.gauges.get_roughpump_pressure()
                                              ),
                                               "level": 4})
                             if time.time() > next_param_read_time:
@@ -107,14 +113,14 @@ class PfeifferGaugeControlStub(Thread):
                                                 {'addr': 3, 'Pressure': 999}])
                             first = False
                         else:
-                            self.gauges.update([{'addr': 1, 'Pressure': self.gauges.get_pressure_cryopump()/2.5},
-                                                {'addr': 2, 'Pressure': self.gauges.get_pressure_chamber()/5},
-                                                {'addr': 3, 'Pressure': self.gauges.get_pressure_roughpump()/3}])
+                            self.gauges.update([{'addr': 1, 'Pressure': self.gauges.get_cryopump_pressure() / 2.5},
+                                                {'addr': 2, 'Pressure': self.gauges.get_chamber_pressure() / 5},
+                                                {'addr': 3, 'Pressure': self.gauges.get_roughpump_pressure() / 3}])
                         # Just to see the screen for longer
                         time.sleep(5)
 
                     Logging.logEvent("Debug", "Status Update",
-                             {"message": "Current Pressure in Chamber is {}".format(self.gauges.get_pressure_chamber()),
+                             {"message": "Current Pressure in Chamber is {}".format(self.gauges.get_chamber_pressure()),
                               "level": 3})
                     if __name__ != '__main__':
                         self.logPressureData()

@@ -45,7 +45,7 @@ class VacuumControlStub(Thread):
         time.sleep(2)
         while True:
             if ProfileInstance.getInstance().activeProfile and \
-                    self.hw.PfeifferGuages.get_pressure_chamber() is not None:
+                    self.hw.PfeifferGuages.get_roughpump_pressure() is not None:
                 # With an active profile, we start putting the system under pressure
                 try:
          
@@ -62,9 +62,9 @@ class VacuumControlStub(Thread):
                     # Reading of pressure gauges, to figure out where the system is
 
                     # When you know what the pressure is, you know what to do go get into pressure
-                    self.cryoPumpPressure = self.hw.PfeifferGuages.get_pressure_cryopump()
-                    self.chamberPressure = self.hw.PfeifferGuages.get_pressure_chamber()
-                    self.roughPumpPressure = self.hw.PfeifferGuages.get_pressure_roughpump()
+                    self.cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
+                    self.chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
+                    self.roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
 
                     # learning from Zoneprofiles what vacuum state the system needs to be in
                     # If it's here, you want the vacuum to be on
