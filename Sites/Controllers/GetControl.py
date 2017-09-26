@@ -1,3 +1,5 @@
+import json
+
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
@@ -93,20 +95,19 @@ class GetControl:
 
     def getPressureGauges(self):
         gauges = HardwareStatusInstance.getInstance().PfeifferGuages
-        resp = dict(CryoPressure = [], ChamberPressure=[], RoughingPressure=[])
-        resp['CryoPressure'].append(gauges.get_cryopump_pressure())
-        resp['ChamberPressure'].append(gauges.get_chamber_pressure())
-        resp['RoughingPressure'].append(gauges.get_roughpump_pressure())
-        buff = json.dumps(resp)    
-        return buff
+        resp = {'CryoPressure': gauges.get_cryopump_pressure(),
+                'ChamberPressure': gauges.get_chamber_pressure(),
+                'RoughingPressure': gauges.get_roughpump_pressure()}
+        return json.dumps(resp)
+
     def getZoneTemps(self):
         temps=dict(ZoneSetPoint=[],ZoneTemp=[])
 
         for i in range(1,10):
             strzone="zone"+str(i)
-            temps['ZoneSetPoint'].append(threadCollection.getInstance().threadCollection.zoneThreadDict[strzone].pid.setPoint)
+            temps['ZoneSetPoint'].append(ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict[strzone].pid.setPoint)
             temps['ZoneTemp'].append(ProfileInstance.getInstance().zoneProfiles.getZone(i-1).getTemp("Max"))
-        buff=json.dumps(temp)                        
+        return json.dumps(temps)
 
     def runProfile(self):
         threadInstance = ThreadCollectionInstance.getInstance()
