@@ -51,6 +51,30 @@ class GetControl:
         # print(errorList[0])
         return str(errorList)
 
+
+    def hardStop(self):
+        print("hard stop")
+        d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
+        zones = ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict
+        ProfileInstance.getInstance().activeProfile = False
+        d_out.update({"IR Lamp 1 PWM DC": 0})
+        d_out.update({"IR Lamp 2 PWM DC": 0})
+        d_out.update({"IR Lamp 3 PWM DC": 0})
+        d_out.update({"IR Lamp 4 PWM DC": 0})
+        d_out.update({"IR Lamp 5 PWM DC": 0})
+        d_out.update({"IR Lamp 6 PWM DC": 0})
+        d_out.update({"IR Lamp 7 PWM DC": 0})
+        d_out.update({"IR Lamp 8 PWM DC": 0})
+        d_out.update({"IR Lamp 9 PWM DC": 0})
+        d_out.update({"IR Lamp 10 PWM DC": 0})
+        d_out.update({"IR Lamp 11 PWM DC": 0})
+        d_out.update({"IR Lamp 12 PWM DC": 0})
+        d_out.update({"IR Lamp 13 PWM DC": 0})
+        d_out.update({"IR Lamp 14 PWM DC": 0})
+        d_out.update({"IR Lamp 15 PWM DC": 0})
+        d_out.update({"IR Lamp 16 PWM DC": 0})
+        return "{'result':'success'}"
+
     def getEventList(self):
         tmp = ProfileInstance.getInstance().systemStatusQueue
         ProfileInstance.getInstance().systemStatusQueue = []

@@ -314,3 +314,1794 @@
     [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032000000000000013
     [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016000000000000007
     [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008000000000000004
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.560000000000001e-06
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000005e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000002e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032000000000000013
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016000000000000007
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008000000000000004
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04000000000000002
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.20000000000000012
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0000000000000007
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.0000000000000036
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 25.000000000000018
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 125.00000000000009
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 625.0000000000005
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3125.0000000000023
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 15625.000000000011
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 78125.00000000006
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 390625.0000000003
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1953125.0000000014
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 9765625.000000007
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 48828125.00000004
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 244140625.00000018
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1220703125.000001
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6103515625.000005
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 30517578125.000023
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 152587890625.00012
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 762939453125.0006
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3814697265625.003
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 19073486328125.016
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 95367431640625.08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 476837158203125.4
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2384185791015627.0
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.1920928955078136e+16
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.960464477539068e+16
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.980232238769534e+17
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.490116119384767e+18
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 7.450580596923834e+18
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.725290298461917e+19
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.8626451492309585e+20
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 9.313225746154793e+20
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.6566128730773966e+21
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.3283064365386985e+22
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.1641532182693493e+23
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.8207660913467464e+23
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.9103830456733735e+24
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.4551915228366867e+25
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 7.275957614183433e+25
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.637978807091716e+26
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.8189894035458583e+27
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 9.094947017729291e+27
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.547473508864646e+28
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.2737367544323228e+29
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.1368683772161614e+30
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.684341886080808e+30
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.8421709430404037e+31
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.4210854715202018e+32
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 7.10542735760101e+32
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.5527136788005045e+33
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.7763568394002522e+34
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.88178419700126e+34
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.4408920985006306e+35
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.2204460492503154e+36
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.1102230246251577e+37
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.551115123125789e+37
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.7755575615628944e+38
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.3877787807814473e+39
+  [94mdebug-2: [0mThere was a <class 'pymysql.err.DataError'> error in PfeifferGaugeControlStub. File: PfeifferGaugeControlStub.py:123
+  [94mdebug-2: [0m(1264, "Out of range value for column 'pressure' at row 2")
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"(1062, 'Duplicate entry 'acceptanceProfile-1' for key 'profile_name'')"
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"(1062, 'Duplicate entry 'acceptanceProfile-1' for key 'profile_name'')"
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /saveProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardstop
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+[94mdebug-1: [0mThere was a <class 'KeyError'> error in Server (GET Handler). File: VerbHandler.py:39
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+[94mdebug-1: [0mThere was a <class 'TypeError'> error in Server (GET Handler). File: VerbHandler.py:39
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mThere was a <class 'TypeError'> error in Server (GET Handler). File: VerbHandler.py:39
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mSending GET Results
+[94mdebug-1: [0mThere was a <class 'AttributeError'> error in Server (GET Handler). File: VerbHandler.py:45
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mThere was a <class 'AttributeError'> error in Server (GET Handler). File: VerbHandler.py:39
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardstop
+[94mdebug-1: [0mThere was a <class 'KeyError'> error in Server (GET Handler). File: VerbHandler.py:39
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mThere was a <class 'AttributeError'> error in Server (GET Handler). File: VerbHandler.py:39
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+[94mdebug-1: [0mSending GET Results
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.560000000000001e-06
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000005e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000002e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032000000000000013
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016000000000000007
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008000000000000004
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04000000000000002
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.20000000000000012
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+[94mdebug-1: [0mReceived Post Request
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'Error':'No profile loaded under that name.'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mSending GET Results
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mZone 1 is handled, about the start
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0480000000000005e-08
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Running HW control Thread
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.0
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+  [94mdebug-2: [0mCurrent chamber pressure: 5.120000000000001e-07
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 5.922999999999999
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+[94mdebug-1: [0mFinished initializing threads and drivers
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mSending GET Results
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.2
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+  [94mdebug-2: [0mCurrent chamber pressure: 0.008
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+  [94mdebug-2: [0mCurrent chamber pressure: 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+  [94mdebug-2: [0mCurrent chamber pressure: 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+  [94mdebug-2: [0mCurrent chamber pressure: 5.120000000000001e-07
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.0
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0480000000000005e-08
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 5.922999999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.096000000000001e-09
+  [94mdebug-2: [0mCurrent chamber pressure: 8.192000000000001e-10
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 11.845999999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.192000000000001e-10
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6384000000000003e-10
+  [94mdebug-2: [0mCurrent chamber pressure: 3.2768e-11
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 17.769
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.2768e-11
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.553600000000001e-12
+  [94mdebug-2: [0mCurrent chamber pressure: 1.31072e-12
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 23.691999999999997
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.31072e-12
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.62144e-13
+  [94mdebug-2: [0mCurrent chamber pressure: 5.2428800000000005e-14
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 29.614999999999995
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.2428800000000005e-14
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0485760000000001e-14
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0971520000000002e-15
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 35.538
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0971520000000002e-15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.194304e-16
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mCurrent chamber pressure: 8.388608000000001e-17
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 41.46099999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.388608000000001e-17
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6777216000000002e-17
+  [94mdebug-2: [0mCurrent chamber pressure: 3.3554432000000005e-18
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 47.38399999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.3554432000000005e-18
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.710886400000001e-19
+  [94mdebug-2: [0mCurrent chamber pressure: 1.3421772800000003e-19
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 53.306999999999995
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.3421772800000003e-19
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.6843545600000005e-20
+  [94mdebug-2: [0mCurrent chamber pressure: 5.368709120000001e-21
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 59.22999999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.368709120000001e-21
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0737418240000003e-21
+  [94mdebug-2: [0mCurrent chamber pressure: 2.1474836480000006e-22
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 65.15299999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.1474836480000006e-22
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.2949672960000014e-23
+  [94mdebug-2: [0mCurrent chamber pressure: 8.589934592000003e-24
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 71.076
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.589934592000003e-24
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.7179869184000006e-24
+  [94mdebug-2: [0mCurrent chamber pressure: 3.4359738368000014e-25
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 76.999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.4359738368000014e-25
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.871947673600003e-26
+  [94mdebug-2: [0mCurrent chamber pressure: 1.3743895347200007e-26
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 82.92199999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.3743895347200007e-26
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.7487790694400013e-27
+  [94mdebug-2: [0mCurrent chamber pressure: 5.497558138880002e-28
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 88.84499999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.497558138880002e-28
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0995116277760004e-28
+  [94mdebug-2: [0mCurrent chamber pressure: 2.1990232555520009e-29
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 94.76799999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.1990232555520009e-29
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.3980465111040016e-30
+  [94mdebug-2: [0mCurrent chamber pressure: 8.796093022208002e-31
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 100.69099999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.796093022208002e-31
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.7592186044416006e-31
+  [94mdebug-2: [0mCurrent chamber pressure: 3.518437208883201e-32
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 106.61399999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.518437208883201e-32
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 7.036874417766402e-33
+  [94mdebug-2: [0mCurrent chamber pressure: 1.4073748835532803e-33
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 112.53699999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.4073748835532803e-33
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.8147497671065608e-34
+  [94mdebug-2: [0mCurrent chamber pressure: 5.629499534213122e-35
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 118.45999999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.629499534213122e-35
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.1258999068426244e-35
+  [94mdebug-2: [0mCurrent chamber pressure: 2.2517998136852487e-36
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 124.38299999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.2517998136852487e-36
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.503599627370498e-37
+  [94mdebug-2: [0mCurrent chamber pressure: 9.007199254740995e-38
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 130.30599999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 9.007199254740995e-38
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.801439850948199e-38
+  [94mdebug-2: [0mCurrent chamber pressure: 3.602879701896398e-39
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 136.22899999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.602879701896398e-39
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 7.205759403792796e-40
+  [94mdebug-2: [0mCurrent chamber pressure: 1.4411518807585593e-40
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 142.152
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.4411518807585593e-40
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.8823037615171185e-41
+  [94mdebug-2: [0mCurrent chamber pressure: 5.764607523034238e-42
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 148.075
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.764607523034238e-42
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mSending GET Results
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+  [94mdebug-2: [0mCurrent chamber pressure: 0.008
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+  [94mdebug-2: [0mCurrent chamber pressure: 0.00032
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+  [94mdebug-2: [0mCurrent chamber pressure: 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+  [94mdebug-2: [0mCurrent chamber pressure: 5.120000000000001e-07
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.0
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0480000000000005e-08
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 5.922999999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.096000000000001e-09
+  [94mdebug-2: [0mCurrent chamber pressure: 8.192000000000001e-10
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 11.845999999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.192000000000001e-10
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6384000000000003e-10
+  [94mdebug-2: [0mCurrent chamber pressure: 3.2768e-11
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 17.769
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.2768e-11
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.553600000000001e-12
+  [94mdebug-2: [0mCurrent chamber pressure: 1.31072e-12
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 23.691999999999997
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.31072e-12
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.62144e-13
+  [94mdebug-2: [0mCurrent chamber pressure: 5.2428800000000005e-14
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 29.614999999999995
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.2428800000000005e-14
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0485760000000001e-14
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0971520000000002e-15
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 35.538
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0971520000000002e-15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.194304e-16
+  [94mdebug-2: [0mCurrent chamber pressure: 8.388608000000001e-17
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 41.46099999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.388608000000001e-17
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6777216000000002e-17
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mCurrent chamber pressure: 3.3554432000000005e-18
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 47.38399999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.3554432000000005e-18
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.710886400000001e-19
+  [94mdebug-2: [0mCurrent chamber pressure: 1.3421772800000003e-19
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 53.306999999999995
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.3421772800000003e-19
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.6843545600000005e-20
+  [94mdebug-2: [0mCurrent chamber pressure: 5.368709120000001e-21
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 59.22999999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.368709120000001e-21
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0737418240000003e-21
+  [94mdebug-2: [0mCurrent chamber pressure: 2.1474836480000006e-22
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 65.15299999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.1474836480000006e-22
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.2949672960000014e-23
+  [94mdebug-2: [0mCurrent chamber pressure: 8.589934592000003e-24
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 71.076
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.589934592000003e-24
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.7179869184000006e-24
+  [94mdebug-2: [0mCurrent chamber pressure: 3.4359738368000014e-25
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 76.999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.4359738368000014e-25
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.871947673600003e-26
+  [94mdebug-2: [0mCurrent chamber pressure: 1.3743895347200007e-26
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 82.92199999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.3743895347200007e-26
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.7487790694400013e-27
+  [94mdebug-2: [0mCurrent chamber pressure: 5.497558138880002e-28
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 88.84499999999998
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+  [94mdebug-2: [0mCurrent chamber pressure: 0.0016
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+  [94mdebug-2: [0mCurrent chamber pressure: 6.400000000000001e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber pressure: 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+  [94mdebug-2: [0mCurrent chamber pressure: 5.120000000000001e-07
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0480000000000005e-08
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.096000000000001e-09
+  [94mdebug-2: [0mCurrent chamber pressure: 8.192000000000001e-10
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.192000000000001e-10
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6384000000000003e-10
+  [94mdebug-2: [0mCurrent chamber pressure: 3.2768e-11
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.2768e-11
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.553600000000001e-12
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mCurrent chamber pressure: 1.31072e-12
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.31072e-12
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.62144e-13
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+  [94mdebug-2: [0mCurrent chamber pressure: 0.008
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+  [94mdebug-2: [0mCurrent chamber pressure: 0.00032
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+  [94mdebug-2: [0mCurrent chamber pressure: 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+  [94mdebug-2: [0mCurrent chamber pressure: 5.120000000000001e-07
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0480000000000005e-08
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.096000000000001e-09
+  [94mdebug-2: [0mCurrent chamber pressure: 8.192000000000001e-10
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.192000000000001e-10
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6384000000000003e-10
+  [94mdebug-2: [0mCurrent chamber pressure: 3.2768e-11
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.2768e-11
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.553600000000001e-12
+  [94mdebug-2: [0mCurrent chamber pressure: 1.31072e-12
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.31072e-12
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.62144e-13
+  [94mdebug-2: [0mCurrent chamber pressure: 5.2428800000000005e-14
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.2428800000000005e-14
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0485760000000001e-14
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0971520000000002e-15
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0971520000000002e-15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.194304e-16
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mCurrent chamber pressure: 8.388608000000001e-17
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.388608000000001e-17
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6777216000000002e-17
+  [94mdebug-2: [0mCurrent chamber pressure: 3.3554432000000005e-18
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.3554432000000005e-18
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.710886400000001e-19
+  [94mdebug-2: [0mCurrent chamber pressure: 1.3421772800000003e-19
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+[94mdebug-1: [0mFinished initializing threads and drivers
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+  [94mdebug-2: [0mCurrent chamber pressure: 0.0016
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+  [94mdebug-2: [0mCurrent chamber pressure: 6.400000000000001e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber pressure: 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+  [94mdebug-2: [0mCurrent chamber pressure: 5.120000000000001e-07
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.2805555555555
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0480000000000005e-08
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.54166666666663
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.096000000000001e-09
+  [94mdebug-2: [0mCurrent chamber pressure: 8.192000000000001e-10
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.192000000000001e-10
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.6722222222222
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6384000000000003e-10
+  [94mdebug-2: [0mCurrent chamber pressure: 3.2768e-11
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.2768e-11
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.80277777777775
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.553600000000001e-12
+  [94mdebug-2: [0mCurrent chamber pressure: 1.31072e-12
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.31072e-12
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 296.93333333333334
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.62144e-13
+  [94mdebug-2: [0mCurrent chamber pressure: 5.2428800000000005e-14
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.2428800000000005e-14
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 297.06388888888887
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0485760000000001e-14
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0971520000000002e-15
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0971520000000002e-15
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 297.1944444444444
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.194304e-16
+  [94mdebug-2: [0mCurrent chamber pressure: 8.388608000000001e-17
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.388608000000001e-17
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 297.325
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6777216000000002e-17
+  [94mdebug-2: [0mCurrent chamber pressure: 3.3554432000000005e-18
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.3554432000000005e-18
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 297.4555555555555
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.710886400000001e-19
+  [94mdebug-2: [0mCurrent chamber pressure: 1.3421772800000003e-19
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.3421772800000003e-19
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 297.5861111111111
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.6843545600000005e-20
+  [94mdebug-2: [0mCurrent chamber pressure: 5.368709120000001e-21
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.368709120000001e-21
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 297.71666666666664
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0737418240000003e-21
+  [94mdebug-2: [0mCurrent chamber pressure: 2.1474836480000006e-22
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.1474836480000006e-22
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 297.8472222222222
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.2949672960000014e-23
+  [94mdebug-2: [0mCurrent chamber pressure: 8.589934592000003e-24
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.589934592000003e-24
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 297.97777777777776
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.7179869184000006e-24
+  [94mdebug-2: [0mCurrent chamber pressure: 3.4359738368000014e-25
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.4359738368000014e-25
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 298.1083333333333
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.871947673600003e-26
+  [94mdebug-2: [0mCurrent chamber pressure: 1.3743895347200007e-26
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.3743895347200007e-26
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 298.2388888888889
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.7487790694400013e-27
+  [94mdebug-2: [0mCurrent chamber pressure: 5.497558138880002e-28
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.497558138880002e-28
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 298.3694444444444
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0995116277760004e-28
+  [94mdebug-2: [0mCurrent chamber pressure: 2.1990232555520009e-29
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.1990232555520009e-29
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 298.5
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.3980465111040016e-30
+  [94mdebug-2: [0mCurrent chamber pressure: 8.796093022208002e-31
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.796093022208002e-31
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 298.63055555555553
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.7592186044416006e-31
+  [94mdebug-2: [0mCurrent chamber pressure: 3.518437208883201e-32
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.518437208883201e-32
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 298.76111111111106
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 7.036874417766402e-33
+  [94mdebug-2: [0mCurrent chamber pressure: 1.4073748835532803e-33
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 298.89166666666665
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.4073748835532803e-33
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.8147497671065608e-34
+  [94mdebug-2: [0mCurrent chamber pressure: 5.629499534213122e-35
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mSending GET Results
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 299.0222222222222
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.629499534213122e-35
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.1258999068426244e-35
+  [94mdebug-2: [0mCurrent chamber pressure: 2.2517998136852487e-36
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 299.15277777777777
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.2517998136852487e-36
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.503599627370498e-37
+  [94mdebug-2: [0mCurrent chamber pressure: 9.007199254740995e-38
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 299.2833333333333
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 9.007199254740995e-38
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.801439850948199e-38
+  [94mdebug-2: [0mCurrent chamber pressure: 3.602879701896398e-39
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 299.4138888888889
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.602879701896398e-39
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 7.205759403792796e-40
+  [94mdebug-2: [0mCurrent chamber pressure: 1.4411518807585593e-40
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+[94mdebug-1: [0mFinished initializing threads and drivers
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+  [94mdebug-2: [0mCurrent chamber pressure: 0.008
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+  [94mdebug-2: [0mCurrent chamber pressure: 0.00032
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+  [94mdebug-2: [0mCurrent chamber pressure: 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+  [94mdebug-2: [0mCurrent chamber pressure: 5.120000000000001e-07
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 303.4611111111111
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+  [94mdebug-2: [0mCurrent chamber pressure: 0.0016
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mSending GET Results
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+  [94mdebug-2: [0mCurrent chamber pressure: 0.0016
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+  [94mdebug-2: [0mCurrent chamber pressure: 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+  [94mdebug-2: [0mCurrent chamber pressure: 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+  [94mdebug-2: [0mCurrent chamber pressure: 5.120000000000001e-07
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 305.1583333333333
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0480000000000005e-08
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 305.2888888888889
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.096000000000001e-09
+  [94mdebug-2: [0mCurrent chamber pressure: 8.192000000000001e-10
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 305.4194444444444
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.192000000000001e-10
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6384000000000003e-10
+  [94mdebug-2: [0mCurrent chamber pressure: 3.2768e-11
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 305.54999999999995
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.2768e-11
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.553600000000001e-12
+  [94mdebug-2: [0mCurrent chamber pressure: 1.31072e-12
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 305.68055555555554
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.31072e-12
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.62144e-13
+  [94mdebug-2: [0mCurrent chamber pressure: 5.2428800000000005e-14
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 305.8111111111111
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.2428800000000005e-14
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0485760000000001e-14
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0971520000000002e-15
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 305.94166666666666
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0971520000000002e-15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.194304e-16
+  [94mdebug-2: [0mCurrent chamber pressure: 8.388608000000001e-17
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 306.0722222222222
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.388608000000001e-17
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6777216000000002e-17
+  [94mdebug-2: [0mCurrent chamber pressure: 3.3554432000000005e-18
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 306.2027777777778
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.3554432000000005e-18
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.710886400000001e-19
+  [94mdebug-2: [0mCurrent chamber pressure: 1.3421772800000003e-19
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 306.3333333333333
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.3421772800000003e-19
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.6843545600000005e-20
+  [94mdebug-2: [0mCurrent chamber pressure: 5.368709120000001e-21
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 306.46388888888885
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.368709120000001e-21
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0737418240000003e-21
+  [94mdebug-2: [0mCurrent chamber pressure: 2.1474836480000006e-22
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 306.59444444444443
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.1474836480000006e-22
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mZone 1 is handled, about the start
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mCurrent chamber pressure: 1
+  [94mdebug-2: [0mCurrent chamber state: Rough Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+  [94mdebug-2: [0mCurrent chamber pressure: 0.04
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+  [94mdebug-2: [0mCurrent chamber pressure: 0.008
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+  [94mdebug-2: [0mCurrent chamber pressure: 0.00032
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+  [94mdebug-2: [0mCurrent chamber pressure: 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+  [94mdebug-2: [0mCurrent chamber pressure: 5.120000000000001e-07
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 307.2472222222222
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0480000000000005e-08
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 307.37777777777774
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.096000000000001e-09
+  [94mdebug-2: [0mCurrent chamber pressure: 8.192000000000001e-10
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 307.5083333333333
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.192000000000001e-10
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6384000000000003e-10
+  [94mdebug-2: [0mCurrent chamber pressure: 3.2768e-11
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 307.63888888888886
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.2768e-11
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mSending GET Results
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.553600000000001e-12
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.31072e-12
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.62144e-13
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.2428800000000005e-14
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0485760000000001e-14
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0971520000000002e-15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.194304e-16
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.388608000000001e-17
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6777216000000002e-17
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+  [94mdebug-2: [0mThere was a <class 'AttributeError'> error in ThermoCoupleUpdater. File: ThermoCoupleUpdater.py:120
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+[94mdebug-1: [0mFinished initializing threads and drivers
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.096000000000001e-09
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.192000000000001e-10
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6384000000000003e-10
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.2768e-11
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.553600000000001e-12
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.31072e-12
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.62144e-13
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.2428800000000005e-14
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0485760000000001e-14
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0971520000000002e-15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.194304e-16
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.388608000000001e-17
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6777216000000002e-17
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.3554432000000005e-18
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.710886400000001e-19
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.3421772800000003e-19
+[94mdebug-1: [0mReceived GET Request
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.6843545600000005e-20
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mSending GET Results
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.368709120000001e-21
+[94mdebug-1: [0mDebug on: Level 3
+[94mdebug-1: [0mStarting initializing threads and drivers
+  [94mdebug-2: [0mCreating HardwareStatusInstance
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermocoupleCollection
+  [94mdebug-2: [0mCreating PC_104_Instance
+  [94mdebug-2: [0mCreating ProfileInstance
+  [94mdebug-2: [0mCreating ZoneCollection
+  [94mdebug-2: [0mCreating ThreadCollectionInstance
+    [94mdebug-3: [0mCreating HardWareControlStub: zone1
+    [94mdebug-3: [0mCreating HardWareControlStub: zone2
+    [94mdebug-3: [0mCreating HardWareControlStub: zone3
+    [94mdebug-3: [0mCreating HardWareControlStub: zone4
+    [94mdebug-3: [0mCreating HardWareControlStub: zone5
+    [94mdebug-3: [0mCreating HardWareControlStub: zone6
+    [94mdebug-3: [0mCreating HardWareControlStub: zone7
+    [94mdebug-3: [0mCreating HardWareControlStub: zone8
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+  [94mdebug-2: [0mCreating PfeifferGaugeInstance
+  [94mdebug-2: [0mCreating PfeifferGaugeCollection
+  [94mdebug-2: [0mCreating ThermoCoupleUpdater
+    [94mdebug-3: [0mCreating VacuumControlStub:
+  [94mdebug-2: [0mCreating SafetyCheck
+[94mdebug-1: [0mFinished initializing threads and drivers
+    [94mdebug-3: [0mStarting Safety Checker Thread
+  [94mdebug-2: [0mStarting TS Registers Control Stub Thread
+  [94mdebug-2: [0mStarting ThermoCoupleUpdater
+  [94mdebug-2: [0mStarting Pfeiffer Guage Control Stub Thread
+  [94mdebug-2: [0mStarting Shi Mcc Control Stub Thread
+[94mdebug-1: [0mStart Up Complete, Server is listening for request...
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.2
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.04
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mZone 1 is handled, about the start
+  [94mdebug-2: [0mCurrent chamber pressure: 0.008
+[94mdebug-1: [0mSending GET Results
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.008
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.0016
+  [94mdebug-2: [0mCurrent chamber pressure: 0.00032
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 0.00032
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.400000000000001e-05
+  [94mdebug-2: [0mCurrent chamber pressure: 1.2800000000000003e-05
+  [94mdebug-2: [0mCurrent chamber state: Cryo Vacuum
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.2800000000000003e-05
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.5600000000000005e-06
+  [94mdebug-2: [0mCurrent chamber pressure: 5.120000000000001e-07
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Running HW control Thread
+  [94mdebug-2: [0mCreating Expected temperture values: zone1
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 0.0
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.120000000000001e-07
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0240000000000003e-07
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0480000000000005e-08
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 5.922999999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0480000000000005e-08
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.096000000000001e-09
+  [94mdebug-2: [0mCurrent chamber pressure: 8.192000000000001e-10
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 11.845999999999998
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.192000000000001e-10
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6384000000000003e-10
+  [94mdebug-2: [0mCurrent chamber pressure: 3.2768e-11
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 17.769
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.2768e-11
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.553600000000001e-12
+  [94mdebug-2: [0mCurrent chamber pressure: 1.31072e-12
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 23.691999999999997
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.31072e-12
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.62144e-13
+  [94mdebug-2: [0mCurrent chamber pressure: 5.2428800000000005e-14
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 29.614999999999995
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 5.2428800000000005e-14
+[94mdebug-1: [0mReceived Post Request
+  [94mdebug-2: [0mPOST Request Path: /loadProfile
+[94mdebug-1: [0mSending POST Results
+  [94mdebug-2: [0mPOST Results: b"{'result':'success'}"
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /runProfile
+[94mdebug-1: [0mSending GET Results
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.0485760000000001e-14
+  [94mdebug-2: [0mCurrent chamber pressure: 2.0971520000000002e-15
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 35.538
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 2.0971520000000002e-15
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 4.194304e-16
+  [94mdebug-2: [0mCurrent chamber pressure: 8.388608000000001e-17
+  [94mdebug-2: [0mCurrent chamber state: Operational Vacuum
+  [94mdebug-2: [0mzone1: Temp Goal Temperture is 41.46099999999999
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 8.388608000000001e-17
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.6777216000000002e-17
+[94mdebug-1: [0mReceived GET Request
+  [94mdebug-2: [0mGET Request Path: /hardStop
+[94mdebug-1: [0mSending GET Results
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 3.3554432000000005e-18
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 6.710886400000001e-19
+    [94mdebug-3: [0mCurrent Pressure in Chamber is 1.3421772800000003e-19

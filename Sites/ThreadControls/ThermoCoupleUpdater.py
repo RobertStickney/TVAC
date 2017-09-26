@@ -61,7 +61,8 @@ class ThermoCoupleUpdater(Thread):
                     Tharsis.init_sys()
 
                 while True:
-                    if ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus():
+                    # Setting True while testing
+                    if True or ProfileInstance.getInstance().activeProfile:
                         if "root" in userName:
                             Logging.logEvent("Debug","Status Update",
                             {"message": "Pulling live data for TC",
@@ -116,14 +117,22 @@ class ThermoCoupleUpdater(Thread):
                         'alarm': tc_alarm
                         }
                         '''
-
-                        Logging.logEvent("Event","ThermoCouple Reading",
-                            {"message": "Current TC reading",
-                             "time":	TCs['time'],
-                             "tcList":	TCs['tcList'],
-                             "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID,
-                             "ProfileInstance": ProfileInstance.getInstance()}
-                        )
+                        if ProfileInstance.getInstance().activeProfile:
+                            Logging.logEvent("Event","ThermoCouple Reading",
+                                {"message": "Current TC reading",
+                                 "time":	TCs['time'],
+                                 "tcList":	TCs['tcList'],
+                                 "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID,
+                                 "ProfileInstance": ProfileInstance.getInstance()}
+                            )
+                        else:
+                            Logging.logEvent("Event","ThermoCouple Reading",
+                                {"message": "Current TC reading",
+                                 "time":    TCs['time'],
+                                 "tcList":  TCs['tcList'],
+                                 "profileUUID": "NULL",
+                                 "ProfileInstance": ProfileInstance.getInstance()}
+                            )
 
                         Logging.logEvent("Debug","Data Dump",
                             {"message": "Current TC reading",

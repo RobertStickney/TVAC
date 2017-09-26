@@ -35,6 +35,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getLastError' : control.getLastError,
                 '/putUnderVacuum':control.putUnderVacuum,
                 '/getEventList':control.getEventList,
+                '/hardStop':control.hardStop,
             }[path]()
 
             Logging.logEvent("Debug","Status Update",

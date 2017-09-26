@@ -105,7 +105,7 @@ class PfeifferGaugeControlStub(Thread):
                             goingUp = False
                         else:
                             print("get_pressure_chamber: "+ str(self.pressure.gauges.get_pressure_chamber()))
-                            if self.pressure.gauges.get_pressure_chamber() > 0.0000001 and not goingUp:
+                            if True or self.pressure.gauges.get_pressure_chamber() > 0.0000001 and not goingUp:
                                 self.pressure.gauges.update([{'addr': 1, 'Pressure': self.pressure.gauges.get_pressure_cryopump()/2.5},
                                                              {'addr': 2, 'Pressure': self.pressure.gauges.get_pressure_chamber()/5},
                                                              {'addr': 3, 'Pressure': self.pressure.gauges.get_pressure_roughpump()/3}])

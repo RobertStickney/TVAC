@@ -32,8 +32,8 @@ class Logging(object):
 				systemStatusQueue = data["ProfileInstance"].systemStatusQueue
 				systemStatusQueue.append("[ '{}','{}', '{}' ]".format(category,logType, data.get("thread")))
 			except Exception as e:
-				# print("Passing for now")
-				raise e
+				print("pass")
+				# raise e
 			coloums = "( event_type, details )"
 			values = "( \"{}\",\"{}\" )".format(category,logType)
 			sql = "INSERT INTO tvac.Event {} VALUES {};".format(coloums, values)
