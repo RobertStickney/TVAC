@@ -92,13 +92,14 @@ class GetControl:
                                        pins.analog_in.getJson())
 
     def getPressureGauges(self):
-        self.cryoPumpPressure = self.gauges.get_pressure_cryopump()
-        self.chamberPressure = self.gauges.get_pressure_chamber()
-        self.roughPumpPressure = self.gauges.get_pressure_roughpump()
-        resp = dict(Pressure = [])
-        resp['Pressure'].append(self.cryoPumpPressure)
-        resp['Pressure'].append(self.chamberPressure)
-        resp['Pressure'].append(self.roughPumpPressure)
+        gauges = HardwareStatusInstance.getInstance().PfeifferGuages
+        cryoPumpPressure = gauges.get_pressure_cryopump()
+        chamberPressure = gauges.get_pressure_chamber()
+        roughPumpPressure = gauges.get_pressure_roughpump()
+        resp = dict("Pressure": [])
+        resp['Pressure'].append(cryoPumpPressure)
+        resp['Pressure'].append(chamberPressure)
+        resp['Pressure'].append(roughPumpPressure)
         buff = json.dumps(resp)    
         return buff            
 
