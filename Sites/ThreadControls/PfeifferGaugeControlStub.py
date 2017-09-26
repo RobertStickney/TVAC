@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.5
 from threading import Thread
 import time
-
+import datetime
 import os
 import sys
 
@@ -32,18 +32,18 @@ class PfeifferGaugeControlStub(Thread):
 
     def logPressureData(self):
         coloums = "( profile_I_ID, guage, pressure, time )"
-        values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID,
+        values  = "( \"{}\",{},{},\"{}\" ),\n".format(self.zoneProfiles.profileUUID,
                                                self.gauges.get_cryopump_address(),
                                                self.gauges.get_cryopump_pressure(),
-                                               time.time())
-        values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID,
+                                               datetime.datetime.fromtimestamp(time.time()))
+        values += "( \"{}\",{},{},\"{}\" ),\n".format(self.zoneProfiles.profileUUID,
                                                self.gauges.get_chamber_address(),
                                                self.gauges.get_chamber_pressure(),
-                                               time.time())
-        values += "( \"{}\",{},{} )".format(self.zoneProfiles.profileUUID,
+                                               datetime.datetime.fromtimestamp(time.time()))
+        values += "( \"{}\",{},{},\"{}\" )".format(self.zoneProfiles.profileUUID,
                                             self.gauges.get_roughpump_address(),
                                             self.gauges.get_roughpump_pressure(),
-                                            time.time())
+                                            datetime.datetime.fromtimestamp(time.time()))
         sql = "INSERT INTO tvac.Pressure {} VALUES {};".format(coloums, values)
         # print(sql)
         mysql = MySQlConnect()

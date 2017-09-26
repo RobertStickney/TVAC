@@ -1,5 +1,6 @@
 import uuid
 import time
+import datetime
 
 from ThreadControls.HardWareControlStub import HardWareControlStub
 from ThreadControls.SafetyCheck import SafetyCheck
@@ -110,7 +111,7 @@ class ThreadCollection:
         '''
 
         coloums = "( profile_name, profile_I_ID, startTime )"
-        values = "( \"{}\",\"{}\", \"{}\" )".format(self.zoneProfiles.profileName,self.zoneProfiles.profileUUID, time.time())
+        values = "( \"{}\",\"{}\", \"{}\" )".format(self.zoneProfiles.profileName,self.zoneProfiles.profileUUID, datetime.datetime.fromtimestamp(time.time()))
         sql = "INSERT INTO tvac.Profile_Instance {} VALUES {};".format(coloums, values)
         # print(sql)
         mysql = MySQlConnect()

@@ -1,6 +1,7 @@
 from Logging.MySql import MySQlConnect
 import math
 import datetime
+import time
 
 class Logging(object):
 	"""
@@ -61,8 +62,8 @@ class Logging(object):
 					elif type(dictionary) == type([]):
 						print("{}  {}".format(prefix,entry))
 			else:
-				coloums = "( message, time )"
-				values = "( \"{}\",\"{}\" )".format("{}{}".format(prefix,string),time.time())
+				coloums = "( message, created )"
+				values = "( \"{}\",\"{}\" )".format("{}".format(string),datetime.datetime.fromtimestamp(time.time()))
 				sql = "INSERT INTO tvac.Debug {} VALUES {};".format(coloums, values)
 				# print(sql)
 				mysql = MySQlConnect()
@@ -71,10 +72,10 @@ class Logging(object):
 					mysql.conn.commit()
 				except Exception as e:
 					pass
-				with open('./debugLog.txt','a') as filer:
-					for line in string.split("\n"):
-						filer.write("{}{}".format(prefix,line)+"\n")
-						print("{}{}".format(prefix,line))
+				#with open('./debugLog.txt','a') as filer:
+				#	for line in string.split("\n"):
+				#		filer.write("{}{}".format(prefix,line)+"\n")
+				#		print("{}{}".format(prefix,line))
 
 	@staticmethod
 	def logExpectedTempertureData(data):
