@@ -176,7 +176,7 @@ class SafetyCheck(Thread):
 				if HardwareStatusInstance.getInstance().OperationalVacuum:
 					vacuum = True
 
-				if vacuum and PfeifferGaugeInstance.getInstance().gauges.get_pressure_chamber() > 0.000001:
+				if vacuum and PfeifferGaugeInstance.getInstance().gauges.get_pressure_chamber() > 1e-4:
 					d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
 					ProfileInstance.getInstance().activeProfile = False
 					print("ERROR")

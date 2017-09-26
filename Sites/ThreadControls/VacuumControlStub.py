@@ -100,10 +100,10 @@ class VacuumControlStub(Thread):
                             # Open the cryopump gate valve
                             # Wait until 10e-6 tor
                             self.state = "Strong Cryo Vacuum"
-                        elif self.chamberPressure < 0.005 and 14 < 15: #torr?
-                            self.state = "Strong Cryo Vacuum"
+                    elif self.chamberPressure < 0.005 and 14 < 15: #torr?
+                        self.state = "Strong Cryo Vacuum"
 
-                    if self.chamberPressure < 0.00001: #torr?
+                    if self.chamberPressure < 1e-4: #torr?
                         # Wait for nothing, either the program will end, or be stopped by the safety checker
                         self.state = "Operational Vacuum"
 
