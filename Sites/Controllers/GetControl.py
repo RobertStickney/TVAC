@@ -98,7 +98,15 @@ class GetControl:
         resp['ChamberPressure'].append(gauges.get_pressure_chamber())
         resp['RoughingPressure'].append(gauges.get_pressure_roughpump())
         buff = json.dumps(resp)    
-        return buff            
+        return buff
+    def getZoneTemps(self):
+        temps=dict(ZoneSetPoint=[],ZoneTemp=[])
+
+        for i in range(1,10):
+            strzone="zone"+str(i)
+            temps['ZoneSetPoint'].append(threadCollection.getInstance().threadCollection.zoneThreadDict[strzone].pid.setPoint)
+            temps['ZoneTemp'].append(ProfileInstance.getInstance().zoneProfiles.getZone(i-1).getTemp("Max"))
+        buff=json.dumps(temp)                        
 
     def runProfile(self):
         threadInstance = ThreadCollectionInstance.getInstance()

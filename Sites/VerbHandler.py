@@ -33,6 +33,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getPC104_Digital': control.getPC104_Digital,
                 '/getPC104_Analog': control.getPC104_Analog,
                 '/getPressureGauges': control.getPressureGauges,
+                '/getZoneTemps': control.getZoneTemps,
                 '/getLastError' : control.getLastError,
                 '/putUnderVacuum':control.putUnderVacuum,
                 '/getEventList':control.getEventList,
