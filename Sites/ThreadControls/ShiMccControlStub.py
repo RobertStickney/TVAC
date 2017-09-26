@@ -9,6 +9,7 @@ if __name__ == '__main__':
     sys.path.insert(0, os.getcwd())
 
 from Collections.HardwareStatusInstance import HardwareStatusInstance
+from Collections.ProfileInstance import ProfileInstance
 from Shi_Cryo_Pump.Shi_Mcc import Shi_Mcc
 
 from Logging.Logging import Logging
@@ -34,7 +35,8 @@ class ShiMccControlStub(Thread):
             try:
                 # Thread "Start up" stuff goes here
                 Logging.logEvent("Event", "Thread Start",
-                                 {"thread": "Shi Mcc Control Stub"})
+                                 {"thread": "Shi Mcc Control Stub",
+                                  "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug", "Status Update",
                                  {"message": "Starting Shi Mcc Control Stub Thread",
                                   "level": 2})

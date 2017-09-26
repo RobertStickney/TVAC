@@ -48,6 +48,8 @@ class VacuumControlStub(Thread):
 
     def run(self):
         # Always run this thread
+        # This lets others load their info first
+        time.sleep(1)
         while True:
             if ProfileInstance.getInstance().activeProfile:
                 # With an active profile, we start putting the system under pressure
@@ -91,11 +93,16 @@ class VacuumControlStub(Thread):
                         # Alert the user they should close o-ring seal 
                         # Start the cryopump
                         self.state = "Cryo Vacuum"
-                    if self.chamberPressure < 0.005 and self.ShiMcc.Get_SecondStageTemp()['data'] < 15: #torr?
-                        # Close the rough gate valve
-                        # Open the cryopump gate valve
-                        # Wait until 10e-6 tor
-                        self.state = "Strong Cryo Vacuum"
+                    userName = os.environ['LOGNAME']
+                    if "root" in userName:
+                        if self.chamberPressure < 0.005 and self.ShiMcc.Get_SecondStageTemp()['data'] < 15: #torr?
+                            # Close the rough gate valve
+                            # Open the cryopump gate valve
+                            # Wait until 10e-6 tor
+                            self.state = "Strong Cryo Vacuum"
+                        elif self.chamberPressure < 0.005 and 14 < 15: #torr?
+                            self.state = "Strong Cryo Vacuum"
+
                     if self.chamberPressure < 0.00001: #torr?
                         # Wait for nothing, either the program will end, or be stopped by the safety checker
                         self.state = "Operational Vacuum"
@@ -151,8 +158,8 @@ class VacuumControlStub(Thread):
         
                 # Close Cryopump gate Valve 
                 # I can't find cryopump, but I found this?
-                self.ShiMcc.Close_PurgeValve() #line 237 Shi_MCC.py
-
+                # self.ShiMcc.Close_PurgeValve() #line 237 Shi_MCC.py
+                HardwareStatusInstance.getInstance().Shi_MCC_Cmds.append(["Close_PurgeValve"])
                 # Turn on Roughing Pump
                 # TODO: Can you turn the roughing pump on via Shi_mcc.py? of Software??
                 # Do we send an alart to the user, if they need to do this phycisally?

@@ -4,6 +4,8 @@ from datetime import datetime
 import os
 
 from Collections.HardwareStatusInstance import HardwareStatusInstance
+from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
+from Collections.ProfileInstance import ProfileInstance
 
 from Logging.Logging import Logging
 
@@ -56,6 +58,10 @@ class SafetyCheck(Thread):
 			MIN_UUT_TEMP = 224.15
 
 			SLEEP_TIME = 1 # in seconds
+
+			# Used to keep track of the first time through a loop
+			vacuum = False
+
 			
 			hardwareStatusInstance = HardwareStatusInstance.getInstance()
 
@@ -165,13 +171,36 @@ class SafetyCheck(Thread):
 
 				self.errorDict = tempErrorDict
 
-				# Check if heaters turned on, start timer, wait 30 (x) seconds and check temp
-				# if no change in temp, send error
+				# Logging if you've entered operational vacuum, and then left it
+				# TODO: OperationalVacuum can't be updated if there isn't an active profile...this needs to change 
+				if HardwareStatusInstance.getInstance().OperationalVacuum:
+					vacuum = True
 
-				# for hb in self.heartbeats:
-				# 	if time.time() - self.heartbeats[hb] > 5:
-				# 		# self.parent.hardwareInterfaceThreadDict[hb].start()
-				# 		print("ERROR: in {}".format(hb))
+				if vacuum and PfeifferGaugeInstance.getInstance().gauges.get_pressure_chamber() > 0.000001:
+					d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
+					ProfileInstance.getInstance().activeProfile = False
+					print("ERROR")
+					vacuum = False
+					# TODO: Send Error
+					d_out.update({"IR Lamp 1 PWM DC": 0})
+					d_out.update({"IR Lamp 2 PWM DC": 0})
+					d_out.update({"IR Lamp 3 PWM DC": 0})
+					d_out.update({"IR Lamp 4 PWM DC": 0})
+					d_out.update({"IR Lamp 5 PWM DC": 0})
+					d_out.update({"IR Lamp 6 PWM DC": 0})
+					d_out.update({"IR Lamp 7 PWM DC": 0})
+					d_out.update({"IR Lamp 8 PWM DC": 0})
+					d_out.update({"IR Lamp 9 PWM DC": 0})
+					d_out.update({"IR Lamp 10 PWM DC": 0})
+					d_out.update({"IR Lamp 11 PWM DC": 0})
+					d_out.update({"IR Lamp 12 PWM DC": 0})
+					d_out.update({"IR Lamp 13 PWM DC": 0})
+					d_out.update({"IR Lamp 14 PWM DC": 0})
+					d_out.update({"IR Lamp 15 PWM DC": 0})
+					d_out.update({"IR Lamp 16 PWM DC": 0})
+
+                    # TODO: Turn off heaters
+
 
 
 				time.sleep(SLEEP_TIME)

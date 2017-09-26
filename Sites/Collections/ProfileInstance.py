@@ -25,5 +25,7 @@ class ProfileInstance:
 
             # System Wide stats
             self.activeProfile = False
+
+            self.systemStatusQueue = []
             
             ProfileInstance.__instance = self

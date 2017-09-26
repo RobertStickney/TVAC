@@ -130,6 +130,8 @@ def main(args):
 	json = generateJSON(fileName)
 	json = JSON.loads(json)
 
+
+	host = "192.168.99.1"
 	host = "localhost"
 	port = "8000"
 	path = "saveProfile"

@@ -43,7 +43,8 @@ class ThermoCoupleUpdater(Thread):
             try:
                 # Thread "Start up" stuff goes here
                 Logging.logEvent("Event","Thread Start",
-                        {"thread": "ThermoCoupleUpdater"})
+                        {"thread": "ThermoCoupleUpdater",
+                         "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug","Status Update",
                 {"message": "Starting ThermoCoupleUpdater",
                  "level":2})
@@ -120,8 +121,8 @@ class ThermoCoupleUpdater(Thread):
                             {"message": "Current TC reading",
                              "time":	TCs['time'],
                              "tcList":	TCs['tcList'],
-                             "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID
-                             }
+                             "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID,
+                             "ProfileInstance": ProfileInstance.getInstance()}
                         )
 
                         Logging.logEvent("Debug","Data Dump",
@@ -140,7 +141,8 @@ class ThermoCoupleUpdater(Thread):
                         {"type": exc_type,
                          "filename": fname,
                          "line": exc_tb.tb_lineno,
-                         "thread": "ThermoCoupleUpdater"
+                         "thread": "ThermoCoupleUpdater",
+                         "ProfileInstance": ProfileInstance.getInstance()
                         })
                 Logging.logEvent("Debug","Status Update",
                         {"message": "There was a {} error in ThermoCoupleUpdater. File: {}:{}".format(exc_type,fname,exc_tb.tb_lineno),

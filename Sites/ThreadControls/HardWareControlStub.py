@@ -158,7 +158,8 @@ class HardWareControlStub(Thread):
                      "level":2})
          
                     Logging.logEvent("Event","Start Profile", 
-                        {'time': datetime.time()})
+                        {'time': datetime.time(),
+                        "ProfileInstance": ProfileInstance.getInstance(),})
 
                     # Setup code is here
 
@@ -181,7 +182,7 @@ class HardWareControlStub(Thread):
                     self.expected_temp_values, self.expected_time_values = self.createExpectedValues(self.zoneProfile.thermalProfiles, startTime=self.zoneProfiles.startTime)
                     justChangedSetpoint = True
                     # Program loop is here
-                    while True:
+                    while ProfileInstance.getInstance().activeProfile:
 
                         # You might need to stay is pause
                         self.checkPause()
@@ -230,7 +231,8 @@ class HardWareControlStub(Thread):
                     #TODO: Turn on the heaters here
 
                     Logging.logEvent("Event","End Profile", 
-                        {'time': datetime.time()})
+                        {'time': datetime.time(),
+                        "ProfileInstance": ProfileInstance.getInstance()})
 
                     self.updateDBwithEndTime()
                     self.running = False
@@ -284,6 +286,7 @@ class HardWareControlStub(Thread):
          "expected_time_values": [time.time()],
          "zone"                : self.args[0],
          "profileUUID"         : self.zoneProfile.profileUUID,
+         "ProfileInstance"     : ProfileInstance.getInstance()
         })
 
 

@@ -20,6 +20,10 @@ class GetControl:
 
         
     def putUnderVacuum(self):
+        '''
+        TODO: Right now this doesn't work, should it work?
+        '''
+
         HardwareStatusInstance.getInstance().vacuum = True
         return "{'result':'success'}"
 
@@ -45,8 +49,13 @@ class GetControl:
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
         # print(errorList[0])
-
         return str(errorList)
+
+    def getEventList(self):
+        tmp = ProfileInstance.getInstance().systemStatusQueue
+        ProfileInstance.getInstance().systemStatusQueue = []
+        return str(tmp)
+    
 
     def getPC104_Digital(self):
         pins = HardwareStatusInstance.getInstance().PC_104

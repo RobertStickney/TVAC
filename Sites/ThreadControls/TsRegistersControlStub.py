@@ -1,13 +1,14 @@
 from threading import Thread
 import time
 import os
+import sys
 if __name__ == '__main__':
-    import sys
     sys.path.insert(0, os.getcwd())
 
 from Collections.PC_104_Instance import PC_104_Instance
 from TS_7250_V2.TS_Registers import TS_Registers
 from TS_7250_V2.PWM_Square_Wave import PWM_Square_Wave
+from Collections.ProfileInstance import ProfileInstance
 
 from Logging.Logging import Logging
 
@@ -35,10 +36,12 @@ class TsRegistersControlStub(Thread):
             try:
                 # Thread "Start up" stuff goes here
                 Logging.logEvent("Event","Thread Start", 
-                        {"thread": "TS Registers Control Stub"})
+                        {"thread": "TS Registers Control Stub",
+                         "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug","Status Update", 
                 {"message": "Starting TS Registers Control Stub Thread",
-                 "level":2})
+                 "level":2,
+                 })
 
                 self.ir_lamp_pwm_start()
                 

@@ -34,6 +34,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getPC104_Analog': control.getPC104_Analog,
                 '/getLastError' : control.getLastError,
                 '/putUnderVacuum':control.putUnderVacuum,
+                '/getEventList':control.getEventList,
             }[path]()
 
             Logging.logEvent("Debug","Status Update",
