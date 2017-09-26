@@ -94,9 +94,9 @@ class GetControl:
     def getPressureGauges(self):
         gauges = HardwareStatusInstance.getInstance().PfeifferGuages
         resp = dict(CryoPressure = [], ChamberPressure=[], RoughingPressure=[])
-        resp['CryoPressure'].append(gauges.get_pressure_cryopump())
-        resp['ChamberPressure'].append(gauges.get_pressure_chamber())
-        resp['RoughingPressure'].append(gauges.get_pressure_roughpump())
+        resp['CryoPressure'].append(gauges.get_cryopump_pressure())
+        resp['ChamberPressure'].append(gauges.get_chamber_pressure())
+        resp['RoughingPressure'].append(gauges.get_roughpump_pressure())
         buff = json.dumps(resp)    
         return buff
     def getZoneTemps(self):
