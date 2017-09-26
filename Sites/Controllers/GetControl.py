@@ -96,7 +96,8 @@ class GetControl:
         cryoPumpPressure = gauges.get_pressure_cryopump()
         chamberPressure = gauges.get_pressure_chamber()
         roughPumpPressure = gauges.get_pressure_roughpump()
-        resp = dict("Pressure": [])
+        resp = {}
+        resp["Pressure"]= []
         resp['Pressure'].append(cryoPumpPressure)
         resp['Pressure'].append(chamberPressure)
         resp['Pressure'].append(roughPumpPressure)

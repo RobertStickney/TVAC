@@ -115,16 +115,16 @@ class PfeifferGaugeControlStub(Thread):
                             first = False
                             goingUp = False
                         else:
-                            print("get_pressure_chamber: "+ str(self.pressure.gauges.get_chamber_pressure()))
-                            if True or self.pressure.gauges.get_chamber_pressure() > 0.0000001 and not goingUp:
-                                self.pressure.gauges.update([{'addr': 1, 'Pressure': self.pressure.gauges.get_cryopump_pressure()/2.5},
-                                                             {'addr': 2, 'Pressure': self.pressure.gauges.get_chamber_pressure()/5},
-                                                             {'addr': 3, 'Pressure': self.pressure.gauges.get_roughpump_pressure()/3}])
+                            print("get_pressure_chamber: "+ str(self.gauges.get_chamber_pressure()))
+                            if True or self.gauges.get_chamber_pressure() > 0.0000001 and not goingUp:
+                                self.gauges.update([{'addr': 1, 'Pressure': self.gauges.get_cryopump_pressure()/2.5},
+                                                             {'addr': 2, 'Pressure': self.gauges.get_chamber_pressure()/5},
+                                                             {'addr': 3, 'Pressure': self.gauges.get_roughpump_pressure()/3}])
                             else:
                                 goingUp = True
-                                self.pressure.gauges.update([{'addr': 1, 'Pressure': self.pressure.gauges.get_cryopump_pressure()*2.5},
-                                                             {'addr': 2, 'Pressure': self.pressure.gauges.get_chamber_pressure()*5},
-                                                             {'addr': 3, 'Pressure': self.pressure.gauges.get_roughpump_pressure()*3}])
+                                self.gauges.update([{'addr': 1, 'Pressure': self.gauges.get_cryopump_pressure()*2.5},
+                                                             {'addr': 2, 'Pressure': self.gauges.get_chamber_pressure()*5},
+                                                             {'addr': 3, 'Pressure': self.gauges.get_roughpump_pressure()*3}])
                         # Just to see the screen for longer
                         time.sleep(5)
 

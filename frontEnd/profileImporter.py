@@ -1,4 +1,4 @@
-import sys
+import sys, os
 import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import *
@@ -190,9 +190,11 @@ def main(args):
 	json = generateJSON(fileName)
 	json = JSON.loads(json)
 
-
-	host = "192.168.99.1"
-	host = "localhost"
+	userName = os.environ['LOGNAME']
+	if "root" in userName or (len(sys.argv) > 1 and sys.argv[1] =="--live"):
+		host = "192.168.99.1"
+	else:
+		host = "localhost"
 	port = "8000"
 	path = "saveProfile"
 

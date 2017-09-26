@@ -175,7 +175,7 @@ class SafetyCheck(Thread):
 				if HardwareStatusInstance.getInstance().OperationalVacuum:
 					vacuum = True
 
-				if vacuum and HardwareStatusInstance.getInstance().PfeifferGuages.get_pressure_chamber() > 1e-4:
+				if vacuum and HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure() > 1e-4:
 					d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
 					ProfileInstance.getInstance().activeProfile = False
 					print("ERROR Pressure is above 10^-4.")
@@ -227,4 +227,3 @@ class SafetyCheck(Thread):
 			# The error has not been on, and is now on
 			# Log SQL stuff 
 			pass
->>>>>>> 09c3ded384f9ff73ac3f99a6a030693dcbfb4d97
