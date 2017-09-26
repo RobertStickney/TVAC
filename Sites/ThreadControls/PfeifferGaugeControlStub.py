@@ -61,10 +61,11 @@ class PfeifferGaugeControlStub(Thread):
             try:
                 # Thread "Start up" stuff goes here
                 Logging.logEvent("Event", "Thread Start",
-                                 {"thread": "Pfeiffer Guage Control Stub"})
+                                {"thread": "Pfeiffer Guage Control Stub",
+                                 "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug", "Status Update",
-                                 {"message": "Starting Pfeiffer Guage Control Stub Thread",
-                                  "level": 2})
+                                {"message": "Starting Pfeiffer Guage Control Stub Thread",
+                                 "level": 2})
 
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
@@ -112,10 +113,18 @@ class PfeifferGaugeControlStub(Thread):
                                                 {'addr': 2, 'Pressure': 1},
                                                 {'addr': 3, 'Pressure': 999}])
                             first = False
+                            goingUp = False
                         else:
-                            self.gauges.update([{'addr': 1, 'Pressure': self.gauges.get_cryopump_pressure() / 2.5},
-                                                {'addr': 2, 'Pressure': self.gauges.get_chamber_pressure() / 5},
-                                                {'addr': 3, 'Pressure': self.gauges.get_roughpump_pressure() / 3}])
+                            print("get_pressure_chamber: "+ str(self.pressure.gauges.get_chamber_pressure()))
+                            if True or self.pressure.gauges.get_chamber_pressure() > 0.0000001 and not goingUp:
+                                self.pressure.gauges.update([{'addr': 1, 'Pressure': self.pressure.gauges.get_cryopump_pressure()/2.5},
+                                                             {'addr': 2, 'Pressure': self.pressure.gauges.get_chamber_pressure()/5},
+                                                             {'addr': 3, 'Pressure': self.pressure.gauges.get_roughpump_pressure()/3}])
+                            else:
+                                goingUp = True
+                                self.pressure.gauges.update([{'addr': 1, 'Pressure': self.pressure.gauges.get_cryopump_pressure()*2.5},
+                                                             {'addr': 2, 'Pressure': self.pressure.gauges.get_chamber_pressure()*5},
+                                                             {'addr': 3, 'Pressure': self.pressure.gauges.get_roughpump_pressure()*3}])
                         # Just to see the screen for longer
                         time.sleep(5)
 

@@ -1,9 +1,69 @@
 import sys
+import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import *
 import json as JSON
 import requests
+import time
 
+
+def createExpectedValues(setPoints,startTime=None):
+	intervalTime = 5
+	if startTime:
+		currentTime = int(startTime)
+	else:
+		currentTime = int(time.time())
+	currentTemp = 300
+	expected_temp_values = []
+	expected_time_values = []
+	setpoint_ramp_start_time = []
+	setpoint_soak_start_time = []
+	for setPoint in setPoints:
+		print(setPoint)
+		goalTemp = setPoint["tempgoal"]
+		rampTime = setPoint["ramp"]
+		soakTime = setPoint["soakduration"]
+
+
+		# skip ramp section if rampTime == 0
+		if rampTime:
+			TempDelta = goalTemp-currentTemp
+			numberOfJumps = rampTime/intervalTime
+			intervalTemp = TempDelta/numberOfJumps
+			rampEndTime = currentTime+rampTime
+
+			# setting all values all for ramp
+			for i, tempSetPoint in enumerate(range(currentTime,rampEndTime, intervalTime)):
+				x = tempSetPoint
+				y = currentTemp + (i*intervalTemp)
+				expected_time_values.append(tempSetPoint)
+				expected_temp_values.append(y)
+		else:
+			rampEndTime = currentTime
+		setpoint_ramp_start_time.append(currentTime)
+
+
+		#Setting all soak values
+		setpoint_soak_start_time.append(rampEndTime)
+		for tempSetPoint in range(rampEndTime, rampEndTime+soakTime, intervalTime):
+			x = tempSetPoint
+			y = goalTemp
+			expected_time_values.append(tempSetPoint)
+			expected_temp_values.append(y)
+			# print("{},{}".format(x,y))
+
+
+		currentTime = rampEndTime+soakTime
+		currentTemp = goalTemp
+	# end of for loop, end generating outputs
+
+
+	return expected_temp_values, expected_time_values
+
+
+def unwrapJSON(json):
+	# print(json)
+	return json['profiles'][0]['thermalprofiles']
 
 
 
@@ -130,6 +190,8 @@ def main(args):
 	json = generateJSON(fileName)
 	json = JSON.loads(json)
 
+
+	host = "192.168.99.1"
 	host = "localhost"
 	port = "8000"
 	path = "saveProfile"
@@ -138,7 +200,6 @@ def main(args):
 	data = json
 	headers = {'Content-type': 'application/json'}
 
-	print(json)
 	try:
 		r = requests.post(url, data=JSON.dumps(data), headers=headers)
 	except Exception as e:
@@ -151,7 +212,17 @@ def main(args):
 		else:
 			popupError(r.text)
 
+	expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json))
+	plt.plot(expected_time_values,expected_temp_values, label="Expected Results")
+	plt.legend(loc='upper left')
+
+	# plt.pause(1)
+	# plt.clf()
+	plt.ylabel('Temperture')
+	plt.xlabel('Time')
+	plt.show(block=True)
 	print("Program worked!")
+
 
 
 

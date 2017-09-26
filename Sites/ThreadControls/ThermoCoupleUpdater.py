@@ -43,7 +43,8 @@ class ThermoCoupleUpdater(Thread):
             try:
                 # Thread "Start up" stuff goes here
                 Logging.logEvent("Event","Thread Start",
-                        {"thread": "ThermoCoupleUpdater"})
+                        {"thread": "ThermoCoupleUpdater",
+                         "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug","Status Update",
                 {"message": "Starting ThermoCoupleUpdater",
                  "level":2})
@@ -60,7 +61,8 @@ class ThermoCoupleUpdater(Thread):
                     Tharsis.init_sys()
 
                 while True:
-                    if ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus():
+                    # Setting True while testing
+                    if True or ProfileInstance.getInstance().activeProfile:
                         if "root" in userName:
                             Logging.logEvent("Debug","Status Update",
                             {"message": "Pulling live data for TC",
@@ -115,14 +117,22 @@ class ThermoCoupleUpdater(Thread):
                         'alarm': tc_alarm
                         }
                         '''
-
-                        Logging.logEvent("Event","ThermoCouple Reading",
-                            {"message": "Current TC reading",
-                             "time":	TCs['time'],
-                             "tcList":	TCs['tcList'],
-                             "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID
-                             }
-                        )
+                        if ProfileInstance.getInstance().activeProfile:
+                            Logging.logEvent("Event","ThermoCouple Reading",
+                                {"message": "Current TC reading",
+                                 "time":	TCs['time'],
+                                 "tcList":	TCs['tcList'],
+                                 "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID,
+                                 "ProfileInstance": ProfileInstance.getInstance()}
+                            )
+                        else:
+                            Logging.logEvent("Event","ThermoCouple Reading",
+                                {"message": "Current TC reading",
+                                 "time":    TCs['time'],
+                                 "tcList":  TCs['tcList'],
+                                 "profileUUID": "NULL",
+                                 "ProfileInstance": ProfileInstance.getInstance()}
+                            )
 
                         Logging.logEvent("Debug","Data Dump",
                             {"message": "Current TC reading",
@@ -140,7 +150,8 @@ class ThermoCoupleUpdater(Thread):
                         {"type": exc_type,
                          "filename": fname,
                          "line": exc_tb.tb_lineno,
-                         "thread": "ThermoCoupleUpdater"
+                         "thread": "ThermoCoupleUpdater",
+                         "ProfileInstance": ProfileInstance.getInstance()
                         })
                 Logging.logEvent("Debug","Status Update",
                         {"message": "There was a {} error in ThermoCoupleUpdater. File: {}:{}".format(exc_type,fname,exc_tb.tb_lineno),

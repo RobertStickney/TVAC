@@ -42,7 +42,8 @@ class VacuumControlStub(Thread):
 
     def run(self):
         # Always run this thread
-        time.sleep(2)
+        # This lets others load their info first
+        time.sleep(1)
         while True:
             if ProfileInstance.getInstance().activeProfile and \
                     self.hw.PfeifferGuages.get_roughpump_pressure() is not None:
@@ -87,12 +88,17 @@ class VacuumControlStub(Thread):
                         # Alert the user they should close o-ring seal 
                         # Start the cryopump
                         self.state = "Crossover Vacuum"
-                    if self.chamberPressure < 0.005 and self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') < 15:
-                        # Close the rough gate valve
-                        # Open the cryopump gate valve
-                        # Wait until 10e-6 tor
-                        self.state = "Cryo Vacuum"
-                    if self.chamberPressure < 0.00001: #torr?
+                    userName = os.environ['LOGNAME']
+                    if "root" in userName:
+                        if self.chamberPressure < 0.005 and self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') < 15:
+                            # Close the rough gate valve
+                            # Open the cryopump gate valve
+                            # Wait until 10e-6 tor
+                            self.state = "Cryo Vacuum"
+                    else:
+                        if self.chamberPressure < 0.005: #torr?
+                            self.state = "Cryo Vacuum"
+                    if self.chamberPressure < 9e-5: #torr?
                         # Wait for nothing, either the program will end, or be stopped by the safety checker
                         self.state = "Operational Vacuum"
 

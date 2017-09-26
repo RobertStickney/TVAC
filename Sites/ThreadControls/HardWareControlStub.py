@@ -158,7 +158,8 @@ class HardWareControlStub(Thread):
                      "level":2})
          
                     Logging.logEvent("Event","Start Profile", 
-                        {'time': datetime.time()})
+                        {'time': datetime.time(),
+                        "ProfileInstance": ProfileInstance.getInstance(),})
 
                     # Setup code is here
 
@@ -181,9 +182,10 @@ class HardWareControlStub(Thread):
                     self.expected_temp_values, self.expected_time_values = self.createExpectedValues(self.zoneProfile.thermalProfiles, startTime=self.zoneProfiles.startTime)
                     justChangedSetpoint = True
                     # Program loop is here
-                    while True:
+                    while ProfileInstance.getInstance().activeProfile:
 
                         # You might need to stay is pause
+                        print("About to check for hold")
                         self.checkPause()
                         self.checkHold()
 
@@ -230,7 +232,8 @@ class HardWareControlStub(Thread):
                     #TODO: Turn on the heaters here
 
                     Logging.logEvent("Event","End Profile", 
-                        {'time': datetime.time()})
+                        {'time': datetime.time(),
+                        "ProfileInstance": ProfileInstance.getInstance()})
 
                     self.updateDBwithEndTime()
                     self.running = False
@@ -284,6 +287,7 @@ class HardWareControlStub(Thread):
          "expected_time_values": [time.time()],
          "zone"                : self.args[0],
          "profileUUID"         : self.zoneProfile.profileUUID,
+         "ProfileInstance"     : ProfileInstance.getInstance()
         })
 
 
@@ -320,12 +324,17 @@ class HardWareControlStub(Thread):
         if self.paused:
             inPause = True
             # turn off lamps while paused
+            print("PAUSED")
             self.d_out.update({self.lamps[1] + " PWM DC": 0})
             self.d_out.update({self.lamps[0] + " PWM DC": 0})
             self.event('pause')
         else:
             inPause = False
         while self.paused:
+            self.d_out.update({self.lamps[1] + " PWM DC": 0})
+            self.d_out.update({self.lamps[0] + " PWM DC": 0})
+            self.dutyCycle = 0
+            self.pid.error_value = 0
             time.sleep(.5)
         if inPause:
             inPause = False

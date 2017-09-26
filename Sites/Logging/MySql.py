@@ -1,4 +1,5 @@
 import time
+import os
 import pymysql
 
 from warnings import filterwarnings
@@ -7,9 +8,15 @@ class MySQlConnect:
 
 
     def __init__(self):
-        user = "TVAC_Admin"
-        host = "192.168.99.10"
-        password = "People 2 Space"
+        userName = os.environ['LOGNAME']
+        if "root" in userName:
+            user = "TVAC_Admin"
+            host = "192.168.99.10"
+            password = "People 2 Space"
+        else:
+            user = "tvac_user"
+            host = "localhost"
+            password = "Go2Mars!"
         database = "tvac"
 
         filterwarnings('ignore', category = pymysql.Warning)
