@@ -79,7 +79,7 @@ class VacuumControlStub(Thread):
                         # use the roughing pump to achieve Rough vacuum
                         # Wait until 0.0.041 tor
                         self.state = "Atmosphere"
-                    if self.chamberPressure < 300: # and self.roughPumpPressure < self.cryoPumpPressure:
+                    if self.roughPumpPressure < 300: # and self.roughPumpPressure < self.cryoPumpPressure:
                         # open Cryopump-Roughing gate valve
                         # Wait until 0.041 tor
                         self.state = "Rough Vacuum"

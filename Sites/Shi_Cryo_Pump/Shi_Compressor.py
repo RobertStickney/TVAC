@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.5
 # He_Compressor_Interface
-import io
+import os
 import time
 
 # Runs on serial port at 9600 8 1  Tout >0.7 sec
@@ -167,75 +167,75 @@ Response: $STA,status bits,<crc-16><cr>
 
 
 
-def HeCompressorOpen(Command):
-    He_Comp = open('/dev/ttyxuart1', 'r+b', buffering=0)
-    He_Comp.write(Command.encode()'\r)
-    time.sleep(0.760)
-    temp = HE_Comp.read(113)
-    print("R:--" + temp.decode().replace('\r', r'\r') + "---")
-    return temp.decode()
+    def HeCompressorOpen(Command):
+        He_Comp = open('/dev/ttyxuart1', 'r+b', buffering=0)
+        He_Comp.write(Command.encode()'\r)
+        time.sleep(0.760)
+        temp = HE_Comp.read(113)
+        print("R:--" + temp.decode().replace('\r', r'\r') + "---")
+        return temp.decode()
 
-def Compressor_GenCmdRead( Parm=349): #Cmd syntax see page #16 of MPT200 Operating instructions
-    return Pfeiffer_applyChecksum("{:03d}00{:03d}02=?".format( Parm))
-	
-def get_Status():
-    # Create Dict of Functions 
-    FunS = {"Status"            : Get_Status,
-            "TcPressure"        : Get_TcPressure,
-            "TempStage1"        : Get_FirstStageTemp,
-            "TempStage2"        : Get_SecondStageTemp,
-            "Duty Cycle"        : Get_DutyCycle,
-            "RegenStep"         : Get_RegenStep,
-            "RegenError"        : Get_RegenError,
-            "CryoPumpRdyState"  : Get_CryoPumpRdyState}
-    return RunGetFunctions(FunS)
+    def Compressor_GenCmdRead( Parm=349): #Cmd syntax see page #16 of MPT200 Operating instructions
+        return Pfeiffer_applyChecksum("{:03d}00{:03d}02=?".format( Parm))
+
+    def get_Status():
+        # Create Dict of Functions
+        FunS = {"Status"            : Get_Status,
+                "TcPressure"        : Get_TcPressure,
+                "TempStage1"        : Get_FirstStageTemp,
+                "TempStage2"        : Get_SecondStageTemp,
+                "Duty Cycle"        : Get_DutyCycle,
+                "RegenStep"         : Get_RegenStep,
+                "RegenError"        : Get_RegenError,
+                "CryoPumpRdyState"  : Get_CryoPumpRdyState}
+        return RunGetFunctions(FunS)
 
 
-def RunGetFunctions(Functions):
-    er = False; pf = False; vals = {}
-    for key in Functions.keys():
-        val = Functions[key]()
-        er |= val['Error']
-        pf |= val['PowerFailure']
-        vals[key] = val['Data']
-    return Format_Responce(json.dumps(vals), er, pf)
+    def RunGetFunctions(Functions):
+        er = False; pf = False; vals = {}
+        for key in Functions.keys():
+            val = Functions[key]()
+            er |= val['Error']
+            pf |= val['PowerFailure']
+            vals[key] = val['Data']
+        return Format_Responce(json.dumps(vals), er, pf)
 
-def Format_Responce(d, error = False, pwrFail = False): # , d_int = 0, d_float = 0.0);
-    return {"Error":error, "PowerFailure":pwrFail, "Data":d}  # , "int"=d_int, "float"=d_float}
+    def Format_Responce(d, error = False, pwrFail = False): # , d_int = 0, d_float = 0.0);
+        return {"Error":error, "PowerFailure":pwrFail, "Data":d}  # , "int"=d_int, "float"=d_float}
 
-# MCC Programmers References Guide Rev C 
+    # MCC Programmers References Guide Rev C
 
-# 2.4 � Duty Cycle pg:8
-def Get_DutyCycle(): # Command Ex: "$XOI??_\r"
-    #return (int(Send_cmd("XOI??"))/23) * 100 #check for int
-    return Send_cmd("XOI??")
+    # 2.4 � Duty Cycle pg:8
+    def Get_DutyCycle(): # Command Ex: "$XOI??_\r"
+        #return (int(Send_cmd("XOI??"))/23) * 100 #check for int
+        return Send_cmd("XOI??")
 
-# 2.5 � Elapsed Time pg:8
-def Get_ElapsedTime(): # Command Ex: "$Y?J\r"
-    return Send_cmd("Y?")
- 
-# Commands:
+    # 2.5 � Elapsed Time pg:8
+    def Get_ElapsedTime(): # Command Ex: "$Y?J\r"
+        return Send_cmd("Y?")
 
-    return RunGetFunctions(FunS)
+    # Commands:
 
-def get_Status():
-    # Create Dict of Functions 
-    FunS = {"Status"            : Get_Status,
-	return get_Status(Funs)
+        return RunGetFunctions(FunS)
 
-def get_ParamValues():
-    # Create Dict of Functions             
-    FunS = {"TEA" : Get_temps,
-            "Te1" : Get_T1_input,
-            "Te2" : Get_T2_input,
-            "Te3" : Get_input,
-            "PRA" : Get_all_pressures, 
-            "PR1" : Get_selected_pressure,
-            "ID1" : Get_firmware_ver_and_ETime,
-            "ON1" : Get_turn_compressor_on,
-            "OFF" : Get_turn_compressor_off,
-            "RS1" : Get_Reset,
-            "CHR" : Get_Cold_Head_Run,
-            "CHP" : Get_Cold_Head_Pause,
-            "POF" : Get_Cold_Head_Pause_off}
-    return RunGetFunctions(FunS)
+    def get_Status():
+        # Create Dict of Functions
+        FunS = {"Status"            : Get_Status,
+        return get_Status(Funs)
+
+    def get_ParamValues():
+        # Create Dict of Functions
+        FunS = {"TEA" : Get_temps,
+                "Te1" : Get_T1_input,
+                "Te2" : Get_T2_input,
+                "Te3" : Get_input,
+                "PRA" : Get_all_pressures,
+                "PR1" : Get_selected_pressure,
+                "ID1" : Get_firmware_ver_and_ETime,
+                "ON1" : Get_turn_compressor_on,
+                "OFF" : Get_turn_compressor_off,
+                "RS1" : Get_Reset,
+                "CHR" : Get_Cold_Head_Run,
+                "CHP" : Get_Cold_Head_Pause,
+                "POF" : Get_Cold_Head_Pause_off}
+        return RunGetFunctions(FunS)

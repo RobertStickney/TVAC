@@ -1,9 +1,13 @@
 #!/usr/bin/env python3.5
+from socket import *
 import time
 import math
 
 
 class PfeifferGauge:
+
+    def __init__(self):
+        self.a = socket(AF_INET, SOCK_DGRAM)
 
     def GetChecksum(self, cmd):  # append the sum of the string's bytes mod 256 + '\r'
         return sum(cmd.encode()) % 256
@@ -68,6 +72,23 @@ class PfeifferGauge:
         return "{:04d}{:02d}".format(a, b + 20)
 
     def SendReceive(self, Address, Parm=349, dataStr=None):
+        for tries in range(3):
+            if dataStr is None:
+                self.a.sendto(self.GenCmdRead(Address, Parm).encode(), ('192.168.99.124', 1234))
+            else:
+                self.a.sendto(self.GenCmdWrite(Address, Parm, dataStr).encode(), ('192.168.99.124', 1234))
+            time.sleep(0.060 * (tries + 1))
+            Responce,_ = self.a.recvfrom(4092)
+            Resp = Responce.decode().strip()
+            if self.ResponceGood(Address, Resp, Parm):
+                break
+            print("Try number: " + str(tries))
+        else:
+            print("No more tries! Something is wrong!")
+            Resp = "{:*^32}".format('Timeout!')
+        return Resp[10:-3]
+
+    def SendReceive_Xuart(self, Address, Parm=349, dataStr=None):
         p_gauge = open('/dev/ttyxuart2', 'r+b', buffering=0)
         for tries in range(3):
             if dataStr is None:
