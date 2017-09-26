@@ -27,6 +27,8 @@ class HardwareStatusInstance:
             self.Thermocouples = ThermocoupleCollection()
             self.PfeifferGuages = PfeifferGaugeCollection()
             self.ShiCryopump = ShiCryopumpCollection()
+            self.Shi_MCC_Cmds = []  # [cmd, arg, arg,... arg]
+            self.Shi_compressor_Cmds = []
             self.PC_104 = PC_104_Instance.getInstance()
 
             # System Wide Stats

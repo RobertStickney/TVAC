@@ -218,7 +218,7 @@ class Shi_Mcc:
         return self.Send_cmd("A?")
 
     def Get_CryoPumpRdyState(self):  # Command Ex: "$A??m\r"
-        return self.Send_cmd("A??")
+        return self.Send_cmd("A??")  # Use this one for the Contract
 
     def Turn_CryoPumpOn(self):  # Command Ex: "$A1c\r"
         return self.Send_cmd("A1")
@@ -260,6 +260,14 @@ class Shi_Mcc:
         return self.Send_cmd("e")
 
     # 2.19 • Regeneration Parameters pg:16
+    def Get_RegenParam(self, Param=''):  # expected call: Get_RegenParam(chr(int))
+        if (Param not in ['0', '1', '2', '3', '4', '5', '6', 'A', 'C', 'G', 'z']):
+            return self.Format_Responce("Parameter unknown: " + str(Param), error=True)
+        val = self.Send_cmd("P" + str(Param) + "?")
+        if not val['Error']:
+            val['Data'] = int(val['Response'])
+        return val
+
     def Get_RegenParam_0(self):
         # return self.Send_cmd("P0?")
         val = self.Send_cmd("P0?")

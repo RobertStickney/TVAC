@@ -8,10 +8,7 @@ import os
 
 
 from Collections.ProfileInstance import ProfileInstance
-from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
-from PID.PID import PID
-from Shi_Cryo_Pump.Shi_Mcc import Shi_Mcc
 
 from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
@@ -27,21 +24,18 @@ class VacuumControlStub(Thread):
 
         Logging.logEvent("Debug","Status Update", 
         {"message": "Creating VacuumControlStub:",
-         "level":3})
+         "level": 3})
 
         Thread.__init__(self, group=group, target=target, name=name)
         self.args = args
         self.kwargs = kwargs
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
-        self.gauges = PfeifferGaugeInstance.getInstance().gauges
-        self.hwStatus = HardwareStatusInstance.getInstance()
+        self.hw = HardwareStatusInstance.getInstance()
         self.state = None
         self.oldState = True
 
-        self.ShiMcc = Shi_Mcc()
-
-        self.updatePeriod = 10
+        self.updatePeriod = 5
 
 
 
@@ -66,10 +60,9 @@ class VacuumControlStub(Thread):
                     # Reading of pressure gauges, to figure out where the system is
 
                     # When you know what the pressure is, you know what to do go get into pressure
-                    self.cryoPumpPressure = self.gauges.get_pressure_cryopump()
-                    self.chamberPressure = self.gauges.get_pressure_chamber()
-                    self.roughPumpPressure = self.gauges.get_pressure_roughpump()
-                    # TODO: Is this pressure result in torr?
+                    self.cryoPumpPressure = self.hw.PfeifferGuages.get_pressure_cryopump()
+                    self.chamberPressure = self.hw.PfeifferGuages.get_pressure_chamber()
+                    self.roughPumpPressure = self.hw.PfeifferGuages.get_pressure_roughpump()
 
                     # learning from Zoneprofiles what vacuum state the system needs to be in
                     # If it's here, you want the vacuum to be on
@@ -78,9 +71,10 @@ class VacuumControlStub(Thread):
                     {"message": "Current chamber pressure: {}".format(self.chamberPressure),
                      "level":2})
 
+                    # Pressure is in Torr and Temperature is in Kelvin.
                     # calculations to get from here to there
                     if self.chamberPressure > 300: #torr?
-                        # use the roughing pump to achive Rough vacuum
+                        # use the roughing pump to achieve Rough vacuum
                         # Wait until 0.0.041 tor
                         self.state = "Atmosphere"
                     if self.chamberPressure < 300 and self.roughPumpPressure < self.cryoPumpPressure:
@@ -90,8 +84,8 @@ class VacuumControlStub(Thread):
                     if self.chamberPressure < 0.041:
                         # Alert the user they should close o-ring seal 
                         # Start the cryopump
-                        self.state = "Cryo Vacuum"
-                    if self.chamberPressure < 0.005 and self.ShiMcc.Get_SecondStageTemp()['data'] < 15: #torr?
+                        self.state = "Crossover Vacuum"
+                    if self.chamberPressure < 0.005 and self.ShiMcc.get_mcc_status('Stage 1 Temp') < 15:
                         # Close the rough gate valve
                         # Open the cryopump gate valve
                         # Wait until 10e-6 tor
@@ -107,7 +101,7 @@ class VacuumControlStub(Thread):
                     result = {
                         'Atmosphere': self.atmosphere,
                         'Rough Vacuum': self.roughVacuum,
-                        'Cryo Vacuum': self.cryoVacuum,
+                        'Crossover Vacuum': self.crossoverVacuum,
                         'Strong Cryo Vacuum': self.strongCryoVacuum,
                         'Operational Vacuum': self.operationalVacuum,
                     }[self.state]()
@@ -134,8 +128,11 @@ class VacuumControlStub(Thread):
                     self.running = False
                     ProfileInstance.getInstance().zoneProfiles.activeProfile = False
                     raise e
+                finally:
+                    pass
                 # end of try, catch
-            # end of running check
+            else:  # end of running check
+                time.sleep(1)
         # end of outter while True
     # end of run()
 
@@ -178,7 +175,7 @@ class VacuumControlStub(Thread):
                 print("in rough vacuum")
 
 
-    def cryoVacuum(self):
+    def crossoverVacuum(self):
         '''
         It enters this state everytime you are between 0.041 torr and 0.005
         '''
@@ -191,7 +188,7 @@ class VacuumControlStub(Thread):
                 #TODO: starts the cryopump
                 self.ShiMcc.Turn_CryoPumpOn() #line 220 ShiMcc.py
             else:
-                print("In Cryo Vacuum")
+                print("In Crossover Vacuum")
 
     def strongCryoVacuum(self):
         '''

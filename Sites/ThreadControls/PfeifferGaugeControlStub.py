@@ -8,7 +8,7 @@ import sys
 if __name__ == '__main__':
     sys.path.insert(0, os.getcwd())
 
-from Collections.PfeifferGaugeInstance import PfeifferGaugeInstance
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 from Collections.ProfileInstance import ProfileInstance
 from PfeifferGuage.PfeifferGauge import PfeifferGauge
 
@@ -26,15 +26,15 @@ class PfeifferGaugeControlStub(Thread):
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.Pgauge = PfeifferGauge()
-        self.pressure = PfeifferGaugeInstance.getInstance()
+        self.gauges = HardwareStatusInstance.getInstance().PfeifferGuages
         self.pressure_read_peroid = 0.5  # 0.5s loop period
         self.param_period = 5  # 5 second period
 
     def logPressureData(self):
         coloums = "( profile_I_ID, guage, pressure )"
-        values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 1, self.pressure.gauges.get_pressure_cryopump())
-        values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 2, self.pressure.gauges.get_pressure_chamber())
-        values += "( \"{}\",{},{} )".format(self.zoneProfiles.profileUUID, 3, self.pressure.gauges.get_pressure_roughpump())
+        values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 1, self.gauges.get_pressure_cryopump())
+        values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 2, self.gauges.get_pressure_chamber())
+        values += "( \"{}\",{},{} )".format(self.zoneProfiles.profileUUID, 3, self.gauges.get_pressure_roughpump())
         sql = "INSERT INTO tvac.Pressure {} VALUES {};".format(coloums, values)
         # print(sql)
         mysql = MySQlConnect()
@@ -43,7 +43,7 @@ class PfeifferGaugeControlStub(Thread):
             mysql.conn.commit()
         except Exception as e:
             raise e
-            return e
+            #return e
 
     def run(self):
         '''
@@ -63,24 +63,25 @@ class PfeifferGaugeControlStub(Thread):
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
                     self.read_all_params()
+                next_pressure_read_time = time.time()
                 next_param_read_time = time.time()
                 while True:
-                    next_pressure_read_time = time.time() + self.pressure_read_peroid
+                    next_pressure_read_time += self.pressure_read_peroid
                     if "root" in userName:
                         try:
                             Logging.logEvent("Debug", "Status Update",
                                              {"message": "Reading and writing with PfeifferGaugeControlStub.",
                                               "level": 4})
-                            self.pressure.gauges.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
-                                                         {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
-                                                         {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
+                            self.gauges.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
+                                                {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
+                                                {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
                             if time.time() > next_param_read_time:
-                                self.pressure.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
-                                                                         'cc on': self.Pgauge.GetCCstate(1)},
-                                                             {'addr': 2, 'error': self.Pgauge.GetError(2),
-                                                                         'cc on': self.Pgauge.GetCCstate(2)},
-                                                             {'addr': 3, 'error': self.Pgauge.GetError(3)}])
-                                next_param_read_time = time.time() + self.param_period
+                                self.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
+                                                                'cc on': self.Pgauge.GetCCstate(1)},
+                                                    {'addr': 2, 'error': self.Pgauge.GetError(2),
+                                                                'cc on': self.Pgauge.GetCCstate(2)},
+                                                    {'addr': 3, 'error': self.Pgauge.GetError(3)}])
+                                next_param_read_time += self.param_period
                         except ValueError as err:
                             exc_type, exc_obj, exc_tb = sys.exc_info()
                             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -97,22 +98,22 @@ class PfeifferGaugeControlStub(Thread):
                         if first:
                             # TODO: Test the system at differnt starting pressures, it could restart at any point
                             # What happens when pressure in roughing  is more than cryo?
-                            self.pressure.gauges.update([{'addr': 1, 'Pressure': 1000},
-                                                             {'addr': 2, 'Pressure': 1},
-                                                             {'addr': 3, 'Pressure': 999}])
+                            self.gauges.update([{'addr': 1, 'Pressure': 1000},
+                                                {'addr': 2, 'Pressure': 1},
+                                                {'addr': 3, 'Pressure': 999}])
                             first = False
                         else:
-                            self.pressure.gauges.update([{'addr': 1, 'Pressure': self.pressure.gauges.get_pressure_cryopump()/2.5},
-                                                         {'addr': 2, 'Pressure': self.pressure.gauges.get_pressure_chamber()/5},
-                                                         {'addr': 3, 'Pressure': self.pressure.gauges.get_pressure_roughpump()/3}])
+                            self.gauges.update([{'addr': 1, 'Pressure': self.gauges.get_pressure_cryopump()/2.5},
+                                                {'addr': 2, 'Pressure': self.gauges.get_pressure_chamber()/5},
+                                                {'addr': 3, 'Pressure': self.gauges.get_pressure_roughpump()/3}])
                         # Just to see the screen for longer
                         time.sleep(5)
 
                     Logging.logEvent("Debug", "Status Update",
-                     {"message": "Current Pressure in Chamber is {}".format(self.pressure.gauges.get_pressure_chamber()),
-                      "level": 3})
-                    self.logPressureData()
-
+                             {"message": "Current Pressure in Chamber is {}".format(self.gauges.get_pressure_chamber()),
+                              "level": 3})
+                    if __name__ != '__main__':
+                        self.logPressureData()
                     if time.time() < next_pressure_read_time:
                         time.sleep(next_pressure_read_time - time.time())
 
@@ -130,11 +131,12 @@ class PfeifferGaugeControlStub(Thread):
                                  {"message": "There was a {} error in PfeifferGaugeControlStub. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
                                   "level": 2})
-                # nicely close things, to open them back up again...
+                # raise e
+            # nicely close things, to open them back up again...
+            finally:
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
                     pass
-                raise e
                 time.sleep(4)
 
     def read_all_params(self):
@@ -160,7 +162,7 @@ class PfeifferGaugeControlStub(Thread):
                        'Pressure SP 1': self.Pgauge.GetSwPressure(3, True),
                        'Pressure SP 2': self.Pgauge.GetSwPressure(3, False),
                        'Pirani Correction': self.Pgauge.GetCorrPir(3)}]
-        self.pressure.gauges.update(paramslist)
+        self.gauges.update(paramslist)
 
 if __name__ == '__main__':
     # adding debug info
@@ -175,8 +177,8 @@ if __name__ == '__main__':
     thread.daemon = True
     thread.start()
 
-    p = PfeifferGaugeInstance.getInstance()
+    p = HardwareStatusInstance.getInstance().PfeifferGuages
     while True:
         time.sleep(2)
-        print(p.gauges.getJson())
+        print(p.getJson())
 
