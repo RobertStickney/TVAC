@@ -63,8 +63,10 @@ class LN2Updater(Thread):
                         zone = self.ThreadCollection.zoneThreadDict[zoneStr]
                         if zone.running:
                             # print("Zone {} is {} running".format(zoneStr, "" if zone.running else "not"))
-                            dutycyclelist.append(zone.dutyCycle)
-
+                            try:
+                                dutycyclelist.append(zone.dutyCycle)
+                            except Exception as e:
+                                pass
                     if dutycyclelist:
                         dutycyclemin = min(dutycyclelist)
                         Logging.debugPrint(4,"Min Duty Cycle: {}".format(dutycyclemin))
