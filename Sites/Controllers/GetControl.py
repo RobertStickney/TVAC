@@ -46,7 +46,7 @@ class GetControl:
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
         # print(errorList[0])
 
-        return str(errorList)
+        return str(erroList)
 
     def getPC104_Digital(self):
         pins = HardwareStatusInstance.getInstance().PC_104
@@ -62,12 +62,23 @@ class GetControl:
         self.cryoPumpPressure = self.gauges.get_pressure_cryopump()
         self.chamberPressure = self.gauges.get_pressure_chamber()
         self.roughPumpPressure = self.gauges.get_pressure_roughpump()
-        resp = dict(Pressure = [])
-        resp['Pressure'].append(self.cryoPumpPressure)
-        resp['Pressure'].append(self.chamberPressure)
-        resp['Pressure'].append(self.roughPumpPressure)
+        resp = dict(CryoPressure = [], ChamberPressure=[], RoughingPressure=[])
+        resp['CryoPressure'].append(self.cryoPumpPressure)
+        resp['ChamberPressure'].append(self.chamberPressure)
+        resp['RoughingPressure'].append(self.roughPumpPressure)
         buff = json.dumps(resp)    
-        return buff            
+        return buff  
+
+    def getZoneTemps(self):
+        temps=dict(ZoneSetPoint=[],ZoneTemp=[])
+
+        for i in range(1,10):
+            zonename="zone"+i
+            setpoint=threadCollection.getInstance().threadCollection.zoneThreadDict[zonename]
+            ztemp=ProfileInstance.getInstance().zoneProfiles.getZone(i-1).getTemp("Max")
+            temps['ZoneSetPoint'].append(setpoint)
+            temps['ZoneTemp'].append(ztemp)
+        buff=json.dumps(temps)               
 
     def runProfile(self):
         threadInstance = ThreadCollectionInstance.getInstance()
