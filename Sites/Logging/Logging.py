@@ -61,8 +61,8 @@ class Logging(object):
 					elif type(dictionary) == type([]):
 						print("{}  {}".format(prefix,entry))
 			else:
-				coloums = "( message )"
-				values = "( \"{}\" )".format("{}{}".format(prefix,string))
+				coloums = "( message, time )"
+				values = "( \"{}\",\"{}\" )".format("{}{}".format(prefix,string),time.time())
 				sql = "INSERT INTO tvac.Debug {} VALUES {};".format(coloums, values)
 				# print(sql)
 				mysql = MySQlConnect()
@@ -95,7 +95,7 @@ class Logging(object):
 		values = ""
 		for i in range(len(expected_temp_values)):
 			time = expected_time_values[i]
-			time = datetime.datetime.fromtimestamp(time / 1e3)
+			time = datetime.datetime.fromtimestamp(time)
 
 			temperture = expected_temp_values[i]
 			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), int(zone[4:]), temperture)
