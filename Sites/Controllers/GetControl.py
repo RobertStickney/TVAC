@@ -49,12 +49,7 @@ class GetControl:
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
         # print(errorList[0])
-<<<<<<< HEAD
-
-        return str(erroList)
-=======
         return str(errorList)
->>>>>>> 187bcaf07124f07c0d416e84d08250ea2755ad6a
 
 
     def hardStop(self):
@@ -97,37 +92,17 @@ class GetControl:
                                        pins.analog_in.getJson())
 
     def getPressureGauges(self):
-<<<<<<< HEAD
-        self.cryoPumpPressure = self.gauges.get_pressure_cryopump()
-        self.chamberPressure = self.gauges.get_pressure_chamber()
-        self.roughPumpPressure = self.gauges.get_pressure_roughpump()
-        resp = dict(CryoPressure = [], ChamberPressure=[], RoughingPressure=[])
-        resp['CryoPressure'].append(self.cryoPumpPressure)
-        resp['ChamberPressure'].append(self.chamberPressure)
-        resp['RoughingPressure'].append(self.roughPumpPressure)
-=======
         gauges = HardwareStatusInstance.getInstance().PfeifferGuages
         cryoPumpPressure = gauges.get_pressure_cryopump()
         chamberPressure = gauges.get_pressure_chamber()
         roughPumpPressure = gauges.get_pressure_roughpump()
-        resp = dict("Pressure": [])
+        resp = {}
+        resp["Pressure"]= []
         resp['Pressure'].append(cryoPumpPressure)
         resp['Pressure'].append(chamberPressure)
         resp['Pressure'].append(roughPumpPressure)
->>>>>>> 187bcaf07124f07c0d416e84d08250ea2755ad6a
         buff = json.dumps(resp)    
-        return buff  
-
-    def getZoneTemps(self):
-        temps=dict(ZoneSetPoint=[],ZoneTemp=[])
-
-        for i in range(1,10):
-            zonename="zone"+i
-            setpoint=threadCollection.getInstance().threadCollection.zoneThreadDict[zonename]
-            ztemp=ProfileInstance.getInstance().zoneProfiles.getZone(i-1).getTemp("Max")
-            temps['ZoneSetPoint'].append(setpoint)
-            temps['ZoneTemp'].append(ztemp)
-        buff=json.dumps(temps)               
+        return buff            
 
     def runProfile(self):
         threadInstance = ThreadCollectionInstance.getInstance()
