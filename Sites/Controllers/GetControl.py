@@ -93,16 +93,20 @@ class GetControl:
 
     def getPressureGauges(self):
         gauges = HardwareStatusInstance.getInstance().PfeifferGuages
-        cryoPumpPressure = gauges.get_pressure_cryopump()
-        chamberPressure = gauges.get_pressure_chamber()
-        roughPumpPressure = gauges.get_pressure_roughpump()
-        resp = {}
-        resp["Pressure"]= []
-        resp['Pressure'].append(cryoPumpPressure)
-        resp['Pressure'].append(chamberPressure)
-        resp['Pressure'].append(roughPumpPressure)
+        resp = dict(CryoPressure = [], ChamberPressure=[], RoughingPressure=[])
+        resp['CryoPressure'].append(gauges.get_pressure_cryopump())
+        resp['ChamberPressure'].append(gauges.get_pressure_chamber())
+        resp['RoughingPressure'].append(gauges.get_pressure_roughpump())
         buff = json.dumps(resp)    
-        return buff            
+        return buff
+    def getZoneTemps(self):
+        temps=dict(ZoneSetPoint=[],ZoneTemp=[])
+
+        for i in range(1,10):
+            strzone="zone"+str(i)
+            temps['ZoneSetPoint'].append(threadCollection.getInstance().threadCollection.zoneThreadDict[strzone].pid.setPoint)
+            temps['ZoneTemp'].append(ProfileInstance.getInstance().zoneProfiles.getZone(i-1).getTemp("Max"))
+        buff=json.dumps(temp)                        
 
     def runProfile(self):
         threadInstance = ThreadCollectionInstance.getInstance()
