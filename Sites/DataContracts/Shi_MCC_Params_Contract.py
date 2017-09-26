@@ -34,7 +34,6 @@ class Shi_MCC_Params_Contract:
         self.TcPressureState = False
 
     def update(self, d):
-        print(d)
         self.__Lock.acquire()
         if 'Elapsed Time' in d:
             self.ElapsedTime = d['Elapsed Time']

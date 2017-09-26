@@ -35,6 +35,8 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getPressureGauges': control.getPressureGauges,
                 '/getLastError' : control.getLastError,
                 '/putUnderVacuum':control.putUnderVacuum,
+                '/getEventList':control.getEventList,
+                '/hardStop':control.hardStop,
             }[path]()
 
             Logging.logEvent("Debug","Status Update",
@@ -42,7 +44,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                  "level":1})
             Logging.logEvent("Debug","Status Update", 
                 {"message": "GET Results: {}".format(result.encode()),
-                 "level":4})
+                 "level": 5})
 
             # Out the results back to the server
             self.setHeader()

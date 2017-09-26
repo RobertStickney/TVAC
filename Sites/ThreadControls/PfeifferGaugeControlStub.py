@@ -32,9 +32,15 @@ class PfeifferGaugeControlStub(Thread):
 
     def logPressureData(self):
         coloums = "( profile_I_ID, guage, pressure )"
-        values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 1, self.gauges.get_pressure_cryopump())
-        values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID, 2, self.gauges.get_pressure_chamber())
-        values += "( \"{}\",{},{} )".format(self.zoneProfiles.profileUUID, 3, self.gauges.get_pressure_roughpump())
+        values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID,
+                                               self.gauges.get_cryopump_address(),
+                                               self.gauges.get_cryopump_pressure())
+        values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID,
+                                               self.gauges.get_chamber_address(),
+                                               self.gauges.get_chamber_pressure())
+        values += "( \"{}\",{},{} )".format(self.zoneProfiles.profileUUID,
+                                            self.gauges.get_roughpump_address(),
+                                            self.gauges.get_roughpump_pressure())
         sql = "INSERT INTO tvac.Pressure {} VALUES {};".format(coloums, values)
         # print(sql)
         mysql = MySQlConnect()
@@ -55,10 +61,11 @@ class PfeifferGaugeControlStub(Thread):
             try:
                 # Thread "Start up" stuff goes here
                 Logging.logEvent("Event", "Thread Start",
-                                 {"thread": "Pfeiffer Guage Control Stub"})
+                                {"thread": "Pfeiffer Guage Control Stub",
+                                 "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug", "Status Update",
-                                 {"message": "Starting Pfeiffer Guage Control Stub Thread",
-                                  "level": 2})
+                                {"message": "Starting Pfeiffer Guage Control Stub Thread",
+                                 "level": 2})
 
                 userName = os.environ['LOGNAME']
                 if "root" in userName:
@@ -69,12 +76,16 @@ class PfeifferGaugeControlStub(Thread):
                     next_pressure_read_time += self.pressure_read_peroid
                     if "root" in userName:
                         try:
-                            Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Reading and writing with PfeifferGaugeControlStub.",
-                                              "level": 4})
                             self.gauges.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
                                                 {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
                                                 {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
+                            Logging.logEvent("Debug", "Status Update",
+                                             {"message": "Reading and writing with PfeifferGaugeControlStub.\nCryopump: {:f}; Chamber: {:f}; RoughPump: {:f}\n".format(
+                                                 self.gauges.get_cryopump_pressure(),
+                                                 self.gauges.get_chamber_pressure(),
+                                                 self.gauges.get_roughpump_pressure()
+                                             ),
+                                              "level": 4})
                             if time.time() > next_param_read_time:
                                 self.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
                                                                 'cc on': self.Pgauge.GetCCstate(1)},
@@ -102,15 +113,23 @@ class PfeifferGaugeControlStub(Thread):
                                                 {'addr': 2, 'Pressure': 1},
                                                 {'addr': 3, 'Pressure': 999}])
                             first = False
+                            goingUp = False
                         else:
-                            self.gauges.update([{'addr': 1, 'Pressure': self.gauges.get_pressure_cryopump()/2.5},
-                                                {'addr': 2, 'Pressure': self.gauges.get_pressure_chamber()/5},
-                                                {'addr': 3, 'Pressure': self.gauges.get_pressure_roughpump()/3}])
+                            print("get_pressure_chamber: "+ str(self.pressure.gauges.get_chamber_pressure()))
+                            if True or self.pressure.gauges.get_chamber_pressure() > 0.0000001 and not goingUp:
+                                self.pressure.gauges.update([{'addr': 1, 'Pressure': self.pressure.gauges.get_cryopump_pressure()/2.5},
+                                                             {'addr': 2, 'Pressure': self.pressure.gauges.get_chamber_pressure()/5},
+                                                             {'addr': 3, 'Pressure': self.pressure.gauges.get_roughpump_pressure()/3}])
+                            else:
+                                goingUp = True
+                                self.pressure.gauges.update([{'addr': 1, 'Pressure': self.pressure.gauges.get_cryopump_pressure()*2.5},
+                                                             {'addr': 2, 'Pressure': self.pressure.gauges.get_chamber_pressure()*5},
+                                                             {'addr': 3, 'Pressure': self.pressure.gauges.get_roughpump_pressure()*3}])
                         # Just to see the screen for longer
                         time.sleep(5)
 
                     Logging.logEvent("Debug", "Status Update",
-                             {"message": "Current Pressure in Chamber is {}".format(self.gauges.get_pressure_chamber()),
+                             {"message": "Current Pressure in Chamber is {}".format(self.gauges.get_chamber_pressure()),
                               "level": 3})
                     if __name__ != '__main__':
                         self.logPressureData()
@@ -179,6 +198,5 @@ if __name__ == '__main__':
 
     p = HardwareStatusInstance.getInstance().PfeifferGuages
     while True:
-        time.sleep(2)
+        time.sleep(5)
         print(p.getJson())
-

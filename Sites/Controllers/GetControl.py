@@ -20,6 +20,10 @@ class GetControl:
 
         
     def putUnderVacuum(self):
+        '''
+        TODO: Right now this doesn't work, should it work?
+        '''
+
         HardwareStatusInstance.getInstance().vacuum = True
         return "{'result':'success'}"
 
@@ -45,8 +49,42 @@ class GetControl:
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
         # print(errorList[0])
+<<<<<<< HEAD
 
         return str(erroList)
+=======
+        return str(errorList)
+>>>>>>> 187bcaf07124f07c0d416e84d08250ea2755ad6a
+
+
+    def hardStop(self):
+        print("hard stop")
+        d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
+        zones = ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict
+        ProfileInstance.getInstance().activeProfile = False
+        d_out.update({"IR Lamp 1 PWM DC": 0})
+        d_out.update({"IR Lamp 2 PWM DC": 0})
+        d_out.update({"IR Lamp 3 PWM DC": 0})
+        d_out.update({"IR Lamp 4 PWM DC": 0})
+        d_out.update({"IR Lamp 5 PWM DC": 0})
+        d_out.update({"IR Lamp 6 PWM DC": 0})
+        d_out.update({"IR Lamp 7 PWM DC": 0})
+        d_out.update({"IR Lamp 8 PWM DC": 0})
+        d_out.update({"IR Lamp 9 PWM DC": 0})
+        d_out.update({"IR Lamp 10 PWM DC": 0})
+        d_out.update({"IR Lamp 11 PWM DC": 0})
+        d_out.update({"IR Lamp 12 PWM DC": 0})
+        d_out.update({"IR Lamp 13 PWM DC": 0})
+        d_out.update({"IR Lamp 14 PWM DC": 0})
+        d_out.update({"IR Lamp 15 PWM DC": 0})
+        d_out.update({"IR Lamp 16 PWM DC": 0})
+        return "{'result':'success'}"
+
+    def getEventList(self):
+        tmp = ProfileInstance.getInstance().systemStatusQueue
+        ProfileInstance.getInstance().systemStatusQueue = []
+        return str(tmp)
+    
 
     def getPC104_Digital(self):
         pins = HardwareStatusInstance.getInstance().PC_104
@@ -59,6 +97,7 @@ class GetControl:
                                        pins.analog_in.getJson())
 
     def getPressureGauges(self):
+<<<<<<< HEAD
         self.cryoPumpPressure = self.gauges.get_pressure_cryopump()
         self.chamberPressure = self.gauges.get_pressure_chamber()
         self.roughPumpPressure = self.gauges.get_pressure_roughpump()
@@ -66,6 +105,16 @@ class GetControl:
         resp['CryoPressure'].append(self.cryoPumpPressure)
         resp['ChamberPressure'].append(self.chamberPressure)
         resp['RoughingPressure'].append(self.roughPumpPressure)
+=======
+        gauges = HardwareStatusInstance.getInstance().PfeifferGuages
+        cryoPumpPressure = gauges.get_pressure_cryopump()
+        chamberPressure = gauges.get_pressure_chamber()
+        roughPumpPressure = gauges.get_pressure_roughpump()
+        resp = dict("Pressure": [])
+        resp['Pressure'].append(cryoPumpPressure)
+        resp['Pressure'].append(chamberPressure)
+        resp['Pressure'].append(roughPumpPressure)
+>>>>>>> 187bcaf07124f07c0d416e84d08250ea2755ad6a
         buff = json.dumps(resp)    
         return buff  
 

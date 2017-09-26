@@ -25,17 +25,20 @@ class PfeifferGaugeCollection:
                   PfeifferGaugeContract(3, 'Roughing Pump')]
         return guages
 
-    def get_pressure_cryopump(self):
+    def get_cryopump_pressure(self):
         return self.pfGuageList[0].getPressure()
+    def get_cryopump_address(self):
+        return self.pfGuageList[0].GetAddress()
 
-
-    def get_pressure_chamber(self):
+    def get_chamber_pressure(self):
         return self.pfGuageList[1].getPressure()
+    def get_chamber_address(self):
+        return self.pfGuageList[1].GetAddress()
 
-
-    def get_pressure_roughpump(self):
+    def get_roughpump_pressure(self):
         return self.pfGuageList[2].getPressure()
-
+    def get_roughpump_address(self):
+        return self.pfGuageList[2].GetAddress()
 
     def update(self, pgList):
         self.__lock.acquire()

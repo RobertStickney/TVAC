@@ -1,5 +1,5 @@
 from Logging.MySql import MySQlConnect
-
+import math
 import datetime
 
 class Logging(object):
@@ -28,11 +28,15 @@ class Logging(object):
 			elif "Thermal Profile Update" in logType:
 				Logging.logThermalProfile(data)
 
-
+			try:
+				systemStatusQueue = data["ProfileInstance"].systemStatusQueue
+				systemStatusQueue.append("[ '{}','{}', '{}' ]".format(category,logType, data.get("thread")))
+			except Exception as e:
+				print("pass")
+				# raise e
 			coloums = "( event_type, details )"
 			values = "( \"{}\",\"{}\" )".format(category,logType)
 			sql = "INSERT INTO tvac.Event {} VALUES {};".format(coloums, values)
-			# print(sql)
 			mysql = MySQlConnect()
 			mysql.cur.execute(sql)
 			mysql.conn.commit()
@@ -133,11 +137,12 @@ class Logging(object):
 		for tc in data['tcList']:
 			thermocouple = tc["Thermocouple"]
 			temperture = tc["temp"]
-
+			if math.isnan(tc["temp"]):
+				continue
 			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), thermocouple, temperture)
 		sql = "INSERT INTO tvac.Real_Temperture {} VALUES {};".format(coloums, values[:-2])
 		
-		
+		sql.replace("nan", "NULL")
 		mysql = MySQlConnect()
 		try:
 			mysql.cur.execute(sql)

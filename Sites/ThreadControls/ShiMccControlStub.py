@@ -9,6 +9,7 @@ if __name__ == '__main__':
     sys.path.insert(0, os.getcwd())
 
 from Collections.HardwareStatusInstance import HardwareStatusInstance
+from Collections.ProfileInstance import ProfileInstance
 from Shi_Cryo_Pump.Shi_Mcc import Shi_Mcc
 
 from Logging.Logging import Logging
@@ -24,7 +25,7 @@ class ShiMccControlStub(Thread):
 
         self.mcc = Shi_Mcc()
         self.hw = HardwareStatusInstance.getInstance()
-        self.mcc_read_period = 0.5  # 0.5s loop period
+        self.mcc_read_period = 1  # 0.5s loop period
         self.param_period = 30  # 10 second period
 
     def run(self):
@@ -34,7 +35,8 @@ class ShiMccControlStub(Thread):
             try:
                 # Thread "Start up" stuff goes here
                 Logging.logEvent("Event", "Thread Start",
-                                 {"thread": "Shi Mcc Control Stub"})
+                                 {"thread": "Shi Mcc Control Stub",
+                                  "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug", "Status Update",
                                  {"message": "Starting Shi Mcc Control Stub Thread",
                                   "level": 2})

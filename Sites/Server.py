@@ -9,10 +9,6 @@ from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
 from Logging.Logging import Logging
 
-# from Logging.debugPrint import debugPrint
-# Adding verbose level for debug printing
-# verbos = 0
-
 class ReuseAddrTCPServer(socketserver.TCPServer):
     allow_reuse_address = True
 
