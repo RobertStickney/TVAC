@@ -9,20 +9,20 @@ class Shi_MCC_Status_Contract:
     def __init__(self):
         self.DutyCycle = 0
         self.FirstStageTemp = 0
-        self.CryoPump = {'Motor On': False, 'Ready': False}
+        self.CryoPump = {'MotorOn': False, 'Ready': False}
         self.PurgeValveState = False
         self.RegenError = ''
         self.RegenStep = ''
         self.RoughingValveState = False
-        self.RoughingInterlock = {'Roughing Permission': False,
-                                  'Roughing Needed': False,
-                                  'Cryopump is running': False}
+        self.RoughingInterlock = {'RoughingPermission': False,
+                                  'RoughingNeeded': False,
+                                  'Cryopumprunning': False}
         self.SecondStageTemp = 0
-        self.Status = {'Pump On': False,
-                       'Rough Open': False,
-                       'Purge Open': False,
-                       'Thermocouple Gauge On': False,
-                       'Power Failure Occurred': False}
+        self.Status = {'PumpOn': False,
+                       'RoughOpen': False,
+                       'PurgeOpen': False,
+                       'ThermocoupleGaugeOn': False,
+                       'PowerFailureOccurred': False}
         self.TcPressure = 0
 
     def update(self, d):
@@ -115,16 +115,16 @@ class Shi_MCC_Status_Contract:
 
     def getJson(self):
         self.__Lock.acquire()
-        message = ['{"Duty Cycle":%s,' % json.dumps(self.DutyCycle),
-                   '"Stage 1 Temp":%s,' % json.dumps(self.FirstStageTemp),
-                   '"Cryo Pump Ready State":%s,' % json.dumps(self.CryoPump),
-                   '"Purge Valve State":%s,' % json.dumps(self.PurgeValveState),
-                   '"Regen Error":%s,' % self.RegenError,
-                   '"Regen Step":%s,' % self.RegenStep,
-                   '"Roughing Valve State":%s,' % json.dumps(self.RoughingValveState),
-                   '"Roughing Interlock":%s,' % json.dumps(self.RoughingInterlock),
-                   '"Stage 2 Temp":%s,' % json.dumps(self.SecondStageTemp),
+        message = ['{"DutyCycle":%s,' % json.dumps(self.DutyCycle),
+                   '"Stage1Temp":%s,' % json.dumps(self.FirstStageTemp),
+                   '"CryoPumpReadyState":%s,' % json.dumps(self.CryoPump),
+                   '"PurgeValveState":%s,' % json.dumps(self.PurgeValveState),
+                   '"RegenError":%s,' % json.dumps(self.RegenError),
+                   '"RegenStep":%s,' % json.dumps(self.RegenStep),
+                   '"RoughingValveState":%s,' % json.dumps(self.RoughingValveState),
+                   '"RoughingInterlock":%s,' % json.dumps(self.RoughingInterlock),
+                   '"Stage2Temp":%s,' % json.dumps(self.SecondStageTemp),
                    '"Status":%s,' % json.dumps(self.Status),
-                   '"Tc Pressure":%s}' % json.dumps(self.TcPressure)]
+                   '"TcPressure":%s}' % json.dumps(self.TcPressure)]
         self.__Lock.release()
         return ''.join(message)

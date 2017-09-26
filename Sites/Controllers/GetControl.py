@@ -91,6 +91,17 @@ class GetControl:
         return '{"out":%s,"in":%s}' % (pins.analog_out.getJson(),
                                        pins.analog_in.getJson())
 
+    def getPressureGauges(self):
+        self.cryoPumpPressure = self.gauges.get_pressure_cryopump()
+        self.chamberPressure = self.gauges.get_pressure_chamber()
+        self.roughPumpPressure = self.gauges.get_pressure_roughpump()
+        resp = dict(Pressure = [])
+        resp['Pressure'].append(self.cryoPumpPressure)
+        resp['Pressure'].append(self.chamberPressure)
+        resp['Pressure'].append(self.roughPumpPressure)
+        buff = json.dumps(resp)    
+        return buff            
+
     def runProfile(self):
         threadInstance = ThreadCollectionInstance.getInstance()
         result = threadInstance.threadCollection.runProfile();
