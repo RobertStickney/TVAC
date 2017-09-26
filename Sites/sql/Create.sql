@@ -21,7 +21,7 @@ CREATE TABLE tvac.Real_Temperture(
 DROP TABLE IF EXISTS tvac.Pressure;
 CREATE TABLE tvac.Pressure(
 	profile_I_ID varchar(36) NOT NULL,
-	time DATETIME DEFAULT CURRENT_TIMESTAMP,
+	time DATETIME NOT NULL,
 	guage tinyint unsigned NOT NULL,
 	pressure float NOT NULL
 );
@@ -35,7 +35,7 @@ CREATE TABLE tvac.Event(
 
 DROP TABLE IF EXISTS tvac.Debug;
 CREATE TABLE tvac.Debug(
-	created DATETIME DEFAULT CURRENT_TIMESTAMP,
+	created DATETIME NOT NULL,
 	message varchar(256) NOT NULL
 );
 
@@ -50,7 +50,7 @@ DROP TABLE IF EXISTS tvac.Profile_Instance;
 CREATE TABLE tvac.Profile_Instance(
 	profile_name varchar(36) NOT NULL,
 	profile_I_ID varchar(36) NOT NULL,
-	startTime DATETIME DEFAULT CURRENT_TIMESTAMP,
+	startTime DATETIME NOT NULL,
 	endTime DATETIME 
 );
 

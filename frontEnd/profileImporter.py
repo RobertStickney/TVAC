@@ -191,7 +191,7 @@ def main(args):
 	json = JSON.loads(json)
 
 	userName = os.environ['LOGNAME']
-	if "root" in userName or (len(sys.argv) > 1 and sys.argv[1] =="--live"):
+	if "root" in userName or (len(sys.argv) > 1 and sys.argv[2] =="--live"):
 		host = "192.168.99.1"
 	else:
 		host = "localhost"

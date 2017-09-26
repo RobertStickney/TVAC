@@ -31,16 +31,19 @@ class PfeifferGaugeControlStub(Thread):
         self.param_period = 5  # 5 second period
 
     def logPressureData(self):
-        coloums = "( profile_I_ID, guage, pressure )"
+        coloums = "( profile_I_ID, guage, pressure, time )"
         values  = "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID,
                                                self.gauges.get_cryopump_address(),
-                                               self.gauges.get_cryopump_pressure())
+                                               self.gauges.get_cryopump_pressure(),
+                                               time.time())
         values += "( \"{}\",{},{} ),\n".format(self.zoneProfiles.profileUUID,
                                                self.gauges.get_chamber_address(),
-                                               self.gauges.get_chamber_pressure())
+                                               self.gauges.get_chamber_pressure(),
+                                               time.time())
         values += "( \"{}\",{},{} )".format(self.zoneProfiles.profileUUID,
                                             self.gauges.get_roughpump_address(),
-                                            self.gauges.get_roughpump_pressure())
+                                            self.gauges.get_roughpump_pressure(),
+                                            time.time())
         sql = "INSERT INTO tvac.Pressure {} VALUES {};".format(coloums, values)
         # print(sql)
         mysql = MySQlConnect()

@@ -1,4 +1,5 @@
 import uuid
+import time
 
 from ThreadControls.HardWareControlStub import HardWareControlStub
 from ThreadControls.SafetyCheck import SafetyCheck
@@ -108,8 +109,8 @@ class ThreadCollection:
         This is a helper function of runProfile that adds the new profile Instance to the DB
         '''
 
-        coloums = "( profile_name, profile_I_ID )"
-        values = "( \"{}\",\"{}\" )".format(self.zoneProfiles.profileName,self.zoneProfiles.profileUUID)
+        coloums = "( profile_name, profile_I_ID, startTime )"
+        values = "( \"{}\",\"{}\", \"{}\" )".format(self.zoneProfiles.profileName,self.zoneProfiles.profileUUID, time.time())
         sql = "INSERT INTO tvac.Profile_Instance {} VALUES {};".format(coloums, values)
         # print(sql)
         mysql = MySQlConnect()

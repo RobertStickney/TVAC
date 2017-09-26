@@ -61,8 +61,8 @@ class Logging(object):
 					elif type(dictionary) == type([]):
 						print("{}  {}".format(prefix,entry))
 			else:
-				coloums = "( message )"
-				values = "( \"{}\" )".format("{}{}".format(prefix,string))
+				coloums = "( message, time )"
+				values = "( \"{}\",\"{}\" )".format("{}{}".format(prefix,string),time.time())
 				sql = "INSERT INTO tvac.Debug {} VALUES {};".format(coloums, values)
 				# print(sql)
 				mysql = MySQlConnect()
