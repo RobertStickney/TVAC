@@ -3,6 +3,8 @@
 import os
 import time
 
+from PyCRC_master.PyCRC.CRC16 import CRC16
+
 # Runs on serial port at 9600 8 1  Tout >0.7 sec
 # $TEA<CR> � read all temps
 # $Ten<CR> � read input n = 1 � 4
@@ -200,8 +202,9 @@ class Shi_Compressor:
                        ((d & 0x01) ^ ((d & 0x40) >> 6)) |  # (d0 xor d6)
                        ((d & 0x02) ^ ((d & 0x80) >> 6)))  # (d1 xor d7)
 
-    def GenCmd(self, cmd):  # Cmd syntax see page MCC Programing Guide
-        return "${0}{1:c}\r".format(cmd, self.get_checksum(cmd))
+    def GenCmd(self, cmd, data=''):  # Cmd syntax see page MCC Programing Guide
+        msg = "${0}{1}".format(cmd, data)
+        return "{0}{1:c}\r".format(msg, self.get_checksum(msg))
 
     def ResponceGood(self, Responce):
         # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
