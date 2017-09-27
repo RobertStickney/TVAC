@@ -37,7 +37,7 @@ class LN2Updater(Thread):
             # and that we are sitting in an operational vacuum
             if ProfileInstance.getInstance().activeProfile and HardwareStatusInstance.getInstance().OperationalVacuum:
                 # some start up stuff here
-                ln2_min = 0  
+                ln2_min = 0.01 
                 time.sleep(5)
                 # hwStatus = self.hardwareStatus.getInstance()
                 userName = os.environ['LOGNAME']
@@ -82,7 +82,8 @@ class LN2Updater(Thread):
 
 
                             # 2500 is the point the valve should be opened too
-                            a_out.update({'LN2 Shroud': 4095, 'LN2 Platen': 4095}) 
+                            a_out.update({'LN2 Shroud': 4095, 'LN2 Platen': 4095})
+                            a_out.update({'LN2 Shroud': 4095})
                            
                         else:
                             Logging.debugPrint(4,"The LN2 should be off")
