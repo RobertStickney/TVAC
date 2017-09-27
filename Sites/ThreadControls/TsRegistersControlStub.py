@@ -63,7 +63,7 @@ class TsRegistersControlStub(Thread):
                         
                         Logging.logEvent("Debug","Status Update", 
                            {"message": "Reading and writing with PC 104",
-                             "level":5})
+                             "level":4})
 
                         self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0(),
                                                self.da_io.digital_out.get_c1_b1(),
@@ -105,18 +105,19 @@ class TsRegistersControlStub(Thread):
                 if "root" in userName:
                     self.ts_reg.close()
                 time.sleep(4)
-                raise (e)
+                #raise (e)
 
     def read_analog_in(self):
         (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
-        Logging.debugPrint(6, "FIFO depth: {:d};  First Ch: {:d};  Time: {:0.6f}s".format(fifo_depth,
+        Logging.debugPrint(4, "FIFO depth: {:d};  First Ch: {:d};  Time: {:0.6f}s".format(fifo_depth,
                                                                                 first_channel,
                                                                                 time.time()-self.time_test))
         self.time_test = time.time()
-        while fifo_depth < 16:
-            time.sleep(self.adc_period * (8 - int(fifo_depth / 2)))
+        if fifo_depth < 16:
+            waitTime = self.adc_period * (8 - int(fifo_depth / 2))
+            time.sleep(waitTime)
             (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
-            Logging.debugPrint(6, "FIFO depth: {:d}".format(fifo_depth))
+            Logging.debugPrint(4, "FIFO depth: {:d}\twaitTime: {}".format(fifo_depth,waitTime))
         d = {}
         for n in range(fifo_depth):
             d['ADC ' + str((n + first_channel) % 16)] = self.ts_reg.adc_fifo_read()
