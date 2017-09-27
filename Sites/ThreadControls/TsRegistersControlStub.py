@@ -79,7 +79,8 @@ class TsRegistersControlStub(Thread):
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
                         self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(2), 2)
                         self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(3), 3)
-                        self.read_analog_in()  # loop period is adc_period * 2 seconds
+                        # self.read_analog_in()  # loop period is adc_period * 2 seconds
+                        self.wait_for_next_Multipule(self.adc_period * 8)
                     else:
                         Logging.logEvent("Debug","Status Update", 
                            {"message": "Test run of PC 104 loop",
@@ -107,6 +108,13 @@ class TsRegistersControlStub(Thread):
                 time.sleep(4)
                 raise (e)
 
+    def wait_for_next_Multipule(self, m):  # m in seconds
+        sleep_time = self.time_test - time.time()
+        if sleep_time > 0:
+            time.sleep(sleep_time)
+        self.time_test += m
+        Logging.debugPrint(6, "Ts Registers Sleep Time: {:0.6f}s".format(sleep_time))
+
     def read_analog_in(self):
         (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
         Logging.debugPrint(6, "FIFO depth: {:d};  First Ch: {:d};  Time: {:0.6f}s".format(fifo_depth,
@@ -114,6 +122,7 @@ class TsRegistersControlStub(Thread):
                                                                                 time.time()-self.time_test))
         self.time_test = time.time()
         while fifo_depth < 16:
+
             time.sleep(self.adc_period * (8 - int(fifo_depth / 2)))
             (first_channel, fifo_depth) = self.ts_reg.adc_fifo_status()
             Logging.debugPrint(6, "FIFO depth: {:d}".format(fifo_depth))
