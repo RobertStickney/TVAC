@@ -109,7 +109,7 @@ class GetControl:
             strzone="zone"+str(i)
 
             temps['ZoneSetPoint'].append(ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict[strzone].pid.SetPoint)
-            temps['ZoneTemp'].append(ProfileInstance.getInstance().zoneProfiles.getZone(i-1).getTemp("Max"))
+            temps['ZoneTemp'].append(ProfileInstance.getInstance().zoneProfiles.getZone(strzone).getTemp())
         buff=json.dumps(temps)
         return buff                        
 

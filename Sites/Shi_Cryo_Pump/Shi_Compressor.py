@@ -165,8 +165,120 @@ Response: $STA,status bits,<crc-16><cr>
 # Example response $STA,0301,2ED1<cr> corresponds to binary 0000001100000001 or :
 # Local ON, solenoid ON, System ON, and no alarms.
 
+class Shi_Compressor:
 
+    def Send_cmd(self, Command):
+        MCC = open('/dev/ttyxuart1  ', 'r+b', buffering=0)
+        for tries in range(3):
+            MCC.write(self.GenCmd(Command).encode())
+            time.sleep(0.10 * (tries + 1))
+            # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
+            resp = MCC.read(64).decode()
+            if self.ResponceGood(resp):
+                if resp[1] == 'A':  # Responce Good!
+                    Data = self.Format_Responce(resp[2:-2])
+                elif resp[1] == 'B':
+                    Data = self.Format_Responce(resp[2:-2], pwrFail=True)
+                elif resp[1] == 'E':
+                    Data = self.Format_Responce(resp[2:-2], error=True)
+                elif resp[1] == 'F':
+                    Data = self.Format_Responce(resp[2:-2], error=True, pwrFail=True)
+                else:
+                    Data = self.Format_Responce("R--" + resp + "-- unknown", error=True)
+                break
+                # TODO: Change to error event print("Try number: " + str(tries))
+        else:
+            # TODO: Change to error event print("No more tries! Something is wrong!")
+            Data = self.Format_Responce('Timeout!', error=True)
+        MCC.close()
+        return Data
 
+    def get_checksum(self, cmd):  # append the sum of the string's bytes mod 256 + '\r'
+        d = sum(cmd.encode())
+        #       0x30 + ( (d2 to d6) or (d0 xor d6) or ((d1 xor d7) shift to d2)
+        return 0x30 + ((d & 0x3c) |
+                       ((d & 0x01) ^ ((d & 0x40) >> 6)) |  # (d0 xor d6)
+                       ((d & 0x02) ^ ((d & 0x80) >> 6)))  # (d1 xor d7)
+
+    def GenCmd(self, cmd):  # Cmd syntax see page MCC Programing Guide
+        return "${0}{1:c}\r".format(cmd, self.get_checksum(cmd))
+
+    def ResponceGood(self, Responce):
+        # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
+        if Responce[-1] != '\r':
+            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
+            return False
+        # print("Checksum: '" + Responce[-2] + "' Data: '" + Responce[1:-2] + "' Calc cksum: '" + chr(get_checksum(Responce[1:-2])) + "'")
+        if Responce[-2] != chr(self.get_checksum(Responce[1:-2])):
+            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "Checksum: " + chr(self.get_checksum(Responce[1:-2])))
+            return False
+        if Responce[0] != '$':
+            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "'$' is not the first byte!")
+            return False
+        return True  # Yea!! responce seems ok
+
+    def Format_Responce(self, d, error=False, pwrFail=False):  # , d_int = 0, d_float = 0.0);
+        return {"Error": error, "PowerFailure": pwrFail, "Response": d}  # , "int"=d_int, "float"=d_float}
+
+    def get_Status(self):
+        # Create Dict of Functions
+        FunS = {"Duty Cycle": self.Get_DutyCycle,  # 2.4 ------------------- Ex: "$XOI??_\r"
+                "Stage 1 Temp": self.Get_FirstStageTemp,  # 2.8 ------------ Ex: "$J;\r"
+                "Cryo Pump Ready State": self.Get_CryoPumpRdyState,  # 2.14  Ex: "$A?2\r"
+                "Purge Valve State": self.Get_PurgeValveState,  # 2.15 ----- Ex: "$E?6\r"
+                "Regen Error": self.Get_RegenError,  # 2.18 ---------------- Ex: "$eT\r"
+                "Regen Step": self.Get_RegenStep,  # 2.20 ------------------ Ex: "$O>\r"
+                "Roughing Valve State": self.Get_RoughingValveState,  # 2.24 Ex: "$D?3\r"
+                "Roughing Interlock": self.Get_RoughingInterlock,  # 2.25 -- Ex: "$Q?B\r"
+                "Stage 2 Temp": self.Get_SecondStageTemp,  # 2.26 ---------- Ex: "$K:\r"
+                "Status": self.Get_Status,  # 2.28 ------------------------- Ex: "$S16\r"
+                "Tc Pressure": self.Get_TcPressure}  # 2.30 ---------------- Ex: "$L=\r"
+        return self.run_GetFunctions(FunS)
+
+    def get_ParamValues(self):
+        # Create Dict of Functions
+        FunS = {"Elapsed Time": self.Get_ElapsedTime,  # 2.5 -------------------------- Ex: "$Y?J\r"
+                "Failed Rate Of Rise Cycles": self.Get_Failed_RateOfRise_Cycles,  # 2.6 Ex: "$m\\r"
+                "Failed Repurge Cycles": self.Get_FailedRepurgeCycles,  # 2.7 --------- Ex: "$l]\r"
+                "First Stage Temp CTL": self.Get_FirstStageTempCTL,  # 2.9 ------------ Ex: "$H?5\r"
+                "Last Rate Of Rise Value": self.Get_LastRateOfRiseValue,  # 2.10 ------ Ex: "$n_\r"
+                "MCC Version": self.Get_ModuleVersion,  # 2.11 ------------------------ Ex: "$@1\r"
+                "Power Failure Recovery": self.Get_PowerFailureRecovery,  # 2.12 ------ Ex: "$i?H\r"
+                "Power Failure Recovery Status": self.Get_PowerFailureRecoveryStatus,  # 2.13 Ex: "$t?a\r"
+                "Regen Cycles": self.Get_RegenCycles,  # 2.17 - Ex: "$Z?K\r"
+                "Regen Param_0": self.Get_RegenParam_0,  # 2.19 Ex: "P0?"
+                "Regen Param_1": self.Get_RegenParam_1,  # 2.19 Ex: "P1?"
+                "Regen Param_2": self.Get_RegenParam_2,  # 2.19 Ex: "P2?"
+                "Regen Param_3": self.Get_RegenParam_3,  # 2.19 Ex: "P3?"
+                "Regen Param_4": self.Get_RegenParam_4,  # 2.19 Ex: "P4?"
+                "Regen Param_5": self.Get_RegenParam_5,  # 2.19 Ex: "P5?"
+                "Regen Param_6": self.Get_RegenParam_6,  # 2.19 Ex: "P6?"
+                "Regen Param_A": self.Get_RegenParam_A,  # 2.19 Ex: "PA?"
+                "Regen Param_C": self.Get_RegenParam_C,  # 2.19 Ex: "PC?"
+                "Regen Param_G": self.Get_RegenParam_G,  # 2.19 Ex: "PG?"
+                "Regen Param_z": self.Get_RegenParam_z,  # 2.19 Ex: "Pz?"
+                "Regen Start Delay": self.Get_RegenStartDelay,  # 2.21 ------ Ex: "$j?[\r"
+                "Regen Step Timer": self.Get_RegenStepTimer,  # 2.22 -------- Ex: "$kZ\r"
+                "Regen Time": self.Get_RegenTime,  # 2.23 ------------------- Ex: "$aP\r"
+                "Second Stage Temp CTL": self.Get_SecondStageTempCTL,  # 2.27 Ex: "$I?:\r"
+                "Tc Pressure State": self.Get_TcPressureState}  # 2.29 ------ Ex: "$B?3\r"
+        return self.run_GetFunctions(FunS)
+
+    def run_GetFunctions(self, Functions):
+        er = False
+        pf = False
+        vals = {}
+        for key in Functions.keys():
+            val = Functions[key]()
+            er |= val['Error']
+            pf |= val['PowerFailure']
+            if 'Data' in val:
+                vals[key] = val['Data']
+            else:
+                vals[key] = val['Response']
+        return self.Format_Responce(vals, er, pf)
+
+    # MCC Programmers References Guide Rev C
     def HeCompressorOpen(Command):
         He_Comp = open('/dev/ttyxuart1', 'r+b', buffering=0)
         He_Comp.write(Command.encode()'\r)
@@ -239,3 +351,6 @@ Response: $STA,status bits,<crc-16><cr>
                 "CHP" : Get_Cold_Head_Pause,
                 "POF" : Get_Cold_Head_Pause_off}
         return RunGetFunctions(FunS)
+
+if __name__ == '__main__':
+    pass
