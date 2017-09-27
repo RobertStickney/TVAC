@@ -190,31 +190,37 @@ def main(args):
 	json = generateJSON(fileName)
 	json = JSON.loads(json)
 
-	userName = os.environ['LOGNAME']
-	if "root" in userName or (len(sys.argv) > 1 and sys.argv[2] =="--live"):
-		host = "192.168.99.1"
-	else:
-		host = "localhost"
-	port = "8000"
-	path = "saveProfile"
+	demo = False
+	if len(sys.argv) > 3 and sys.argv[2] =="--demo":
+		demo = True
 
-	url = "http://{}:{}/{}".format(host,port,path)
-	data = json
-	headers = {'Content-type': 'application/json'}
-
-	try:
-		r = requests.post(url, data=JSON.dumps(data), headers=headers)
-	except Exception as e:
-		popupError("Can't send request to sever\nCheck to make sure it's turned on and connected")
-	print(r.text)
-	if "success" not in r.text:
-		errorCode = r.text.split(",")[0]
-		if "1062" in errorCode:
-			popupError("There is already a profile of this name in the database.\nPlease rename the profile or run profile in Database")	
+	if not demo:
+		userName = os.environ['LOGNAME']
+		if "root" in userName or (len(sys.argv) > 2 and sys.argv[2] =="--live"):
+			host = "192.168.99.1"
 		else:
-			popupError(r.text)
+			host = "localhost"
+		port = "8000"
+		path = "saveProfile"
+
+		url = "http://{}:{}/{}".format(host,port,path)
+		data = json
+		headers = {'Content-type': 'application/json'}
+
+		try:
+			r = requests.post(url, data=JSON.dumps(data), headers=headers)
+		except Exception as e:
+			popupError("Can't send request to sever\nCheck to make sure it's turned on and connected")
+		print(r.text)
+		if "success" not in r.text:
+			errorCode = r.text.split(",")[0]
+			if "1062" in errorCode:
+				popupError("There is already a profile of this name in the database.\nPlease rename the profile or run profile in Database")	
+			else:
+				popupError(r.text)
 
 	expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json))
+
 	plt.plot(expected_time_values,expected_temp_values, label="Expected Results")
 	plt.legend(loc='upper left')
 

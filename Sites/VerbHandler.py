@@ -30,7 +30,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/checkZoneStatus': control.checkTreadStatus,
                 '/getAllThermoCoupleData': control.getAllThermoCoupleData,
                 '/getAllZoneData': control.getAllZoneData,
-                '/getMCCData:' control.getMCCData,
+                '/getMCCData': control.getMCCData,
                 '/getPC104_Digital': control.getPC104_Digital,
                 '/getPC104_Analog': control.getPC104_Analog,
                 '/getPressureGauges': control.getPressureGauges,

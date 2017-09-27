@@ -142,6 +142,15 @@ class HardWareControlStub(Thread):
             currentTemp = goalTemp
         # end of for loop, end generating outputs
 
+        print("Logging all data")
+        Logging.logEvent("Event","Expected Temp Update",
+        {"expected_temp_values": expected_temp_values,
+         "expected_time_values": expected_time_values,
+         "zone"                : self.args[0],
+         "profileUUID"         : self.zoneProfile.profileUUID,
+         "ProfileInstance"     : ProfileInstance.getInstance()
+        })
+
 
         return expected_temp_values, expected_time_values
 
