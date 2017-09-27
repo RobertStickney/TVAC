@@ -86,7 +86,6 @@ class HardWareControlStub(Thread):
             goalTemp = setPoint.tempGoal
             rampTime = setPoint.ramp
             soakTime = setPoint.soakduration
-
             # skip ramp section if rampTime == 0
             if rampTime:
                 TempDelta = goalTemp-currentTemp
@@ -137,6 +136,7 @@ class HardWareControlStub(Thread):
                 expected_temp_values.append(y)
                 # print("{},{}".format(x,y))
 
+            # input("pause")
 
             currentTime = rampEndTime+soakTime
             currentTemp = goalTemp

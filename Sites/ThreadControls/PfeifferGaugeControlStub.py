@@ -113,7 +113,7 @@ class PfeifferGaugeControlStub(Thread):
                             # TODO: Test the system at differnt starting pressures, it could restart at any point
                             # What happens when pressure in roughing  is more than cryo?
                             self.gauges.update([{'addr': 1, 'Pressure': 1000},
-                                                {'addr': 2, 'Pressure': 1},
+                                                {'addr': 2, 'Pressure': 0.00001},
                                                 {'addr': 3, 'Pressure': 999}])
                             first = False
                             goingUp = False

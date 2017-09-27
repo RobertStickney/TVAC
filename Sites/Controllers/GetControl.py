@@ -20,13 +20,31 @@ class GetControl:
         # print(json)
         return json
 
+
+    def holdAllZones(self):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        threadInstance.threadCollection.hold(data)
+        return "{'result':'success'}"
+
+    def pauseAllZones(self):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        threadInstance.threadCollection.pause()
+        return "{'result':'success'}"
+
+        
+    def resumeAllZones(self):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        threadInstance.threadCollection.removePause()
+        return "{'result':'success'}"
+
+    def unHoldAllZones(self):
+        threadInstance = ThreadCollectionInstance.getInstance()
+        threadInstance.threadCollection.releaseHoldThread()
+        return "{'result':'success'}"
+
         
     def putUnderVacuum(self):
-        '''
-        TODO: Right now this doesn't work, should it work?
-        '''
-
-        HardwareStatusInstance.getInstance().vacuum = True
+        ProfileInstance.getInstance().vacuumWanted = True
         return "{'result':'success'}"
 
     def getAllZoneData(self):
