@@ -30,7 +30,7 @@ class ZoneProfileContract:
         if 'average' in d:
             self.zone = d['average']
         else:
-            self.average = 0
+            self.average = 'average'
         if 'thermalprofiles' in d:
             self.thermalProfiles = self.setThermalProfiles(d['thermalprofiles'])
         else:
