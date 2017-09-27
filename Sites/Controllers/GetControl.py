@@ -82,6 +82,8 @@ class GetControl:
         ProfileInstance.getInstance().systemStatusQueue = []
         return str(tmp)
     
+    def getMCCData(self):
+        return HardwareStatusInstance.getInstance().ShiCryopump.mcc_status.getJson()
 
     def getPC104_Digital(self):
         pins = HardwareStatusInstance.getInstance().PC_104
@@ -105,9 +107,11 @@ class GetControl:
 
         for i in range(1,10):
             strzone="zone"+str(i)
-            temps['ZoneSetPoint'].append(ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict[strzone].pid.setPoint)
+
+            temps['ZoneSetPoint'].append(ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict[strzone].pid.SetPoint)
             temps['ZoneTemp'].append(ProfileInstance.getInstance().zoneProfiles.getZone(i-1).getTemp("Max"))
-        return json.dumps(temps)
+        buff=json.dumps(temps)
+        return buff                        
 
     def runProfile(self):
         threadInstance = ThreadCollectionInstance.getInstance()
