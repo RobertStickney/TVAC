@@ -93,7 +93,7 @@ class VacuumControlStub(Thread):
                             self.state = "Rough Vacuum"
                         if ((self.oldState != "Cryo Vacuum") and
                                 (self.chamberPressure < 0.040) and
-                                (self.cryoPumpPressure < 0.0456)) or \
+                                (self.cryoPumpPressure < 0.045)) or \
                                 ((self.oldState == "Cryo Vacuum") and
                                      (self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') > 16)):
                             # Alert the user they should close o-ring seal 
@@ -102,7 +102,7 @@ class VacuumControlStub(Thread):
                         userName = os.environ['LOGNAME']
                         if "root" in userName:
                             if (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15 or
-                                        self.chamberPressure < 1e-4):
+                                        self.chamberPressure < 1.001e-3):
                                 # Close the rough gate valve
                                 # Open the cryopump gate valve
                                 # Wait until 10e-6 tor
@@ -110,7 +110,7 @@ class VacuumControlStub(Thread):
                         else:
                             if self.chamberPressure < 0.005: #torr?
                                 self.state = "Cryo Vacuum"
-                        if self.chamberPressure < 9e-5: #torr?
+                        if self.chamberPressure < 1e-3: #torr?
                             # Wait for nothing, either the program will end, or be stopped by the safety checker
                             self.state = "Operational Vacuum"
 
