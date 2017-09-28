@@ -101,7 +101,7 @@ class VacuumControlStub(Thread):
                             self.state = "Crossover Vacuum"
                         userName = os.environ['LOGNAME']
                         if "root" in userName:
-                            if self.chamberPressure < 0.005 and self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') < 15:
+                            if self.chamberPressure < 0.005 and self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15:
                                 # Close the rough gate valve
                                 # Open the cryopump gate valve
                                 # Wait until 10e-6 tor
@@ -188,7 +188,7 @@ class VacuumControlStub(Thread):
         '''
         if (self.oldState != self.state):  # and (self.oldState == "Atmosphere"):
             Logging.logEvent("Debug", "Status Update",
-                             {"message": "Entering Rough vacuum from Atmosphere. Ruffing the Cryo Pump.",
+                             {"message": "Entering Rough vacuum. Ruffing the Cryo Pump.",
                               "level": 1})
             # The system has just crossed over to a new point
             userName = os.environ['LOGNAME']
