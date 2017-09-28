@@ -93,7 +93,7 @@ class VacuumControlStub(Thread):
                             self.state = "Rough Vacuum"
                         if ((self.oldState != "Cryo Vacuum") and
                                 (self.chamberPressure < 0.040) and
-                                (self.cryoPumpPressure < 0.045)) or \
+                                (self.cryoPumpPressure < 0.046)) or \
                                 ((self.oldState == "Cryo Vacuum") and
                                      (self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') > 16)):
                             # Alert the user they should close o-ring seal 
