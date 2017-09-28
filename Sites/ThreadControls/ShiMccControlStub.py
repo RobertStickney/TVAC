@@ -92,7 +92,7 @@ class ShiMccControlStub(Thread):
                                 next_param_read_time = time.time() + self.param_period
 
                             while len(self.hw.Shi_MCC_Cmds):
-                                cmd = self.hw.Shi_MCC_Cmds.pop([0])
+                                cmd = self.hw.Shi_MCC_Cmds.pop()
                                 if 'FirstStageTempCTL' == cmd[0]:  # 2.9 • First Stage Temperature Control pg:10
                                     self.run_set_cmd(self.mcc.Set_FirstStageTempCTL, cmd)
                                     self.run_get_cmd(self.mcc.Get_FirstStageTempCTL,
