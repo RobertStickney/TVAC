@@ -39,6 +39,10 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/putUnderVacuum':control.putUnderVacuum,
                 '/getEventList':control.getEventList,
                 '/hardStop':control.hardStop,
+                '/hold':control.holdAllZones,
+                '/pause':control.pauseAllZones,
+                '/resume':control.resumeAllZones,
+                '/unHold':control.unHoldAllZones,
             }[path]()
 
             Logging.logEvent("Debug","Status Update",

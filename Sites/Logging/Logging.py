@@ -72,10 +72,8 @@ class Logging(object):
 					mysql.conn.commit()
 				except Exception as e:
 					pass
-				#with open('./debugLog.txt','a') as filer:
-				#	for line in string.split("\n"):
-				#		filer.write("{}{}".format(prefix,line)+"\n")
-				#		print("{}{}".format(prefix,line))
+				for line in string.split("\n"):
+					print("{}{}".format(prefix,line))
 
 	@staticmethod
 	def logExpectedTempertureData(data):

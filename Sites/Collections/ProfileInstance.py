@@ -25,6 +25,7 @@ class ProfileInstance:
 
             # System Wide stats
             self.activeProfile = False
+            self.vacuumWanted = False
 
             self.systemStatusQueue = []
             

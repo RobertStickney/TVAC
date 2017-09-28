@@ -21,10 +21,12 @@ class ThreadCollection:
 
     def __init__(self):
         self.zoneThreadDict = self.createZoneCollection()
-        self.hardwareInterfaceThreadDict = self.createHardwareInterfaces(self)
+        self.hardwareInterfaceThreadDict = self.createHardwareInterfaces(parent=self)
         self.safetyThread = SafetyCheck(parent=self)
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
+
+        self.runHardwareInterfaces()
 
         # if there is a half finished profile in the database
         if not self.zoneProfiles.getActiveProfileStatus():
@@ -136,7 +138,7 @@ class ThreadCollection:
     
         if firstStart:
             result = self.addProfileInstancetoBD()
-            # If there is an error connenting to the DB, return it
+            # If there is an error connecting to the DB, return it
             if result != True:
                 return result
 
@@ -176,21 +178,38 @@ class ThreadCollection:
     #         handled = self.zoneThreadDict[thread].handeled
     #         # print("{} is {} and is {} handled".format(thread, "ALIVE" if isAlive else "DEAD", "NOT" if not handled else ""))
 
-    def pause(self,data):
-        thread = data['zone']
-        self.zoneThreadDict[thread].paused = True;
+    def pause(self,data=None):
+        if data:
+            thread = data['zone']
+            self.zoneThreadDict[thread].paused = True;
+            return
+        for zone in self.zoneThreadDict:
+            self.zoneThreadDict[zone].paused = True;
 
     def removePause(self,data):
-        thread = data['zone']
-        self.zoneThreadDict[thread].paused = False
+        if data:
+            thread = data['zone']
+            self.zoneThreadDict[thread].paused = False
+            return
+        for zone in self.zoneThreadDict:
+            self.zoneThreadDict[zone].paused = False;
 
     def holdThread(self,data):
-        thread = data['zone']
-        self.zoneThreadDict[thread].inHold = True
+        if data:
+            thread = data['zone']
+            self.zoneThreadDict[thread].inHold = True
+            return
+        for zone in self.zoneThreadDict:
+            self.zoneThreadDict[zone].inHold = True;            
 
     def releaseHoldThread(self,data):
-        thread = data['zone']
-        self.zoneThreadDict[thread].inHold = False
+        if data:
+            thread = data['zone']
+            self.zoneThreadDict[thread].inHold = False
+            return
+        for zone in self.zoneThreadDict:
+            self.zoneThreadDict[zone].inHold = False;
+
 
     def abortThread(self,data):
         thread = data['zone']

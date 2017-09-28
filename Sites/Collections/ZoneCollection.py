@@ -100,7 +100,7 @@ class ZoneCollection:
             TP['thermalsetpoint'] = int(result['set_point'])
             TP['tempgoal'] = float(result['temp_goal'])
             TP['soakduration'] = int(result['soak_time'])
-            TP['ramp'] = int(result['soak_time'])
+            TP['ramp'] = int(result['ramp_time'])
             thermalprofiles.append(TP)
             
         return thermalprofiles
