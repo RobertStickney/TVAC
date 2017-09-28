@@ -87,13 +87,13 @@ class VacuumControlStub(Thread):
                             # Wait until 0.0.041 tor
                             self.state = "Atmosphere"
                         if ((self.oldState != "Crossover Vacuum") and (self.chamberPressure < 300)) or \
-                                ((self.oldState != "Atmosphere") and (self.chamberPressure > 0.041)):
+                                ((self.oldState != "Atmosphere") and (self.chamberPressure > 0.046)):
                             # open Cryopump-Roughing gate valve
                             # Wait until 0.041 tor
                             self.state = "Rough Vacuum"
                         if ((self.oldState != "Cryo Vacuum") and
                                 (self.chamberPressure < 0.040) and
-                                (self.cryoPumpPressure < 0.046)) or \
+                                (self.cryoPumpPressure < 0.0456)) or \
                                 ((self.oldState == "Cryo Vacuum") and
                                      (self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') > 16)):
                             # Alert the user they should close o-ring seal 
