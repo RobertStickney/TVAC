@@ -92,6 +92,7 @@ class Logging(object):
 		print("expected_temp_values")
 		coloums = "( profile_I_ID, time, zone, temperture )"
 		values = ""
+		Logging.debugPrint(3,"Logging expected Temp")
 		for i in range(len(expected_temp_values)):
 			time = expected_time_values[i]
 			time = datetime.datetime.fromtimestamp(time)
@@ -100,7 +101,7 @@ class Logging(object):
 			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), int(zone[4:]), temperture)
 
 		sql = "INSERT INTO tvac.Expected_Temperture {} VALUES {};".format(coloums, values[:-2])
-
+		Logging.debugPrint(3,"Logging to expected Temp")
 		mysql = MySQlConnect()
 		try:
 			mysql.cur.execute(sql)

@@ -23,7 +23,7 @@ class GetControl:
 
     def holdAllZones(self):
         threadInstance = ThreadCollectionInstance.getInstance()
-        threadInstance.threadCollection.hold(data)
+        threadInstance.threadCollection.holdThread()
         return "{'result':'success'}"
 
     def pauseAllZones(self):

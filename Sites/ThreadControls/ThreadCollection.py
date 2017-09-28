@@ -186,7 +186,7 @@ class ThreadCollection:
         for zone in self.zoneThreadDict:
             self.zoneThreadDict[zone].paused = True;
 
-    def removePause(self,data):
+    def removePause(self,data=None):
         if data:
             thread = data['zone']
             self.zoneThreadDict[thread].paused = False
@@ -194,7 +194,7 @@ class ThreadCollection:
         for zone in self.zoneThreadDict:
             self.zoneThreadDict[zone].paused = False;
 
-    def holdThread(self,data):
+    def holdThread(self,data=None):
         if data:
             thread = data['zone']
             self.zoneThreadDict[thread].inHold = True
@@ -202,7 +202,7 @@ class ThreadCollection:
         for zone in self.zoneThreadDict:
             self.zoneThreadDict[zone].inHold = True;            
 
-    def releaseHoldThread(self,data):
+    def releaseHoldThread(self,data=None):
         if data:
             thread = data['zone']
             self.zoneThreadDict[thread].inHold = False

@@ -75,14 +75,15 @@ class LN2Updater(Thread):
                             # throw safety up
                             Logging.debugPrint(4,"The LN2 should be on")
                             # What's the difference between this and...
-                            d_out.update({'LN2-S Sol': True, 'LN2-P Sol': True, })
+                            #d_out.update({'LN2-S Sol': True, 'LN2-P Sol': True, })
+                            d_out.update({'LN2-S Sol': True,})
                             # this
                             # d_out.update({"LN2-S EN":True})
                             # d_out.update({"LN2-Sol EN":True})
 
 
                             # 2500 is the point the valve should be opened too
-                            a_out.update({'LN2 Shroud': 4095, 'LN2 Platen': 4095})
+                            #a_out.update({'LN2 Shroud': 4095, 'LN2 Platen': 4095})
                             a_out.update({'LN2 Shroud': 4095})
                            
                         else:
