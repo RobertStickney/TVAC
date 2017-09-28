@@ -82,7 +82,7 @@ class ShiMccControlStub(Thread):
                             else:
                                 self.hw.ShiCryopump.update({'MCC Status': val['Response']})
                             Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Cryopump Stage 1: K; Stage 2: {:.1f}K".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'), self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp')),
+                                             {"message": "Cryopump Stage 1: {:.1f}K; Stage 2: {:.1f}K".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'), self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp')),
                                               "level": 4})
                             if time.time() > next_param_read_time:
                                 val = self.mcc.get_ParamValues()
