@@ -90,7 +90,7 @@ class VacuumControlStub(Thread):
                             # open Cryopump-Roughing gate valve
                             # Wait until 0.041 tor
                             self.state = "Rough Vacuum"
-                        if (self.chamberPressure < 0.041) & (self.chamberPressure < 0.045):
+                        if (self.chamberPressure < 0.041) & (self.cryoPumpPressure < 0.045):
                             # Alert the user they should close o-ring seal 
                             # Start the cryopump
                             self.state = "Crossover Vacuum"
