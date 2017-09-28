@@ -101,7 +101,8 @@ class VacuumControlStub(Thread):
                             self.state = "Crossover Vacuum"
                         userName = os.environ['LOGNAME']
                         if "root" in userName:
-                            if self.chamberPressure < 0.005 and self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15:
+                            if (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15 or
+                                        self.chamberPressure < 1e-4):
                                 # Close the rough gate valve
                                 # Open the cryopump gate valve
                                 # Wait until 10e-6 tor
@@ -230,7 +231,7 @@ class VacuumControlStub(Thread):
         '''
         It enters this state everytime you are between 0.005 torr and 0.00001
         '''
-        if (self.oldState != self.state) and (self.oldState == "Atmosphere"):
+        if (self.oldState != self.state):
             # The system has just crossed over to a new point
             userName = os.environ['LOGNAME']
             if "root" in userName:
@@ -249,6 +250,8 @@ class VacuumControlStub(Thread):
 
                 # Open the cryopump gate valve
                 self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
+                time.sleep(2)
+                self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
 
             else:
                 print("In Strong Cryo Vacuum")
