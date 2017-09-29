@@ -80,7 +80,7 @@ class ZoneProfileContract:
         if 'thermocouples' in d:
             self.thermocouples = self.setThermocouples(d['thermocouples'])
         if 'heatError' in d: 
-            self.heatError = float(d['heatError']) + 273.15 #to convert c to k
+            self.heatError = float(d['heatError'])
         self.__lock.release()
 
 
@@ -97,7 +97,7 @@ class ZoneProfileContract:
         self.__lock.release()
         return temp
 
-    def getTempProfile(self, mode=None):
+    def getTemp_C(self, mode=None):
         self.__lock.acquire()
         if not mode:
             mode = self.average

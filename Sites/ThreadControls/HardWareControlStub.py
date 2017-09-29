@@ -51,7 +51,7 @@ class HardWareControlStub(Thread):
         self.tempGoalTemperature = 0
         self.pid = PID()
 
-        self.maxTempRisePerMin = 10
+        self.maxTempRisePerMin = 6.4
         self.maxTempRisePerUpdate = (self.maxTempRisePerMin/60)*self.updatePeriod
 
 
@@ -175,7 +175,7 @@ class HardWareControlStub(Thread):
                     # Setup code is here
 
                     self.updatePeriod = 10
-                    self.maxTempRisePerMin = 6.4
+
                     self.setpoint = 0
                     self.maxTempRisePerUpdate = (self.maxTempRisePerMin/60)*self.updatePeriod
 
@@ -209,7 +209,7 @@ class HardWareControlStub(Thread):
                             break
 
                         # this will find the time value matching the current time
-                        # and give us the temp value it should be at that time. 
+                        # and give us the temp value it should be at that time.
                         while currentTime > self.expected_time_values[0]:
                             self.temp_temperture = self.expected_temp_values[0]
                             self.expected_temp_values = self.expected_temp_values[1:]
@@ -220,15 +220,16 @@ class HardWareControlStub(Thread):
                         # With the temp goal tempurture picked, make the duty cycle 
                         self.updateDutyCycle()
 
-                        if currentTime > self.setpoint_ramp_start_time[self.setpoint]:
-                            if justChangedSetpoint: 
-                                justChangedSetpoint = False
-                                print("Starting ramp for setpoint: {} at time {}".format(self.setpoint,time.time()))
+                        # Logging.debugPrint(3,"len expected_time_values:{}".format(len(expected_time_values)) 
+                        # if currentTime > self.setpoint_ramp_start_time[self.setpoint]:
+                        #     if justChangedSetpoint: 
+                        #         justChangedSetpoint = False
+                        #         print("Starting ramp for setpoint: {} at time {}".format(self.setpoint,time.time()))
 
-                        if currentTime > self.setpoint_soak_start_time[self.setpoint]:
-                            print("Starting Soak for setpoint: {} at time {}".format(self.setpoint,time.time()))
-                            self.setpoint += 1
-                            justChangedSetpoint = True
+                        # if currentTime > self.setpoint_soak_start_time[self.setpoint]:
+                        #     print("Starting Soak for setpoint: {} at time {}".format(self.setpoint,time.time()))
+                        #     self.setpoint += 1
+                        #     justChangedSetpoint = True
 
                         if len(self.expected_time_values) <= 0:
                             break
@@ -284,7 +285,10 @@ class HardWareControlStub(Thread):
 
         self.pid.SetPoint = self.temp_temperture
         # TODO: Don't leave this hardcoded
-        self.pid.update(self.zoneProfile.getTemp_C("Max"))
+        Logging.debugPrint(3,"max Temp: {}".format(self.zoneProfile.getTemp("Max")))
+        while self.zoneProfile.getTemp("Max") == 0:
+            pass
+        self.pid.update(self.zoneProfile.getTemp("Max"))
         self.dutyCycle = self.pid.error_value/self.maxTempRisePerUpdate
 
         # TODO: pick what lamp you want to use

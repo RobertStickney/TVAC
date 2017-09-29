@@ -1,6 +1,4 @@
 class ThermalProfileContract:
-    def CtoK(self,num):
-        return num + 273.15
 
     def __init__(self, d):
         if 'thermalsetpoint' in d:
@@ -8,7 +6,7 @@ class ThermalProfileContract:
         else:
             self.zone = 0
         if 'tempgoal' in d:
-            self.tempGoal = self.CtoK(d['tempgoal'])
+            self.tempGoal = d['tempgoal']
         else:
             self.temp = 0
         if 'soakduration' in d:
