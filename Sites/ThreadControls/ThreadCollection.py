@@ -181,10 +181,10 @@ class ThreadCollection:
     def pause(self,data=None):
         if data:
             thread = data['zone']
-            self.zoneThreadDict[thread].paused = True;
+            self.zoneThreadDict[thread].paused = True
             return
         for zone in self.zoneThreadDict:
-            self.zoneThreadDict[zone].paused = True;
+            self.zoneThreadDict[zone].paused = True
 
     def removePause(self,data=None):
         if data:
@@ -192,23 +192,14 @@ class ThreadCollection:
             self.zoneThreadDict[thread].paused = False
             return
         for zone in self.zoneThreadDict:
-            self.zoneThreadDict[zone].paused = False;
+            self.zoneThreadDict[zone].paused = False
 
     def holdThread(self,data=None):
-        if data:
-            thread = data['zone']
-            self.zoneThreadDict[thread].inHold = True
-            return
-        for zone in self.zoneThreadDict:
-            self.zoneThreadDict[zone].inHold = True;            
+        Logging.debugPrint(3,"Holding Zones")
+        ProfileInstance.getInstance().inHold = True
 
     def releaseHoldThread(self,data=None):
-        if data:
-            thread = data['zone']
-            self.zoneThreadDict[thread].inHold = False
-            return
-        for zone in self.zoneThreadDict:
-            self.zoneThreadDict[zone].inHold = False;
+        ProfileInstance.getInstance().inHold = False
 
 
     def abortThread(self,data):

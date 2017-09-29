@@ -128,6 +128,8 @@ class ZoneCollection:
         self.profileName = profileName
         self.startTime = startTime
 
+        Logging.debugPrint(2,"Loaded profile: {}".format(profileName))
+
         for result in results:
             zoneProfile = {}
             zoneName = "zone"+str(result['zone'])

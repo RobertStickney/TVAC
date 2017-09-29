@@ -97,6 +97,19 @@ class ZoneProfileContract:
         self.__lock.release()
         return temp
 
+    def getTempProfile(self, mode=None):
+        self.__lock.acquire()
+        if not mode:
+            mode = self.average
+        if mode == "Average":
+            temp = (sum(a) / len(a))
+        if mode == "Min":
+            temp = min(self.thermocouples, key=lambda x: x.getTemp('C')).getTemp()
+        if mode == "Max":
+            temp = max(self.thermocouples, key=lambda x: x.getTemp('C')).getTemp()
+        self.__lock.release()
+        return temp
+
     def getJson(self):
         self.__lock.acquire()
         message = ['{"zone":%s,' % self.zone,

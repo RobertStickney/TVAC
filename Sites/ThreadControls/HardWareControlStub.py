@@ -43,7 +43,6 @@ class HardWareControlStub(Thread):
 
         self.running = False
         self.paused = False
-        self.inHold = False
         self.zoneUUID = uuid.uuid4()
         self.zoneProfile.update(json.loads('{"zoneuuid":"%s"}'%self.zoneUUID))
         self.timeStartForHold = None
@@ -63,11 +62,14 @@ class HardWareControlStub(Thread):
         generate a list time values and matching temputure values
         '''
         Logging.logEvent("Debug","Status Update", 
-        {"message": "Creating Expected temperture values: {}".format(self.args[0]),
+        {"message": "temp hold: Creating Expected temperture values: {}".format(self.args[0]),
          "level":2})
         intervalTime = self.updatePeriod
         # if given a startTime, use that, otherwise, use current
         if startTime:
+            Logging.logEvent("Debug","Status Update", 
+            {"message": "{}: Creating expected Value, sometimes after Hold".format(self.args[0]),
+            "level":3})
             if "datetime.datetime" in str(type(startTime)):
                 startTime = time.mktime(startTime.timetuple())
             currentTime = int(startTime)
@@ -194,9 +196,10 @@ class HardWareControlStub(Thread):
                     while ProfileInstance.getInstance().activeProfile:
 
                         # You might need to stay is pause
-                        print("About to check for hold")
                         self.checkPause()
-                        self.checkHold()
+                        # Logging.debugPrint(3,"About to check for hold")
+                        # self.checkHold()
+                        # Logging.debugPrint(3,"Just left hold, if held")
 
                         # get current time
                         currentTime = time.time()
@@ -279,18 +282,21 @@ class HardWareControlStub(Thread):
         update the duty cycle for the lamps
         '''
 
-        Logging.logEvent("Debug","Status Update", 
-            {"message": "{}: Temp Goal Temperture is {}".format(self.args[0],self.temp_temperture),
-            "level":2})
         self.pid.SetPoint = self.temp_temperture
         # TODO: Don't leave this hardcoded
-        self.pid.update(self.zoneProfile.getTemp("Max"))
+        self.pid.update(self.zoneProfile.getTemp_C("Max"))
         self.dutyCycle = self.pid.error_value/self.maxTempRisePerUpdate
 
         # TODO: pick what lamp you want to use
         self.d_out.update({self.lamps[1] + " PWM DC": self.dutyCycle})
         self.d_out.update({self.lamps[0] + " PWM DC": self.dutyCycle})
 
+        Logging.logEvent("Debug","Status Update", 
+            {"message": "{}: Temp Goal Temperture is {}".format(self.args[0],self.temp_temperture),
+            "level":2})
+        Logging.logEvent("Debug","Status Update", 
+            {"message": "{}: Current duty Cycle: {}".format(self.args[0],self.dutyCycle),
+            "level":2})
         Logging.logEvent("Event","Expected Temp Update",
         {"expected_temp_values": [self.temp_temperture],
          "expected_time_values": [time.time()],
@@ -308,24 +314,43 @@ class HardWareControlStub(Thread):
 
         TODO: NOTE: if a hold is held less than updateTime it might not recalculate or even get in here
         '''
-        if self.inHold:
-            inHoldFlag = True
-            self.event('hold')
-            startHoldTime = int(time.time())
-            Logging.debugPrint(3,"In hold for first time")
-        else:
-            inHoldFlag = False
-        while self.inHold:
-            self.updateDutyCycle()
-            time.sleep(.5)
-        if inHoldFlag:
-            Logging.debugPrint(3,"out of hold")
-            endHoldTime = int(time.time())
-            holdTime = endHoldTime - startHoldTime
-            self.startTime = self.startTime + holdTime
-            # regenerate expected time, moving things forward to account for hold
-            self.expected_temp_values, self.expected_time_values = self.createExpectedValues(self.zoneProfile.thermalProfiles, startTime=self.startTime)
-            inHoldFlag = False
+        try:
+            if ProfileInstance.getInstance().inHold:
+                inHoldFlag = True
+                self.event('hold')
+                startHoldTime = int(time.time())
+                Logging.logEvent("Debug","Status Update", 
+                {"message": "{}: In hold for first time".format(self.args[0]),
+                "level":3})
+                time.sleep(.5)
+                while ProfileInstance.getInstance().inHold:
+                    Logging.logEvent("Debug","Status Update", 
+                    {"message": "{}: In Hold currently". format(self.args[0]),
+                    "level":4})
+                    self.updateDutyCycle()
+                    time.sleep(5)
+
+                Logging.logEvent("Debug","Status Update", 
+                {"message": "{}: Just Left hold". format(self.args[0]),
+                "level":4})
+                endHoldTime = int(time.time())
+                holdTime = endHoldTime - startHoldTime
+                self.startTime = self.startTime + holdTime
+                # regenerate expected time, moving things forward to account for hold
+                Logging.logEvent("Debug","Status Update", 
+                {"message": "{}: Leaving hold after {} seconds in hold, new startTime {}".format(self.args[0], holdTime, self.startTime),
+                "level":3})
+                time.sleep(.5)
+                self.expected_temp_values, self.expected_time_values = self.createExpectedValues(self.zoneProfile.thermalProfiles, startTime=self.startTime)
+                inHoldFlag = False
+
+            else:
+                inHoldFlag = False
+        except Exception as e:
+            Logging.logEvent("Debug","Status Update", 
+            {"message": "{}: hold error: {}".format(self.args[0],e),
+            "level":3})
+
 
     def checkPause(self):
         '''
