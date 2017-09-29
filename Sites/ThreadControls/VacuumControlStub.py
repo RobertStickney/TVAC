@@ -95,14 +95,13 @@ class VacuumControlStub(Thread):
                                 (self.chamberPressure < 0.040) and
                                 (self.cryoPumpPressure < 0.045)) or \
                                 ((self.oldState == "Cryo Vacuum") and
-                                     (self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') > 16)):
+                                     (self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') > 20)):
                             # Alert the user they should close o-ring seal 
                             # Start the cryopump
                             self.state = "Crossover Vacuum"
                         userName = os.environ['LOGNAME']
                         if "root" in userName:
-                            if (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15 or
-                                        self.chamberPressure < 1.001e-3):
+                            if (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15 and self.chamberPressure < 0.035):
                                 # Close the rough gate valve
                                 # Open the cryopump gate valve
                                 # Wait until 10e-6 tor
@@ -110,7 +109,7 @@ class VacuumControlStub(Thread):
                         else:
                             if self.chamberPressure < 0.005: #torr?
                                 self.state = "Cryo Vacuum"
-                        if self.chamberPressure < 1e-3: #torr?
+                        if self.chamberPressure < 9e-5: #torr?
                             # Wait for nothing, either the program will end, or be stopped by the safety checker
                             self.state = "Operational Vacuum"
 
@@ -199,7 +198,7 @@ class VacuumControlStub(Thread):
                 time.sleep(2)
                 self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
                 self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
-                self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 12])
+                self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
             else:
                 Logging.logEvent("Debug", "Status Update",
                                  {"message": "In Rough vacuum.",
