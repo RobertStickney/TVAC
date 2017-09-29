@@ -86,7 +86,6 @@ class HardWareControlStub(Thread):
             goalTemp = setPoint.tempGoal
             rampTime = setPoint.ramp
             soakTime = setPoint.soakduration
-
             # skip ramp section if rampTime == 0
             if rampTime:
                 TempDelta = goalTemp-currentTemp
@@ -137,10 +136,20 @@ class HardWareControlStub(Thread):
                 expected_temp_values.append(y)
                 # print("{},{}".format(x,y))
 
+            # input("pause")
 
             currentTime = rampEndTime+soakTime
             currentTemp = goalTemp
         # end of for loop, end generating outputs
+
+       # print("Logging all data")
+       # Logging.logEvent("Event","Expected Temp Update",
+       # {"expected_temp_values": expected_temp_values,
+       #  "expected_time_values": expected_time_values,
+       #  "zone"                : self.args[0],
+       #  "profileUUID"         : self.zoneProfile.profileUUID,
+       #  "ProfileInstance"     : ProfileInstance.getInstance()
+       # })
 
 
         return expected_temp_values, expected_time_values
@@ -303,13 +312,14 @@ class HardWareControlStub(Thread):
             inHoldFlag = True
             self.event('hold')
             startHoldTime = int(time.time())
-            print("in hold for first time")
+            Logging.debugPrint(3,"In hold for first time")
         else:
             inHoldFlag = False
         while self.inHold:
             self.updateDutyCycle()
             time.sleep(.5)
         if inHoldFlag:
+            Logging.debugPrint(3,"out of hold")
             endHoldTime = int(time.time())
             holdTime = endHoldTime - startHoldTime
             self.startTime = self.startTime + holdTime

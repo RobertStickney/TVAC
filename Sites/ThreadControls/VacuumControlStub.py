@@ -38,110 +38,120 @@ class VacuumControlStub(Thread):
         self.updatePeriod = 2
 
 
-
-
     def run(self):
         # Always run this thread
         # This lets others load their info first
-        time.sleep(1)
         while True:
-            if ProfileInstance.getInstance().activeProfile and \
-                    self.hw.PfeifferGuages.get_roughpump_pressure() is not None:
-                # With an active profile, we start putting the system under pressure
-                try:
-         
-                    # Logging.logEvent("Debug","Status Update", 
-                    # {"message": "Running Vacuum Control Stub",
-                    #  "level":2})
-                    # Setup code is here
-                    if self.state:
-                        self.oldState = self.state
+            Logging.logEvent("Event","Thread Start",
+                {"thread": "VacuumControlStub",
+                 "ProfileInstance": ProfileInstance.getInstance()})
+            Logging.logEvent("Debug","Status Update",
+                {"message": "Starting VacuumControlStub",
+                 "level":2})
+            time.sleep(1)
+            try:
+               while True:
+                    if (ProfileInstance.getInstance().activeProfile or
+                        ProfileInstance.getInstance().vacuumWanted) and \
+                            self.hw.PfeifferGuages.get_roughpump_pressure() is not None:
+                        # With an active profile, we start putting the system under pressure
+             
+                        # Logging.logEvent("Debug","Status Update", 
+                        # {"message": "Running Vacuum Control Stub",
+                        #  "level":2})
+                        # Setup code is here
+                        if self.state:
+                            self.oldState = self.state
 
-                    # connection to the MCC
-                    # JK, it's already done in the MCC control stub
+                        # connection to the MCC
+                        # JK, it's already done in the MCC control stub
 
-                    # Reading of pressure gauges, to figure out where the system is
+                        # Reading of pressure gauges, to figure out where the system is
 
-                    # When you know what the pressure is, you know what to do go get into pressure
-                    self.cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
-                    self.chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
-                    self.roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
+                        # When you know what the pressure is, you know what to do go get into pressure
+                        self.cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
+                        self.chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
+                        self.roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
 
-                    # learning from Zoneprofiles what vacuum state the system needs to be in
-                    # If it's here, you want the vacuum to be on
-                    
-                    Logging.logEvent("Debug","Status Update", 
-                    {"message": "Current chamber pressure: {}".format(self.chamberPressure),
-                     "level":2})
+                        # learning from Zoneprofiles what vacuum state the system needs to be in
+                        # If it's here, you want the vacuum to be on
+                        
+                        Logging.logEvent("Debug","Status Update", 
+                        {"message": "Current chamber pressure: {}".format(self.chamberPressure),
+                         "level":2})
 
-                    # Pressure is in Torr and Temperature is in Kelvin.
-                    # calculations to get from here to there
-                    if self.chamberPressure > 300: #torr?
-                        # use the roughing pump to achieve Rough vacuum
-                        # Wait until 0.0.041 tor
-                        self.state = "Atmosphere"
-                    if self.chamberPressure < 300: # and self.roughPumpPressure < self.cryoPumpPressure:
-                        # open Cryopump-Roughing gate valve
-                        # Wait until 0.041 tor
-                        self.state = "Rough Vacuum"
-                    if self.chamberPressure < 0.041:
-                        # Alert the user they should close o-ring seal 
-                        # Start the cryopump
-                        self.state = "Crossover Vacuum"
-                    userName = os.environ['LOGNAME']
-                    if "root" in userName:
-                        if self.chamberPressure < 0.005 and self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') < 15:
-                            # Close the rough gate valve
-                            # Open the cryopump gate valve
-                            # Wait until 10e-6 tor
-                            self.state = "Cryo Vacuum"
-                    else:
-                        if self.chamberPressure < 0.005: #torr?
-                            self.state = "Cryo Vacuum"
-                    if self.chamberPressure < 9e-5: #torr?
-                        # Wait for nothing, either the program will end, or be stopped by the safety checker
-                        self.state = "Operational Vacuum"
+                        # Pressure is in Torr and Temperature is in Kelvin.
+                        # calculations to get from here to there
+                        if self.chamberPressure > 300: #torr?
+                            # use the roughing pump to achieve Rough vacuum
+                            # Wait until 0.0.041 tor
+                            self.state = "Atmosphere"
+                        if ((self.oldState != "Crossover Vacuum") and (self.chamberPressure < 300)) or \
+                                ((self.oldState != "Atmosphere") and (self.chamberPressure > 0.046)):
+                            # open Cryopump-Roughing gate valve
+                            # Wait until 0.041 tor
+                            self.state = "Rough Vacuum"
+                        if ((self.oldState != "Cryo Vacuum") and
+                                (self.chamberPressure < 0.040) and
+                                (self.cryoPumpPressure < 0.045)) or \
+                                ((self.oldState == "Cryo Vacuum") and
+                                     (self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') > 20)):
+                            # Alert the user they should close o-ring seal 
+                            # Start the cryopump
+                            self.state = "Crossover Vacuum"
+                        userName = os.environ['LOGNAME']
+                        if "root" in userName:
+                            if (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15 and self.chamberPressure < 0.035):
+                                # Close the rough gate valve
+                                # Open the cryopump gate valve
+                                # Wait until 10e-6 tor
+                                self.state = "Cryo Vacuum"
+                        else:
+                            if self.chamberPressure < 0.005: #torr?
+                                self.state = "Cryo Vacuum"
+                        if self.chamberPressure < 9e-5: #torr?
+                            # Wait for nothing, either the program will end, or be stopped by the safety checker
+                            self.state = "Operational Vacuum"
 
-                    Logging.logEvent("Debug","Status Update", 
-                    {"message": "Current chamber state: {}".format(self.state),
-                     "level":2})
+                        Logging.logEvent("Debug","Status Update", 
+                        {"message": "Current chamber state: {}".format(self.state),
+                         "level":2})
 
-                    result = {
-                        'Atmosphere': self.atmosphere,
-                        'Rough Vacuum': self.roughVacuum,
-                        'Crossover Vacuum': self.crossoverVacuum,
-                        'Cryo Vacuum': self.CryoVacuum,
-                        'Operational Vacuum': self.operationalVacuum,
-                    }[self.state]()
+                        result = {
+                            'Atmosphere': self.atmosphere,
+                            'Rough Vacuum': self.roughVacuum,
+                            'Crossover Vacuum': self.crossoverVacuum,
+                            'Cryo Vacuum': self.CryoVacuum,
+                            'Operational Vacuum': self.operationalVacuum,
+                        }[self.state]()
 
-                    if "Operational Vacuum" in self.state:
-                        self.hw.OperationalVacuum = True
-                    else:
-                        self.hw.OperationalVacuum = False
+                        if "Operational Vacuum" in self.state:
+                            self.hw.OperationalVacuum = True
+                        else:
+                            self.hw.OperationalVacuum = False
 
-                    
+                        
 
-                    # sleep until the next time around
-                    time.sleep(self.updatePeriod)
+                        # sleep until the next time around
+                        time.sleep(self.updatePeriod)
 
 
-                    # TODO: Is there some safe way of taking the chamber out of vacuum?
-                except Exception as e:
+                        # TODO: Is there some safe way of taking the chamber out of vacuum?
+                    # End of inner if
+                    else: 
+                        time.sleep(1)
+                # end of inner while True
+            except Exception as e:
 
-                    exc_type, exc_obj, exc_tb = sys.exc_info()
-                    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                    print("Error: {} in file {}:{}".format(exc_type, fname, exc_tb.tb_lineno))
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print("Error: {} in file {}:{}".format(exc_type, fname, exc_tb.tb_lineno))
 
-                    # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
-                    self.running = False
-                    ProfileInstance.getInstance().zoneProfiles.activeProfile = False
-                    raise e
-                finally:
-                    pass
-                # end of try, catch
-            else:  # end of running check
-                time.sleep(1)
-        # end of outter while True
+                # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
+                ProfileInstance.getInstance().zoneProfiles.activeProfile = False
+                raise e
+            # end of try, catch
+        #end of outer while true
     # end of run()
 
     def atmosphere(self):
@@ -174,9 +184,12 @@ class VacuumControlStub(Thread):
 
     def roughVacuum(self):
         '''
-        It enters this state everytime you are between 0.041 torr and 0.005 torr
+        It enters this state everytime you are between 0.040 torr and 0.005 torr
         '''
-        if self.oldState != self.state:
+        if (self.oldState != self.state):  # and (self.oldState == "Atmosphere"):
+            Logging.logEvent("Debug", "Status Update",
+                             {"message": "Entering Rough vacuum. Ruffing the Cryo Pump.",
+                              "level": 1})
             # The system has just crossed over to a new point
             userName = os.environ['LOGNAME']
             if "root" in userName:
@@ -185,16 +198,21 @@ class VacuumControlStub(Thread):
                 time.sleep(2)
                 self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
                 self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
-                self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 12])
+                self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
             else:
-                print("in rough vacuum")
+                Logging.logEvent("Debug", "Status Update",
+                                 {"message": "In Rough vacuum.",
+                                  "level": 4})
 
 
     def crossoverVacuum(self):
         '''
         It enters this state everytime you are between 0.041 torr and 0.005
         '''
-        if self.oldState != self.state:
+        if (self.oldState != self.state):
+            Logging.logEvent("Debug", "Status Update",
+                             {"message": "Entering Crossover Vacuum from Rough vacuum. Cryo pump On.",
+                              "level": 1})
             # The system has just crossed over to a new point
             userName = os.environ['LOGNAME']
             if "root" in userName:
@@ -212,7 +230,7 @@ class VacuumControlStub(Thread):
         '''
         It enters this state everytime you are between 0.005 torr and 0.00001
         '''
-        if self.oldState != self.state:
+        if (self.oldState != self.state):
             # The system has just crossed over to a new point
             userName = os.environ['LOGNAME']
             if "root" in userName:
@@ -231,6 +249,8 @@ class VacuumControlStub(Thread):
 
                 # Open the cryopump gate valve
                 self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
+                time.sleep(2)
+                self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
 
             else:
                 print("In Strong Cryo Vacuum")

@@ -81,6 +81,9 @@ class ShiMccControlStub(Thread):
                                                   "level": 4})
                             else:
                                 self.hw.ShiCryopump.update({'MCC Status': val['Response']})
+                            Logging.logEvent("Debug", "Status Update",
+                                             {"message": "Cryopump Stage 1: {:.1f}K; Stage 2: {:.1f}K".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'), self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp')),
+                                              "level": 4})
                             if time.time() > next_param_read_time:
                                 val = self.mcc.get_ParamValues()
                                 if val['Error']:
@@ -92,7 +95,7 @@ class ShiMccControlStub(Thread):
                                 next_param_read_time = time.time() + self.param_period
 
                             while len(self.hw.Shi_MCC_Cmds):
-                                cmd = self.hw.Shi_MCC_Cmds.pop([0])
+                                cmd = self.hw.Shi_MCC_Cmds.pop()
                                 if 'FirstStageTempCTL' == cmd[0]:  # 2.9 • First Stage Temperature Control pg:10
                                     self.run_set_cmd(self.mcc.Set_FirstStageTempCTL, cmd)
                                     self.run_get_cmd(self.mcc.Get_FirstStageTempCTL,

@@ -72,10 +72,8 @@ class Logging(object):
 					mysql.conn.commit()
 				except Exception as e:
 					pass
-				#with open('./debugLog.txt','a') as filer:
-				#	for line in string.split("\n"):
-				#		filer.write("{}{}".format(prefix,line)+"\n")
-				#		print("{}{}".format(prefix,line))
+				for line in string.split("\n"):
+					print("{}{}".format(prefix,line))
 
 	@staticmethod
 	def logExpectedTempertureData(data):
@@ -94,6 +92,7 @@ class Logging(object):
 		print("expected_temp_values")
 		coloums = "( profile_I_ID, time, zone, temperture )"
 		values = ""
+		Logging.debugPrint(3,"Logging expected Temp")
 		for i in range(len(expected_temp_values)):
 			time = expected_time_values[i]
 			time = datetime.datetime.fromtimestamp(time)
@@ -102,7 +101,7 @@ class Logging(object):
 			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), int(zone[4:]), temperture)
 
 		sql = "INSERT INTO tvac.Expected_Temperture {} VALUES {};".format(coloums, values[:-2])
-
+		Logging.debugPrint(3,"Logging to expected Temp")
 		mysql = MySQlConnect()
 		try:
 			mysql.cur.execute(sql)
