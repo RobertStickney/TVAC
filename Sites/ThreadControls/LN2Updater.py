@@ -40,7 +40,7 @@ class LN2Updater(Thread):
                 ln2_min = 0.01 
                 time.sleep(5)
                 # hwStatus = self.hardwareStatus.getInstance()
-                userName = os.environ['LOGNAME']
+                userName = os.getlogin()
 
                 a_out = self.hardwareStatus.getInstance().PC_104.analog_out  # todo: better variable name?
                 d_out = self.hardwareStatus.getInstance().PC_104.digital_out

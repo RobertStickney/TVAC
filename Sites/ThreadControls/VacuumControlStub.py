@@ -99,7 +99,7 @@ class VacuumControlStub(Thread):
                             # Alert the user they should close o-ring seal 
                             # Start the cryopump
                             self.state = "Crossover Vacuum"
-                        userName = os.environ['LOGNAME']
+                        userName = os.getlogin()
                         if "root" in userName:
                             if (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15 and self.chamberPressure < 0.035):
                                 # Close the rough gate valve
@@ -160,7 +160,7 @@ class VacuumControlStub(Thread):
         '''
         if self.oldState != self.state:
             # The system has just crossed over to a new point
-            userName = os.environ['LOGNAME']
+            userName = os.getlogin()
             if "root" in userName:
                 # TODO: Read coldwater value from Compressor
         
@@ -191,7 +191,7 @@ class VacuumControlStub(Thread):
                              {"message": "Entering Rough vacuum. Ruffing the Cryo Pump.",
                               "level": 1})
             # The system has just crossed over to a new point
-            userName = os.environ['LOGNAME']
+            userName = os.getlogin()
             if "root" in userName:
                 # open Cryopump-Roughing gate valve
                 self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
@@ -214,7 +214,7 @@ class VacuumControlStub(Thread):
                              {"message": "Entering Crossover Vacuum from Rough vacuum. Cryo pump On.",
                               "level": 1})
             # The system has just crossed over to a new point
-            userName = os.environ['LOGNAME']
+            userName = os.getlogin()
             if "root" in userName:
                 #TODO: Alert the user they should close o-ring seal 
                 self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
@@ -232,7 +232,7 @@ class VacuumControlStub(Thread):
         '''
         if (self.oldState != self.state):
             # The system has just crossed over to a new point
-            userName = os.environ['LOGNAME']
+            userName = os.getlogin()
             if "root" in userName:
 
                 # Close the rough gate valve

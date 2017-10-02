@@ -41,7 +41,7 @@ class ShiMccControlStub(Thread):
                                  {"message": "Starting Shi Mcc Control Stub Thread",
                                   "level": 2})
 
-                userName = os.environ['LOGNAME']
+                userName = os.getlogin()
                 if "root" in userName:
                     Logging.logEvent("Debug", "Status Update",
                                      {"message": "Power on the Shi Mcc",
@@ -182,7 +182,7 @@ class ShiMccControlStub(Thread):
                                      exc_type, fname, exc_tb.tb_lineno, e),
                                   "level": 2})
                 # nicely close things, to open them back up again...
-                userName = os.environ['LOGNAME']
+                userName = os.getlogin()
                 if "root" in userName:
                     raise e
                     # pass

@@ -53,7 +53,7 @@ class ThermoCoupleUpdater(Thread):
                 Channel_List = "(@1001:1020,2036:2040,3001:3040)"
                 hwStatus = self.hardwareStatusInstance.getInstance()
 
-                userName = os.environ['LOGNAME']
+                userName = os.getlogin()
 
                 if "root" in userName:
                     # Hasn't been tested yet
