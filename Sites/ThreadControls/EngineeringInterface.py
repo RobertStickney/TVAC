@@ -30,7 +30,7 @@ class EngineeringInterface(Thread):
             try:
                 # Thread "Start up" stuff goes here
                 
-                userName = os.environ['LOGNAME']
+                userName = os.getlogin()
                 if "root" in userName:
                     # Root is only in live, might need to change in busy box
                     self.ts_reg.open_Registers()
@@ -86,7 +86,7 @@ class EngineeringInterface(Thread):
                          "level":2})
                 
                 # nicely close things, to open them back up again...
-                userName = os.environ['LOGNAME']
+                userName = os.getlogin()
                 if "root" in userName:
                     self.ts_reg.close()
                 time.sleep(4)
