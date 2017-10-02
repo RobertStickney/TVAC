@@ -206,7 +206,7 @@ def createExpectedValues(setPoints,startTime=None):
 def getLiveTempFromDB():
 	mysql = MySQlConnect()
 	# These two can be combined into one sql statement...if I have time look into that
-	sql = "SELECT profile_name, startTime, endTime FROM tvac.Profile_Instance WHERE profile_name like \"acceptanceProfile\";"
+	sql = "SELECT profile_name, startTime, endTime FROM tvac.Profile_Instance WHERE profile_name like \"coldRampAndSoak\";"
 	mysql = MySQlConnect()
 	try:
 		mysql.cur.execute(sql)
@@ -234,7 +234,7 @@ def getLiveTempFromDB():
 def getExpectedFromDB():
 	mysql = MySQlConnect()
 	# These two can be combined into one sql statement...if I have time look into that
-	sql = "SELECT profile_name, startTime, endTime FROM tvac.Profile_Instance WHERE profile_name like \"acceptanceProfile\";"
+	sql = "SELECT profile_name, startTime, endTime FROM tvac.Profile_Instance WHERE profile_name like \"coldRampAndSoak\";"
 	mysql = MySQlConnect()
 	try:
 		mysql.cur.execute(sql)
@@ -264,9 +264,9 @@ def utc_to_local(utc_dt):
 
 def main(args):
 	# Get live data
-	importantTCs = [1,2,3,4,5]
-	importantTCs = [6]
-	importantTCs.extend(list(range(76,80)))
+	# importantTCs = [1,2,3,4,5]
+	importantTCs = [90]
+	importantTCs.extend(list(range(90,130)))
 	overlay = False
 	secondsShown = 50000
 	secondsShown *= -1
@@ -306,12 +306,12 @@ def main(args):
 				tmp.append(thermocouple[1])
 				tc_data[thermocouple[0]] = tmp
 		print("time,tc,temp")
-		for i, time in enumerate(time_values):
-			for tc in tc_data:
-				print("{},{},{}".format(time_values[i],tc,tc_data[tc][i]))
+		# for i, time in enumerate(time_values):
+		# 	for tc in tc_data:
+		# 		print("{},{},{}".format(time_values[i],tc,tc_data[tc][i]))
 		for tc in tc_data:
-			# if tc in importantTCs:
-			plt.plot(time_values[secondsShown:],tc_data[tc][secondsShown:], label=str(tc))
+			if tc in importantTCs:
+				plt.plot(time_values[secondsShown:],tc_data[tc][secondsShown:], label=str(tc))
 		# print("times: {}".format(len(time_values)))
 		# print("tcs: {}".format(len(tc_data)))
 		# print("total: {}".format(len(time_values)*len(tc_data)))

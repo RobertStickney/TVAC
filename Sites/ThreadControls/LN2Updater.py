@@ -89,13 +89,15 @@ class LN2Updater(Thread):
                         else:
                             Logging.debugPrint(4,"The LN2 should be off")
                             # What's the difference between this and...
-                            d_out.update({'LN2-S Sol': False, 'LN2-P Sol': False, })
+                            # d_out.update({'LN2-S Sol': False, 'LN2-P Sol': False, })
+                            d_out.update({'LN2-S Sol': False})
                             # this
                             # d_out.update({"LN2-S EN":False})
                             # d_out.update({"LN2-Sol EN":False})
 
 
                             # 2500 is the point the valve should be opened too
-                            a_out.update({'LN2 Shroud': 0, 'LN2 Platen': 0})
+                            # a_out.update({'LN2 Shroud': 0, 'LN2 Platen': 0})
+                            a_out.update({'LN2 Shroud': 0})
                             #how to update LN2 (assuming this is in AnalogInContract) --> What is the structure of the dictionary? d['ADC 15'] --> LN@Shroud
                     time.sleep(self.SLEEP_TIME)

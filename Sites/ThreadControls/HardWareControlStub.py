@@ -23,8 +23,6 @@ class HardWareControlStub(Thread):
     It controls if we are in a ramp, hold, soak, or paused.
     It also generates the expected temp values at the given time 
     '''
-
-
     def __init__(self, group=None, target=None, name=None,
                  args=(), kwargs=None, verbose=None, lamps=None):
 
@@ -198,7 +196,7 @@ class HardWareControlStub(Thread):
                         # You might need to stay is pause
                         self.checkPause()
                         # Logging.debugPrint(3,"About to check for hold")
-                        # self.checkHold()
+                        self.checkHold()
                         # Logging.debugPrint(3,"Just left hold, if held")
 
                         # get current time
