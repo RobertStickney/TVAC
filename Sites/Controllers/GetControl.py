@@ -95,6 +95,10 @@ class GetControl:
         d_out.update({"IR Lamp 16 PWM DC": 0})
         return "{'result':'success'}"
 
+    def getCompressorTemp(self):
+        resp = {'CompressorTemp': 123}
+        return json.dumps(resp)
+
     def getEventList(self):
         tmp = ProfileInstance.getInstance().systemStatusQueue
         ProfileInstance.getInstance().systemStatusQueue = []
@@ -121,13 +125,20 @@ class GetControl:
         return json.dumps(resp)
 
     def getZoneTemps(self):
-        temps=dict(ZoneSetPoint=[],ZoneTemp=[])
+        temps=dict(ZoneTemps=[])
 
         for i in range(1,10):
             strzone="zone"+str(i)
+            try:    
+                temps['ZoneTemps'].append(ProfileInstance.getInstance().zoneProfiles.getZone(strzone).getTemp())
+            except:
+                temps['ZoneTemps'].append(float('nan'))
 
-            temps['ZoneSetPoint'].append(ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict[strzone].pid.SetPoint)
-            temps['ZoneTemp'].append(ProfileInstance.getInstance().zoneProfiles.getZone(strzone).getTemp())
+            try:
+                temps['ZoneTemps'].append(ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict[strzone].pid.SetPoint)
+            except:
+                temps['ZoneTemps'].append(float('nan'))
+
         buff=json.dumps(temps)
         return buff                        
 
