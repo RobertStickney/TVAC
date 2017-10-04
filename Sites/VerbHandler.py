@@ -37,6 +37,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getPressureGauges': control.getPressureGauges,
                 '/getZoneTemps': control.getZoneTemps,
                 '/getLastError' : control.getLastError,
+                '/getLastErrorTest' : control.getLastErrorTest,
                 '/putUnderVacuum':control.putUnderVacuum,
                 '/getEventList':control.getEventList,
                 '/hardStop':control.hardStop,

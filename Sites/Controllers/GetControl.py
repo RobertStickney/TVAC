@@ -61,15 +61,35 @@ class GetControl:
         # data unused
         Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
         errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
-        tempErrorList = []
+        tempErrorList = dict(time=[],event=[],Thermocouple=[],details=[],actions=[])
         for i, error in enumerate(errorList):
-            tempErrorList.append(error)
+            tempErrorList['time'].append(error['time'])
+            tempErrorList['event'].append(error['event'])
+            tempErrorList['Thermocouple'].append(error['Thermocouple'])
+            tempErrorList['details'].append(error['details'])
+            tempErrorList['actions'].append(error['actions'])
+
             errorList.pop(i)
         print(errorList)
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
         # print(errorList[0])
-        return str(errorList)
+        return json.dumps(tempErrorList)
+
+    def getLastErrorTest(self):
+        # ONLY FOR labview testing / design purposes - delete later and reference to getLastError?
+        # Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
+        # errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
+        tempErrorList = []
+        for i in range(0,7):
+            error="Error something has happened to " +str(i)
+            tempErrorList.append(error)
+            #errorList.pop(i)
+        print(tempErrorList)
+        # error = errorList[0]
+        # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
+        # print(errorList[0])
+        return json.dumps(tempErrorList)
 
 
     def hardStop(self):
