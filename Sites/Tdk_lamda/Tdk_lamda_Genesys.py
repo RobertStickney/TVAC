@@ -12,7 +12,7 @@ class Tdk_lambda_Genesys:
             tdk.write(self.append_checksum(command).encode())
             time.sleep(0.15 * tries)
             # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
-            (resp_good, resp) = self.check_checksum(tdk.read(64).decode())
+            (resp_good, resp) = self.check_checksum(tdk.read(128).decode())
             print("R:---" + resp.replace('\r', r'\r') + "---")
             if resp_good:
                 break
