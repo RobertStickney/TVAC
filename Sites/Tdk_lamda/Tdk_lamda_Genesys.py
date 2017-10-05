@@ -22,7 +22,7 @@ class Tdk_lambda_Genesys:
         return resp
 
     def append_checksum(self, cmd):
-        return '{:s}${:2X}\r'.format(cmd, 0xff & sum(cmd.encode()))
+        return '{:s}${:02X}\r'.format(cmd, 0xff & sum(cmd.encode()))
 
     def check_checksum(self, resp):
         print("R:---" + resp.replace('\r', r'\r') + "---")
