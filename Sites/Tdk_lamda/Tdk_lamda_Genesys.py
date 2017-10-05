@@ -18,7 +18,7 @@ class Tdk_lambda_Genesys:
                 break
             print("TDK LAMBDA cmd try number: {:d}".format(tries))
         else:
-            print("No more tries! Something is wrong!")
+            raise Exception('Response: "{:s}" is not "OK"'.format(resp))
             resp = ""
         tdk.close()
         return resp
@@ -32,12 +32,19 @@ class Tdk_lambda_Genesys:
         else:
             return False, resp.strip()
 
+    def set_addr(self, addr):
+        resp = self.send_cmd('ADR {:d}'.format(addr))
+        if resp != 'OK':
+            raise Exception('Response: "{:s}" is not "OK"'.format(resp))
+
+    def get_idn(self):
+        pass
 
 
 if __name__ == '__main__':
     tdk = Tdk_lambda_Genesys()
     cmds = ['ADR 1', 'IDN?', 'REV?', 'SN?', 'DATE?', 'OUT?', 'AST?', 'DVC?', 'STT?',
             'ADR 1', 'IDN?', 'REV?', 'SN?', 'DATE?', 'OUT?', 'AST?', 'DVC?', 'STT?',
-            'ADR 1', 'IDN?', 'REV?', 'SN?', 'DATE?', 'OUT?', 'AST?', 'DVC?', 'STT?']
+            'ADR 2', 'IDN?', 'REV?', 'SN?', 'DATE?', 'OUT?', 'AST?', 'DVC?', 'STT?']
     for cmd in cmds:
         print('cmd: "{:s}" - resp: "{:s}"'.format(cmd, tdk.send_cmd(cmd)))
