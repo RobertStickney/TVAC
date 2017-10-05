@@ -13,13 +13,12 @@ class Tdk_lambda_Genesys:
             time.sleep(0.10 * tries)
             # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
             (resp_good, resp) = self.check_checksum(tdk.read(64).decode())
-            print(resp)
+            print("R:---" + resp.replace('\r', r'\r') + "---")
             if resp_good:
                 break
             print("TDK LAMBDA cmd try number: {:d}".format(tries))
         else:
             raise Exception('Response: "{:s}" is not "OK"'.format(resp))
-            resp = ""
         tdk.close()
         return resp
 
@@ -27,6 +26,7 @@ class Tdk_lambda_Genesys:
         return '{:s}${:2X}\r'.format(cmd, 0xff & sum(cmd.encode()))
 
     def check_checksum(self, resp):
+        print("CS:--" + self.append_checksum(resp[:-4]).replace('\r', r'\r') + "---")
         if resp == self.append_checksum(resp[:-4]):
             return True, resp[:-4].strip()
         else:
