@@ -25,8 +25,8 @@ class Tdk_lambda_Genesys:
         return '{:s}${:02X}\r'.format(cmd, 0xff & sum(cmd.encode()))
 
     def check_checksum(self, resp):
-        print("R:---" + resp.replace('\r', r'\r') + "---")
-        print("CS:--" + self.append_checksum(resp[:-4]).replace('\r', r'\r') + "---")
+        # print("R:---" + resp.replace('\r', r'\r') + "---")
+        # print("CS:--" + self.append_checksum(resp[:-4]).replace('\r', r'\r') + "---")
         if resp == self.append_checksum(resp[:-4]):
             return True, resp[:-4].strip()
         else:
@@ -44,7 +44,8 @@ class Tdk_lambda_Genesys:
 if __name__ == '__main__':
     tdk = Tdk_lambda_Genesys()
     cmds = ['ADR 1', 'IDN?', 'REV?', 'SN?', 'DATE?', 'OUT?', 'AST?', 'DVC?', 'STT?',
-            'ADR 1', 'IDN?', 'REV?', 'SN?', 'DATE?', 'OUT?', 'AST?', 'DVC?', 'STT?',
-            'ADR 2', 'IDN?', 'REV?', 'SN?', 'DATE?', 'OUT?', 'AST?', 'DVC?', 'STT?']
+            'ADR 2', 'IDN?', 'REV?', 'SN?', 'DATE?', 'OUT?', 'AST?', 'DVC?', 'STT?',
+            'ADR 3', 'IDN?', 'REV?', 'SN?', 'DATE?', 'OUT?', 'AST?', 'DVC?', 'STT?',
+            'ADR 4', 'IDN?', 'REV?', 'SN?', 'DATE?', 'OUT?', 'AST?', 'DVC?', 'STT?']
     for cmd in cmds:
         print('cmd: "{:s}" - resp: "{:s}"'.format(cmd, tdk.send_cmd(cmd)))
