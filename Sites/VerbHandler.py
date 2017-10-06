@@ -3,7 +3,7 @@ import json
 import sys
 import os
 
-from Controllers.PostControl import PostContol
+from Controllers.PostControl import PostControl
 from Controllers.GetControl import GetControl
 # from Collections.ProfileInstance import ProfileInstance
 
@@ -97,7 +97,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                  "level":2})
 
             # Based on the path we are given, do different functions
-            control = PostContol()
+            control = PostControl()
             result = {
                 '/saveProfile': control.saveProfile,
                 '/loadProfile' : control.loadProfile,
