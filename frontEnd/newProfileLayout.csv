@@ -1,0 +1,11 @@
+zone1;zone2;zone3;zone4;zone5;zone6;zone7;zone8;;;
+Max;;Max;;;;;;;;
+11 90;;12;;;;;;;;
+100;;95;;;;;;;;
+;;;;;;;;;;
+setpt;ramptime;soaktime;zone1;zone2;zone3;zone4;zone5;zone6;zone7;zone8
+1;600;3600;0;273;273;0;300;200;100;200
+2;;;;;;;;;;
+3;;;;;;;;;;
+4;;;;;;;;;;
+5;;;;;;;;;;
