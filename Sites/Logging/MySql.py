@@ -8,7 +8,8 @@ class MySQlConnect:
 
 
     def __init__(self):
-        userName = os.environ['LOGNAME']
+ #       userName = os.getlogin()
+        userName=os.getlogin()
         if "root" in userName:
             user = "TVAC_Admin"
             host = "192.168.99.10"

@@ -58,17 +58,17 @@ class Shi_Mcc:
 
     def get_Status(self):
         # Create Dict of Functions
-        FunS = {"Duty Cycle": self.Get_DutyCycle,  # 2.4 ------------------- Ex: "$XOI??_\r"
-                "Stage 1 Temp": self.Get_FirstStageTemp,  # 2.8 ------------ Ex: "$J;\r"
-                "Cryo Pump Ready State": self.Get_CryoPumpRdyState,  # 2.14  Ex: "$A?2\r"
-                "Purge Valve State": self.Get_PurgeValveState,  # 2.15 ----- Ex: "$E?6\r"
-                "Regen Error": self.Get_RegenError,  # 2.18 ---------------- Ex: "$eT\r"
-                "Regen Step": self.Get_RegenStep,  # 2.20 ------------------ Ex: "$O>\r"
-                "Roughing Valve State": self.Get_RoughingValveState,  # 2.24 Ex: "$D?3\r"
-                "Roughing Interlock": self.Get_RoughingInterlock,  # 2.25 -- Ex: "$Q?B\r"
-                "Stage 2 Temp": self.Get_SecondStageTemp,  # 2.26 ---------- Ex: "$K:\r"
+        FunS = {"DutyCycle": self.Get_DutyCycle,  # 2.4 ------------------- Ex: "$XOI??_\r"
+                "Stage1Temp": self.Get_FirstStageTemp,  # 2.8 ------------ Ex: "$J;\r"
+                "CryoPumpReadyState": self.Get_CryoPumpRdyState,  # 2.14  Ex: "$A?2\r"
+                "PurgeValveState": self.Get_PurgeValveState,  # 2.15 ----- Ex: "$E?6\r"
+                "RegenError": self.Get_RegenError,  # 2.18 ---------------- Ex: "$eT\r"
+                "RegenStep": self.Get_RegenStep,  # 2.20 ------------------ Ex: "$O>\r"
+                "RoughingValveState": self.Get_RoughingValveState,  # 2.24 Ex: "$D?3\r"
+                "RoughingInterlock": self.Get_RoughingInterlock,  # 2.25 -- Ex: "$Q?B\r"
+                "Stage2Temp": self.Get_SecondStageTemp,  # 2.26 ---------- Ex: "$K:\r"
                 "Status": self.Get_Status,  # 2.28 ------------------------- Ex: "$S16\r"
-                "Tc Pressure": self.Get_TcPressure}  # 2.30 ---------------- Ex: "$L=\r"
+                "TcPressure": self.Get_TcPressure}  # 2.30 ---------------- Ex: "$L=\r"
         return self.run_GetFunctions(FunS)
 
     def get_ParamValues(self):
@@ -434,7 +434,7 @@ class Shi_Mcc:
     # 2.26 • Second Stage Temperature pg:20
     def Get_SecondStageTemp(self):  # Command Ex: "$K:\r"
         # return self.Send_cmd("K")
-        userName = os.environ['LOGNAME']
+        userName = os.getlogin()
         if "root" in userName:
             val = self.Send_cmd("K")
         else:
