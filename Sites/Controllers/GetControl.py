@@ -9,9 +9,12 @@ from Logging.Logging import Logging
 class GetControl:
 
     def checkTreadStatus(self):
-        threadInstance = ThreadCollectionInstance.getInstance()
-        threadInstance.threadCollection.checkThreadStatus()
-        return "{'result':'success'}"
+        try:
+            threadInstance = ThreadCollectionInstance.getInstance()
+            threadInstance.threadCollection.checkThreadStatus()
+            return "{'result':'success'}"
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
 
     def getAllThermoCoupleData(self):
         Logging.debugPrint(2, "Calling: getAllThermoCoupleData")  #Todo Change to logEvent()
@@ -22,30 +25,47 @@ class GetControl:
 
 
     def holdAllZones(self):
-        threadInstance = ThreadCollectionInstance.getInstance()
-        threadInstance.threadCollection.holdThread()
-        return "{'result':'success'}"
+        try:
+            threadInstance = ThreadCollectionInstance.getInstance()
+            threadInstance.threadCollection.holdThread()
+            return "{'result':'success'}"
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
 
     def pauseAllZones(self):
-        threadInstance = ThreadCollectionInstance.getInstance()
-        threadInstance.threadCollection.pause()
-        return "{'result':'success'}"
+        try:
+            threadInstance = ThreadCollectionInstance.getInstance()
+            threadInstance.threadCollection.pause()
+            return "{'result':'success'}"
+        except Exception as e:
+            print("lol")
+            return "{'error':'{}'}".format(str(e))
 
         
     def resumeAllZones(self):
-        threadInstance = ThreadCollectionInstance.getInstance()
-        threadInstance.threadCollection.removePause()
-        return "{'result':'success'}"
+        try:
+            threadInstance = ThreadCollectionInstance.getInstance()
+            threadInstance.threadCollection.removePause()
+            return "{'result':'success'}"
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
 
     def unHoldAllZones(self):
-        threadInstance = ThreadCollectionInstance.getInstance()
-        threadInstance.threadCollection.releaseHoldThread()
+        print("!")
+        try:
+            threadInstance = ThreadCollectionInstance.getInstance()
+            threadInstance.threadCollection.releaseHoldThread()
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
         return "{'result':'success'}"
 
-        
+
     def putUnderVacuum(self):
-        ProfileInstance.getInstance().vacuumWanted = True
-        return "{'result':'success'}"
+        try:
+            ProfileInstance.getInstance().vacuumWanted = True
+            return "{'result':'success'}"
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
 
     def getAllZoneData(self):
         # This doesn't work...

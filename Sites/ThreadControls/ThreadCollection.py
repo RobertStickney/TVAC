@@ -2,14 +2,14 @@ import uuid
 import time
 import datetime
 
-from ThreadControls.HardWareControlStub import HardWareControlStub
+from ThreadControls.controlStubs.DutyCycleControlStub import DutyCycleControlStub
 from ThreadControls.SafetyCheck import SafetyCheck
-from ThreadControls.ThermoCoupleUpdater import ThermoCoupleUpdater
-from ThreadControls.TsRegistersControlStub import TsRegistersControlStub
-from ThreadControls.LN2Updater import LN2Updater
-from ThreadControls.PfeifferGaugeControlStub import PfeifferGaugeControlStub
-from ThreadControls.VacuumControlStub import VacuumControlStub
-from ThreadControls.ShiMccControlStub import ShiMccControlStub
+from ThreadControls.updaters.ThermoCoupleUpdater import ThermoCoupleUpdater
+from ThreadControls.updaters.TsRegistersUpdater import TsRegistersUpdater
+from ThreadControls.controlStubs.LN2ControlStub import LN2ControlStub
+from ThreadControls.updaters.PfeifferGaugeUpdater import PfeifferGaugeUpdater
+from ThreadControls.controlStubs.VacuumControlStub import VacuumControlStub
+from ThreadControls.controlStubs.ShiMccControlStub import ShiMccControlStub
 
 
 from Collections.ProfileInstance import ProfileInstance
@@ -20,13 +20,14 @@ from Logging.Logging import Logging
 class ThreadCollection:
 
     def __init__(self):
-        self.zoneThreadDict = self.createZoneCollection()
+        # self.zoneThreadDict = self.createZoneCollection()
+        self.dutyCycleThread = DutyCycleControlStub()
         self.hardwareInterfaceThreadDict = self.createHardwareInterfaces(parent=self)
         self.safetyThread = SafetyCheck(parent=self)
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
 
-        self.runHardwareInterfaces()
+        self.runThreads()
 
         # if there is a half finished profile in the database
         if not self.zoneProfiles.getActiveProfileStatus():
@@ -66,34 +67,21 @@ class ThreadCollection:
             return False, False
         return result['profile_name'], result['startTime']
         
-    def createZoneCollection(self):
-        return {
-            "zone1": HardWareControlStub(args=('zone1',), kwargs=({'pause': 10}),lamps=['IR Lamp 1','IR Lamp 2']),
-            "zone2": HardWareControlStub(args=('zone2',),lamps=['IR Lamp 3','IR Lamp 4']),
-            "zone3": HardWareControlStub(args=('zone3',),lamps=['IR Lamp 6','IR Lamp 5']),
-            "zone4": HardWareControlStub(args=('zone4',),lamps=['IR Lamp 7','IR Lamp 8']),
-            "zone5": HardWareControlStub(args=('zone5',),lamps=['IR Lamp 9','IR Lamp 10']),
-            "zone6": HardWareControlStub(args=('zone6',),lamps=['IR Lamp 12','IR Lamp 11']),
-            "zone7": HardWareControlStub(args=('zone7',),lamps=['IR Lamp 13','IR Lamp 14']),
-            "zone8": HardWareControlStub(args=('zone8',),lamps=['IR Lamp 15','IR Lamp 16']),
-            # zone9 is the platen
-            # "zone9": HardWareControlStub(args=('zone9',))
-            }
 
     def createHardwareInterfaces(self,parent):
         # sending parent for testing, getting current profile data to zone instance
         return {
-            1: TsRegistersControlStub(parent=parent),
+            1: TsRegistersUpdater(parent=parent),
             2: ThermoCoupleUpdater(parent=parent),
-            3: PfeifferGaugeControlStub(),
+            3: PfeifferGaugeUpdater(),
             4: ShiMccControlStub(),
             # 5: ShiCompressorControlStub)(),
-            6: LN2Updater(ThreadCollection=parent),
+            6: LN2ControlStub(ThreadCollection=parent),
             7: VacuumControlStub(),
             }
 
 
-    def runHardwareInterfaces(self):
+    def runThreads(self):
         # Starts all the hw threads
         try:
             for key in sorted(self.hardwareInterfaceThreadDict.keys()):
@@ -101,6 +89,8 @@ class ThreadCollection:
                 self.hardwareInterfaceThreadDict[key].start()
             self.safetyThread.daemon = True
             self.safetyThread.start()
+            self.dutyCycleThread.daemon = True
+            self.dutyCycleThread.start()
         except Exception as e:
             raise e
             # TODO: Add an error logger to this error
@@ -166,7 +156,7 @@ class ThreadCollection:
     # def runSingleThread(self,data):
     #     thread = data['zone']
     #     if self.zoneThreadDict[thread].handeled:
-    #         self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
+    #         self.zoneThreadDict[thread] = DutyCycleControlStub(args=(thread,))
     #     self.zoneThreadDict[thread].running = True
     #     self.zoneThreadDict[thread].daemon = True
     #     self.zoneThreadDict[thread].start()
@@ -179,33 +169,23 @@ class ThreadCollection:
     #         # print("{} is {} and is {} handled".format(thread, "ALIVE" if isAlive else "DEAD", "NOT" if not handled else ""))
 
     def pause(self,data=None):
-        if data:
-            thread = data['zone']
-            self.zoneThreadDict[thread].paused = True
-            return
-        for zone in self.zoneThreadDict:
-            self.zoneThreadDict[zone].paused = True
+        self.dutyCycleThread.paused = True
 
     def removePause(self,data=None):
-        if data:
-            thread = data['zone']
-            self.zoneThreadDict[thread].paused = False
-            return
-        for zone in self.zoneThreadDict:
-            self.zoneThreadDict[zone].paused = False
+        self.dutyCycleThread.paused = False
 
     def holdThread(self,data=None):
         Logging.debugPrint(3,"Holding Zones")
-        ProfileInstance.getInstance().inHold = True
+        self.dutyCycleThread.held = True
 
     def releaseHoldThread(self,data=None):
-        ProfileInstance.getInstance().inHold = False
+        self.dutyCycleThread.held = False
 
 
     def abortThread(self,data):
         thread = data['zone']
         self.zoneThreadDict[thread].terminate()
-        self.zoneThreadDict[thread] = HardWareControlStub(args=(thread,))
+        self.zoneThreadDict[thread] = DutyCycleControlStub(args=(thread,))
 
     # TODO Why is this here?
     # def calculateRamp(self,data):

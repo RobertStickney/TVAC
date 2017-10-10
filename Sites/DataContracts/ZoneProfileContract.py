@@ -40,7 +40,7 @@ class ZoneProfileContract:
         else:
             self.thermocouples = []
 
-        self.zoneUUID = ''
+        self.zoneUUID = False
         self.activeZoneProfile = False
         self.heatError = None
 

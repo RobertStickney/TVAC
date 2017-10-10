@@ -266,7 +266,7 @@ def main(args):
 	# Get live data
 	# importantTCs = [1,2,3,4,5]
 	importantTCs = [90]
-	importantTCs.extend(list(range(90,130)))
+	importantTCs.extend(list(range(1,90)))
 	overlay = False
 	secondsShown = 50000
 	secondsShown *= -1
