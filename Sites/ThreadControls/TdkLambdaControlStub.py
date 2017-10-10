@@ -113,31 +113,31 @@ class TdkLambdaControlStub(Thread):
                             while len(self.hw.TdkLambda_Cmds):
                                 cmd = self.hw.TdkLambda_Cmds.pop()
                                 if 'Set Platen Left' == cmd[0]:
-                                    if cmd[2] == 'V'
+                                    if cmd[2] == 'V':
                                         self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_left_addr(),
                                                          self.pwr_supply.set_pv, cmd[1])
-                                    if cmd[2] == 'C'
+                                    if cmd[2] == 'C':
                                         self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_left_addr(),
                                                          self.pwr_supply.set_pc, cmd[1])
                                 elif 'Set Platen Right' == cmd[0]:
-                                    if cmd[2] == 'V'
+                                    if cmd[2] == 'V':
                                         self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_right_addr(),
                                                          self.pwr_supply.set_pv, cmd[1])
-                                    if cmd[2] == 'C'
+                                    if cmd[2] == 'C':
                                         self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_right_addr(),
                                                          self.pwr_supply.set_pc, cmd[1])
                                 elif 'Set Shroud Left' == cmd[0]:
-                                    if cmd[2] == 'V'
+                                    if cmd[2] == 'V':
                                         self.run_set_cmd(self.hw.TdkLambda_PS.get_shroud_left_addr(),
                                                          self.pwr_supply.set_pv, cmd[1])
-                                    if cmd[2] == 'C'
+                                    if cmd[2] == 'C':
                                         self.run_set_cmd(self.hw.TdkLambda_PS.get_shroud_left_addr(),
                                                          self.pwr_supply.set_pc, cmd[1])
                                 elif 'Set Shroud Right' == cmd[0]:
-                                    if cmd[2] == 'V'
+                                    if cmd[2] == 'V':
                                         self.run_set_cmd(self.hw.TdkLambda_PS.get_shroud_right_addr(),
                                                          self.pwr_supply.set_pv, cmd[1])
-                                    if cmd[2] == 'C'
+                                    if cmd[2] == 'C':
                                         self.run_set_cmd(self.hw.TdkLambda_PS.get_shroud_right_addr(),
                                                          self.pwr_supply.set_pc, cmd[1])
                                 elif 'Platen Duty Cycle' == cmd[0]:  #Duty cycle is a value from 0-1
