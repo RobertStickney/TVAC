@@ -81,15 +81,35 @@ class GetControl:
         # data unused
         Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
         errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
-        tempErrorList = []
+        tempErrorList = dict(time=[],event=[],Thermocouple=[],details=[],actions=[])
         for i, error in enumerate(errorList):
-            tempErrorList.append(error)
+            tempErrorList['time'].append(error['time'])
+            tempErrorList['event'].append(error['event'])
+            tempErrorList['Thermocouple'].append(error['Thermocouple'])
+            tempErrorList['details'].append(error['details'])
+            tempErrorList['actions'].append(error['actions'])
+
             errorList.pop(i)
         print(errorList)
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
         # print(errorList[0])
-        return str(errorList)
+        return json.dumps(tempErrorList)
+
+    def getLastErrorTest(self):
+        # ONLY FOR labview testing / design purposes - delete later and reference to getLastError?
+        # Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
+        # errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
+        tempErrorList = []
+        for i in range(0,7):
+            error="Error something has happened to " +str(i)
+            tempErrorList.append(error)
+            #errorList.pop(i)
+        print(tempErrorList)
+        # error = errorList[0]
+        # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
+        # print(errorList[0])
+        return json.dumps(tempErrorList)
 
 
     def hardStop(self):
@@ -114,6 +134,10 @@ class GetControl:
         d_out.update({"IR Lamp 15 PWM DC": 0})
         d_out.update({"IR Lamp 16 PWM DC": 0})
         return "{'result':'success'}"
+
+    def getCompressorTemp(self):
+        resp = {'CompressorTemp': 123}
+        return json.dumps(resp)
 
     def getEventList(self):
         tmp = ProfileInstance.getInstance().systemStatusQueue
@@ -141,13 +165,20 @@ class GetControl:
         return json.dumps(resp)
 
     def getZoneTemps(self):
-        temps=dict(ZoneSetPoint=[],ZoneTemp=[])
+        temps=dict(ZoneTemps=[])
 
         for i in range(1,10):
             strzone="zone"+str(i)
+            try:    
+                temps['ZoneTemps'].append(ProfileInstance.getInstance().zoneProfiles.getZone(strzone).getTemp())
+            except:
+                temps['ZoneTemps'].append(float('nan'))
 
-            temps['ZoneSetPoint'].append(ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict[strzone].pid.SetPoint)
-            temps['ZoneTemp'].append(ProfileInstance.getInstance().zoneProfiles.getZone(strzone).getTemp())
+            try:
+                temps['ZoneTemps'].append(ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict[strzone].pid.SetPoint)
+            except:
+                temps['ZoneTemps'].append(float('nan'))
+
         buff=json.dumps(temps)
         return buff                        
 

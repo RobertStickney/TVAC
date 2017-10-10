@@ -195,7 +195,7 @@ def main(args):
 		demo = True
 
 	if not demo:
-		userName = os.environ['LOGNAME']
+		userName=os.getlogin()
 		if "root" in userName or (len(sys.argv) > 2 and sys.argv[2] =="--live"):
 			host = "192.168.99.1"
 		else:

@@ -86,7 +86,7 @@ class SafetyCheck(Thread):
 					if tc.temp > MAX_OPERATING_TEMP:
 						errorDetail = "TC # {} is above MAX_OPERATING_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_OPERATING_TEMP,tc.temp)
 						error = {
-							"time" : datetime.now(),
+							"time" : str(datetime.now()),
 							"event":"System Alarm: High Temperature",
 							"Thermocouple": tc.Thermocouple,
 							"details": errorDetail,
@@ -106,7 +106,7 @@ class SafetyCheck(Thread):
 						if tc.temp > MAX_UUT_TEMP:
 							errorDetail = "TC # {} is above MAX_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_UUT_TEMP,tc.temp)
 							error = {
-								"time" : datetime.now(),
+								"time" : str(datetime.now()),
 								"event":"Product Saver Alarm: High Temperature",
 								"Thermocouple": tc.Thermocouple,
 								"details": errorDetail,
@@ -118,7 +118,7 @@ class SafetyCheck(Thread):
 						if tc.temp < MIN_UUT_TEMP:
 							errorDetail = "TC # {} is below MIN_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_UUT_TEMP,tc.temp)
 							error = {
-								"time" : datetime.now(),
+								"time" : str(datetime.now()),
 								"event":"Product Saver Alarm: Low Temperature",
 								"Thermocouple": tc.Thermocouple,
 								"details": errorDetail,
@@ -130,7 +130,7 @@ class SafetyCheck(Thread):
 					if tc.temp > MAX_TOUCH_TEMP:
 						errorDetail = "TC # {} is above MAX_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_TOUCH_TEMP,tc.temp)
 						error = {
-							"time" : datetime.now(),
+							"time" : str(datetime.now()),
 							"event":"Human Touch Alarm: High Temperature",
 							"Thermocouple": tc.Thermocouple,
 							"details": errorDetail,
@@ -142,7 +142,7 @@ class SafetyCheck(Thread):
 					if tc.temp < MIN_TOUCH_TEMP:
 						errorDetail = "TC # {} is below MIN_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_TOUCH_TEMP,tc.temp)
 						error = {
-							"time" : datetime.now(),
+							"time" : str(datetime.now()),
 							"event":"Human Touch Alarm: Low Temperature",
 							"Thermocouple": tc.Thermocouple,
 							"details": errorDetail,
@@ -159,7 +159,7 @@ class SafetyCheck(Thread):
 
 						# make a event log
 						errorLog = {
-							"time" : datetime.now(),
+							"time" : str(datetime.now()),
 							"event": errorType,
 							"Thermocouple": tc.Thermocouple,
 							"details": "The current event has ended",
