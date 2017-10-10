@@ -1,6 +1,7 @@
 from Collections.ThermocoupleCollection import ThermocoupleCollection
 from Collections.PfeifferGaugeCollection import PfeifferGaugeCollection
 from Collections.ShiCryopumpCollection import ShiCryopumpCollection
+from Collections.TdkLambdaCollection import TdkLambdaCollection
 from Collections.PC_104_Instance import PC_104_Instance
 
 from Logging.Logging import Logging
@@ -29,6 +30,8 @@ class HardwareStatusInstance:
             self.ShiCryopump = ShiCryopumpCollection()
             self.Shi_MCC_Cmds = []  # [cmd, arg, arg,... arg]
             self.Shi_compressor_Cmds = []
+            self.TdkLambda_PS = TdkLambdaCollection()
+            self.TdkLambda_Cmds = []  # [cmd, arg, arg,... arg]
             self.PC_104 = PC_104_Instance.getInstance()
 
             # System Wide Stats
