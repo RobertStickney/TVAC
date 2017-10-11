@@ -32,51 +32,30 @@ class PfeifferGaugeContract:
         self.__lock.acquire()
         if 'Model Name' in d:
             self.model_name = d['Model Name']
+            self.model_name_cpt200 = False
+            self.model_name_ppt200 = False
+            self.model_name_rpt200 = False
+            self.model_name_hpt200 = False
+            self.model_name_mpt200 = False
             if self.model_name == 'CPT 200':
                 self.model_name_cpt200 = True
-                self.model_name_ppt200 = False
-                self.model_name_rpt200 = False
-                self.model_name_hpt200 = False
-                self.model_name_mpt200 = False
                 self.cold_cathode_on = None
                 self.cc_overlap_switch = None
                 self.pirani_correction_value = None
                 self.cold_cathod_correction_value = None
             elif self.model_name == 'PPT 200':
-                self.model_name_cpt200 = False
                 self.model_name_ppt200 = True
-                self.model_name_rpt200 = False
-                self.model_name_hpt200 = False
-                self.model_name_mpt200 = False
                 self.cold_cathode_on = None
                 self.cc_overlap_switch = None
                 self.cold_cathod_correction_value = None
             elif self.model_name == 'RPT 200':
-                self.model_name_cpt200 = False
-                self.model_name_ppt200 = False
                 self.model_name_rpt200 = True
-                self.model_name_hpt200 = False
-                self.model_name_mpt200 = False
                 self.cold_cathode_on = None
                 self.cold_cathod_correction_value = None
             elif self.model_name == 'HPT 200':
-                self.model_name_cpt200 = False
-                self.model_name_ppt200 = False
-                self.model_name_rpt200 = False
                 self.model_name_hpt200 = True
-                self.model_name_mpt200 = False
             elif self.model_name == 'MPT 200':
-                self.model_name_cpt200 = False
-                self.model_name_ppt200 = False
-                self.model_name_rpt200 = False
-                self.model_name_hpt200 = False
                 self.model_name_mpt200 = True
-            else:
-                self.model_name_cpt200 = False
-                self.model_name_ppt200 = False
-                self.model_name_rpt200 = False
-                self.model_name_hpt200 = False
-                self.model_name_mpt200 = False
         if 'Software Vir' in d:
             self.software_version = d['Software Vir']
         if ('cc on' in d) and (self.model_name_hpt200 or

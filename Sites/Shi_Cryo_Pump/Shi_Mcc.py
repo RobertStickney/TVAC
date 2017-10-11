@@ -58,17 +58,17 @@ class Shi_Mcc:
 
     def get_Status(self):
         # Create Dict of Functions
-        FunS = {"DutyCycle": self.Get_DutyCycle,  # 2.4 ------------------- Ex: "$XOI??_\r"
+        FunS = {"DutyCycle": self.Get_DutyCycle,  # 2.4 ------------------ Ex: "$XOI??_\r"
                 "Stage1Temp": self.Get_FirstStageTemp,  # 2.8 ------------ Ex: "$J;\r"
-                "CryoPumpReadyState": self.Get_CryoPumpRdyState,  # 2.14  Ex: "$A?2\r"
+                "CryoPumpReadyState": self.Get_CryoPumpRdyState,  # 2.14 - Ex: "$A?2\r"
                 "PurgeValveState": self.Get_PurgeValveState,  # 2.15 ----- Ex: "$E?6\r"
-                "RegenError": self.Get_RegenError,  # 2.18 ---------------- Ex: "$eT\r"
-                "RegenStep": self.Get_RegenStep,  # 2.20 ------------------ Ex: "$O>\r"
+                "RegenError": self.Get_RegenError,  # 2.18 --------------- Ex: "$eT\r"
+                "RegenStep": self.Get_RegenStep,  # 2.20 ----------------- Ex: "$O>\r"
                 "RoughingValveState": self.Get_RoughingValveState,  # 2.24 Ex: "$D?3\r"
-                "RoughingInterlock": self.Get_RoughingInterlock,  # 2.25 -- Ex: "$Q?B\r"
+                "RoughingInterlock": self.Get_RoughingInterlock,  # 2.25 - Ex: "$Q?B\r"
                 "Stage2Temp": self.Get_SecondStageTemp,  # 2.26 ---------- Ex: "$K:\r"
-                "Status": self.Get_Status,  # 2.28 ------------------------- Ex: "$S16\r"
-                "TcPressure": self.Get_TcPressure}  # 2.30 ---------------- Ex: "$L=\r"
+                "Status": self.Get_Status,  # 2.28 ----------------------- Ex: "$S16\r"
+                "TcPressure": self.Get_TcPressure}  # 2.30 --------------- Ex: "$L=\r"
         return self.run_GetFunctions(FunS)
 
     def get_ParamValues(self):

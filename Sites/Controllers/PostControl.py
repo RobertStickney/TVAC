@@ -5,7 +5,7 @@ from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 from Logging.Logging import Logging
 
 
-class PostContol:
+class PostControl:
 
     def loadProfile(self,data):
         profileInstance = ProfileInstance.getInstance()

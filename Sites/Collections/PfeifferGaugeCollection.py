@@ -45,9 +45,8 @@ class PfeifferGaugeCollection:
         self.time = datetime.now()
         self.__lock.release()
         for updatePG in pgList:
-            # Why is this tc? should this be Guage?
-            tc = self.getPG(updatePG['addr'])
-            tc.update(updatePG)
+            pg = self.getPG(updatePG['addr'])
+            pg.update(updatePG)
 
     def getPG(self, n):
         for pg in self.pfGuageList:

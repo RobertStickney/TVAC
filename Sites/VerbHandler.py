@@ -3,7 +3,7 @@ import json
 import sys
 import os
 
-from Controllers.PostControl import PostContol
+from Controllers.PostControl import PostControl
 from Controllers.GetControl import GetControl
 # from Collections.ProfileInstance import ProfileInstance
 
@@ -30,12 +30,14 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/checkZoneStatus': control.checkTreadStatus,
                 '/getAllThermoCoupleData': control.getAllThermoCoupleData,
                 '/getAllZoneData': control.getAllZoneData,
+                '/getCompressorTemp': control.getCompressorTemp,
                 '/getMCCData': control.getMCCData,
                 '/getPC104_Digital': control.getPC104_Digital,
                 '/getPC104_Analog': control.getPC104_Analog,
                 '/getPressureGauges': control.getPressureGauges,
                 '/getZoneTemps': control.getZoneTemps,
                 '/getLastError' : control.getLastError,
+                '/getLastErrorTest' : control.getLastErrorTest,
                 '/putUnderVacuum':control.putUnderVacuum,
                 '/getEventList':control.getEventList,
                 '/hardStop':control.hardStop,
@@ -95,7 +97,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                  "level":2})
 
             # Based on the path we are given, do different functions
-            control = PostContol()
+            control = PostControl()
             result = {
                 '/saveProfile': control.saveProfile,
                 '/loadProfile' : control.loadProfile,
