@@ -33,14 +33,17 @@ class Logging(object):
 				systemStatusQueue = data["ProfileInstance"].systemStatusQueue
 				systemStatusQueue.append("[ '{}','{}', '{}' ]".format(category,logType, data.get("thread")))
 			except Exception as e:
-				print("pass")
-				# raise e
+				Logging.debugPrint(1, "Error: {}".format(e))
+
 			coloums = "( event_type, details )"
 			values = "( \"{}\",\"{}\" )".format(category,logType)
 			sql = "INSERT INTO tvac.Event {} VALUES {};".format(coloums, values)
-			mysql = MySQlConnect()
-			mysql.cur.execute(sql)
-			mysql.conn.commit()
+			try:
+				mysql = MySQlConnect()
+				mysql.cur.execute(sql)
+				mysql.conn.commit()
+			except Exception as e:
+				Logging.debugPrint(1, "Error: {}".format(e))
 		elif category is "Debug":
 			if "Status Update" in logType:
 				Logging.debugPrint(data["level"],data['message'])
@@ -66,8 +69,8 @@ class Logging(object):
 				values = "( \"{}\",\"{}\" )".format("{}".format(string),datetime.datetime.fromtimestamp(time.time()))
 				sql = "INSERT INTO tvac.Debug {} VALUES {};".format(coloums, values)
 				# print(sql)
-				mysql = MySQlConnect()
 				try:
+					mysql = MySQlConnect()
 					mysql.cur.execute(sql)
 					mysql.conn.commit()
 				except Exception as e:
@@ -99,12 +102,12 @@ class Logging(object):
 			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), int(zone[4:]), temperture)
 
 		sql = "INSERT INTO tvac.Expected_Temperture {} VALUES {};".format(coloums, values[:-2])
-		mysql = MySQlConnect()
 		try:
+			mysql = MySQlConnect()
 			mysql.cur.execute(sql)
 			mysql.conn.commit()
 		except Exception as e:
-			raise e
+			Logging.debugPrint(1, "Error: {}".format(e))
 
 
 	@staticmethod
@@ -140,12 +143,12 @@ class Logging(object):
 		sql = "INSERT INTO tvac.Real_Temperture {} VALUES {};".format(coloums, values[:-2])
 		
 		sql.replace("nan", "NULL")
-		mysql = MySQlConnect()
 		try:
+			mysql = MySQlConnect()
 			mysql.cur.execute(sql)
 			mysql.conn.commit()
 		except Exception as e:
-			raise e
+			Logging.debugPrint(1, "Error: {}".format(e))
 
 
 	@staticmethod

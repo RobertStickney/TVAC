@@ -32,19 +32,13 @@ class ThreadCollection:
         # if there is a half finished profile in the database
         if not self.zoneProfiles.getActiveProfileStatus():
             profileName, startTime = self.returnActiveProfile()
-            # If there is one
+            # If there is one, or if the database is down
             if profileName:
                 # self.zoneProfiles.activeProfile = True
                 # load up ram (zone collection) with info from the database and the given start time
                 self.zoneProfiles.loadProfile(profileName,startTime)
                 # after it's in memory, run it!
                 self.runProfile(firstStart = False)
-            else:
-                # If there is an error, it's stored here so return it
-                if startTime:
-                    return startTime
-                #No error
-            # End of If profile found
         # end if no active profile
     #end of function 
 
@@ -55,8 +49,8 @@ class ThreadCollection:
         Returns the profile profile_name and Profile ID if there is, False, False if not
         '''
         sql = "SELECT profile_name, startTime FROM tvac.Profile_Instance WHERE endTime IS NULL;"
-        mysql = MySQlConnect()
         try:
+            mysql = MySQlConnect()
             mysql.cur.execute(sql)
             mysql.conn.commit()
         except Exception as e:
