@@ -56,7 +56,7 @@ class Tdk_lambda_Genesys:
         elif resp == 'OFF':
             return {'output enable': False}
         else:
-            raise Exception('Out? Response: "{:s}" is not "1" or "0"'.format(resp))
+            raise Exception('Out? Response: "{:s}" is not "ON" or "OFF"'.format(resp))
     def set_out(self, out_on=False):
         if out_on:
             resp = self.send_cmd('OUT 1')
