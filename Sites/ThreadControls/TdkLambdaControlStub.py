@@ -77,6 +77,7 @@ class TdkLambdaControlStub(Thread):
                                              {'addr': self.hw.TdkLambda_PS.get_shroud_right_addr()}]
                     for ps in update_power_supplies:
                         self.pwr_supply.set_addr(ps['addr'])
+                        print('Get Addr 1 Params Start.')
                         ps.update(self.pwr_supply.get_out())
                         if not self.hw.OperationalVacuum:
                             self.pwr_supply.set_out_off()
@@ -87,6 +88,7 @@ class TdkLambdaControlStub(Thread):
                         ps.update(self.pwr_supply.get_ast())
                         ps.update(self.pwr_supply.get_out())
                         ps.update(self.pwr_supply.get_mode())
+                        print('Get Addr 1 Params end.')
                     self.hw.TdkLambda_PS.update(update_power_supplies)
                 next_status_read_time = time.time()
                 while True:
