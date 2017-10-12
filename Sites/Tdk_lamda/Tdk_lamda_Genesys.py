@@ -51,9 +51,9 @@ class Tdk_lambda_Genesys:
 
     def get_out(self):
         resp = self.send_cmd('OUT?')
-        if resp == '1':
+        if resp == 'ON':
             return {'output enable': True}
-        elif resp == '0':
+        elif resp == 'OFF':
             return {'output enable': False}
         else:
             raise Exception('Out? Response: "{:s}" is not "1" or "0"'.format(resp))
