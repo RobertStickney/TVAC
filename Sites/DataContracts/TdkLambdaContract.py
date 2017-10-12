@@ -100,10 +100,22 @@ class TdkLambdaContract:
                    '"System Location":%s,' % self.system_location,
                    '"Model Name":%s,' % self.model_name,
                    '"Serial Number":%s,' % self.serial_number,
+                   '"last test date":%s,' % self.last_test_date,
                    '"Software Version":%s,' % self.software_version,
                    '"Programmed Voltage":%s,' % self.voltage_programmed,
                    '"Programmed Current":%s,' % self.current_programmed,
                    '"Measured Voltage":%s,' % self.voltage_measured,
+                   '"Measured Current":%s,' % self.current_measured,
+                   '"Over Voltage SP":%s,' % self.Over_Voltage_SP,
+                   '"Under Voltage SP":%s,' % self.Under_Voltage_SP,
+                   '"Output Enable":%s,' % json.dumps(self.output_enable),
+                   '"Auto Restart":%s,' % self.auto_restart,
+                   '"Measured Current":%s,' % self.current_measured,
+                   '"Measured Current":%s,' % self.current_measured,
+                   '"Measured Current":%s,' % self.current_measured,
+                   '"Measured Current":%s,' % self.current_measured,
+                   '"Measured Current":%s,' % self.current_measured,
+                   '"Measured Current":%s,' % self.current_measured,
                    '"Measured Current":%s,' % self.current_measured]
         self.__lock.release()
         return ''.join(message)

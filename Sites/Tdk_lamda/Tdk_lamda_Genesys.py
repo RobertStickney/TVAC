@@ -57,9 +57,30 @@ class Tdk_lambda_Genesys:
             return {'output enable': False}
         else:
             raise Exception('Out? Response: "{:s}" is not "1" or "0"'.format(resp))
+    def set_out(self, out_on=False):
+        if out_on:
+            resp = self.send_cmd('OUT 1')
+        else:
+            resp = self.send_cmd('OUT 0')
+        if resp != 'OK':
+            raise Exception('OUT Response: "{:s}" is not "OK"'.format(resp))
+    def set_out_on(self):
+        resp = self.send_cmd('OUT 1')
+        if resp != 'OK':
+            raise Exception('OUT 1 Response: "{:s}" is not "OK"'.format(resp))
+    def set_out_off(self):
+        resp = self.send_cmd('OUT 0')
+        if resp != 'OK':
+            raise Exception('OUT 0 Response: "{:s}" is not "OK"'.format(resp))
 
     def get_ast(self):
-        return {'auto restart': self.send_cmd('AST?')}
+        resp = self.send_cmd('AST?')
+        if resp == '1':
+            return {'auto restart': True}
+        elif resp == '0':
+            return {'auto restart': False}
+        else:
+            raise Exception('Out? Response: "{:s}" is not "1" or "0"'.format(resp))
 
     def get_mode(self):
         return {'control mode': self.send_cmd('MODE?')}
@@ -82,17 +103,8 @@ class Tdk_lambda_Genesys:
                 d.update({'fault reg': int(val[3:-1])})
             else:
                 raise Exception('STT? resp: "{:s}" is not formatted like: '
-                                '"MV(float),PV(float),MC(float),PC(float),SR(hex),FR(hex)"'.format(resp))
+                                '"MV(float),PV(float),MC(float),PC(float),SR(hex),FR(hex)"'.format(val))
         return d
-
-    def set_out_on(self):
-        resp = self.send_cmd('OUT 1')
-        if resp != 'OK':
-            raise Exception('OUT 1 Response: "{:s}" is not "OK"'.format(resp))
-    def set_out_off(self):
-        resp = self.send_cmd('OUT 0')
-        if resp != 'OK':
-            raise Exception('OUT 0 Response: "{:s}" is not "OK"'.format(resp))
 
     # TODO put coersing limits on program values
     def set_pv(self, volt):
