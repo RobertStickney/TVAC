@@ -287,7 +287,7 @@ if __name__ == '__main__':
     p = HardwareStatusInstance.getInstance().TdkLambda_PS
     c = HardwareStatusInstance.getInstance().TdkLambda_Cmds
 
-    time.sleep(2)
+    time.sleep(5)
     print(p.getJson())
 
     hw.OperationalVacuum = True
