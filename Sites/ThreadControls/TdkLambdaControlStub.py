@@ -27,7 +27,7 @@ class TdkLambdaControlStub(Thread):
         self.pwr_supply = Tdk_lambda_Genesys()
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.hw = HardwareStatusInstance.getInstance()
-        self.ps_read_peroid = 0.5  # 0.5s loop period
+        self.ps_read_peroid = 4.0  # 0.5s loop period
 
     # def logVoltagesData(self):
     #     coloums = "( profile_I_ID, guage, pressure, time )"
@@ -289,21 +289,21 @@ if __name__ == '__main__':
     p = HardwareStatusInstance.getInstance().TdkLambda_PS
     c = HardwareStatusInstance.getInstance().TdkLambda_Cmds
 
-    time.sleep(5)
+    time.sleep(10)
     print(p.getJson())
 
     hw.OperationalVacuum = True
-    time.sleep(1)
+    time.sleep(5)
     print(p.getJson())
     c.append(['Enable Platen Output', ''])
-    time.sleep(1)
+    time.sleep(5)
     print(p.getJson())
     c.append(['Platen Duty Cycle', 0.1])
-    time.sleep(1)
+    time.sleep(5)
     print(p.getJson())
     c.append(['Platen Duty Cycle', 0.05])
-    time.sleep(1)
+    time.sleep(5)
     print(p.getJson())
     c.append(['Disable Platen Output', ''])
-    time.sleep(1)
+    time.sleep(5)
     print(p.getJson())
