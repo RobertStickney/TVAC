@@ -110,13 +110,6 @@ class TdkLambdaContract:
                    '"Over Voltage SP":%s,' % self.Over_Voltage_SP,
                    '"Under Voltage SP":%s,' % self.Under_Voltage_SP,
                    '"Output Enable":%s,' % json.dumps(self.output_enable),
-                   '"Auto Restart":%s,' % self.auto_restart,
-                   '"Measured Current":%s,' % self.current_measured,
-                   '"Measured Current":%s,' % self.current_measured,
-                   '"Measured Current":%s,' % self.current_measured,
-                   '"Measured Current":%s,' % self.current_measured,
-                   '"Measured Current":%s,' % self.current_measured,
-                   '"Measured Current":%s,' % self.current_measured,
-                   '"Measured Current":%s,' % self.current_measured]
+                   '"Auto Restart":%s,' % self.auto_restart]
         self.__lock.release()
         return ''.join(message)
