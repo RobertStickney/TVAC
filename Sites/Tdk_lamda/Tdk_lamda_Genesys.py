@@ -75,12 +75,12 @@ class Tdk_lambda_Genesys:
 
     def get_ast(self):
         resp = self.send_cmd('AST?')
-        if resp == '1':
+        if resp == 'ON':
             return {'auto restart': True}
-        elif resp == '0':
+        elif resp == 'OFF':
             return {'auto restart': False}
         else:
-            raise Exception('Out? Response: "{:s}" is not "1" or "0"'.format(resp))
+            raise Exception('AST? Response: "{:s}" is not "OFF" or "OFF"'.format(resp))
 
     def get_mode(self):
         return {'control mode': self.send_cmd('MODE?')}
