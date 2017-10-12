@@ -41,13 +41,13 @@ class TdkLambdaCollection:
     def get_val(self, addr, name):
         return self.getPS(addr).get_val(name)
 
-    def update(self, pgList):
+    def update(self, psList):
         self.__lock.acquire()
         self.time = datetime.now()
         self.__lock.release()
-        for updatePG in pgList:
-            ps = self.getPS(updatePG['addr'])
-            ps.update(updatePG)
+        for updatePS in psList:
+            ps = self.getPS(updatePS['addr'])
+            ps.update(updatePS)
 
     def getPS(self, n):
         for ps in self.TdkLambda_ps:
