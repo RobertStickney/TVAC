@@ -60,6 +60,6 @@ class TdkLambdaCollection:
         self.__lock.acquire()
         message.append('{"time":%s,' % self.time)
         self.__lock.release()
-        message.append('PGs:[%s]' %','.join([pg.getJson() for pg in self.pfGuageList]))
+        message.append('PGs:[%s]' %','.join([ps.getJson() for ps in self.TdkLambda_ps]))
         message.append('}')
         return ''.join(message)
