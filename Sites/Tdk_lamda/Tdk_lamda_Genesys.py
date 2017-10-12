@@ -10,7 +10,7 @@ class Tdk_lambda_Genesys:
         tdk = open('/dev/ttyxuart4', 'r+b', buffering=0)
         for tries in range(1, 3+1):
             tdk.write(self.append_checksum(command).encode())
-            time.sleep(0.05 * tries)
+            time.sleep(0.08 * tries)
             # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
             (resp_good, resp) = self.check_checksum(tdk.read(128).decode())
             if resp_good:
