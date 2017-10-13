@@ -213,7 +213,8 @@ class DutyCycleControlStub(Thread):
             # Check to make sure there is an active profile
             # and that we are sitting in an operational vacuum
             # and that all drivers and updaters are running
-            if ProfileInstance.getInstance().activeProfile and HardwareStatusInstance.getInstance().OperationalVacuum:
+            # if ProfileInstance.getInstance().activeProfile and HardwareStatusInstance.getInstance().OperationalVacuum:
+            if ProfileInstance.getInstance().activeProfile:
                 try:
                     Logging.logEvent("Debug","Status Update", 
                     {"message": "Running Duty Cycle thread",

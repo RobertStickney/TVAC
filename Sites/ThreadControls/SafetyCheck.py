@@ -30,7 +30,8 @@ class SafetyCheck(Thread):
 				"Product Saver Alarm: High Temperature": False,
 				"Product Saver Alarm: Low Temperature": False,
 				"Human Touch Alarm: High Temperature": False,
-				"Human Touch Alarm: Low Temperature": False
+				"Human Touch Alarm: Low Temperature": False,
+				"Raised Pressure While Testing": False,
 			}
 
 			SafetyCheck.__instance = self
@@ -42,168 +43,181 @@ class SafetyCheck(Thread):
 		# This should always stay on
 		while True:
 			# initialization of the safety Thread
+			try:
+				# Temps are in Kelvin
+				MAX_OPERATING_TEMP = 400
+				# safe at all lower bounds
+				# MIN_OPERATING_TEMP 
 
-			# Temps are in Celsius
-			MAX_OPERATING_TEMP = 151
-			# safe at all lower bounds
-			# MIN_OPERATING_TEMP 
+				MAX_TOUCH_TEMP = 318.15
+				MIN_TOUCH_TEMP = 269.15
 
-			MAX_TOUCH_TEMP = 318.15
-			MIN_TOUCH_TEMP = 269.15
+				# TODO, make this user defined
+				# These are test values, they will change when the code is written to change them
+				MAX_UUT_TEMP = MAX_OPERATING_TEMP 
+				MIN_UUT_TEMP = 77
 
-			# TODO, make this user defined
-			# These are test values, they will change when the code is written to change them
-			MAX_UUT_TEMP = 363.15 
-			MIN_UUT_TEMP = 224.15
+				SLEEP_TIME = 1 # in seconds
 
-			SLEEP_TIME = 1 # in seconds
+				# Used to keep track of the first time through a loop
+				vacuum = False
 
-			# Used to keep track of the first time through a loop
-			vacuum = False
+				hardwareStatusInstance = HardwareStatusInstance.getInstance()
 
-			
-			hardwareStatusInstance = HardwareStatusInstance.getInstance()
-
-			Logging.logEvent("Debug","Status Update", 
-					{"message": "Starting Safety Checker Thread",
-					 "level":3})
-			# stop when the program ends
-			while True: 
 				Logging.logEvent("Debug","Status Update", 
-				{"message": "Running Safety Checker Thread",
-				 "level":4})
+						{"message": "Starting Safety Checker Thread",
+						 "level":3})
+				# stop when the program ends
+				while True: 
+					Logging.logEvent("Debug","Status Update", 
+					{"message": "Running Safety Checker Thread",
+					 "level":4})
 
-				tempErrorDict = {
-					"System Alarm: High Temperature": False,
-					"Product Saver Alarm: High Temperature": False,
-					"Product Saver Alarm: Low Temperature": False,
-					"Human Touch Alarm: High Temperature": False,
-					"Human Touch Alarm: Low Temperature": False
-				}
-				TCs = hardwareStatusInstance.Thermocouples.tcList
-				for tc in TCs:
-					# if there are any TC's higher than max temp
-					if tc.temp > MAX_OPERATING_TEMP:
-						errorDetail = "TC # {} is above MAX_OPERATING_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_OPERATING_TEMP,tc.temp)
-						error = {
-							"time" : str(datetime.now()),
-							"event":"System Alarm: High Temperature",
-							"Thermocouple": tc.Thermocouple,
-							"details": errorDetail,
-							"actions": ["Turned off heater", "Log Event"]
-							}
-						errorInList = False
-						for tempError in self.errorList:
-							if error["event"] == tempError["event"]:
-								if error["Thermocouple"] == tempError["Thermocouple"]:
-									errorInList = True
-
-						if not errorInList: 
-							self.logEvent(error)
-							tempErrorDict[error['event']] = True
-
-					if tc.userDefined:
-						if tc.temp > MAX_UUT_TEMP:
-							errorDetail = "TC # {} is above MAX_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_UUT_TEMP,tc.temp)
+					tempErrorDict = {
+						"System Alarm: High Temperature": False,
+						"Product Saver Alarm: High Temperature": False,
+						"Product Saver Alarm: Low Temperature": False,
+						"Human Touch Alarm: High Temperature": False,
+						"Human Touch Alarm: Low Temperature": False,
+						"Pressure Loss In Profile": False,
+					}
+					TCs = hardwareStatusInstance.Thermocouples.ValidTCs
+					print()
+					for tc in TCs:
+						print("TC: {} - {}".format(tc.Thermocouple, tc.temp))
+						# if there are any TC's higher than max temp
+						if tc.temp > MAX_OPERATING_TEMP:
+							errorDetail = "TC # {} is above MAX_OPERATING_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_OPERATING_TEMP,tc.temp)
 							error = {
 								"time" : str(datetime.now()),
-								"event":"Product Saver Alarm: High Temperature",
-								"Thermocouple": tc.Thermocouple,
+								"event":"System Alarm: High Temperature",
+								"item": "Thermocouple",
+								"itemID": tc.Thermocouple,
 								"details": errorDetail,
 								"actions": ["Turned off heater", "Log Event"]
 								}
 							self.logEvent(error)
-							tempErrorDict[error['event']] = True
+							errorInList = False
+							for tempError in self.errorList:
+								if error["event"] == tempError["event"]:
+									if error["item"] == tempError["item"]:
+										if error['itemID'] == tempError['itemID']:
+											errorInList = True
 
-						if tc.temp < MIN_UUT_TEMP:
-							errorDetail = "TC # {} is below MIN_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_UUT_TEMP,tc.temp)
+							if not errorInList: 
+								self.logEvent(error)
+								tempErrorDict[error['event']] = True
+
+						if tc.userDefined:
+							if tc.temp > MAX_UUT_TEMP:
+								errorDetail = "TC # {} is above MAX_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_UUT_TEMP,tc.temp)
+								error = {
+									"time" : str(datetime.now()),
+									"event":"Product Saver Alarm: High Temperature",
+									"item": "Thermocouple",
+									"itemID": tc.Thermocouple,
+									"details": errorDetail,
+									"actions": ["Turned off heater", "Log Event"]
+									}
+								self.logEvent(error)
+								tempErrorDict[error['event']] = True
+
+							if tc.temp < MIN_UUT_TEMP:
+								errorDetail = "TC # {} is below MIN_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_UUT_TEMP,tc.temp)
+								error = {
+									"time" : str(datetime.now()),
+									"event":"Product Saver Alarm: Low Temperature",
+									"item": "Thermocouple",
+									"itemID": tc.Thermocouple,
+									"details": errorDetail,
+									"actions": ["Turned off LN flow", "Log Event"]
+									}
+								self.logEvent(error)
+								tempErrorDict[error['event']] = True
+
+						
+						if tc.temp > MAX_TOUCH_TEMP:
+							errorDetail = "TC # {} is above MAX_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_TOUCH_TEMP,tc.temp)
 							error = {
 								"time" : str(datetime.now()),
-								"event":"Product Saver Alarm: Low Temperature",
-								"Thermocouple": tc.Thermocouple,
+								"event":"Human Touch Alarm: High Temperature",
+								"item": "Thermocouple",
+								"itemID": tc.Thermocouple,
 								"details": errorDetail,
-								"actions": ["Turned off LN flow", "Log Event"]
+								"actions": ["Log Event"]
 								}
 							self.logEvent(error)
 							tempErrorDict[error['event']] = True
-					
-					if tc.temp > MAX_TOUCH_TEMP:
-						errorDetail = "TC # {} is above MAX_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_TOUCH_TEMP,tc.temp)
-						error = {
-							"time" : str(datetime.now()),
-							"event":"Human Touch Alarm: High Temperature",
-							"Thermocouple": tc.Thermocouple,
-							"details": errorDetail,
-							"actions": ["Log Event"]
-							}
-						self.logEvent(error)
-						tempErrorDict[error['event']] = True
 
-					if tc.temp < MIN_TOUCH_TEMP:
-						errorDetail = "TC # {} is below MIN_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_TOUCH_TEMP,tc.temp)
-						error = {
-							"time" : str(datetime.now()),
-							"event":"Human Touch Alarm: Low Temperature",
-							"Thermocouple": tc.Thermocouple,
-							"details": errorDetail,
-							"actions": ["Log Event"]
-							}
-						self.logEvent(error)
-						tempErrorDict[error['event']] = True
-				# End of TC for loop
+						if tc.temp < MIN_TOUCH_TEMP:
+							errorDetail = "TC # {} is below MIN_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_TOUCH_TEMP,tc.temp)
+							error = {
+								"time" : str(datetime.now()),
+								"event":"Human Touch Alarm: Low Temperature",
+								"item": "Thermocouple",
+								"itemID": tc.Thermocouple,
+								"details": errorDetail,
+								"actions": ["Log Event"]
+								}
+							self.logEvent(error)
+							tempErrorDict[error['event']] = True
+					# End of TC for loop
 
-				for errorType in self.errorDict:
-					# for every type of error
-					if self.errorDict[errorType] and not tempErrorDict[errorType]:
-						# It was true and now is not, log it. 
+					for errorType in self.errorDict:
+						# for every type of error
+						if self.errorDict[errorType] and not tempErrorDict[errorType]:
+							# It was true and now is not, log it. 
 
-						# make a event log
-						errorLog = {
-							"time" : str(datetime.now()),
-							"event": errorType,
-							"Thermocouple": tc.Thermocouple,
-							"details": "The current event has ended",
-							"actions": ["Log Event"]
-							}
-						self.logEvent(errorLog)
-							
+							# make a event log
+							errorLog = {
+								"time" : str(datetime.now()),
+								"event": errorType,
+								"item": "Thermocouple",
+								"itemID": tc.Thermocouple,
+								"details": "The current event has ended",
+								"actions": ["Log Event"]
+								}
+							self.logEvent(errorLog)
+								
 
-				self.errorDict = tempErrorDict
+					self.errorDict = tempErrorDict
 
-				# Logging if you've entered operational vacuum, and then left it
-				# TODO: OperationalVacuum can't be updated if there isn't an active profile...this needs to change 
-				if HardwareStatusInstance.getInstance().OperationalVacuum:
-					vacuum = True
+					# Logging if you've entered operational vacuum, and then left it
+					# TODO: OperationalVacuum can't be updated if there isn't an active profile...this needs to change 
+					if HardwareStatusInstance.getInstance().OperationalVacuum:
+						vacuum = True
 
-				if vacuum and HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure() > 1e-4:
-					d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
-					ProfileInstance.getInstance().activeProfile = False
-					print("ERROR Pressure is above 10^-4.")
-					vacuum = False
-					# TODO: Send Error
-					d_out.update({"IR Lamp 1 PWM DC": 0})
-					d_out.update({"IR Lamp 2 PWM DC": 0})
-					d_out.update({"IR Lamp 3 PWM DC": 0})
-					d_out.update({"IR Lamp 4 PWM DC": 0})
-					d_out.update({"IR Lamp 5 PWM DC": 0})
-					d_out.update({"IR Lamp 6 PWM DC": 0})
-					d_out.update({"IR Lamp 7 PWM DC": 0})
-					d_out.update({"IR Lamp 8 PWM DC": 0})
-					d_out.update({"IR Lamp 9 PWM DC": 0})
-					d_out.update({"IR Lamp 10 PWM DC": 0})
-					d_out.update({"IR Lamp 11 PWM DC": 0})
-					d_out.update({"IR Lamp 12 PWM DC": 0})
-					d_out.update({"IR Lamp 13 PWM DC": 0})
-					d_out.update({"IR Lamp 14 PWM DC": 0})
-					d_out.update({"IR Lamp 15 PWM DC": 0})
-					d_out.update({"IR Lamp 16 PWM DC": 0})
+					if vacuum and HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure() > 1e-4:
+						d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
+						ProfileInstance.getInstance().activeProfile = False
+						print("ERROR Pressure is above 10^-4.")
+						vacuum = False
+						# TODO: Send Error
+						d_out.update({"IR Lamp 1 PWM DC": 0})
+						d_out.update({"IR Lamp 2 PWM DC": 0})
+						d_out.update({"IR Lamp 3 PWM DC": 0})
+						d_out.update({"IR Lamp 4 PWM DC": 0})
+						d_out.update({"IR Lamp 5 PWM DC": 0})
+						d_out.update({"IR Lamp 6 PWM DC": 0})
+						d_out.update({"IR Lamp 7 PWM DC": 0})
+						d_out.update({"IR Lamp 8 PWM DC": 0})
+						d_out.update({"IR Lamp 9 PWM DC": 0})
+						d_out.update({"IR Lamp 10 PWM DC": 0})
+						d_out.update({"IR Lamp 11 PWM DC": 0})
+						d_out.update({"IR Lamp 12 PWM DC": 0})
+						d_out.update({"IR Lamp 13 PWM DC": 0})
+						d_out.update({"IR Lamp 14 PWM DC": 0})
+						d_out.update({"IR Lamp 15 PWM DC": 0})
+						d_out.update({"IR Lamp 16 PWM DC": 0})
 
-                    # TODO: Turn off heaters
+	                    # TODO: Turn off heaters
 
 
 
-				time.sleep(SLEEP_TIME)
-			# end of while true loop
+					time.sleep(SLEEP_TIME)
+				# end of while true loop
+			except Exception as e:
+				raise e
 
 
 	def logEvent(self, error):
@@ -211,8 +225,9 @@ class SafetyCheck(Thread):
 		if self.errorList:
 			for tempError in self.errorList:
 				if error["event"] == tempError["event"]:
-					if error["Thermocouple"] == tempError["Thermocouple"]:
-						errorInList = True
+					if error["item"] == tempError["item"]:
+						if error['itemID'] == tempError['itemID']:
+							errorInList = True
 
 		if not errorInList: 
 			# debugPrint(1, error["details"])

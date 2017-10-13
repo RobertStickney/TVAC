@@ -90,7 +90,7 @@ class GetControl:
             tempErrorList['actions'].append(error['actions'])
 
             errorList.pop(i)
-        print(errorList)
+        Logging.debugPrint(2, "Error :" + str(errorList))
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
         # print(errorList[0])
@@ -115,7 +115,6 @@ class GetControl:
     def hardStop(self):
         print("hard stop")
         d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
-        zones = ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict
         ProfileInstance.getInstance().activeProfile = False
         d_out.update({"IR Lamp 1 PWM DC": 0})
         d_out.update({"IR Lamp 2 PWM DC": 0})
