@@ -1,13 +1,14 @@
-from threading import Thread
-import time
 import os
 import sys
+import time
+from threading import Thread
+
 if __name__ == '__main__':
     sys.path.insert(0, os.getcwd())
 
 from Collections.PC_104_Instance import PC_104_Instance
-from TS_7250_V2.TS_Registers import TS_Registers
-from TS_7250_V2.PWM_Square_Wave import PWM_Square_Wave
+from Hardware_Drivers.TS_Registers import TS_Registers
+from Hardware_Drivers.PWM_Square_Wave import PWM_Square_Wave
 from Collections.ProfileInstance import ProfileInstance
 
 from Logging.Logging import Logging

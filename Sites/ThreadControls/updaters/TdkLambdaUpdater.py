@@ -10,13 +10,13 @@ if __name__ == '__main__':
 
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
-from Tdk_lamda.Tdk_lamda_Genesys import Tdk_lambda_Genesys
+from Hardware_Drivers.Tdk_lamda_Genesys import Tdk_lambda_Genesys
 
 from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
 
 
-class TdkLambdaControlStub(Thread):
+class TdkLambdaUpdater(Thread):
     def __init__(self, parent=None, group=None, target=None, name=None,
                  args=(), kwargs=None, verbose=None):
         Thread.__init__(self, group=group, target=target, name=name)
@@ -121,11 +121,11 @@ class TdkLambdaControlStub(Thread):
                         except ValueError as err:
                             exc_type, exc_obj, exc_tb = sys.exc_info()
                             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                            Logging.logEvent("Error", 'Error in TdkLambdaControlStub reading values: "%s"' % err,
+                            Logging.logEvent("Error", 'Error in TdkLambdaUpdater reading values: "%s"' % err,
                                              {"type": exc_type,
                                               "filename": fname,
                                               "line": exc_tb.tb_lineno,
-                                              "thread": "TdkLambdaControlStub"
+                                              "thread": "TdkLambdaUpdater"
                                               })
                     else:
                         Logging.logEvent("Debug", "Status Update",
@@ -165,10 +165,10 @@ class TdkLambdaControlStub(Thread):
                                  {"type": exc_type,
                                   "filename": fname,
                                   "line": exc_tb.tb_lineno,
-                                  "thread": "TdkLambdaControlStub"
+                                  "thread": "TdkLambdaUpdater"
                                   })
                 Logging.logEvent("Debug", "Status Update",
-                                 {"message": "There was a {} error in TdkLambdaControlStub. File: {}:{}\n{}".format(
+                                 {"message": "There was a {} error in TdkLambdaUpdater. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
                                   "level": 2})
                 # raise e
@@ -288,9 +288,9 @@ class TdkLambdaControlStub(Thread):
         else:
             Logging.logEvent("Error", 'Unknown TDK Lambda command: "%s"' % cmd[0],
                              {"type": 'Unknown TdkLambda_Cmd',
-                              "filename": 'ThreadControls/TdkLambdaControlStub.py',
+                              "filename": 'ThreadControls/TdkLambdaUpdater.py',
                               "line": 93,
-                              "thread": "TdkLambdaControlStub"
+                              "thread": "TdkLambdaUpdater"
                               })
 
 
@@ -303,7 +303,7 @@ if __name__ == '__main__':
     Logging.logEvent("Debug","Status Update",
         {"message": "Debug on: Level {}".format(Logging.verbos),
          "level":1})
-    thread = TdkLambdaControlStub()
+    thread = TdkLambdaUpdater()
     thread.daemon = True
     thread.start()
 

@@ -1,21 +1,20 @@
 #!/usr/bin/env python3.5
-from threading import Thread
-import time
-import json
 import os
 import sys
+import time
+from threading import Thread
 
 if __name__ == '__main__':
     sys.path.insert(0, os.getcwd())
 
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from Collections.ProfileInstance import ProfileInstance
-from Shi_Cryo_Pump.Shi_Mcc import Shi_Mcc
+from Hardware_Drivers.Shi_Mcc import Shi_Mcc
 
 from Logging.Logging import Logging
 
 
-class ShiMccControlStub(Thread):
+class ShiMccUpdater(Thread):
     def __init__(self, parent=None, group=None, target=None, name=None,
                  args=(), kwargs=None, verbose=None):
         Thread.__init__(self, group=group, target=target, name=name)
@@ -75,7 +74,7 @@ class ShiMccControlStub(Thread):
                     if "root" in userName:
                         try:
                             Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Reading and writing with ShiMccControlStub.",
+                                             {"message": "Reading and writing with ShiMccUpdater.",
                                               "level": 4})
                             val = self.mcc.get_Status()
                             if val['Error']:
@@ -148,18 +147,18 @@ class ShiMccControlStub(Thread):
                                 else:
                                     Logging.logEvent("Error", 'Unknown Shi_MCC_Cmd: "%s"' % cmd[0],
                                                      {"type": 'Unknown Shi_MCC_Cmd',
-                                                      "filename": 'ThreadControls/ShiMccControlStub.py',
-                                                      "line": 93,
-                                                      "thread": "ShiMccControlStub"
+                                                      "filename": 'ThreadControls/ShiMccUpdater.py',
+                                                      "line": 0,
+                                                      "thread": "ShiMccUpdater"
                                                       })
                         except ValueError as err:
                             exc_type, exc_obj, exc_tb = sys.exc_info()
                             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                            Logging.logEvent("Error", 'Error in ShiMccControlStub reading values: "%s"' % err,
+                            Logging.logEvent("Error", 'Error in ShiMccUpdater reading values: "%s"' % err,
                                              {"type": exc_type,
                                               "filename": fname,
                                               "line": exc_tb.tb_lineno,
-                                              "thread": "ShiMccControlStub"
+                                              "thread": "ShiMccUpdater"
                                               })
                             raise err
                     else:
@@ -177,10 +176,10 @@ class ShiMccControlStub(Thread):
                                  {"type": exc_type,
                                   "filename": fname,
                                   "line": exc_tb.tb_lineno,
-                                  "thread": "ShiMccControlStub"
+                                  "thread": "ShiMccUpdater"
                                   })
                 Logging.logEvent("Debug", "Status Update",
-                                 {"message": "There was a {} error in ShiMccControlStub. File: {}:{}\n{}".format(
+                                 {"message": "There was a {} error in ShiMccUpdater. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
                                   "level": 2})
                 time.sleep(4)
@@ -225,7 +224,7 @@ if __name__ == '__main__':
     hw_status = HardwareStatusInstance.getInstance()
     hw_status.PC_104.digital_out.update({'MCC2 Power': True})
 
-    thread = ShiMccControlStub()
+    thread = ShiMccUpdater()
     thread.daemon = True
     thread.start()
 

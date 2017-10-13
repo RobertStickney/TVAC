@@ -1,14 +1,12 @@
-from threading import Thread
-from datetime import datetime
 import os
-import time
 import sys
+import time
+from datetime import datetime
+from threading import Thread
 
-from Keysight_34980A.Kesight_34980A_TC_Scan import Keysight34980A_TC
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from Collections.ProfileInstance import ProfileInstance
-
-
+from Hardware_Drivers.Kesight_34980A_TC_Scan import Keysight34980A_TC
 from Logging.Logging import Logging
 
 

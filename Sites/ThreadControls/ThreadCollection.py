@@ -1,21 +1,19 @@
-import uuid
 import time
 import datetime
-
-from ThreadControls.controlStubs.DutyCycleControlStub import DutyCycleControlStub
-from ThreadControls.SafetyCheck import SafetyCheck
-from ThreadControls.updaters.ThermoCoupleUpdater import ThermoCoupleUpdater
-from ThreadControls.updaters.TsRegistersUpdater import TsRegistersUpdater
-from ThreadControls.controlStubs.LN2ControlStub import LN2ControlStub
-from ThreadControls.updaters.PfeifferGaugeUpdater import PfeifferGaugeUpdater
-from ThreadControls.controlStubs.VacuumControlStub import VacuumControlStub
-from ThreadControls.controlStubs.ShiMccControlStub import ShiMccControlStub
-
+import time
 
 from Collections.ProfileInstance import ProfileInstance
-
-from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
+from Logging.MySql import MySQlConnect
+from ThreadControls.SafetyCheck import SafetyCheck
+from ThreadControls.controlStubs.DutyCycleControlStub import DutyCycleControlStub
+from ThreadControls.controlStubs.LN2ControlStub import LN2ControlStub
+from ThreadControls.controlStubs.VacuumControlStub import VacuumControlStub
+from ThreadControls.updaters.PfeifferGaugeUpdater import PfeifferGaugeUpdater
+from ThreadControls.updaters.ShiMccUpdater import ShiMccUpdater
+from ThreadControls.updaters.ThermoCoupleUpdater import ThermoCoupleUpdater
+from ThreadControls.updaters.TsRegistersUpdater import TsRegistersUpdater
+
 
 class ThreadCollection:
 
@@ -68,7 +66,7 @@ class ThreadCollection:
             1: TsRegistersUpdater(parent=parent),
             2: ThermoCoupleUpdater(parent=parent),
             3: PfeifferGaugeUpdater(),
-            4: ShiMccControlStub(),
+            4: ShiMccUpdater(),
             # 5: ShiCompressorControlStub)(),
             6: LN2ControlStub(ThreadCollection=parent),
             7: VacuumControlStub(),
