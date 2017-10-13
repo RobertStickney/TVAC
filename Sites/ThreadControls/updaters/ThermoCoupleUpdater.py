@@ -6,16 +6,16 @@ from threading import Thread
 
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from Collections.ProfileInstance import ProfileInstance
-from Hardware_Drivers.Kesight_34980A_TC_Scan import Keysight34980A_TC
+from Hardware_Drivers.Keysight_34980A_TCs import Keysight_34980A_TCs
 from Logging.Logging import Logging
 
 
 class ThermoCoupleUpdater(Thread):
     """
-    This is a simply thread class that connects the hardware (Keysight34980A_TC)
+    This is a simply thread class that connects the hardware (Keysight_34980A_TCs)
     With our software interface (hwStatus.Thermocouples).
 
-    This is one way communication, it doesn't write anything to the Keysight34980A_TC, only reads.
+    This is one way communication, it doesn't write anything to the Keysight_34980A_TCs, only reads.
 
     If there are errors in the thread, they will be caught, processed, and the thread restarted
     """
@@ -55,7 +55,7 @@ class ThermoCoupleUpdater(Thread):
 
                 if "root" in userName:
                     # Hasn't been tested yet
-                    Tharsis = Keysight34980A_TC(ipAddr_34980A, ChannelList = Channel_List)
+                    Tharsis = Keysight_34980A_TCs(ipAddr_34980A, ChannelList = Channel_List)
                     Tharsis.init_sys()
 
                 while True:

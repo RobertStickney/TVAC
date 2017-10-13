@@ -15,7 +15,7 @@ from datetime import datetime
 #Ex: (@1002:1030,3010) Slot_1-Ch_2-30, & Slot_3-Ch_10
 #Channel_List = "(@2036:2040,3001:3040)"
 
-class Keysight34980A_TC(Telnet):
+class Keysight_34980A_TCs(Telnet):
 
     def __init__(self, host='192.168.99.3', port=5024, timeout=10,
                 ChannelList = "(@1001:1040,2001:2040,3001:3040)"):
