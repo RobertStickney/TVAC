@@ -111,6 +111,7 @@ class Tdk_lambda_Genesys:
         resp = self.send_cmd('PV {:0.2f}'.format(volt))
         if resp != 'OK':
             raise Exception('PV {:0.2f} Response: "{:s}" is not "OK"'.format(volt, resp))
+
     def set_pc(self, current):
         resp = self.send_cmd('PC {:0.3f}'.format(current))
         if resp != 'OK':

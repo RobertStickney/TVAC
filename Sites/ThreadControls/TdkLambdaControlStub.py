@@ -238,6 +238,19 @@ class TdkLambdaControlStub(Thread):
                                  {
                                      "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
                                      "level": 4})
+        elif 'Setup Platen' == cmd[0]:  # Duty cycle is a value from 0-1
+            if self.hw.OperationalVacuum:
+                for addr in [self.hw.TdkLambda_PS.get_platen_left_addr(),
+                             self.hw.TdkLambda_PS.get_platen_right_addr()]:
+                    self.pwr_supply.set_addr(addr)
+                    self.pwr_supply.set_pc(0.0)
+                    self.pwr_supply.set_pv(0.0)
+                    self.pwr_supply.set_out_on()
+            else:
+                Logging.logEvent("Debug", "Status Update",
+                                 {
+                                     "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
+                                     "level": 4})
         elif 'Disable All Output' == cmd[0]:  # Duty cycle is a value from 0-1
             self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_left_addr(),
                              self.pwr_supply.set_out, False)
@@ -253,16 +266,25 @@ class TdkLambdaControlStub(Thread):
             self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_right_addr(),
                              self.pwr_supply.set_out, False)
         elif 'Platen Duty Cycle' == cmd[0]:  # Duty cycle is a value from 0-1
-            if cmd[1] > 1:
-                dutycycle = 1.0
-            elif cmd[1] < 0:
-                dutycycle = 0.0
+            if self.hw.OperationalVacuum:
+                if cmd[1] > 1:
+                    dutycycle = 1.0
+                elif cmd[1] < 0:
+                    dutycycle = 0.0
+                else:
+                    dutycycle = float(cmd[1])
+                current = 5.5 * dutycycle
+                voltage = current * 80.0
+                for addr in [self.hw.TdkLambda_PS.get_platen_left_addr(),
+                             self.hw.TdkLambda_PS.get_platen_right_addr()]:
+                    self.pwr_supply.set_addr(addr)
+                    self.pwr_supply.set_pc(current)
+                    self.pwr_supply.set_pv(voltage)
             else:
-                dutycycle = float(cmd[1])
-            self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_left_addr(),
-                             self.pwr_supply.set_pv, 450.0 * dutycycle)
-            self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_right_addr(),
-                             self.pwr_supply.set_pv, 450.0 * dutycycle)
+                Logging.logEvent("Debug", "Status Update",
+                                 {
+                                     "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
+                                     "level": 4})
         else:
             Logging.logEvent("Error", 'Unknown TDK Lambda command: "%s"' % cmd[0],
                              {"type": 'Unknown TdkLambda_Cmd',
@@ -295,7 +317,7 @@ if __name__ == '__main__':
     hw.OperationalVacuum = True
     time.sleep(5)
     print(p.getJson())
-    c.append(['Enable Platen Output', ''])
+    c.append(['Setup Platen', ''])
     time.sleep(5)
     print(p.getJson())
     c.append(['Platen Duty Cycle', 0.1])
