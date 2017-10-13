@@ -188,6 +188,7 @@ def main(args):
 		popupError("Error calling profile Importer")
 	fileName = args[1]
 	json = generateJSON(fileName)
+	print(json)
 	json = JSON.loads(json)
 
 	demo = False

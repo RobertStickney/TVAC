@@ -90,7 +90,7 @@ class GetControl:
             tempErrorList['actions'].append(error['actions'])
 
             errorList.pop(i)
-        print(errorList)
+        Logging.debugPrint(2, "Error :" + str(errorList))
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
         # print(errorList[0])
