@@ -5,6 +5,7 @@ from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
 from Logging.Logging import Logging
+from datetime import datetime           #For Testing only - DELETE
 
 class GetControl:
 
@@ -97,13 +98,19 @@ class GetControl:
         return json.dumps(tempErrorList)
 
     def getLastErrorTest(self):
-        # ONLY FOR labview testing / design purposes - delete later and reference to getLastError?
+        # ONLY FOR labview testing / design purposes - TO DO DELETE BEFORE DISTRIBUTION
         # Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
         # errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
-        tempErrorList = []
-        for i in range(0,7):
-            error="Error something has happened to " +str(i)
-            tempErrorList.append(error)
+        tempErrorList = dict(time=[],event=[],Thermocouple=[],details=[],actions=[])
+        for i in range(0,3):
+            if i==2:
+                tempErrorList['time'].append("2017-10-15 09:57:04.570877")
+            else:
+                tempErrorList['time'].append(str(datetime.now()))
+            tempErrorList['event'].append("Bogus Error")
+            tempErrorList['Thermocouple'].append(42)
+            tempErrorList['details'].append("Gremlins have attacked")
+            tempErrorList['actions'].append("Coffee")
             #errorList.pop(i)
         print(tempErrorList)
         # error = errorList[0]
