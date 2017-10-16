@@ -7,9 +7,9 @@ import json as JSON
 import requests
 import time
 
-import matplotlib
-matplotlib.use("TkAgg")
-from matplotlib import pyplot as plt
+#import matplotlib
+#matplotlib.use("TkAgg")
+#from matplotlib import pyplot as plt
 
 def createExpectedValues(setPoints,startTime=None):
 	#print(setPoints)
@@ -75,19 +75,19 @@ def unwrapJSON(json,zone):
 def closeErrorWindow(root): 
     root.destroy()
 
-def popupError(message):
-	root = tk.Tk()
-	root.title("Error")
-	l = Label(text=message).pack(padx=20, pady=30)
-	button = Button(root, text="Close", command=root.destroy)
-	button.pack(pady=10)
+# def popupError(message):
+# 	root = tk.Tk()
+# 	root.title("Error")
+# 	l = Label(text=message).pack(padx=20, pady=30)
+# 	button = Button(root, text="Close", command=root.destroy)
+# 	button.pack(pady=10)
 
 
-	center(root)
+# 	center(root)
 
-	root.mainloop()
+# 	root.mainloop()
 
-	quit()
+# 	quit()
 
 def center(toplevel):
 	'''
@@ -160,10 +160,12 @@ def generateJSON(fileName):
 				if i > 0:
 					rampRatePerMin = (float(oldGoalTemp) - float(goalTemp))/float(rampTime) * 60
 					if abs(rampRatePerMin) > 12:
-						popupError("Zone {}, Setpoint {} has ramp rate over 1.2 C per minute. ({}c/min)".format(zone, setPoint, rampRatePerMin))
+						#popupError("Zone {}, Setpoint {} has ramp rate over 1.2 C per minute. ({}c/min)".format(zone, setPoint, rampRatePerMin))
+						print("ZoneError")
 				i += 1
 	except (OSError) as e:
-		popupError("File named:\n\n{}\n\nCan not be opened, check to make sure file is there and is readable.".format(fileName))
+		#popupError("File named:\n\n{}\n\nCan not be opened, check to make sure file is there and is readable.".format(fileName))
+		print("Error Read Error")
 		quit()
 
 	header
@@ -178,10 +180,12 @@ def generateJSON(fileName):
 		output += "      \"zone\": {},\n".format(zone+1)
 		output += "      \"average\": \"{}\",\n".format(averages[zone])
 		if maxTemp[zone] == "":
-			popupError("Missing maxTemp Error on zone {}".format(zone+1))
+			#popupError("Missing maxTemp Error on zone {}".format(zone+1))
+			print("MaxTemp")
 		output += "      \"maxTemp\": \"{}\",\n".format(maxTemp[zone])
 		if thermocouples[zone] == "":
-			popupError("Missing Thermo Couples on zone {}".format(zone+1))
+			#popupError("Missing Thermo Couples on zone {}".format(zone+1))
+			print("MinTemp")
 		output += "      \"thermocouples\": [{}],\n".format(thermocouples[zone].replace(" ",","))
 		output += "      \"thermalprofiles\":\n"
 		output += "      [\n"
@@ -207,7 +211,8 @@ def generateJSON(fileName):
 
 def main(args):
 	if len(args) < 2:
-		popupError("Error calling profile Importer")
+		#popupError("Error calling profile Importer")
+		print("Error Calling Importer")
 	jsonLabview = args[1]
 #	json = generateJSON(fileName)
 	#print(json)
