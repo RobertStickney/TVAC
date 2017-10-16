@@ -111,7 +111,7 @@ class GetControl:
             tempErrorList['Thermocouple'].append(42)
             tempErrorList['details'].append("Gremlins have attacked")
             tempErrorList['actions'].append("Coffee")
-            #errorList.pop(i)
+            errorList.pop(i)
         print(tempErrorList)
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
