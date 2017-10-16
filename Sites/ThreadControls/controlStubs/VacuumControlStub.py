@@ -101,7 +101,10 @@ class VacuumControlStub(Thread):
                             # Alert the user they should close o-ring seal 
                             # Start the cryopump
                             self.state = "Crossover Vacuum"
-                        userName = os.environ['LOGNAME']
+                        if os.name == "posix":
+                            userName = os.environ['LOGNAME']
+                        else:
+                            userName = "user" 
                         if "root" in userName:
                             if (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15 and self.chamberPressure < 0.035):
                                 # Close the rough gate valve

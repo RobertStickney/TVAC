@@ -43,8 +43,10 @@ class LN2ControlStub(Thread):
                     ln2_min = 0.01 
                     time.sleep(5)
                     # hwStatus = self.hardwareStatus.getInstance()
-                    userName = os.environ['LOGNAME']
-
+                    if os.name == "posix":
+                        userName = os.environ['LOGNAME']
+                    else:
+                        userName = "user" 
                     a_out = self.hardwareStatus.getInstance().PC_104.analog_out  # todo: better variable name?
                     d_out = self.hardwareStatus.getInstance().PC_104.digital_out
 
