@@ -144,7 +144,7 @@ class TsRegistersUpdater(Thread):
         offsets = [.1,.1, .2,.2, .3,.3, .4,.4, .5,.5, .6,.6, .7,.7, .8,.8]
         for i in range(16):
             self.ir_lamp_pwm.append(PWM_Square_Wave(self.pwm_period,
-                                                    offsets[i], 0,
+                                                    offsets[i],
                                                     "IR Lamp "+str(i+1),
                                                     self.da_io.digital_out.update))
 

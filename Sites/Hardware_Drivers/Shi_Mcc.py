@@ -2,16 +2,34 @@ import time
 import os
 
 from Logging.Logging import Logging
+from Hardware_Drivers.tty_reader import TTY_Reader
+
 
 class Shi_Mcc:
 
+    def __init__(self):
+        self.port = None
+        self.port_listener = TTY_Reader(None)
+        self.port_listener.daemon = True
+
+    def open_port(self):
+        self.port = open('/dev/ttyxuart0', 'r+b', buffering=0)
+        self.port_listener.get_fd(self.port)
+        self.port_listener.start()
+        self.port_listener.flush_buffer(1.0)
+
+    def flush_port(self):
+        self.port_listener.flush_buffer(1.0)
+
+    def close_port(self):
+        if not self.port.closed:
+            self.port.close()
+
     def Send_cmd(self, Command):
-        MCC = open('/dev/ttyxuart0', 'r+b', buffering=0)
         for tries in range(3):
-            MCC.write(self.GenCmd(Command).encode())
-            time.sleep(0.10 * (tries + 1))
+            self.port.write(self.GenCmd(Command).encode())
             # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
-            resp = MCC.read(64).decode()
+            resp = self.port_listener.read_line(0.7)
             if self.ResponceGood(resp):
                 if resp[1] == 'A':  # Responce Good!
                     Data = self.Format_Responce(resp[2:-2])
@@ -28,7 +46,6 @@ class Shi_Mcc:
         else:
             # TODO: Change to error event print("No more tries! Something is wrong!")
             Data = self.Format_Responce('Timeout!', error=True)
-        MCC.close()
         return Data
 
     def get_checksum(self, cmd):  # append the sum of the string's bytes mod 256 + '\r'
@@ -43,6 +60,9 @@ class Shi_Mcc:
 
     def ResponceGood(self, Responce):
         # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
+        if len(Responce) < 4:
+            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
+            return False
         if Responce[-1] != '\r':
             # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
             return False
