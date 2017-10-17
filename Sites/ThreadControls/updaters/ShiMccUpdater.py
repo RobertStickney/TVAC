@@ -47,18 +47,23 @@ class ShiMccUpdater(Thread):
                     Logging.logEvent("Debug", "Status Update",
                                     {"message": "Power on the Shi Mcc",
                                     "level": 3})
+                    self.mcc.open_port()
                     Currently_powered = self.hw.PC_104.digital_out.getVal('MCC2 Power')
                     self.hw.PC_104.digital_out.update({'MCC2 Power': True})
                     if not Currently_powered:
                         time.sleep(5)
+                    self.mcc.flush_port()
                     # Now send some initialization commands
                     # The maximum second stage temperature the cryopump may start to restart after a power failure.
-                    val = self.mcc.Set_RegenParam('6', 65)
+                    val = self.mcc.Get_RegenParam_6()
                     if val['Error']:
-                        Logging.logEvent("Debug", "Shi MCC Error",
-                                         {"message": "Set_RegenParam: %s" % val['Response'],
-                                          "level": 3})
-                        raise Exception("Shi MCC Error with Set_RegenParam: %s" % val['Response'])
+                        Logging.logEvent("Debug", "Status Update",  
+                                         {"message": 'Shi MCC GetRegenParam_6" Error Response: %s' % (val),
+                                          "level": 4})
+                        raise Exception("Shi MCC Error with Set_RegenParam_6: %s" % val['Response'])
+                    else:
+                        if val['Data'] != 65:
+                            self.run_set_cmd(self.mcc.Set_RegenParam, [' ', '6', 65])
                     # 2: Power failure recovery enabled only when T2 is less than the limit set point.
                     val = self.mcc.Set_PowerFailureRecovery(2)
                     if val['Error']:
@@ -182,6 +187,7 @@ class ShiMccUpdater(Thread):
                                  {"message": "There was a {} error in ShiMccUpdater. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
                                   "level": 2})
+                self.mcc.close_port()
                 time.sleep(4)
 
     def run_set_cmd(self, function, cmd):
