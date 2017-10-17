@@ -49,7 +49,7 @@ class TsRegistersUpdater(Thread):
                 if os.name == "posix":
                     userName = os.environ['LOGNAME']
                 else:
-                    userName = "user"
+                    userName = "user" 
                 if "root" in userName:
                     # Root is only in live, might need to change in busy box
                     self.ts_reg.open_Registers()
@@ -106,7 +106,10 @@ class TsRegistersUpdater(Thread):
                          "level":2})
                 
                 # nicely close things, to open them back up again...
-                userName = os.environ['LOGNAME']
+                if os.name == "posix":
+                    userName = os.environ['LOGNAME']
+                else:
+                    userName = "user" 
                 if "root" in userName:
                     self.ts_reg.close()
                 time.sleep(4)
