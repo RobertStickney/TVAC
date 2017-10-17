@@ -24,6 +24,7 @@ class ShiCryopumpCollection:
         self.__lock.acquire()
         self.time = datetime.now()
         self.__lock.release()
+        # Logging.debugPrint(3, "ShiCryopumpCollection: {}".format(d))
         if 'MCC Status' in d:
             self.mcc_status.update(d['MCC Status'])
         if 'MCC Params' in d:

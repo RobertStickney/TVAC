@@ -93,10 +93,8 @@ class Keysight_34980A_TCs(Telnet):
 
     def getTC_Values(self, print_raw_values = False):
         ## tc_list formating from "DataContracts.ThermocoupleCollection"
-        print("Getting TC data")
         tc_list = {'time':datetime.now(), 'tcList': []}
         values = self.send("READ?",6).split(',')
-        print("after the send")
         v1 = values[0:len(values):4]
         v2 = values[1:len(values):4]
         v3 = values[2:len(values):4]

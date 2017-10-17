@@ -1,13 +1,18 @@
-import sys, os
-import matplotlib.pyplot as plt
+#!/usr/bin/env python
+import sys
+#import matplotlib.pyplot as plt
 import tkinter as tk
 from tkinter import *
 import json as JSON
 import requests
 import time
 
+import matplotlib
+matplotlib.use("TkAgg")
+from matplotlib import pyplot as plt
 
 def createExpectedValues(setPoints,startTime=None):
+	#print(setPoints)
 	intervalTime = 5
 	if startTime:
 		currentTime = int(startTime)
@@ -19,7 +24,7 @@ def createExpectedValues(setPoints,startTime=None):
 	setpoint_ramp_start_time = []
 	setpoint_soak_start_time = []
 	for setPoint in setPoints:
-		print(setPoint)
+		#print(setPoint)
 		goalTemp = setPoint["tempgoal"]
 		rampTime = setPoint["ramp"]
 		soakTime = setPoint["soakduration"]
@@ -61,9 +66,9 @@ def createExpectedValues(setPoints,startTime=None):
 	return expected_temp_values, expected_time_values
 
 
-def unwrapJSON(json):
-	# print(json)
-	return json['profiles'][0]['thermalprofiles']
+def unwrapJSON(json,zone):
+	#print(json)
+	return json[zone]['thermalprofiles']
 
 
 
@@ -102,7 +107,10 @@ def generateJSON(fileName):
 			header = f.readline().strip()
 			averages = f.readline().strip().split(",")
 			thermocouples = f.readline().strip().split(",")
-			heatErrors = f.readline().strip().split(",")
+			maxTemp = f.readline().strip().split(",")
+			minTemp = f.readline().strip().split(",")
+			maxSlope = f.readline().strip().split(",")
+
 			# Skip any blank lines
 			tempString = ""
 			while not tempString:
@@ -110,55 +118,68 @@ def generateJSON(fileName):
 			# tempString holds header, we can ignore
 			setpoints = []
 			i = 0
+
 			while True:
 				line = f.readline().split(",")
-				# print(line)
+				#print(line)
 				# print(zone)
-				if len(line) <= 5:
+				if len(line) <= 11:
 					break
 
 				if i > 0:
 					oldGoalTemp = goalTemp
 
-				zone = line[0]
-				setPoint = line[1]
-				rampTime = line[2]
-				soakTime = line[3]
-				goalTemp = line[4]
+				for j in range(0,9):
+					zone = line[j+3]
+
+					if zone!="":
+
+						zone = j+1
+						setPoint = line[0]
+						rampTime = line[1]
+						soakTime = line[2]
+						goalTemp = line[3+j]
+						goalTemp=goalTemp.rstrip()
+
+						# print(setPoint)
+						# print(rampTime)
+						# print(soakTime)
+						# print(goalTemp)
 
 
-				tempSetpoint = {
-				"zone":zone,
-				"setPoint":setPoint,
-				"rampTime":rampTime,
-				"soakTime":soakTime,
-				"goalTemp":goalTemp,
-				}
-				setpoints.append(tempSetpoint)
+						tempSetpoint = {
+						"zone":zone,
+						"setPoint":setPoint,
+						"rampTime":rampTime,
+						"soakTime":soakTime,
+						"goalTemp":goalTemp,
+						}
+						setpoints.append(tempSetpoint)
 
+						#print(tempSetpoint)
 				if i > 0:
 					rampRatePerMin = (float(oldGoalTemp) - float(goalTemp))/float(rampTime) * 60
-					if abs(rampRatePerMin) > 1.2:
+					if abs(rampRatePerMin) > 12:
 						popupError("Zone {}, Setpoint {} has ramp rate over 1.2 C per minute. ({}c/min)".format(zone, setPoint, rampRatePerMin))
 				i += 1
 	except (OSError) as e:
 		popupError("File named:\n\n{}\n\nCan not be opened, check to make sure file is there and is readable.".format(fileName))
 		quit()
 
-	# header
+	header
 	output = "{\n"
-	output += "  \"name\" : \"{}\",".format(fileName.split(".")[0])
+	#output += "  \"name\" : \"{}\",".format(fileName.split(".")[0])
 	output += "  \"profiles\": [\n"
-	for zone in range(8):
+	for zone in range(9):
 		if averages[zone] == "":
 			continue
 
 		output += "    {\n"
 		output += "      \"zone\": {},\n".format(zone+1)
 		output += "      \"average\": \"{}\",\n".format(averages[zone])
-		if heatErrors[zone] == "":
-			popupError("Missing Heat Error on zone {}".format(zone+1))
-		output += "      \"heatError\": \"{}\",\n".format(heatErrors[zone])
+		if maxTemp[zone] == "":
+			popupError("Missing maxTemp Error on zone {}".format(zone+1))
+		output += "      \"maxTemp\": \"{}\",\n".format(maxTemp[zone])
 		if thermocouples[zone] == "":
 			popupError("Missing Thermo Couples on zone {}".format(zone+1))
 		output += "      \"thermocouples\": [{}],\n".format(thermocouples[zone].replace(" ",","))
@@ -181,61 +202,42 @@ def generateJSON(fileName):
 	output = output[:-2] + "\n"
 	output += "  ]\n"
 	output += "}"
+	#print(output)
 	return output
 
 def main(args):
 	if len(args) < 2:
 		popupError("Error calling profile Importer")
-	fileName = args[1]
-	json = generateJSON(fileName)
-	print(json)
-	json = JSON.loads(json)
+	jsonLabview = args[1]
+#	json = generateJSON(fileName)
+	#print(json)
+	#json = JSON.loads(jsonLabview)
+
+	with open(jsonLabview) as json_file:
+		json = JSON.load(json_file)
 
 	demo = False
-	if len(sys.argv) > 3 and sys.argv[2] =="--demo":
-		demo = True
 
-	if not demo:
-		userName=os.getlogin()
-		if "root" in userName or (len(sys.argv) > 2 and sys.argv[2] =="--live"):
-			host = "192.168.99.1"
-		else:
-			host = "localhost"
-		port = "8000"
-		path = "saveProfile"
+	expected_temps=dict(time=[],zone1=[],zone2=[],zone3=[],zone4=[],zone5=[],zone6=[],zone7=[],zone8=[],zone9=[])
 
-		url = "http://{}:{}/{}".format(host,port,path)
-		data = json
-		headers = {'Content-type': 'application/json'}
+	#expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json,0))
+#	expected_temp_values2, expected_time_values = createExpectedValues(unwrapJSON(json,1))
 
+	for i in range(0,8):
 		try:
-			r = requests.post(url, data=JSON.dumps(data), headers=headers)
-		except Exception as e:
-			popupError("Can't send request to sever\nCheck to make sure it's turned on and connected")
-		print(r.text)
-		if "success" not in r.text:
-			errorCode = r.text.split(",")[0]
-			if "1062" in errorCode:
-				popupError("There is already a profile of this name in the database.\nPlease rename the profile or run profile in Database")	
-			else:
-				popupError(r.text)
+			expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json,i))
+			
+			for j in range(0,len(expected_temp_values)):
+				zonestr="zone"+str(i+1)
+				expected_temps[zonestr].append(expected_temp_values[j])
+				if i==0:
+					expected_temps["time"].append(expected_time_values[j])
+		except:
+			continue	
 
-	expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json))
-
-	plt.plot(expected_time_values,expected_temp_values, label="Expected Results")
-	plt.legend(loc='upper left')
-
-	# plt.pause(1)
-	# plt.clf()
-	plt.ylabel('Temperture')
-	plt.xlabel('Time')
-	plt.show(block=True)
-	print("Program worked!")
+	print(JSON.dumps(expected_temps))
+	# print(expected_time_values)
+	#print("Program worked!")
 
 
-
-
-
-
-if __name__ == '__main__':
-	main(sys.argv)
+main(sys.argv)

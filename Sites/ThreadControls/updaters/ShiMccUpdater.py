@@ -82,6 +82,7 @@ class ShiMccUpdater(Thread):
                                                  {"message": "Shi MCC Error Response: %s" % val['Response'],
                                                   "level": 4})
                             else:
+                                Logging.debugPrint(3,"MCC Response: {}".format(val['Response']))
                                 self.hw.ShiCryopump.update({'MCC Status': val['Response']})
                             Logging.logEvent("Debug", "Status Update",
                                              {"message": "Cryopump Stage 1: {:.1f}K; Stage 2: {:.1f}K".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'), self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp')),
@@ -182,6 +183,7 @@ class ShiMccUpdater(Thread):
                                  {"message": "There was a {} error in ShiMccUpdater. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
                                   "level": 2})
+                raise e
                 time.sleep(4)
 
     def run_set_cmd(self, function, cmd):

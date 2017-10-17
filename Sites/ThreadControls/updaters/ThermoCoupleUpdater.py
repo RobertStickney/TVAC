@@ -84,7 +84,7 @@ class ThermoCoupleUpdater(Thread):
                                     {'Thermocouple': 3,'working':True, 'temp':hwStatus.Thermocouples.getTC(3).getTemp() + currentPID + 3},
                                     {'Thermocouple': 4,'working':True, 'temp':hwStatus.Thermocouples.getTC(4).getTemp() + currentPID + 4},
                                     {'Thermocouple': 5,'working':True, 'temp':hwStatus.Thermocouples.getTC(5).getTemp() + currentPID + 5},
-                                    {'Thermocouple': 6,'working':False, 'temp':hwStatus.Thermocouples.getTC(5).getTemp() + currentPID + 0},
+                                    {'Thermocouple': 6,'working':False, 'temp':hwStatus.Thermocouples.getTC(6).getTemp() + currentPID + 0},
 
                                 ]
                             }

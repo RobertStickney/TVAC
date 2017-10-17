@@ -287,7 +287,7 @@ class Shi_Compressor:
     # MCC Programmers References Guide Rev C
     def HeCompressorOpen(Command):
         He_Comp = open('/dev/ttyxuart1', 'r+b', buffering=0)
-        He_Comp.write(Command.encode()'\r)
+        He_Comp.write(Command.encode()'\r')
         time.sleep(0.760)
         temp = HE_Comp.read(113)
         print("R:--" + temp.decode().replace('\r', r'\r') + "---")

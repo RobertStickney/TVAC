@@ -1,6 +1,8 @@
 import time
 import os
 
+from Logging.Logging import Logging
+
 class Shi_Mcc:
 
     def Send_cmd(self, Command):
@@ -67,7 +69,7 @@ class Shi_Mcc:
                 "RoughingValveState": self.Get_RoughingValveState,  # 2.24 Ex: "$D?3\r"
                 "RoughingInterlock": self.Get_RoughingInterlock,  # 2.25 - Ex: "$Q?B\r"
                 "Stage2Temp": self.Get_SecondStageTemp,  # 2.26 ---------- Ex: "$K:\r"
-                "Status": self.Get_Status,  # 2.28 ----------------------- Ex: "$S16\r"
+                "Status": self.Get_Status_Cmd,  # 2.28 ----------------------- Ex: "$S16\r"
                 "TcPressure": self.Get_TcPressure}  # 2.30 --------------- Ex: "$L=\r"
         return self.run_GetFunctions(FunS)
 
@@ -106,6 +108,7 @@ class Shi_Mcc:
         vals = {}
         for key in Functions.keys():
             val = Functions[key]()
+            # Logging.debugPrint(3,"Shi mcc val: {}".format(val))
             er |= val['Error']
             pf |= val['PowerFailure']
             if 'Data' in val:
@@ -458,7 +461,7 @@ class Shi_Mcc:
         return self.Send_cmd("I{0:d}".format(temp))
 
     # 2.28 • Status pg:22
-    def Get_Status(self):  # Command Ex: "$S16\r"
+    def Get_Status_Cmd(self):  # Command Ex: "$S16\r"
         # return self.Send_cmd("S1")
         val = self.Send_cmd("S1")
         if (not val['Error']) & (len(val['Response']) == 1):

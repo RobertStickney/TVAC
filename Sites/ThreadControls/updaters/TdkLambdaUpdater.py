@@ -77,7 +77,6 @@ class TdkLambdaUpdater(Thread):
                                              {'addr': self.hw.TdkLambda_PS.get_shroud_right_addr()}]
                     for ps in update_power_supplies:
                         self.pwr_supply.set_addr(ps['addr'])
-                        print('Get Addr 1 Params Start.')
                         ps.update(self.pwr_supply.get_out())
                         if not self.hw.OperationalVacuum:
                             self.pwr_supply.set_out_off()
@@ -88,7 +87,6 @@ class TdkLambdaUpdater(Thread):
                         ps.update(self.pwr_supply.get_ast())
                         ps.update(self.pwr_supply.get_out())
                         ps.update(self.pwr_supply.get_mode())
-                        print('Get Addr 1 Params end.')
                     self.hw.TdkLambda_PS.update(update_power_supplies)
                 next_status_read_time = time.time()
                 while True:
@@ -116,7 +114,7 @@ class TdkLambdaUpdater(Thread):
                             #                   "level": 4})
                             # cmd[0] = location; cmd[1] = value; cmd[2] = Volts or Current
                             while len(self.hw.TdkLambda_Cmds):
-                                self.Process_Commands(self.hw.TdkLambda_Cmds.pop())
+                                self.Process_Commands(self.hw.TdkLambda_Cmds.pop(0))
 
                         except ValueError as err:
                             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -184,6 +182,7 @@ class TdkLambdaUpdater(Thread):
         fun(val)
 
     def Process_Commands(self, cmd):
+        print("Tdk command: {}".format(cmd))
         if 'Set Platen Left' == cmd[0]:
             if cmd[2] == 'V':
                 self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_left_addr(),
@@ -226,7 +225,7 @@ class TdkLambdaUpdater(Thread):
                 Logging.logEvent("Debug", "Status Update",
                                  {
                                      "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
-                                     "level": 4})
+                                     "level": 3})
         elif 'Enable Platen Output' == cmd[0]:  # Duty cycle is a value from 0-1
             if self.hw.OperationalVacuum:
                 self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_left_addr(),
@@ -237,8 +236,12 @@ class TdkLambdaUpdater(Thread):
                 Logging.logEvent("Debug", "Status Update",
                                  {
                                      "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
-                                     "level": 4})
+                                     "level": 3})
         elif 'Setup Platen' == cmd[0]:  # Duty cycle is a value from 0-1
+            Logging.logEvent("Debug", "Status Update",
+             {
+             "message": 'Setting up Platen',
+             "level": 2})
             if self.hw.OperationalVacuum:
                 for addr in [self.hw.TdkLambda_PS.get_platen_left_addr(),
                              self.hw.TdkLambda_PS.get_platen_right_addr()]:
@@ -250,7 +253,7 @@ class TdkLambdaUpdater(Thread):
                 Logging.logEvent("Debug", "Status Update",
                                  {
                                      "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
-                                     "level": 4})
+                                     "level": 3})
         elif 'Disable All Output' == cmd[0]:  # Duty cycle is a value from 0-1
             self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_left_addr(),
                              self.pwr_supply.set_out, False)
@@ -284,7 +287,7 @@ class TdkLambdaUpdater(Thread):
                 Logging.logEvent("Debug", "Status Update",
                                  {
                                      "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
-                                     "level": 4})
+                                     "level": 3})
         else:
             Logging.logEvent("Error", 'Unknown TDK Lambda command: "%s"' % cmd[0],
                              {"type": 'Unknown TdkLambda_Cmd',
@@ -329,6 +332,9 @@ if __name__ == '__main__':
     c.append(['Platen Duty Cycle', 1.0])
     time.sleep(5)
     print(p.getJson())
+    c.append(['Platen Duty Cycle', 0.5])
+    c.append(['Platen Duty Cycle', 0.5])
+    c.append(['Platen Duty Cycle', 0.5])
     c.append(['Platen Duty Cycle', 0.5])
     time.sleep(5)
     print(p.getJson())

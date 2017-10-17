@@ -90,7 +90,7 @@ class GetControl:
             tempErrorList['actions'].append(error['actions'])
 
             errorList.pop(i)
-        Logging.debugPrint(2, "Error :" + str(errorList))
+        Logging.debugPrint(2, "Error: " + str(errorList))
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
         # print(errorList[0])
@@ -104,7 +104,7 @@ class GetControl:
         for i in range(0,7):
             error="Error something has happened to " +str(i)
             tempErrorList.append(error)
-            #errorList.pop(i)
+            # errorList.pop(i)
         print(tempErrorList)
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
@@ -170,12 +170,12 @@ class GetControl:
             strzone="zone"+str(i)
             try:    
                 temps['ZoneTemps'].append(ProfileInstance.getInstance().zoneProfiles.getZone(strzone).getTemp())
-            except:
+            except Exception as e:
                 temps['ZoneTemps'].append(float('nan'))
 
             try:
-                temps['ZoneTemps'].append(ThreadCollectionInstance.getInstance().threadCollection.zoneThreadDict[strzone].pid.SetPoint)
-            except:
+                temps['ZoneTemps'].append(ThreadCollectionInstance.getInstance().threadCollection.dutyCycleThread.zones["zone{}".format(i)].pid.SetPoint)
+            except Exception as e:
                 temps['ZoneTemps'].append(float('nan'))
 
         buff=json.dumps(temps)

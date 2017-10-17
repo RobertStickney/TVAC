@@ -53,8 +53,7 @@ class VacuumControlStub(Thread):
             time.sleep(1)
             try:
                while True:
-                    if (ProfileInstance.getInstance().activeProfile or
-                        ProfileInstance.getInstance().vacuumWanted) and \
+                    if ProfileInstance.getInstance().vacuumWanted and \
                             self.hw.PfeifferGuages.get_roughpump_pressure() is not None:
                         # With an active profile, we start putting the system under pressure
              

@@ -53,9 +53,16 @@ class ZoneControlStub():
         self.dutyCycle = self.pid.error_value/self.maxTempRisePerUpdate
 
         # TODO: pick what lamp you want to use
-        self.parent.d_out.update({self.lamps[1] + " PWM DC": self.dutyCycle})
-        self.parent.d_out.update({self.lamps[0] + " PWM DC": self.dutyCycle})
+        if self.lamps:
+            self.parent.d_out.update({self.lamps[1] + " PWM DC": self.dutyCycle})
+            self.parent.d_out.update({self.lamps[0] + " PWM DC": self.dutyCycle})
+        else:
+            # for zone 9, the platen
+            HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', self.dutyCycle])
 
+        Logging.logEvent("Debug","Status Update", 
+            {"message": "{}: Current temp: {}".format(self.name,self.zoneProfile.getTemp("Max")),
+            "level":2})
         Logging.logEvent("Debug","Status Update", 
             {"message": "{}: Temp Goal Temperture is {}".format(self.name,self.temp_temperture),
             "level":2})
@@ -227,12 +234,22 @@ class DutyCycleControlStub(Thread):
                     # local temp variables for checking state
                     self.startTime = int(time.time())
                     # Generate the expected values at a given time
+
+                    Logging.logEvent("Debug","Status Update", 
+                    {"message": "Setting up Platen",
+                     "level":2})
+                    HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Setup Platen', ''])
+
                     for zone in self.zones:
                         if self.zones[zone].zoneProfile.activeZoneProfile:
                             self.zones[zone].expected_temp_values, self.expected_time_values = self.zones[zone].createExpectedValues(self.zones[zone].zoneProfile.thermalProfiles, startTime=self.zoneProfiles.startTime)
                     justChangedSetpoint = True
                     # Program loop is here
                     while ProfileInstance.getInstance().activeProfile:
+
+                        Logging.logEvent("Debug","Status Update", 
+                            {"message": "Running Duty Cycle Thread",
+                             "level":3})
 
                         # You might need to stay is pause
                         self.checkPause()
@@ -241,6 +258,8 @@ class DutyCycleControlStub(Thread):
                         # get current time
                         currentTime = time.time()
 
+
+
                         # if there is no more expected time values, break out of while True loop
                         if len(self.expected_time_values) <= 0:
                             break
@@ -248,18 +267,21 @@ class DutyCycleControlStub(Thread):
                         # this will find the time value matching the current time
                         # and give us the temp value it should be at that time.
                         while currentTime > self.expected_time_values[0]:
-                            print("zone1: {}".format(len(self.zones["zone1"].expected_temp_values)))
-                            print("zone2: {}".format(len(self.zones["zone2"].expected_temp_values)))
-                            print("zone3: {}".format(len(self.zones["zone3"].expected_temp_values)))
+                            # print("zone1: {}".format(len(self.zones["zone1"].expected_temp_values)))
+                            # print("zone2: {}".format(len(self.zones["zone2"].expected_temp_values)))
+                            # print("zone3: {}".format(len(self.zones["zone3"].expected_temp_values)))
                             for zone in self.zones:
                                 if self.zones[zone].zoneProfile.activeZoneProfile:
                                     self.zones[zone].temp_temperture = self.zones[zone].expected_temp_values[0]
                                     self.zones[zone].expected_temp_values = self.zones[zone].expected_temp_values[1:]
+                                    Logging.debugPrint(3, "zone: {} temp: {}".format(zone, self.zones[zone].temp_temperture))
                             self.expected_time_values = self.expected_time_values[1:]
 
                             if len(self.expected_time_values) <= 0:
                                 break
-                            print("{} -- {}".format(currentTime, self.expected_time_values[0]))
+                        Logging.logEvent("Debug","Status Update", 
+                            {"message": "currentTime: {}".format(currentTime),
+                             "level":3})
                         # With the temp goal tempurture picked, make the duty cycle 
                         for zone in self.zones:
                             if self.zones[zone].zoneProfile.activeZoneProfile:
@@ -287,18 +309,26 @@ class DutyCycleControlStub(Thread):
 
                     for zone in self.zones:
                         if self.zones[zone].zoneProfile.activeZoneProfile:
-                            zone = self.zones[zone]
-                            self.d_out.update({zone.lamps[1] + " PWM DC": 0})
-                            self.d_out.update({zone.lamps[0] + " PWM DC": 0})
 
-                    #TODO: Turn on the heaters here
+                            zone = self.zones[zone]
+                            if zone.lamps:
+                                self.d_out.update({zone.lamps[1] + " PWM DC": 0})
+                                self.d_out.update({zone.lamps[0] + " PWM DC": 0})
+                            else:
+                                HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
+                    #TODO: Turn off the heaters here
 
                     Logging.logEvent("Event","End Profile", 
                         {'time': datetime.time(),
                         "ProfileInstance": ProfileInstance.getInstance()})
 
+                    HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Disable Platen Output',''])
+
                     self.updateDBwithEndTime()
                     self.running = False
+
+
+
                     # self.zoneProfile.activeZoneProfile = False
                     # This assumes all zones have the same end time
                     ProfileInstance.getInstance().activeProfile = False

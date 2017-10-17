@@ -40,7 +40,8 @@ class LN2ControlStub(Thread):
                 # try and catch anything that might go wrong
                 try:
                     # some start up stuff here
-                    ln2_min = 0.01 
+                    ln2_max = 0.1
+                    ln2_min = -0.2 
                     time.sleep(5)
                     # hwStatus = self.hardwareStatus.getInstance()
                     userName = os.environ['LOGNAME']
@@ -70,12 +71,14 @@ class LN2ControlStub(Thread):
                             dutycyclemin = min(dutycyclelist)
                             Logging.debugPrint(4,"Min Duty Cycle: {}".format(dutycyclemin))
 
-                            if dutycyclemin < ln2_min: # todo: arb_value to be determined
+
+
+                            if dutycyclemin < ln2_max: # todo: arb_value to be determined
                                 # throw safety up
                                 Logging.debugPrint(4,"The LN2 should be on")
+                                d_out.update({'LN2-S Sol': True, 'LN2-P Sol': True, })
+                                # d_out.update({'LN2-S Sol': True,})
                                 # What's the difference between this and...
-                                #d_out.update({'LN2-S Sol': True, 'LN2-P Sol': True, })
-                                d_out.update({'LN2-S Sol': True,})
                                 # this
                                 # d_out.update({"LN2-S EN":True})
                                 # d_out.update({"LN2-Sol EN":True})
@@ -83,13 +86,16 @@ class LN2ControlStub(Thread):
 
                                 # 2500 is the point the valve should be opened too
                                 #a_out.update({'LN2 Shroud': 4095, 'LN2 Platen': 4095})
-                                a_out.update({'LN2 Shroud': 4095})
-                               
+                                PercentVavleopen = 4095*(dutycyclemin-ln2_max)/(ln2_min-ln2_max)
+
+                                if dutycyclemin < ln2_min:
+                                    PercentVavleopen = 4095
+                                a_out.update({'LN2 Shroud': PercentVavleopen})
                             else:
                                 Logging.debugPrint(4,"The LN2 should be off")
                                 # What's the difference between this and...
-                                # d_out.update({'LN2-S Sol': False, 'LN2-P Sol': False, })
-                                d_out.update({'LN2-S Sol': False})
+                                d_out.update({'LN2-S Sol': False, 'LN2-P Sol': False, })
+                                # d_out.update({'LN2-S Sol': False})
                                 # this
                                 # d_out.update({"LN2-S EN":False})
                                 # d_out.update({"LN2-Sol EN":False})

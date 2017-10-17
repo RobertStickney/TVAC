@@ -85,16 +85,16 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 {"message": "Received Post Request",
                  "level":1})
             body = self.getBody()
-
-            # You might need to decode the results
-            if type(body) == type(b'a'):
-                body = body.decode("utf-8")
-            contractObj = json.loads(body)
             path = self.path
             
             Logging.logEvent("Debug","Status Update", 
                 {"message": "POST Request Path: {}".format(path),
                  "level":2})
+
+            # You might need to decode the results
+            if type(body) == type(b'a'):
+                body = body.decode("utf-8")
+            contractObj = json.loads(body)
 
             # Based on the path we are given, do different functions
             control = PostControl()

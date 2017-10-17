@@ -13,6 +13,8 @@ from ThreadControls.updaters.PfeifferGaugeUpdater import PfeifferGaugeUpdater
 from ThreadControls.updaters.ShiMccUpdater import ShiMccUpdater
 from ThreadControls.updaters.ThermoCoupleUpdater import ThermoCoupleUpdater
 from ThreadControls.updaters.TsRegistersUpdater import TsRegistersUpdater
+from ThreadControls.updaters.TdkLambdaUpdater import TdkLambdaUpdater
+
 
 
 class ThreadCollection:
@@ -68,8 +70,9 @@ class ThreadCollection:
             3: PfeifferGaugeUpdater(),
             4: ShiMccUpdater(),
             # 5: ShiCompressorControlStub)(),
-            6: LN2ControlStub(ThreadCollection=parent),
-            7: VacuumControlStub(),
+            6: TdkLambdaUpdater(),
+            7: LN2ControlStub(ThreadCollection=parent),
+            8: VacuumControlStub(),
             }
 
 

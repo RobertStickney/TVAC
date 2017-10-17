@@ -46,7 +46,10 @@ class TsRegistersUpdater(Thread):
 
                 self.ir_lamp_pwm_start()
                 
-                userName = os.environ['LOGNAME']
+                if os.name == "posix":
+                    userName = os.environ['LOGNAME']
+                else:
+                    userName = "user"
                 if "root" in userName:
                     # Root is only in live, might need to change in busy box
                     self.ts_reg.open_Registers()

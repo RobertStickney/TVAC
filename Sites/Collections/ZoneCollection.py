@@ -1,6 +1,7 @@
 import uuid
 
 from DataContracts.ZoneProfileContract import ZoneProfileContract
+# from Collections.ProfileInstance import ProfileInstance
 
 from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
@@ -153,6 +154,9 @@ class ZoneCollection:
             self.zoneDict[zoneName].update(zoneProfile)
             self.zoneDict[zoneName].activeZoneProfile = True
 
+            # TODO: This needs to be fixed
+            # ProfileInstance.getInstance().vacuumWanted = True
+
         return "{'result':'success'}"
         
 
@@ -162,9 +166,12 @@ class ZoneCollection:
         '''
         average = zoneProfile["average"]
         zone = zoneProfile["zone"]
-        heatError = zoneProfile["heatError"]
+        heatError = zoneProfile["maxTemp"]
+        minTemp = zoneProfile["minTemp"]
+        maxSlope =zoneProfile["maxSlope"]
 
-        coloums = "( profile_name, zone, average, heat_error )"
+        # coloums = "( profile_name, zone, average, max_heat_error, min_heat_error )"
+        coloums = "( profile_name, zone, average, heat_error)"
         print(heatError)
         values = "( \"{}\",{},\"{}\",{} )".format(name,zone,average, heatError)
         sql = "INSERT INTO tvac.Thermal_Zone_Profile {} VALUES {};".format(coloums, values)
@@ -200,11 +207,11 @@ class ZoneCollection:
         for tc in zoneProfile["thermocouples"]:
             values += "( \"{}\", {}, {} ),\n".format(name, zone, tc)
         sql = "INSERT INTO tvac.TC_Profile {} VALUES {};".format(coloums, values[:-2])
-        # print(sql)
         try:
             mysql.cur.execute(sql)
             mysql.conn.commit()
         except Exception as e:
+            print(sql)
             return e
 
         return True
