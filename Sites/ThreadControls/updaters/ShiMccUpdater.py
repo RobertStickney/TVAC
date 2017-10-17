@@ -41,7 +41,10 @@ class ShiMccUpdater(Thread):
                                 {"message": "Starting Shi Mcc Control Stub Thread",
                                 "level": 2})
 
-                userName = os.getlogin()
+                if os.name == "posix":
+                    userName = os.environ['LOGNAME']
+                else:
+                    userName = "user"
                 if "root" in userName:
                     # Live systems go here
                     Logging.logEvent("Debug", "Status Update",
