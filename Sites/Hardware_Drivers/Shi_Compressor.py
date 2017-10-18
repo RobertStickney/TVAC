@@ -5,7 +5,6 @@ import time
 
 if __name__ == '__main__':
     sys.path.insert(0, os.getcwd())
-    print('start')
 
 from PyCRC_master.PyCRC.CRC16 import CRC16
 from Hardware_Drivers.tty_reader import TTY_Reader
@@ -171,9 +170,7 @@ class ShiCompressor:
         self.port_listener.daemon = True
 
     def open_port(self):
-        print('Open xuart next.')
         self.port = open('/dev/ttyxuart1', 'r+b', buffering=0)
-        print('Opened xuart!')
         self.port_listener.get_fd(self.port)
         self.port_listener.start()
         # self.port_listener.flush_buffer(1.0)
@@ -303,12 +300,12 @@ if __name__ == '__main__':
     compressor.get_temperatures()
     compressor.get_pressure()
     compressor.get_id()
-    print(compressor.get_status())
+    print(compressor.get_status_bits())
     # compressor.set_compressor_on()
-    # print(compressor.get_status())
+    # print(compressor.get_status_bits())
     # time.sleep(2)
     # compressor.set_compressor_off()
-    # print(compressor.get_status())
+    # print(compressor.get_status_bits())
     # time.sleep(.5)
-    # print(compressor.get_status())
+    # print(compressor.get_status_bits())
     compressor.close_port()
