@@ -270,8 +270,8 @@ class ShiCompressor:
         return resp
 
     def get_status_bits(self):
-        resp = int(self.send_cmd('STA3504\r').split(',')[1])
-        data = {'Config': 'RS-232 Read and Command' if resp & 0x8000 else 'RS-232 Read Only',
+        resp = int(self.send_cmd('STA3504\r').split(',')[1], 16)
+        data = {'Config': 'RS-232 Read Only' if resp & 0x8000 else 'RS-232 Read and Command',
                 'Op-State': (resp & 0xe00) >> 9,
                 'Solenoid ON':       True if resp & 0x100 else False,
                 'Pressure Alarm':    True if resp & 0x80 else False,
@@ -310,3 +310,31 @@ if __name__ == '__main__':
     time.sleep(.5)
     print(compressor.get_status_bits())
     compressor.close_port()
+
+'''
+C:--$TEAA4B9\r---
+R:--$TEA,026,024,023,000,4F5C\r---
+C:--$PRA95F7\r---
+R:--$PRA,236,000,EA28\r---
+C:--$ID1D629\r---
+R:--$ID1,1.7,000322.4,000,C2AC\r---
+C:--$STA3504\r---
+R:--$STA,0000,FAD0\r---
+{'Helium Temp Alarm': False, 'Water Temp Alarm': False, 'Op-State': 0, 'Water Flow Alarm': False, 'System ON': False, 'Solenoid ON': False, 'Oil Level Alarm': False, 'Config': 'RS-232 Read Only', 'Pressure Alarm': False, 'Phase/Fuse Alarm': False, 'Motor Tempe Alarm': False}
+C:--$ON177CF\r---
+R:--$ON1,8936\r---
+C:--$STA3504\r---
+R:--$STA,0301,2ED1\r---
+{'Helium Temp Alarm': True, 'Water Temp Alarm': False, 'Op-State': 0, 'Water Flow Alarm': True, 'System ON': True, 'Solenoid ON': True, 'Oil Level Alarm': False, 'Config': 'RS-232 Read Only', 'Pressure Alarm': False, 'Phase/Fuse Alarm': True, 'Motor Tempe Alarm': False}
+C:--$STA3504\r---
+R:--$STA,0301,2ED1\r---
+{'Helium Temp Alarm': True, 'Water Temp Alarm': False, 'Op-State': 0, 'Water Flow Alarm': True, 'System ON': True, 'Solenoid ON': True, 'Oil Level Alarm': False, 'Config': 'RS-232 Read Only', 'Pressure Alarm': False, 'Phase/Fuse Alarm': True, 'Motor Tempe Alarm': False}
+C:--$OFF9188\r---
+R:--$OFF,BB90\r---
+C:--$STA3504\r---
+R:--$STA,0000,FAD0\r---
+{'Helium Temp Alarm': False, 'Water Temp Alarm': False, 'Op-State': 0, 'Water Flow Alarm': False, 'System ON': False, 'Solenoid ON': False, 'Oil Level Alarm': False, 'Config': 'RS-232 Read Only', 'Pressure Alarm': False, 'Phase/Fuse Alarm': False, 'Motor Tempe Alarm': False}
+C:--$STA3504\r---
+R:--$STA,0000,FAD0\r---
+{'Helium Temp Alarm': False, 'Water Temp Alarm': False, 'Op-State': 0, 'Water Flow Alarm': False, 'System ON': False, 'Solenoid ON': False, 'Oil Level Alarm': False, 'Config': 'RS-232 Read Only', 'Pressure Alarm': False, 'Phase/Fuse Alarm': False, 'Motor Tempe Alarm': False}
+'''
