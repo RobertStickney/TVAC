@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.5
 # He_Compressor_Interface
 import os
+import sys
 import time
 
 if __name__ == '__main__':
