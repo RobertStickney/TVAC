@@ -167,10 +167,12 @@ class Shi_Compressor:
         self.port_listener.daemon = True
 
     def open_port(self):
+        print('Open xuart next.')
         self.port = open('/dev/ttyxuart1', 'r+b', buffering=0)
+        print('Opened xuart!')
         self.port_listener.get_fd(self.port)
         self.port_listener.start()
-        self.port_listener.flush_buffer(1.0)
+        # self.port_listener.flush_buffer(1.0)
 
     def flush_port(self):
         self.port_listener.flush_buffer(1.0)
@@ -179,9 +181,9 @@ class Shi_Compressor:
         if not self.port.closed:
             self.port.close()
 
-    def send_cmd(self, Command):
+    def send_cmd(self, command):
         for tries in range(3):
-            msg = "${0:s}".format(Command)
+            msg = "${0:s}".format(command)
             # msg1 = "{0:s}{0:04X}\r".format(msg, self.crc(msg))
             print("C:--" + msg.replace('\r', r'\r') + "---")
             self.port.write(msg.encode())
@@ -190,7 +192,7 @@ class Shi_Compressor:
             print("R:--" + resp.replace('\r', r'\r') + "---")
             if len(resp) > 0:
                 break
-            # if self.ResponceGood(resp, Command):
+            # if self.ResponceGood(resp, command):
             #     if resp[1] == 'A':  # Responce Good!
             #         Data = self.Format_Responce(resp[2:-2])
             #     elif resp[1] == 'B':
@@ -289,7 +291,6 @@ class Shi_Compressor:
     def set_compressor_off(self):
         resp = self.send_cmd('OFF9188\r')
         return resp
-
 
 
 if __name__ == '__main__':
