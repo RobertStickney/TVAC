@@ -7,6 +7,7 @@ import time
 
 if __name__ == '__main__':
     sys.path.insert(0, os.getcwd())
+    print('start')
 
 from PyCRC_master.PyCRC.CRC16 import CRC16
 from Hardware_Drivers.tty_reader import TTY_Reader
