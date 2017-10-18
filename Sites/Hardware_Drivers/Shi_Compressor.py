@@ -162,7 +162,7 @@ Response: $STA,status bits,<crc-16><cr>
 # Example response $STA,0301,2ED1<cr> corresponds to binary 0000001100000001 or :
 # Local ON, solenoid ON, System ON, and no alarms.
 
-class Shi_Compressor:
+class ShiCompressor:
 
     def __init__(self):
         self.crc16 = CRC16()
@@ -212,8 +212,8 @@ class Shi_Compressor:
         else:
             # TODO: Change to error event print("No more tries! Something is wrong!")
             # Data = self.Format_Responce('Timeout!', error=True)
-            Data = '----Timeout!-------'
-        return Data
+            resp = '----Timeout!-------'
+        return resp
 
     # def ResponceGood(self, Responce):
     #     # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
@@ -298,7 +298,7 @@ class Shi_Compressor:
 
 
 if __name__ == '__main__':
-    compressor = Shi_Compressor()
+    compressor = ShiCompressor()
     compressor.open_port()
     compressor.get_temperatures()
     compressor.get_pressure()
