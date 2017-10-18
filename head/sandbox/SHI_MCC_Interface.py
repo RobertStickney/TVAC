@@ -107,7 +107,7 @@ def Format_Responce(d, error = False, pwrFail = False): # , d_int = 0, d_float =
 
 # 2.4 • Duty Cycle pg:8
 def Get_DutyCycle(): # Command Ex: "$XOI??_\r"
-    #return (int(Send_cmd("XOI??"))/23) * 100 #check for int
+    #return (int(send_cmd("XOI??"))/23) * 100 #check for int
     return Send_cmd("XOI??")
 
 # 2.5 • Elapsed Time pg:8

@@ -4,6 +4,7 @@ import os
 import time
 
 from PyCRC_master.PyCRC.CRC16 import CRC16
+from Hardware_Drivers.tty_reader import TTY_Reader
 
 # Runs on serial port at 9600 8 1  Tout >0.7 sec
 # $TEA<CR> � read all temps
@@ -21,22 +22,12 @@ from PyCRC_master.PyCRC.CRC16 import CRC16
 
 # Any Malformed or Invalid message from host returns $???, 3278<CR>
 '''
-$TEA: Read all temperatures
-Command with checksum and carriage return = $TEAA4B9<cr>
-Response: $TEA,T1,T2,T3,T4,<crc-16><cr>
 
 $Ten: Read selected temperature (n = 1, 2, 3, or 4)
 Command with checksum and carriage return = $TE140B8<cr>, $TE241F8<cr>,
 $TE38139<cr>, or $TE44378<cr>
 Response: $TEn,Tn,<crc-16><cr>
 
-$PRA: Read all pressures
-Command with checksum and carriage return = $PRA95F7<cr>
-Response: $PRA,P1,P2,<crc-16><cr>
-
-$PRn: Read selected pressure (n = 1 or 2)
-Command with checksum and carriage return = $PR171F6<cr> or $PR270B6<cr>
-Response: $PRn,Pn,<crc-16><cr>
 
 $STA: Read Status bits
 Command with checksum and carriage return = $STA3504<cr>
@@ -171,197 +162,148 @@ class Shi_Compressor:
 
     def __init__(self):
         self.crc16 = CRC16()
+        self.port = None
+        self.port_listener = TTY_Reader(None)
+        self.port_listener.daemon = True
 
-    def Send_cmd(self, Command):
-        MCC = open('/dev/ttyxuart1  ', 'r+b', buffering=0)
+    def open_port(self):
+        self.port = open('/dev/ttyxuart1', 'r+b', buffering=0)
+        self.port_listener.get_fd(self.port)
+        self.port_listener.start()
+        self.port_listener.flush_buffer(1.0)
+
+    def flush_port(self):
+        self.port_listener.flush_buffer(1.0)
+
+    def close_port(self):
+        if not self.port.closed:
+            self.port.close()
+
+    def send_cmd(self, Command):
         for tries in range(3):
-            MCC.write(self.GenCmd(Command).encode())
-            time.sleep(0.10 * (tries + 1))
+            msg = "${0:s}".format(Command)
+            # msg1 = "{0:s}{0:04X}\r".format(msg, self.crc(msg))
+            print("C:--" + msg.replace('\r', r'\r') + "---")
+            self.port.write(msg.encode())
             # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
-            resp = MCC.read(64).decode()
-            if self.ResponceGood(resp):
-                if resp[1] == 'A':  # Responce Good!
-                    Data = self.Format_Responce(resp[2:-2])
-                elif resp[1] == 'B':
-                    Data = self.Format_Responce(resp[2:-2], pwrFail=True)
-                elif resp[1] == 'E':
-                    Data = self.Format_Responce(resp[2:-2], error=True)
-                elif resp[1] == 'F':
-                    Data = self.Format_Responce(resp[2:-2], error=True, pwrFail=True)
-                else:
-                    Data = self.Format_Responce("R--" + resp + "-- unknown", error=True)
+            resp = self.port_listener.read_line(0.5)
+            print("R:--" + resp.replace('\r', r'\r') + "---")
+            if len(resp) > 0:
                 break
-                # TODO: Change to error event print("Try number: " + str(tries))
+            # if self.ResponceGood(resp, Command):
+            #     if resp[1] == 'A':  # Responce Good!
+            #         Data = self.Format_Responce(resp[2:-2])
+            #     elif resp[1] == 'B':
+            #         Data = self.Format_Responce(resp[2:-2], pwrFail=True)
+            #     elif resp[1] == 'E':
+            #         Data = self.Format_Responce(resp[2:-2], error=True)
+            #     elif resp[1] == 'F':
+            #         Data = self.Format_Responce(resp[2:-2], error=True, pwrFail=True)
+            #     else:
+            #         Data = self.Format_Responce("R--" + resp + "-- unknown", error=True)
+            #     break
+            #     # TODO: Change to error event print("Try number: " + str(tries))
         else:
             # TODO: Change to error event print("No more tries! Something is wrong!")
-            Data = self.Format_Responce('Timeout!', error=True)
-        MCC.close()
+            # Data = self.Format_Responce('Timeout!', error=True)
+            Data = '----Timeout!-------'
         return Data
 
-    def get_checksum(self, cmd):  # append the sum of the string's bytes mod 256 + '\r'
-        d = sum(cmd.encode())
-        #       0x30 + ( (d2 to d6) or (d0 xor d6) or ((d1 xor d7) shift to d2)
-        return 0x30 + ((d & 0x3c) |
-                       ((d & 0x01) ^ ((d & 0x40) >> 6)) |  # (d0 xor d6)
-                       ((d & 0x02) ^ ((d & 0x80) >> 6)))  # (d1 xor d7)
-
-    def GenCmd(self, cmd, data=''):  # Cmd syntax see page MCC Programing Guide
-        msg = "${0:s}{1:s}".format(cmd, data)
-        return "{0:s}{0:04X}\r".format(msg, self.crc(msg))
-
-    def ResponceGood(self, Responce):
-        # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
-        if Responce[-1] != '\r':
-            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
-            return False
-        # print("Checksum: '" + Responce[-2] + "' Data: '" + Responce[1:-2] + "' Calc cksum: '" + chr(get_checksum(Responce[1:-2])) + "'")
-        if Responce[-2] != chr(self.get_checksum(Responce[1:-2])):
-            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "Checksum: " + chr(self.get_checksum(Responce[1:-2])))
-            return False
-        if Responce[0] != '$':
-            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "'$' is not the first byte!")
-            return False
-        return True  # Yea!! responce seems ok
+    # def ResponceGood(self, Responce):
+    #     # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
+    #     if Responce[-1] != '\r':
+    #         # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
+    #         return False
+    #     # print("Checksum: '" + Responce[-2] + "' Data: '" + Responce[1:-2] + "' Calc cksum: '" + chr(get_checksum(Responce[1:-2])) + "'")
+    #     if Responce[-2] != chr(self.get_checksum(Responce[1:-2])):
+    #         # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "Checksum: " + chr(self.get_checksum(Responce[1:-2])))
+    #         return False
+    #     if Responce[0] != '$':
+    #         # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "'$' is not the first byte!")
+    #         return False
+    #     return True  # Yea!! responce seems ok
 
     def Format_Responce(self, d, error=False, pwrFail=False):  # , d_int = 0, d_float = 0.0);
         return {"Error": error, "PowerFailure": pwrFail, "Response": d}  # , "int"=d_int, "float"=d_float}
 
-    def get_Status(self):
-        # Create Dict of Functions
-        FunS = {"Duty Cycle": self.Get_DutyCycle,  # 2.4 ------------------- Ex: "$XOI??_\r"
-                "Stage 1 Temp": self.Get_FirstStageTemp,  # 2.8 ------------ Ex: "$J;\r"
-                "Cryo Pump Ready State": self.Get_CryoPumpRdyState,  # 2.14  Ex: "$A?2\r"
-                "Purge Valve State": self.Get_PurgeValveState,  # 2.15 ----- Ex: "$E?6\r"
-                "Regen Error": self.Get_RegenError,  # 2.18 ---------------- Ex: "$eT\r"
-                "Regen Step": self.Get_RegenStep,  # 2.20 ------------------ Ex: "$O>\r"
-                "Roughing Valve State": self.Get_RoughingValveState,  # 2.24 Ex: "$D?3\r"
-                "Roughing Interlock": self.Get_RoughingInterlock,  # 2.25 -- Ex: "$Q?B\r"
-                "Stage 2 Temp": self.Get_SecondStageTemp,  # 2.26 ---------- Ex: "$K:\r"
-                "Status": self.Get_Status,  # 2.28 ------------------------- Ex: "$S16\r"
-                "Tc Pressure": self.Get_TcPressure}  # 2.30 ---------------- Ex: "$L=\r"
-        return self.run_GetFunctions(FunS)
-
-    def get_ParamValues(self):
-        # Create Dict of Functions
-        FunS = {"Elapsed Time": self.Get_ElapsedTime,  # 2.5 -------------------------- Ex: "$Y?J\r"
-                "Failed Rate Of Rise Cycles": self.Get_Failed_RateOfRise_Cycles,  # 2.6 Ex: "$m\\r"
-                "Failed Repurge Cycles": self.Get_FailedRepurgeCycles,  # 2.7 --------- Ex: "$l]\r"
-                "First Stage Temp CTL": self.Get_FirstStageTempCTL,  # 2.9 ------------ Ex: "$H?5\r"
-                "Last Rate Of Rise Value": self.Get_LastRateOfRiseValue,  # 2.10 ------ Ex: "$n_\r"
-                "MCC Version": self.Get_ModuleVersion,  # 2.11 ------------------------ Ex: "$@1\r"
-                "Power Failure Recovery": self.Get_PowerFailureRecovery,  # 2.12 ------ Ex: "$i?H\r"
-                "Power Failure Recovery Status": self.Get_PowerFailureRecoveryStatus,  # 2.13 Ex: "$t?a\r"
-                "Regen Cycles": self.Get_RegenCycles,  # 2.17 - Ex: "$Z?K\r"
-                "Regen Param_0": self.Get_RegenParam_0,  # 2.19 Ex: "P0?"
-                "Regen Param_1": self.Get_RegenParam_1,  # 2.19 Ex: "P1?"
-                "Regen Param_2": self.Get_RegenParam_2,  # 2.19 Ex: "P2?"
-                "Regen Param_3": self.Get_RegenParam_3,  # 2.19 Ex: "P3?"
-                "Regen Param_4": self.Get_RegenParam_4,  # 2.19 Ex: "P4?"
-                "Regen Param_5": self.Get_RegenParam_5,  # 2.19 Ex: "P5?"
-                "Regen Param_6": self.Get_RegenParam_6,  # 2.19 Ex: "P6?"
-                "Regen Param_A": self.Get_RegenParam_A,  # 2.19 Ex: "PA?"
-                "Regen Param_C": self.Get_RegenParam_C,  # 2.19 Ex: "PC?"
-                "Regen Param_G": self.Get_RegenParam_G,  # 2.19 Ex: "PG?"
-                "Regen Param_z": self.Get_RegenParam_z,  # 2.19 Ex: "Pz?"
-                "Regen Start Delay": self.Get_RegenStartDelay,  # 2.21 ------ Ex: "$j?[\r"
-                "Regen Step Timer": self.Get_RegenStepTimer,  # 2.22 -------- Ex: "$kZ\r"
-                "Regen Time": self.Get_RegenTime,  # 2.23 ------------------- Ex: "$aP\r"
-                "Second Stage Temp CTL": self.Get_SecondStageTempCTL,  # 2.27 Ex: "$I?:\r"
-                "Tc Pressure State": self.Get_TcPressureState}  # 2.29 ------ Ex: "$B?3\r"
-        return self.run_GetFunctions(FunS)
-
-    def run_GetFunctions(self, Functions):
-        er = False
-        pf = False
-        vals = {}
-        for key in Functions.keys():
-            val = Functions[key]()
-            er |= val['Error']
-            pf |= val['PowerFailure']
-            if 'Data' in val:
-                vals[key] = val['Data']
-            else:
-                vals[key] = val['Response']
-        return self.Format_Responce(vals, er, pf)
-
-    # MCC Programmers References Guide Rev C
-    def HeCompressorOpen(Command):
-        He_Comp = open('/dev/ttyxuart1', 'r+b', buffering=0)
-        He_Comp.write(Command.encode()'\r')
-        time.sleep(0.760)
-        temp = HE_Comp.read(113)
-        print("R:--" + temp.decode().replace('\r', r'\r') + "---")
-        return temp.decode()
-
-    def Compressor_GenCmdRead( Parm=349): #Cmd syntax see page #16 of MPT200 Operating instructions
-        return Pfeiffer_applyChecksum("{:03d}00{:03d}02=?".format( Parm))
-
-    def get_Status():
-        # Create Dict of Functions
-        FunS = {"Status"            : Get_Status,
-                "TcPressure"        : Get_TcPressure,
-                "TempStage1"        : Get_FirstStageTemp,
-                "TempStage2"        : Get_SecondStageTemp,
-                "Duty Cycle"        : Get_DutyCycle,
-                "RegenStep"         : Get_RegenStep,
-                "RegenError"        : Get_RegenError,
-                "CryoPumpRdyState"  : Get_CryoPumpRdyState}
-        return RunGetFunctions(FunS)
-
-
-    def RunGetFunctions(Functions):
-        er = False; pf = False; vals = {}
-        for key in Functions.keys():
-            val = Functions[key]()
-            er |= val['Error']
-            pf |= val['PowerFailure']
-            vals[key] = val['Data']
-        return Format_Responce(json.dumps(vals), er, pf)
-
-    def Format_Responce(d, error = False, pwrFail = False): # , d_int = 0, d_float = 0.0);
-        return {"Error":error, "PowerFailure":pwrFail, "Data":d}  # , "int"=d_int, "float"=d_float}
-
-    # MCC Programmers References Guide Rev C
-
-    # 2.4 � Duty Cycle pg:8
-    def Get_DutyCycle(): # Command Ex: "$XOI??_\r"
-        #return (int(Send_cmd("XOI??"))/23) * 100 #check for int
-        return Send_cmd("XOI??")
-
-    # 2.5 � Elapsed Time pg:8
-    def Get_ElapsedTime(): # Command Ex: "$Y?J\r"
-        return Send_cmd("Y?")
+    # def get_ParamValues():
+    #     # Create Dict of Functions
+    #     FunS = {"TEA" : Get_temps,
+    #             "Te1" : Get_T1_input,
+    #             "Te2" : Get_T2_input,
+    #             "Te3" : Get_input,
+    #             "PRA" : Get_all_pressures,
+    #             "PR1" : Get_selected_pressure,
+    #             "ID1" : Get_firmware_ver_and_ETime,
+    #             "ON1" : Get_turn_compressor_on,
+    #             "OFF" : Get_turn_compressor_off,
+    #             "RS1" : Get_Reset,
+    #             "CHR" : Get_Cold_Head_Run,
+    #             "CHP" : Get_Cold_Head_Pause,
+    #             "POF" : Get_Cold_Head_Pause_off}
+    #     return RunGetFunctions(FunS)
 
     # Commands:
 
-        return RunGetFunctions(FunS)
+    def get_temperatures(self):
+        # $TEA: Read all temperatures
+        # Command with checksum and carriage return = $TEAA4B9<cr>
+        # Response: $TEA,T1,T2,T3,T4,<crc-16><cr>
+        resp = self.send_cmd('TEAA4B9\r')
+        return resp
 
-    def get_Status():
-        # Create Dict of Functions
-        FunS = {"Status"            : Get_Status,
-        return get_Status(Funs)
+    def get_pressure(self):
+        # $PRA: Read all pressures
+        # Command with checksum and carriage return = $PRA95F7<cr>
+        # Response: $PRA,P1,P2,<crc-16><cr>
+        # $PRn: Read selected pressure (n = 1 or 2)
+        # Command with checksum and carriage return = $PR171F6<cr> or $PR270B6<cr>
+        # Response: $PRn,Pn,<crc-16><cr>
+        resp = self.send_cmd('PRA95F7\r')
+        return resp
 
-    def get_ParamValues():
-        # Create Dict of Functions
-        FunS = {"TEA" : Get_temps,
-                "Te1" : Get_T1_input,
-                "Te2" : Get_T2_input,
-                "Te3" : Get_input,
-                "PRA" : Get_all_pressures,
-                "PR1" : Get_selected_pressure,
-                "ID1" : Get_firmware_ver_and_ETime,
-                "ON1" : Get_turn_compressor_on,
-                "OFF" : Get_turn_compressor_off,
-                "RS1" : Get_Reset,
-                "CHR" : Get_Cold_Head_Run,
-                "CHP" : Get_Cold_Head_Pause,
-                "POF" : Get_Cold_Head_Pause_off}
-        return RunGetFunctions(FunS)
+    def get_id(self):
+        resp = self.send_cmd('ID1D629\r')
+        return resp
+
+    def get_status_bits(self):
+        resp = int(self.send_cmd('STA3504\r')[4:-5], 16)
+        data = {'Config': 'RS-232 Read and Command' if resp & 0x8000 else 'RS-232 Read Only',
+                'Op-State': (resp & 0xe00) >> 9,
+                'Solenoid ON':       True if resp & 0x100 else False,
+                'Pressure Alarm':    True if resp & 0x80 else False,
+                'Oil Level Alarm':   True if resp & 0x40 else False,
+                'Water Flow Alarm':  True if resp & 0x20 else False,
+                'Water Temp Alarm':  True if resp & 0x10 else False,
+                'Helium Temp Alarm': True if resp & 0x8 else False,
+                'Phase/Fuse Alarm':  True if resp & 0x4 else False,
+                'Motor Tempe Alarm': True if resp & 0x2 else False,
+                'System ON':         True if resp & 0x1 else False,
+                }
+        return data
+
+    def set_compressor_on(self):
+        resp = self.send_cmd('ON177CF\r')
+        return resp
+
+    def set_compressor_off(self):
+        resp = self.send_cmd('OFF9188\r')
+        return resp
+
+
 
 if __name__ == '__main__':
-    MCC = open('/dev/ttyxuart1  ', 'r+b', buffering=0)
-    cmd_str = self.GenCmd(Command)
-    MCC.write(cmd_str.encode())
-    time.sleep(0.10 * (tries + 1))
-    resp = MCC.read(64).decode()
-    print responce
+    compressor = Shi_Compressor()
+    compressor.open_port()
+    compressor.get_temperatures()
+    compressor.get_pressure()
+    compressor.get_id()
+    print(compressor.get_status())
+    # compressor.set_compressor_on()
+    # print(compressor.get_status())
+    # time.sleep(2)
+    # compressor.set_compressor_off()
+    # print(compressor.get_status())
+    # time.sleep(.5)
+    # print(compressor.get_status())
+    compressor.close_port()

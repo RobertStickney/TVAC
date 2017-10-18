@@ -141,7 +141,7 @@ class Shi_Mcc:
 
     # 2.4 • Duty Cycle pg:8
     def Get_DutyCycle(self):  # Command Ex: "$XOI??_\r"
-        # return self.Send_cmd("XOI??")
+        # return self.send_cmd("XOI??")
         val = self.Send_cmd("XOI??")
         if not val['Error']:
             val['Data'] = (int(val['Response'])/23) * 100
@@ -149,7 +149,7 @@ class Shi_Mcc:
 
     # 2.5 • Elapsed Time pg:8
     def Get_ElapsedTime(self):  # Command Ex: "$Y?J\r"
-        # return self.Send_cmd("Y?")
+        # return self.send_cmd("Y?")
         val = self.Send_cmd("Y?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -157,7 +157,7 @@ class Shi_Mcc:
 
     # 2.6 • Failed Rate Of Rise Cycles pg:8
     def Get_Failed_RateOfRise_Cycles(self):  # Command Ex: "$m\\r"
-        # return self.Send_cmd("m")
+        # return self.send_cmd("m")
         val = self.Send_cmd("m")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -165,7 +165,7 @@ class Shi_Mcc:
 
     # 2.7 • Failed Repurge Cycles pg:9
     def Get_FailedRepurgeCycles(self):  # Command Ex: "$l]\r"
-        # return self.Send_cmd("l")
+        # return self.send_cmd("l")
         val = self.Send_cmd("l")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -173,7 +173,7 @@ class Shi_Mcc:
 
     # 2.8 • First Stage Temperature pg:9
     def Get_FirstStageTemp(self):  # Command Ex: "$J;\r"
-        # return self.Send_cmd("J")
+        # return self.send_cmd("J")
         val = self.Send_cmd("J")
         if not val['Error']:
             val['Data'] = float(val['Response'])
@@ -181,7 +181,7 @@ class Shi_Mcc:
 
     # 2.9 • First Stage Temperature Control pg:10
     def Get_FirstStageTempCTL(self):  # Command Ex: "$H?5\r"
-        # return self.Send_cmd("H?")
+        # return self.send_cmd("H?")
         val = self.Send_cmd("H?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -199,7 +199,7 @@ class Shi_Mcc:
 
     # 2.10 • Last Rate Of Rise Value pg:11
     def Get_LastRateOfRiseValue(self):  # Command Ex: "$n_\r"
-        # return self.Send_cmd("n")
+        # return self.send_cmd("n")
         val = self.Send_cmd("n")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -211,7 +211,7 @@ class Shi_Mcc:
 
     # 2.12 • Power Failure Recovery pg:11
     def Get_PowerFailureRecovery(self):  # Command Ex: "$i?H\r"
-        # return self.Send_cmd("i?")
+        # return self.send_cmd("i?")
         val = self.Send_cmd("i?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -229,7 +229,7 @@ class Shi_Mcc:
 
     # 2.13 • Power Failure Recovery Status pg:12
     def Get_PowerFailureRecoveryStatus(self):  # Command Ex: "$t?a\r"
-        # return self.Send_cmd("t?")
+        # return self.send_cmd("t?")
         val = self.Send_cmd("t?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -250,7 +250,7 @@ class Shi_Mcc:
 
     # 2.15 • Purge On/Off/Query pg:14
     def Get_PurgeValveState(self):  # Command Ex: "$E?6\r"
-        # return self.Send_cmd("E?")
+        # return self.send_cmd("E?")
         val = self.Send_cmd("E?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -271,7 +271,7 @@ class Shi_Mcc:
 
     # 2.17 • Regeneration Cycles pg:15
     def Get_RegenCycles(self):  # Command Ex: "$Z?K\r"
-        # return self.Send_cmd("Z?")
+        # return self.send_cmd("Z?")
         val = self.Send_cmd("Z?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -291,77 +291,77 @@ class Shi_Mcc:
         return val
 
     def Get_RegenParam_0(self):
-        # return self.Send_cmd("P0?")
+        # return self.send_cmd("P0?")
         val = self.Send_cmd("P0?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_1(self):
-        # return self.Send_cmd("P1?")
+        # return self.send_cmd("P1?")
         val = self.Send_cmd("P1?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_2(self):
-        # return self.Send_cmd("P2?")
+        # return self.send_cmd("P2?")
         val = self.Send_cmd("P2?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_3(self):
-        # return self.Send_cmd("P3?")
+        # return self.send_cmd("P3?")
         val = self.Send_cmd("P3?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_4(self):
-        # return self.Send_cmd("P4?")
+        # return self.send_cmd("P4?")
         val = self.Send_cmd("P4?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_5(self):
-        # return self.Send_cmd("P5?")
+        # return self.send_cmd("P5?")
         val = self.Send_cmd("P5?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_6(self):
-        # return self.Send_cmd("P6?")
+        # return self.send_cmd("P6?")
         val = self.Send_cmd("P6?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_A(self):
-        # return self.Send_cmd("PA?")
+        # return self.send_cmd("PA?")
         val = self.Send_cmd("PA?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_C(self):
-        # return self.Send_cmd("PC?")
+        # return self.send_cmd("PC?")
         val = self.Send_cmd("PC?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_G(self):
-        # return self.Send_cmd("PG?")
+        # return self.send_cmd("PG?")
         val = self.Send_cmd("PG?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
         return val
 
     def Get_RegenParam_z(self):
-        # return self.Send_cmd("Pz?")
+        # return self.send_cmd("Pz?")
         val = self.Send_cmd("Pz?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -401,7 +401,7 @@ class Shi_Mcc:
 
     # 2.21 • Regeneration Start Delay pg.18
     def Get_RegenStartDelay(self):  # Command Ex: "$j?[\r"
-        # return self.Send_cmd("j?")
+        # return self.send_cmd("j?")
         val = self.Send_cmd("j?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -415,7 +415,7 @@ class Shi_Mcc:
 
     # 2.22 • Regeneration Step Timer pg:18
     def Get_RegenStepTimer(self):  # Command Ex: "$kZ\r"
-        # return self.Send_cmd("k")
+        # return self.send_cmd("k")
         val = self.Send_cmd("k")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -423,7 +423,7 @@ class Shi_Mcc:
 
     # 2.23 • Regeneration Time pg:19
     def Get_RegenTime(self):  # Command Ex: "$aP\r"
-        # return self.Send_cmd("a")
+        # return self.send_cmd("a")
         val = self.Send_cmd("a")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -431,7 +431,7 @@ class Shi_Mcc:
 
     # 2.24 • Rough On/Off/Query pg:19
     def Get_RoughingValveState(self):  # Command Ex: "$D?3\r"
-        # return self.Send_cmd("D?")
+        # return self.send_cmd("D?")
         val = self.Send_cmd("D?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -445,7 +445,7 @@ class Shi_Mcc:
 
     # 2.25 • Rough Valve Interlock pg:20
     def Get_RoughingInterlock(self):  # Command Ex: "$Q?B\r"
-        # return self.Send_cmd("Q?")
+        # return self.send_cmd("Q?")
         val = self.Send_cmd("Q?")
         if not val['Error']:
             val['Data'] = int(val['Response']) - 0x30
@@ -456,7 +456,7 @@ class Shi_Mcc:
 
     # 2.26 • Second Stage Temperature pg:20
     def Get_SecondStageTemp(self):  # Command Ex: "$K:\r"
-        # return self.Send_cmd("K")
+        # return self.send_cmd("K")
         if os.name == "posix":
             userName = os.environ['LOGNAME']
         else:
@@ -471,7 +471,7 @@ class Shi_Mcc:
 
     # 2.27 • Second Stage Temperature Control pg:21
     def Get_SecondStageTempCTL(self):  # Command Ex: "$I?:\r"
-        # return self.Send_cmd("I?")
+        # return self.send_cmd("I?")
         val = self.Send_cmd("I?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -485,7 +485,7 @@ class Shi_Mcc:
 
     # 2.28 • Status pg:22
     def Get_Status_Cmd(self):  # Command Ex: "$S16\r"
-        # return self.Send_cmd("S1")
+        # return self.send_cmd("S1")
         val = self.Send_cmd("S1")
         if (not val['Error']) & (len(val['Response']) == 1):
             val['Data'] = ord(val['Response']) - 0x20
@@ -493,7 +493,7 @@ class Shi_Mcc:
 
     # 2.29 • TC On/Off/Query pg:22
     def Get_TcPressureState(self):  # Command Ex: "$B?3\r"
-        # return self.Send_cmd("B?")
+        # return self.send_cmd("B?")
         val = self.Send_cmd("B?")
         if not val['Error']:
             val['Data'] = int(val['Response'])
@@ -507,7 +507,7 @@ class Shi_Mcc:
 
     # 2.30 • Thermocouple Pressure pg:22
     def Get_TcPressure(self):  # Command Ex: "$L=\r"
-        # return self.Send_cmd("L")
+        # return self.send_cmd("L")
         val = self.Send_cmd("L")
         if not val['Error']:
             val['Data'] = float(val['Response']) / 1000  # Change to Torr
