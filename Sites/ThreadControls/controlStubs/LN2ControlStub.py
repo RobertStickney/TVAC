@@ -110,7 +110,9 @@ class LN2ControlStub(Thread):
                         time.sleep(self.SLEEP_TIME)
                     # end of Inner While True
                 except Exception as e:
-                    raise e
+                    Logging.debugPrint(1, "Error in run, LN2 Control Stub: {}".format(str(e)))
+                    if Logging.debug:
+                        raise e
                 # end of try catch
             # end of If should be running
         # end of outter while true

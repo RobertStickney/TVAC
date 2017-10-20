@@ -32,7 +32,7 @@ class VacuumControlStub(Thread):
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.hw = HardwareStatusInstance.getInstance()
-        self.state = None
+        self.state = False
         self.oldState = True
 
         self.updatePeriod = 2
@@ -42,14 +42,10 @@ class VacuumControlStub(Thread):
         # While true to restart the thread if it errors out
         while True:
             # This has no startup, but should wait until all drivers and updaters are running
-            Logging.logEvent("Event","Thread Start",
-                {"thread": "VacuumControlStub",
-                 "ProfileInstance": ProfileInstance.getInstance()})
             Logging.logEvent("Debug","Status Update",
                 {"message": "Starting VacuumControlStub",
                  "level":2})
             
-            # TODO: change this to a while not ready, sleep 1
             time.sleep(1)
             try:
                while True:
@@ -57,9 +53,9 @@ class VacuumControlStub(Thread):
                             self.hw.PfeifferGuages.get_roughpump_pressure() is not None:
                         # With an active profile, we start putting the system under pressure
              
-                        # Logging.logEvent("Debug","Status Update", 
-                        # {"message": "Running Vacuum Control Stub",
-                        #  "level":2})
+                        Logging.logEvent("Debug","Status Update", 
+                        {"message": "Running Vacuum Control Stub",
+                         "level":4})
                         # Setup code is here
                         if self.state:
                             self.oldState = self.state
@@ -129,7 +125,11 @@ class VacuumControlStub(Thread):
                         if "Operational Vacuum" in self.state:
                             self.hw.OperationalVacuum = True
                         else:
-                            self.hw.OperationalVacuum = False
+                            #TODO: If you are in debugging mode, you can run as if you were in vacuum (take this out for last testing)
+                            if Logging.debug:
+                                self.hw.OperationalVacuum = True
+                            else:
+                                self.hw.OperationalVacuum = False
 
                         
 
@@ -150,7 +150,9 @@ class VacuumControlStub(Thread):
 
                 # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
                 ProfileInstance.getInstance().zoneProfiles.activeProfile = False
-                raise e
+                Logging.debugPrint(1, "Error in check run, vacuum Control Stub: {}".format(str(e)))
+                if Logging.debug:
+                    raise e
             # end of try, catch
         #end of outer while true
     # end of run()
@@ -262,8 +264,8 @@ class VacuumControlStub(Thread):
         '''
         if self.oldState != self.state:
             # The system has just crossed over to a new point
-            
-            pass
+            print("In Operational Vacuum")
+            self.zoneProfiles.updateThermalStartTime(time.time())
             # Bakes ban happen here.
             # Thermal Profiles can start here
 

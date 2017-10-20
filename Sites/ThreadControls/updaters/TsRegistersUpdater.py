@@ -36,9 +36,6 @@ class TsRegistersUpdater(Thread):
             # While true to restart the thread if it errors out
             try:
                 # Thread "Start up" stuff goes here
-                Logging.logEvent("Event","Thread Start", 
-                        {"thread": "TS Registers Control Stub",
-                         "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug","Status Update", 
                 {"message": "Starting TS Registers Control Stub Thread",
                  "level":2,

@@ -6,6 +6,7 @@ from tkinter import *
 import json as JSON
 import requests
 import time
+import os
 
 import matplotlib
 matplotlib.use("TkAgg")
@@ -111,6 +112,13 @@ def generateJSON(fileName):
 			minTemp = f.readline().strip().split(",")
 			maxSlope = f.readline().strip().split(",")
 
+			print("header: {}".format(header))
+			print("averages: {}".format(averages))
+			print("thermocouples: {}".format(thermocouples))
+			print("maxTemp: {}".format(maxTemp))
+			print("minTemp: {}".format(minTemp))
+			print("maxSlope: {}".format(maxSlope))
+
 			# Skip any blank lines
 			tempString = ""
 			while not tempString:
@@ -121,8 +129,6 @@ def generateJSON(fileName):
 
 			while True:
 				line = f.readline().split(",")
-				#print(line)
-				# print(zone)
 				if len(line) <= 11:
 					break
 
@@ -166,9 +172,8 @@ def generateJSON(fileName):
 		popupError("File named:\n\n{}\n\nCan not be opened, check to make sure file is there and is readable.".format(fileName))
 		quit()
 
-	header
 	output = "{\n"
-	#output += "  \"name\" : \"{}\",".format(fileName.split(".")[0])
+	output += "  \"name\" : \"{}\",".format(fileName.split(".")[0])
 	output += "  \"profiles\": [\n"
 	for zone in range(9):
 		if averages[zone] == "":
@@ -180,6 +185,12 @@ def generateJSON(fileName):
 		if maxTemp[zone] == "":
 			popupError("Missing maxTemp Error on zone {}".format(zone+1))
 		output += "      \"maxTemp\": \"{}\",\n".format(maxTemp[zone])
+		if minTemp[zone] == "":
+			popupError("Missing minTemp Error on zone {}".format(zone+1))
+		output += "      \"minTemp\": \"{}\",\n".format(minTemp[zone])
+		if maxSlope[zone] == "":
+			popupError("Missing maxSlope Error on zone {}".format(zone+1))
+		output += "      \"maxSlope\": \"{}\",\n".format(maxSlope[zone])
 		if thermocouples[zone] == "":
 			popupError("Missing Thermo Couples on zone {}".format(zone+1))
 		output += "      \"thermocouples\": [{}],\n".format(thermocouples[zone].replace(" ",","))
@@ -205,39 +216,89 @@ def generateJSON(fileName):
 	#print(output)
 	return output
 
+
 def main(args):
 	if len(args) < 2:
 		popupError("Error calling profile Importer")
-	jsonLabview = args[1]
-#	json = generateJSON(fileName)
-	#print(json)
-	#json = JSON.loads(jsonLabview)
-
-	with open(jsonLabview) as json_file:
-		json = JSON.load(json_file)
+	fileName = args[1]
+	json = generateJSON(fileName)
+	print(json)
+	json = JSON.loads(json)
 
 	demo = False
+	if len(sys.argv) > 3 and sys.argv[2] =="--demo":
+		demo = True
 
-	expected_temps=dict(time=[],zone1=[],zone2=[],zone3=[],zone4=[],zone5=[],zone6=[],zone7=[],zone8=[],zone9=[])
+	if not demo:
+		userName=os.getlogin()
+		if "root" in userName or (len(sys.argv) > 2 and sys.argv[2] =="--live"):
+			host = "192.168.99.1"
+		else:
+			host = "localhost"
+		port = "8000"
+		path = "saveProfile"
 
-	#expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json,0))
-#	expected_temp_values2, expected_time_values = createExpectedValues(unwrapJSON(json,1))
+		url = "http://{}:{}/{}".format(host,port,path)
+		data = json
+		headers = {'Content-type': 'application/json'}
 
-	for i in range(0,8):
 		try:
-			expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json,i))
-			
-			for j in range(0,len(expected_temp_values)):
-				zonestr="zone"+str(i+1)
-				expected_temps[zonestr].append(expected_temp_values[j])
-				if i==0:
-					expected_temps["time"].append(expected_time_values[j])
-		except:
-			continue	
+			r = requests.post(url, data=JSON.dumps(data), headers=headers)
+		except Exception as e:
+			popupError("Can't send request to sever\nCheck to make sure it's turned on and connected")
+		print(r.text)
+		if "success" not in r.text:
+			errorCode = r.text.split(",")[0]
+			if "1062" in errorCode:
+				popupError("There is already a profile of this name in the database.\nPlease rename the profile or run profile in Database")	
+			else:
+				popupError(r.text)
 
-	print(JSON.dumps(expected_temps))
-	# print(expected_time_values)
-	#print("Program worked!")
+	# expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json))
+
+	# plt.plot(expected_time_values,expected_temp_values, label="Expected Results")
+	# plt.legend(loc='upper left')
+
+	# plt.pause(1)
+	# plt.clf()
+	# plt.ylabel('Temperture')
+	# plt.xlabel('Time')
+	# plt.show(block=True)
+	print("Program worked!")
+
+# def main(args):
+# 	if len(args) < 2:
+# 		popupError("Error calling profile Importer")
+# 	fileName = args[1]
+# 	json = generateJSON(fileName)
+# 	print(json)
+	#json = JSON.loads(jsonLabview)
+
+# 	with open(jsonLabview) as json_file:
+# 		json = JSON.load(json_file)
+
+# 	demo = False
+
+# 	expected_temps=dict(time=[],zone1=[],zone2=[],zone3=[],zone4=[],zone5=[],zone6=[],zone7=[],zone8=[],zone9=[])
+
+# 	#expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json,0))
+# #	expected_temp_values2, expected_time_values = createExpectedValues(unwrapJSON(json,1))
+
+# 	for i in range(0,8):
+# 		try:
+# 			expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json,i))
+			
+# 			for j in range(0,len(expected_temp_values)):
+# 				zonestr="zone"+str(i+1)
+# 				expected_temps[zonestr].append(expected_temp_values[j])
+# 				if i==0:
+# 					expected_temps["time"].append(expected_time_values[j])
+# 		except:
+# 			continue	
+
+# 	print(JSON.dumps(expected_temps))
+# 	# print(expected_time_values)
+# 	#print("Program worked!")
 
 
 main(sys.argv)

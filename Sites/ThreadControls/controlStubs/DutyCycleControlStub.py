@@ -22,8 +22,8 @@ class ZoneControlStub():
 
 
         self.zoneProfile = ProfileInstance.getInstance().zoneProfiles.getZone(name)
-        self.zoneUUID = uuid.uuid4()
-        self.zoneProfile.update(json.loads('{"zoneuuid":"%s"}'%self.zoneUUID))
+        # self.zoneUUID = uuid.uuid4()
+        # self.zoneProfile.update(json.loads('{"zoneuuid":"%s"}'%self.zoneUUID))
 
         self.lamps = lamps
         self.name = name
@@ -43,13 +43,13 @@ class ZoneControlStub():
 
     def updateDutyCycle(self):
         '''
-        Given that temp_temperture is assigned to a value, this will 
+        Given that temp_temperature is assigned to a value, this will 
         update the duty cycle for the lamps
         '''
 
-        self.pid.SetPoint = self.temp_temperture
+        self.pid.SetPoint = self.temp_temperature
         # TODO: Don't leave this hardcoded
-        self.pid.update(self.zoneProfile.getTemp("Max"))
+        self.pid.update(self.zoneProfile.getTemp(self.zoneProfile.average))
         self.dutyCycle = self.pid.error_value/self.maxTempRisePerUpdate
 
         # TODO: pick what lamp you want to use
@@ -60,17 +60,21 @@ class ZoneControlStub():
             # for zone 9, the platen
             HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', self.dutyCycle])
 
-        Logging.logEvent("Debug","Status Update", 
-            {"message": "{}: Current temp: {}".format(self.name,self.zoneProfile.getTemp("Max")),
-            "level":2})
-        Logging.logEvent("Debug","Status Update", 
-            {"message": "{}: Temp Goal Temperture is {}".format(self.name,self.temp_temperture),
-            "level":2})
-        Logging.logEvent("Debug","Status Update", 
-            {"message": "{}: Current duty Cycle: {}".format(self.name,self.dutyCycle),
-            "level":2})
-        Logging.logEvent("Event","Expected Temp Update",
-        {"expected_temp_values": [self.temp_temperture],
+        Logging.debugPrint(2, "{}: {}\{} -- {}".format(self.name,
+                                                    self.zoneProfile.getTemp(self.zoneProfile.average),
+                                                    self.temp_temperature,
+                                                    self.dutyCycle))
+        # Logging.logEvent("Debug","Status Update", 
+        #     {"message": "{}: Current temp: {}".format(self.name,self.zoneProfile.getTemp(self.zoneProfile.average)),
+        #     "level":2})
+        # Logging.logEvent("Debug","Status Update", 
+        #     {"message": "{}: Temp Goal temperature is {}".format(self.name,self.temp_temperature),
+        #     "level":2})
+        # Logging.logEvent("Debug","Status Update", 
+        #     {"message": "{}: Current duty Cycle: {}".format(self.name,self.dutyCycle),
+        #     "level":2})
+        Logging.logExpectedTemperatureData(
+        {"expected_temp_values": [self.temp_temperature],
          "expected_time_values": [time.time()],
          "zone"                : self.name,
          "profileUUID"         : self.zoneProfile.profileUUID,
@@ -84,7 +88,7 @@ class ZoneControlStub():
         generate a list time values and matching temputure values
         '''
         Logging.logEvent("Debug","Status Update", 
-        {"message": "Creating Expected temperture values: {}".format(self.name),
+        {"message": "Creating Expected temperature values: {}".format(self.name),
          "level":2})
         intervalTime = self.parent.updatePeriod
         # if given a startTime, use that, otherwise, use current
@@ -96,7 +100,7 @@ class ZoneControlStub():
             currentTime = int(time.time())
         
         # TODO: Change don't let this be hardcoded to Max
-        currentTemp = self.zoneProfile.getTemp("Max")
+        currentTemp = self.zoneProfile.getTemp(self.zoneProfile.average)
 
         expected_temp_values = []
         expected_time_values = []
@@ -116,7 +120,7 @@ class ZoneControlStub():
 
                 # Debug prints
                 debugStatus = {
-                "goal Temperture":goalTemp,
+                "goal temperature":goalTemp,
                 "Time at Start of Setpoint": currentTime,
                 "Ramp Duration": rampTime,
                 "Delta temp per Update": intervalTemp,
@@ -141,7 +145,7 @@ class ZoneControlStub():
             # Debug prints
             debugStatus = {
             "Soak Duration": soakTime,
-            "goal Temperture":goalTemp,
+            "goal temperature":goalTemp,
             }
             Logging.logEvent("Debug","Data Dump", 
                 {"message": "Setpoint {}: Soak Status".format(setPoint.thermalsetpoint),
@@ -220,8 +224,7 @@ class DutyCycleControlStub(Thread):
             # Check to make sure there is an active profile
             # and that we are sitting in an operational vacuum
             # and that all drivers and updaters are running
-            # if ProfileInstance.getInstance().activeProfile and HardwareStatusInstance.getInstance().OperationalVacuum:
-            if ProfileInstance.getInstance().activeProfile:
+            if ProfileInstance.getInstance().activeProfile and HardwareStatusInstance.getInstance().OperationalVacuum:
                 try:
                     Logging.logEvent("Debug","Status Update", 
                     {"message": "Running Duty Cycle thread",
@@ -242,7 +245,7 @@ class DutyCycleControlStub(Thread):
 
                     for zone in self.zones:
                         if self.zones[zone].zoneProfile.activeZoneProfile:
-                            self.zones[zone].expected_temp_values, self.expected_time_values = self.zones[zone].createExpectedValues(self.zones[zone].zoneProfile.thermalProfiles, startTime=self.zoneProfiles.startTime)
+                            self.zones[zone].expected_temp_values, self.expected_time_values = self.zones[zone].createExpectedValues(self.zones[zone].zoneProfile.thermalProfiles, startTime=self.zoneProfiles.thermalStartTime)
                     justChangedSetpoint = True
                     # Program loop is here
                     while ProfileInstance.getInstance().activeProfile:
@@ -272,16 +275,16 @@ class DutyCycleControlStub(Thread):
                             # print("zone3: {}".format(len(self.zones["zone3"].expected_temp_values)))
                             for zone in self.zones:
                                 if self.zones[zone].zoneProfile.activeZoneProfile:
-                                    self.zones[zone].temp_temperture = self.zones[zone].expected_temp_values[0]
+                                    self.zones[zone].temp_temperature = self.zones[zone].expected_temp_values[0]
                                     self.zones[zone].expected_temp_values = self.zones[zone].expected_temp_values[1:]
-                                    Logging.debugPrint(3, "zone: {} temp: {}".format(zone, self.zones[zone].temp_temperture))
+                                    # Logging.debugPrint(3, "zone: {} temp: {}".format(zone, self.zones[zone].temp_temperature))
                             self.expected_time_values = self.expected_time_values[1:]
 
                             if len(self.expected_time_values) <= 0:
                                 break
-                        Logging.logEvent("Debug","Status Update", 
-                            {"message": "currentTime: {}".format(currentTime),
-                             "level":3})
+                        # Logging.logEvent("Debug","Status Update", 
+                        #     {"message": "currentTime: {}".format(currentTime),
+                        #      "level":3})
                         # With the temp goal tempurture picked, make the duty cycle 
                         for zone in self.zones:
                             if self.zones[zone].zoneProfile.activeZoneProfile:
@@ -296,7 +299,11 @@ class DutyCycleControlStub(Thread):
                         # if currentTime > self.setpoint_soak_start_time[self.setpoint]:
                         #     print("Starting Soak for setpoint: {} at time {}".format(self.setpoint,time.time()))
                         #     self.setpoint += 1
-                        #     justChangedSetpoint = True
+                        # 
+
+
+
+                            justChangedSetpoint = True
 
                         if len(self.expected_time_values) <= 0:
                             break
@@ -340,7 +347,9 @@ class DutyCycleControlStub(Thread):
                     # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
                     self.running = False
                     ProfileInstance.getInstance().zoneProfiles.activeProfile = False
-                    raise e
+                    Logging.debugPrint(1, "Error in run, Duty Cycle: {}".format(str(e)))
+                    if Logging.debug:
+                        raise e
                 # end of try, catch
             # Sleeping so it doesn't busty wait
             time.sleep(1)
@@ -356,7 +365,9 @@ class DutyCycleControlStub(Thread):
             mysql.cur.execute(sql)
             mysql.conn.commit()
         except Exception as e:
-            raise e
+            Logging.debugPrint(1, "Error in updateDBwithEndTime, Duty Cycle control: {}".format(str(e)))
+            if Logging.debug:
+                raise e
 
 
     def checkHold(self):
@@ -396,10 +407,9 @@ class DutyCycleControlStub(Thread):
                     if self.zones[zone].zoneProfile.activeZoneProfile:
                         self.zones[zone].expected_temp_values, self.expected_time_values = self.zones[zone].createExpectedValues(self.zones[zone].zoneProfile.thermalProfiles, startTime=self.startTime)
         except Exception as e:
-            Logging.logEvent("Debug","Status Update", 
-            {"message": "hold error: {}".format("\n".join(traceback.format_list(traceback.extract_stack()))),
-            "level":3})
-            raise e
+            Logging.debugPrint(1, "Error in check Hold, Duty Cycle: {}".format(str(e)))
+            if Logging.debug:
+                raise e
 
     def checkPause(self):
         '''
@@ -434,9 +444,8 @@ class DutyCycleControlStub(Thread):
                     if self.zones[zone].zoneProfile.activeZoneProfile:
                         self.zones[zone].expected_temp_values, self.expected_time_values = self.zones[zone].createExpectedValues(self.zones[zone].zoneProfile.thermalProfiles, startTime=self.startTime)
         except Exception as e:
-            Logging.logEvent("Debug","Status Update", 
-            {"message": "pause error: {}".format("\n".join(traceback.format_list(traceback.extract_stack()))),
-            "level":3})
-            raise e
+            Logging.debugPrint(1, "Error in check Pause, Duty Cycle Control Stub: {}".format(str(e)))
+            if Logging.debug:
+                raise e
 
 

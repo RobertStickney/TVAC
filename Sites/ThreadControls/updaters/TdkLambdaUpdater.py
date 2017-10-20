@@ -62,14 +62,14 @@ class TdkLambdaUpdater(Thread):
             # While true to restart the thread if it errors out
             try:
                 # Thread "Start up" stuff goes here
-                Logging.logEvent("Event", "Thread Start",
-                                {"thread": "TDK Lambda Genesys Control Stub",
-                                 "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug", "Status Update",
                                 {"message": "TDK Lambda Genesys Control Stub Thread",
                                  "level": 2})
 
-                userName = os.getlogin()
+                if os.name == 'posix':
+                    userName = os.environ['LOGNAME']
+                else:
+                    userName = "User"
                 if "root" in userName:
                     update_power_supplies = [{'addr': self.hw.TdkLambda_PS.get_platen_left_addr()},
                                              {'addr': self.hw.TdkLambda_PS.get_platen_right_addr()},
@@ -168,14 +168,11 @@ class TdkLambdaUpdater(Thread):
                 Logging.logEvent("Debug", "Status Update",
                                  {"message": "There was a {} error in TdkLambdaUpdater. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
-                                  "level": 2})
-                # raise e
-            # nicely close things, to open them back up again...
-            finally:
-                userName = os.getlogin()
-                if "root" in userName:
-                    pass
+                                  "level": 1})
+                if Logging.debug:
+                    raise e
                 time.sleep(4)
+            # nicely close things, to open them back up again...
 
     def run_set_cmd(self, addr, fun, val):
         self.pwr_supply.set_addr(addr)
@@ -297,50 +294,50 @@ class TdkLambdaUpdater(Thread):
                               })
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     # adding debug info
-    if(len(sys.argv)>1):
-        for arg in sys.argv:
-            if arg.startswith("-v"):
-                Logging.verbos = arg.count("v")
-    Logging.logEvent("Debug","Status Update",
-        {"message": "Debug on: Level {}".format(Logging.verbos),
-         "level":1})
-    thread = TdkLambdaUpdater()
-    thread.daemon = True
-    thread.start()
+    # if(len(sys.argv)>1):
+    #     for arg in sys.argv:
+    #         if arg.startswith("-v"):
+    #             Logging.verbos = arg.count("v")
+    # Logging.logEvent("Debug","Status Update",
+    #     {"message": "Debug on: Level {}".format(Logging.verbos),
+    #      "level":1})
+    # thread = TdkLambdaUpdater()
+    # thread.daemon = True
+    # thread.start()
 
-    hw = HardwareStatusInstance.getInstance()
-    p = HardwareStatusInstance.getInstance().TdkLambda_PS
-    c = HardwareStatusInstance.getInstance().TdkLambda_Cmds
+    # hw = HardwareStatusInstance.getInstance()
+    # p = HardwareStatusInstance.getInstance().TdkLambda_PS
+    # c = HardwareStatusInstance.getInstance().TdkLambda_Cmds
 
-    time.sleep(10)
-    print(p.getJson())
+    # time.sleep(10)
+    # print(p.getJson())
 
-    hw.OperationalVacuum = True
-    time.sleep(5)
-    print(p.getJson())
-    c.append(['Setup Platen', ''])
-    time.sleep(5)
-    print(p.getJson())
-    c.append(['Platen Duty Cycle', 0.1])
-    time.sleep(5)
-    print(p.getJson())
-    c.append(['Platen Duty Cycle', 0.05])
-    time.sleep(5)
-    print(p.getJson())
-    c.append(['Platen Duty Cycle', 1.0])
-    time.sleep(5)
-    print(p.getJson())
-    c.append(['Platen Duty Cycle', 0.5])
-    c.append(['Platen Duty Cycle', 0.5])
-    c.append(['Platen Duty Cycle', 0.5])
-    c.append(['Platen Duty Cycle', 0.5])
-    time.sleep(5)
-    print(p.getJson())
-    c.append(['Platen Duty Cycle', 0.0])
-    time.sleep(5)
-    print(p.getJson())
-    c.append(['Disable Platen Output', ''])
-    time.sleep(5)
-    print(p.getJson())
+    # hw.OperationalVacuum = True
+    # time.sleep(5)
+    # print(p.getJson())
+    # c.append(['Setup Platen', ''])
+    # time.sleep(5)
+    # print(p.getJson())
+    # c.append(['Platen Duty Cycle', 0.1])
+    # time.sleep(5)
+    # print(p.getJson())
+    # c.append(['Platen Duty Cycle', 0.05])
+    # time.sleep(5)
+    # print(p.getJson())
+    # c.append(['Platen Duty Cycle', 1.0])
+    # time.sleep(5)
+    # print(p.getJson())
+    # c.append(['Platen Duty Cycle', 0.5])
+    # c.append(['Platen Duty Cycle', 0.5])
+    # c.append(['Platen Duty Cycle', 0.5])
+    # c.append(['Platen Duty Cycle', 0.5])
+    # time.sleep(5)
+    # print(p.getJson())
+    # c.append(['Platen Duty Cycle', 0.0])
+    # time.sleep(5)
+    # print(p.getJson())
+    # c.append(['Disable Platen Output', ''])
+    # time.sleep(5)
+    # print(p.getJson())

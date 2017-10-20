@@ -28,7 +28,6 @@ class Shi_MCC_Status_Contract:
 
     def update(self, d):
         self.__Lock.acquire()
-        Logging.debugPrint(3,"Shi_MCC_Status_Contract update: {}".format(d))
         if 'DutyCycle' in d:
             self.DutyCycle = d['DutyCycle']
         if 'Stage1Temp' in d:

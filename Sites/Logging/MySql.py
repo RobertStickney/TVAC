@@ -8,8 +8,10 @@ class MySQlConnect:
 
 
     def __init__(self):
- #       userName = os.getlogin()
-        userName=os.getlogin()
+        if os.name == 'posix':
+            userName = os.environ['LOGNAME']
+        else:
+            userName = "User"
         if "root" in userName:
             user = "TVAC_Admin"
             host = "192.168.99.10"
@@ -30,7 +32,7 @@ if __name__ == '__main__':
     mysql = MySQlConnect()
 
 
-    sql = "SELECT * FROM tvac.Real_Temperture ORDER BY time DESC LIMIT 1;"
+    sql = "SELECT * FROM tvac.Real_Temperature ORDER BY time DESC LIMIT 1;"
     # print(sql)
 
     mysql.cur.execute(sql)
@@ -39,9 +41,9 @@ if __name__ == '__main__':
     # Profile_Instance
     # print(mysql.cur.fetchone()["profile_I_ID"])
     profile_I_ID = mysql.cur.fetchone()["profile_I_ID"]
-    sql = "SELECT * FROM tvac.Real_Temperture WHERE profile_I_ID=\"{}\";".format(profile_I_ID)
+    sql = "SELECT * FROM tvac.Real_Temperature WHERE profile_I_ID=\"{}\";".format(profile_I_ID)
 
     mysql.cur.execute(sql)
     mysql.conn.commit()
     for row in mysql.cur:
-        print("{},{},{},zone".format(row["time"],row["thermocouple"],row["temperture"]))
+        print("{},{},{},zone".format(row["time"],row["thermocouple"],row["temperature"]))

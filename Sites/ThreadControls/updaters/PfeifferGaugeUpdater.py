@@ -50,8 +50,10 @@ class PfeifferGaugeUpdater(Thread):
             mysql.cur.execute(sql)
             mysql.conn.commit()
         except Exception as e:
-            raise e
-            #return e
+            print(sql)
+            Logging.debugPrint(1, "Error in logPressureData, PfeifferGaugeUpdater: {}".format(str(e)))
+            if Logging.debug:
+                raise e
 
     def run(self):
         '''
@@ -62,9 +64,6 @@ class PfeifferGaugeUpdater(Thread):
             # While true to restart the thread if it errors out
             try:
                 # Thread "Start up" stuff goes here
-                Logging.logEvent("Event", "Thread Start",
-                                {"thread": "Pfeiffer Guage Control Stub",
-                                 "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug", "Status Update",
                                 {"message": "Starting Pfeiffer Guage Control Stub Thread",
                                  "level": 2})
@@ -112,7 +111,7 @@ class PfeifferGaugeUpdater(Thread):
                             # TODO: Test the system at differnt starting pressures, it could restart at any point
                             # What happens when pressure in roughing  is more than cryo?
                             self.gauges.update([{'addr': 1, 'Pressure': 1000},
-                                                {'addr': 2, 'Pressure': 0.000001},
+                                                {'addr': 2, 'Pressure': 0.001},
                                                 {'addr': 3, 'Pressure': 999}])
                             first = False
                             goingUp = False
@@ -134,8 +133,9 @@ class PfeifferGaugeUpdater(Thread):
                               "level": 4})
                     if __name__ != '__main__':
                         self.logPressureData()
-                    if time.time() < next_pressure_read_time:
-                        time.sleep(next_pressure_read_time - time.time())
+                    currentTime = time.time()
+                    if currentTime < next_pressure_read_time:
+                        time.sleep(next_pressure_read_time - currentTime)
 
             except Exception as e:
                 # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
@@ -150,13 +150,9 @@ class PfeifferGaugeUpdater(Thread):
                 Logging.logEvent("Debug", "Status Update",
                                  {"message": "There was a {} error in PfeifferGaugeUpdater. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
-                                  "level": 2})
-                # raise e
-            # nicely close things, to open them back up again...
-            finally:
-                userName = os.environ['LOGNAME']
-                if "root" in userName:
-                    pass
+                                  "level": 1})
+                if Logging.debug:
+                    raise e
                 time.sleep(4)
 
     def read_all_params(self):

@@ -81,16 +81,16 @@ class GetControl:
         # data unused
         Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
         errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
-        tempErrorList = dict(time=[],event=[],Thermocouple=[],details=[],actions=[])
+        tempErrorList = dict(time=[],event=[],item=[],details=[],actions=[])
         for i, error in enumerate(errorList):
             tempErrorList['time'].append(error['time'])
             tempErrorList['event'].append(error['event'])
-            tempErrorList['Thermocouple'].append(error['Thermocouple'])
+            tempErrorList['item'].append(error['item'])
             tempErrorList['details'].append(error['details'])
             tempErrorList['actions'].append(error['actions'])
 
             errorList.pop(i)
-        Logging.debugPrint(2, "Error: " + str(errorList))
+        Logging.debugPrint(2, "Error :" + str(errorList))
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
         # print(errorList[0])
@@ -185,3 +185,6 @@ class GetControl:
         threadInstance = ThreadCollectionInstance.getInstance()
         result = threadInstance.threadCollection.runProfile();
         return result
+
+    def recordData(self):
+        ProfileInstance.getInstance().recordData = True

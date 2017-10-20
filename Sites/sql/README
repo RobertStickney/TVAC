@@ -1,6 +1,6 @@
 tvac:
-	Expected_Temperture
-	Real_Temperture
+	Expected_Temperature
+	Real_Temperature
 	Event
 	Debug
 	TC_Profile
@@ -15,17 +15,17 @@ Format
 |	  ...		|
 +===============+
 
-Expected_Temperture
+Expected_Temperature
 	profile_I_ID
 	time
 	zone
-	temperture
+	Temperature
 
-Real_Temperture
+Real_Temperature
 	profile_I_ID
 	time
 	thermocouple
-	temperture
+	Temperature
 
 Event
 	event_type
