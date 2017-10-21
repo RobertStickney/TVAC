@@ -70,7 +70,62 @@ def unwrapJSON(json,zone):
 	#print(json)
 	return json[zone]['thermalprofiles']
 
+def validateProfile(json,zone,errors):
+	zoneData=json[zone]
+	#print(zoneData)
 
+	if zoneData["average"] == "":
+		zoneData["average"] == "Max"
+
+
+	if len(zoneData["thermocouples"]) == 0:
+		print("ProfileError : No Thermcouples selected for Zone",str(zoneData["zone"]))
+		errors+=1	
+	else:
+		for i in range(0,len(zoneData["thermocouples"])):
+			if zoneData["thermocouples"][i] == 0 or zoneData["thermocouples"][i] > 120 or zoneData["thermocouples"][i] <0:
+				print("ProfileError : Invalid TC Number for Zone",str(zoneData["zone"]))
+				errors+=1	
+
+
+	if zoneData["maxTemp"] > 500 or zoneData["maxTemp"] < 50:
+		print("ProfileError : Maximum Temp Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))
+		errors+=1	
+	if zoneData["maxTemp"] <= zoneData["minTemp"]:
+		print("ProfileError : Maximum Temp Limit below Minimum Temp Limit for Zone",str(zoneData["zone"]))
+		errors+=1	
+	if zoneData["maxTemp"] <= zoneData["minTemp"]:
+		print("ProfileError : Maximum Temp Limit below Minimum Temp Limit for Zone",str(zoneData["zone"]))
+		errors+=1	
+	if zoneData["minTemp"] > 500 or zoneData["minTemp"] < 50:
+		print("ProfileError : Minimum Temp Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))		
+		errors+=1	
+
+
+	if abs(zoneData["maxSlope"]) > 20 or zoneData["maxSlope"] == 0:
+		print("ProfileError : Slope Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))
+		errors+=1	
+
+
+	setPtData=json[zone]['thermalprofiles']
+
+	if len(setPtData) == 0:
+		print("ProfileError : No Set Points Defined for Zone",str(zoneData["zone"]))
+		errors+=1			
+	else:
+		for i in range(0,len(setPtData)):
+			if setPtData[i]["tempgoal"] == 0:
+				print("ProfileError : WARNING Floating Temp Goal Set for Zone %s, Set Point %s"
+				 % (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
+
+			elif setPtData[i]["tempgoal"] > zoneData["maxTemp"] or setPtData[i]["tempgoal"] < zoneData["minTemp"]:
+				print("ProfileError : Temperature Goal for Zone %s, Set Point %s violates Max/Min Temp Limits" 
+					% (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
+				errors+=1	
+
+	#print(setPtData[0]["tempgoal"])
+
+	return errors
 
 def closeErrorWindow(root): 
     root.destroy()
@@ -210,28 +265,24 @@ def generateJSON(fileName):
 	return output
 
 def main(args):
+
+	errors=0
+
 	if len(args) < 2:
 		#popupError("Error calling profile Importer")
 		print("Error Calling Importer")
 	jsonLabview = args[1]
-#	json = generateJSON(fileName)
-	#print(json)
-	#json = JSON.loads(jsonLabview)
 
 	with open(jsonLabview) as json_file:
 		json = JSON.load(json_file)
 
-	demo = False
-
 	expected_temps=dict(time=[],zone1=[],zone2=[],zone3=[],zone4=[],zone5=[],zone6=[],zone7=[],zone8=[],zone9=[])
-
-	#expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json,0))
-#	expected_temp_values2, expected_time_values = createExpectedValues(unwrapJSON(json,1))
 
 	for i in range(0,8):
 		try:
 			expected_temp_values, expected_time_values = createExpectedValues(unwrapJSON(json,i))
-			
+			errors=validateProfile(json,i,errors)
+
 			for j in range(0,len(expected_temp_values)):
 				zonestr="zone"+str(i+1)
 				expected_temps[zonestr].append(expected_temp_values[j])
@@ -240,9 +291,9 @@ def main(args):
 		except:
 			continue	
 
-	print(JSON.dumps(expected_temps))
 	# print(expected_time_values)
 	#print("Program worked!")
-
+	if errors == 0:
+		print(JSON.dumps(expected_temps))
 
 main(sys.argv)
