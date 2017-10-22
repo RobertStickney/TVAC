@@ -46,9 +46,18 @@ class ShiCryopumpCollection:
         # whichTCs values: ['all', 'Working', 'NotWorking']
         message = []
         self.__lock.acquire()
-        message.append('{"time":%s,' % self.time)
+        message = ['"time":%s' % self.time]
         self.__lock.release()
-        message.append('"MCC Status":%s,' % self.mcc_status.getJson())
-        message.append('"MCC Params":%s,' % self.mcc_params.getJson())
-        message.append('"Compressor":%s}' % self.compressor.getJson())
-        return ''.join(message)
+        message += ['"MCC Status":%s' % self.mcc_status.getJson(),
+                    '"MCC Params":%s' % self.mcc_params.getJson(),
+                    '"Compressor":%s' % self.compressor.getJson(),
+                    ]
+        return '{' + ','.join(message) + '}'
+
+    def get_json_plots(self, name):
+        self.__lock.acquire()
+        message = ['"time":%s,' % self.time]
+        self.__lock.release()
+        message += self.mcc_status.get_json_plots()
+        message += self.compressor.get_json_plots()
+        return '{' + ','.join(message) + '}'

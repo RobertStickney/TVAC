@@ -28,10 +28,10 @@ class HardwareStatusInstance:
             self.Thermocouples = ThermocoupleCollection()
             self.PfeifferGuages = PfeifferGaugeCollection()
             self.ShiCryopump = ShiCryopumpCollection()
-            self.Shi_MCC_Cmds = []  # [cmd, arg, arg,... arg]
-            self.Shi_compressor_Cmds = []
+            self.Shi_MCC_Cmds = []  # ['cmd', arg, arg,... arg]
+            self.Shi_Compressor_Cmds = []  # 'cmd'
             self.TdkLambda_PS = TdkLambdaCollection()
-            self.TdkLambda_Cmds = []  # [cmd, arg, arg,... arg]
+            self.TdkLambda_Cmds = []  # ['cmd', arg, arg,... arg]
             self.PC_104 = PC_104_Instance.getInstance()
 
             # System Wide Stats

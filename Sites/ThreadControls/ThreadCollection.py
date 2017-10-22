@@ -11,9 +11,10 @@ from ThreadControls.controlStubs.LN2ControlStub import LN2ControlStub
 from ThreadControls.controlStubs.VacuumControlStub import VacuumControlStub
 from ThreadControls.updaters.PfeifferGaugeUpdater import PfeifferGaugeUpdater
 from ThreadControls.updaters.ShiMccUpdater import ShiMccUpdater
+from ThreadControls.updaters.ShiCompressorUpdater import ShiCompressorUpdater
 from ThreadControls.updaters.ThermoCoupleUpdater import ThermoCoupleUpdater
-from ThreadControls.updaters.TsRegistersUpdater import TsRegistersUpdater
 from ThreadControls.updaters.TdkLambdaUpdater import TdkLambdaUpdater
+from ThreadControls.updaters.TsRegistersUpdater import TsRegistersUpdater
 
 
 
@@ -69,7 +70,7 @@ class ThreadCollection:
             2: ThermoCoupleUpdater(parent=parent),
             3: PfeifferGaugeUpdater(),
             4: ShiMccUpdater(),
-            # 5: ShiCompressorControlStub)(),
+            5: ShiCompressorUpdater(),
             6: TdkLambdaUpdater(),
             7: LN2ControlStub(ThreadCollection=parent),
             8: VacuumControlStub(),
@@ -110,7 +111,7 @@ class ThreadCollection:
 
         return True
 
-
+    # TODO: Should this function be removed I think it is depreacated.
     def runProfile(self, firstStart=True):
         '''
         This assumes a profile is already loaded in RAM, it will start the profile

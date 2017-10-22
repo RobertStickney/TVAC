@@ -141,9 +141,8 @@ class GetControl:
         d_out.update({"IR Lamp 16 PWM DC": 0})
         return "{'result':'success'}"
 
-    def getCompressorTemp(self):
-        resp = {'CompressorTemp': 123}
-        return json.dumps(resp)
+    def getShiTemps(self):
+        return HardwareStatusInstance.getInstance().ShiCryopump.mcc_status.get_json_plots()
 
     def getEventList(self):
         tmp = ProfileInstance.getInstance().systemStatusQueue

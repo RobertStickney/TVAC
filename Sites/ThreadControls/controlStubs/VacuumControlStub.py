@@ -31,6 +31,7 @@ class VacuumControlStub(Thread):
         self.kwargs = kwargs
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
+        self.profile = ProfileInstance.getInstance()
         self.hw = HardwareStatusInstance.getInstance()
         self.state = None
         self.oldState = True
@@ -49,12 +50,11 @@ class VacuumControlStub(Thread):
                 {"message": "Starting VacuumControlStub",
                  "level":2})
             
-            # TODO: change this to a while not ready, sleep 1
-            time.sleep(1)
             try:
-               while True:
-                    if ProfileInstance.getInstance().vacuumWanted and \
-                            self.hw.PfeifferGuages.get_roughpump_pressure() is not None:
+                while self.wait_for_hardware():  # Wait for hardware drivers to read sensors.
+                    time.sleep(1)
+                while True:
+                    if self.profile.vacuumWanted:
                         # With an active profile, we start putting the system under pressure
              
                         # Logging.logEvent("Debug","Status Update", 
@@ -81,7 +81,7 @@ class VacuumControlStub(Thread):
                         {"message": "Current chamber pressure: {}".format(self.chamberPressure),
                          "level":4})
 
-                        # Pressure is in Torr and Temperature is in Kelvin.
+                        # Pressure is in Torr and Temperatur>e is in Kelvin.
                         # calculations to get from here to there
                         if self.chamberPressure > 300: #torr?
                             # use the roughing pump to achieve Rough vacuum
@@ -155,7 +155,7 @@ class VacuumControlStub(Thread):
                 ProfileInstance.getInstance().zoneProfiles.activeProfile = False
                 raise e
             # end of try, catch
-        #end of outer while true
+        # end of outer while true
     # end of run()
 
     def atmosphere(self):
@@ -270,6 +270,19 @@ class VacuumControlStub(Thread):
             # Bakes ban happen here.
             # Thermal Profiles can start here
 
+    def wait_for_hardware(self):
+        ready = True
+        ready &= self.hw.PfeifferGuages.get_roughpump_pressure() is not None
+        ready &= self.hw.PfeifferGuages.get_chamber_pressure() is not None
+        ready &= self.hw.PfeifferGuages.get_cryopump_pressure() is not None
+        ready &= self.hw.ShiCryopump.get_mcc_params('Elapsed Time') is not None
+        ready &= self.hw.ShiCryopump.get_mcc_params('Tc Pressure State') is not None
+        ready &= self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') is not None
+        ready &= self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') is not None
+        ready &= self.hw.ShiCryopump.get_compressor('Helium Discharge Temperature') is not None
+        ready &= self.hw.ShiCryopump.get_compressor('Water Outlet Temperature') is not None
+        ready &= self.hw.ShiCryopump.get_compressor('System ON') is not None
+        return ready
 
 
     # TODO: Write a wrapper around opening valves to make one final check of the pressures before we open them
