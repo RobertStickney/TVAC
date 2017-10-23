@@ -40,9 +40,6 @@ class ThermoCoupleUpdater(Thread):
             # This try is there to catch any errors that might show up
             try:
                 # Thread "Start up" stuff goes here
-                Logging.logEvent("Event","Thread Start",
-                        {"thread": "ThermoCoupleUpdater",
-                         "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug","Status Update",
                 {"message": "Starting ThermoCoupleUpdater",
                  "level":2})
@@ -102,20 +99,12 @@ class ThermoCoupleUpdater(Thread):
                         'alarm': tc_alarm
                         }
                         '''
-                        if ProfileInstance.getInstance().activeProfile:
+                        if ProfileInstance.getInstance().recordData:
                             Logging.logEvent("Event","ThermoCouple Reading",
                                 {"message": "Current TC reading",
                                  "time":	TCs['time'],
                                  "tcList":	TCs['tcList'],
                                  "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID,
-                                 "ProfileInstance": ProfileInstance.getInstance()}
-                            )
-                        else:
-                            Logging.logEvent("Event","ThermoCouple Reading",
-                                {"message": "Current TC reading",
-                                 "time":    TCs['time'],
-                                 "tcList":  TCs['tcList'],
-                                 "profileUUID": "NULL",
                                  "ProfileInstance": ProfileInstance.getInstance()}
                             )
 
@@ -140,11 +129,11 @@ class ThermoCoupleUpdater(Thread):
                         })
                 Logging.logEvent("Debug","Status Update",
                         {"message": "There was a {} error in ThermoCoupleUpdater. File: {}:{}".format(exc_type,fname,exc_tb.tb_lineno),
-                         "level":2})
-                raise e
+                         "level":1})
+                if Logging.debug:
+                    raise e
                 # If you want to cleanly close things, do it here
                 time.sleep(self.SLEEP_TIME)
-                    # raise e
                 # end of try/except
             # end of running check
         # end of while True

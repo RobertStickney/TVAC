@@ -10,6 +10,7 @@ class ThermocoupleContract:
         self.temp = 0
         self.working = False
         self.userDefined = False
+        self.zone = 0
 
 
         self.time = 0

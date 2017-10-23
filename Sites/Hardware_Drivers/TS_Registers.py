@@ -168,6 +168,7 @@ class TS_Registers():
         print("Write byte: 0x{:x}".format(b))
 
     def dac_write(self, value, channel):
+        value = int(value)
         self.pc104.seek(self.Adc16Addr(0x0E))
         self.pc104.write_byte(value & 0xFF)
         self.pc104.write_byte(((channel & 0x03) << 6) | 0x30 | ((value & 0xF00)>>8))

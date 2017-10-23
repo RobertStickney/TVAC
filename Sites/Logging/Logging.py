@@ -9,6 +9,7 @@ class Logging(object):
 	output this program does
 	"""
 	verbos = 0
+	debug = False
 
 	@staticmethod
 	def logEvent(category, logType, data):
@@ -20,30 +21,27 @@ class Logging(object):
 				# in here check if 'type' is a buffer error, if so suggest checking connection to device
 				print("Error: Thread '{}' has had an error of type {}. Restarting thread now...".format(data['thread'],data['type']))
 		elif category is "Event":
-			if "Thread Start" in logType:
-				print("Event- {}: {}".format(logType,data.get("thread")))
-			elif "ThermoCouple Reading" in logType:
-				Logging.logLiveTempertureData(data)
-			elif "Expected Temp Update" in logType:
-				Logging.logExpectedTempertureData(data)
-			elif "Thermal Profile Update" in logType:
-				Logging.logThermalProfile(data)
+			# if "Thread Start" in logType:
+			currentTime = datetime.datetime.now()
+			print("Event- {}: {}".format(logType,data.get("message"),currentTime))
 
-			try:
-				systemStatusQueue = data["ProfileInstance"].systemStatusQueue
-				systemStatusQueue.append("[ '{}','{}', '{}' ]".format(category,logType, data.get("thread")))
-			except Exception as e:
-				Logging.debugPrint(1, "Error: {}".format(e))
+			# try:
+			# 	systemStatusQueue = data["ProfileInstance"].systemStatusQueue
+			# 	systemStatusQueue.append("[ '{}','{}', '{}' ]".format(category,logType, data.get("thread")))
+			# except Exception as e:
+			# 	Logging.debugPrint(1, "Error in Logging, LogEvent: {}".format(e))
+			# 	if Logging.debug:
+			# 		raise e
 
-			coloums = "( event_type, details )"
-			values = "( \"{}\",\"{}\" )".format(category,logType)
-			sql = "INSERT INTO tvac.Event {} VALUES {};".format(coloums, values)
-			try:
-				mysql = MySQlConnect()
-				mysql.cur.execute(sql)
-				mysql.conn.commit()
-			except Exception as e:
-				Logging.debugPrint(1, "Error: {}".format(e))
+			# coloums = "( event_type, details )"
+			# values = "( \"{}\",\"{}\" )".format(category,logType)
+			# sql = "INSERT INTO tvac.Event {} VALUES {};".format(coloums, values)
+			# try:
+			# 	mysql = MySQlConnect()
+			# 	mysql.cur.execute(sql)
+			# 	mysql.conn.commit()
+			# except Exception as e:
+			# 	Logging.debugPrint(1, "Error: {}".format(e))
 		elif category is "Debug":
 			if "Status Update" in logType:
 				Logging.debugPrint(data["level"],data['message'])
@@ -79,7 +77,7 @@ class Logging(object):
 					print("{}{}".format(prefix,line))
 
 	@staticmethod
-	def logExpectedTempertureData(data):
+	def logExpectedTemperatureData(data):
 		'''
 		data = {
 	  		 "expected_temp_values": expected_temp_values,
@@ -92,16 +90,16 @@ class Logging(object):
 		zone 				 = data["zone"]
 		profile 			 = data["profileUUID"]
 
-		coloums = "( profile_I_ID, time, zone, temperture )"
+		coloums = "( profile_I_ID, time, zone, temperature )"
 		values = ""
 		for i in range(len(expected_temp_values)):
 			time = expected_time_values[i]
 			time = datetime.datetime.fromtimestamp(time)
 
-			temperture = expected_temp_values[i]
-			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), int(zone[4:]), temperture)
+			temperature = expected_temp_values[i]
+			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), int(zone[4:]), temperature)
 
-		sql = "INSERT INTO tvac.Expected_Temperture {} VALUES {};".format(coloums, values[:-2])
+		sql = "INSERT INTO tvac.Expected_Temperature {} VALUES {};".format(coloums, values[:-2])
 		try:
 			mysql = MySQlConnect()
 			mysql.cur.execute(sql)
@@ -111,7 +109,7 @@ class Logging(object):
 
 
 	@staticmethod
-	def logLiveTempertureData(data):
+	def logLiveTemperatureData(data):
 		'''
 		data = {
 			"time":		TCs['time'],
@@ -131,16 +129,16 @@ class Logging(object):
 
 		time = data["time"]
 		profile = data["profileUUID"]
-		coloums = "( profile_I_ID, time, thermocouple, temperture )"
+		coloums = "( profile_I_ID, time, thermocouple, temperature )"
 		values = ""
 
 		for tc in data['tcList']:
 			thermocouple = tc["Thermocouple"]
-			temperture = tc["temp"]
+			temperature = tc["temp"]
 			if math.isnan(tc["temp"]):
 				continue
-			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), thermocouple, temperture)
-		sql = "INSERT INTO tvac.Real_Temperture {} VALUES {};".format(coloums, values[:-2])
+			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), thermocouple, temperature)
+		sql = "INSERT INTO tvac.Real_Temperature {} VALUES {};".format(coloums, values[:-2])
 		
 		sql.replace("nan", "NULL")
 		try:

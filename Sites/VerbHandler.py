@@ -51,12 +51,12 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 {"message": "Sending GET Results",
                  "level":1})
             Logging.logEvent("Debug","Status Update", 
-                {"message": "GET Results: {}".format(result.encode()),
+                {"message": "GET Results: {}".format(str(result).encode()),
                  "level": 5})
 
             # Out the results back to the server
             self.setHeader()
-            self.wfile.write(result.encode())
+            self.wfile.write(str(result).encode())
         except Exception as e:
             # print("There has been an error")
             # FileCreation.pushFile("Error","Get",'{"errorMessage":"%s"}\n'%(e))
@@ -116,11 +116,11 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 {"message": "Sending POST Results",
                  "level":1})
             Logging.logEvent("Debug","Status Update", 
-                {"message": "POST Results: {}".format(result.replace("\"","'").encode()),
+                {"message": "POST Results: {}".format(str(result).replace("\"","'").encode()),
                  "level":2})
 
             self.setHeader()
-            self.wfile.write(result.encode())
+            self.wfile.write(str(result).encode())
         except Exception as e:
 
             exc_type, exc_obj, exc_tb = sys.exc_info()

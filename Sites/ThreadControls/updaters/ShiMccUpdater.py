@@ -34,9 +34,6 @@ class ShiMccUpdater(Thread):
             # This has no check because it should always be running
             try:
                 # Thread "Start up" stuff goes here
-                Logging.logEvent("Event", "Thread Start",
-                                {"thread": "Shi Mcc Control Stub",
-                                "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug", "Status Update",
                                 {"message": "Starting Shi Mcc Control Stub Thread",
                                 "level": 2})
@@ -93,7 +90,6 @@ class ShiMccUpdater(Thread):
                                                  {"message": "Shi MCC Error Response: %s" % val['Response'],
                                                   "level": 4})
                             else:
-                                Logging.debugPrint(3,"MCC Response: {}".format(val['Response']))
                                 self.hw.ShiCryopump.update({'MCC Status': val['Response']})
                             Logging.logEvent("Debug", "Status Update",
                                              {"message": "Cryopump Stage 1: {:.1f}K; Stage 2: {:.1f}K".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'), self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp')),
@@ -172,7 +168,8 @@ class ShiMccUpdater(Thread):
                                               "line": exc_tb.tb_lineno,
                                               "thread": "ShiMccUpdater"
                                               })
-                            raise err
+                            if Logging.debug:
+                                raise err
                     else:
                         Logging.logEvent("Debug", "Status Update",
                                          {"message": "Test run of Shi MCC loop",
@@ -193,10 +190,10 @@ class ShiMccUpdater(Thread):
                 Logging.logEvent("Debug", "Status Update",
                                  {"message": "There was a {} error in ShiMccUpdater. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
-                                  "level": 2})
-                raise e
-                # self.mcc.close_port()
-                # time.sleep(4)
+                                  "level": 1})
+                if Logging.debug:
+                    raise e
+                time.sleep(4)
 
     def run_set_cmd(self, function, cmd):
         if len(cmd) <= 1:

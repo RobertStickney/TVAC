@@ -457,10 +457,10 @@ class Shi_Mcc:
     # 2.26 • Second Stage Temperature pg:20
     def Get_SecondStageTemp(self):  # Command Ex: "$K:\r"
         # return self.Send_cmd("K")
-        if os.name == "posix":
+        if os.name == 'posix':
             userName = os.environ['LOGNAME']
         else:
-            userName = "user"
+            userName = "User"
         if "root" in userName:
             val = self.Send_cmd("K")
         else:
