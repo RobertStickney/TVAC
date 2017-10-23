@@ -125,6 +125,8 @@ class TdkLambdaUpdater(Thread):
                                               "line": exc_tb.tb_lineno,
                                               "thread": "TdkLambdaUpdater"
                                               })
+                            if Logging.debug:
+                                raise err
                     else:
                         Logging.logEvent("Debug", "Status Update",
                                          {"message": "Test run of TDK Lambda Power Supplies loop",

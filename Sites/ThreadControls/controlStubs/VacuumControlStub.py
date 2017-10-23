@@ -110,6 +110,9 @@ class VacuumControlStub(Thread):
                             # Wait for nothing, either the program will end, or be stopped by the safety checker
                             self.state = "Operational Vacuum"
 
+                        # if Logging.debug:
+                        #     self.state = "Operational Vacuum"
+
                         Logging.logEvent("Debug","Status Update", 
                         {"message": "Current chamber state: {}".format(self.state),
                          "level":4})
@@ -125,11 +128,11 @@ class VacuumControlStub(Thread):
                         if "Operational Vacuum" in self.state:
                             self.hw.OperationalVacuum = True
                         else:
-                            #TODO: If you are in debugging mode, you can run as if you were in vacuum (take this out for last testing)
-                            if Logging.debug:
-                                self.hw.OperationalVacuum = True
-                            else:
-                                self.hw.OperationalVacuum = False
+                            # #TODO: If you are in debugging mode, you can run as if you were in vacuum (take this out for last testing)
+                            # if Logging.debug:
+                            #     self.hw.OperationalVacuum = True
+                            # else:
+                            self.hw.OperationalVacuum = False
 
                         
 

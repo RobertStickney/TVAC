@@ -31,8 +31,9 @@ class ThreadCollection:
 
         # if there is a half finished profile in the database
         result = self.returnActiveProfile()
+        Logging.debugPrint(3,"Active Profile?: {}".format(result))
         if result:
-            print("result: {}".format(result))
+            Logging.debugPrint(1, "Unfinished profile found: {}".format(str(result['profile_name'])))
             # load up ram (zone collection) with info from the database and the given start time
             self.zoneProfiles.loadProfile(result['profile_name'],result['profile_Start_Time'],result['thermal_Start_Time'],result['first_Soak_Start_Time'])
             # after it's in memory, run it!

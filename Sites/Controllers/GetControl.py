@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
@@ -81,19 +82,17 @@ class GetControl:
         # data unused
         Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
         errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
-        tempErrorList = dict(time=[],event=[],item=[],details=[],actions=[])
+        tempErrorList = dict(time=[],event=[],item=[],itemID=[],details=[],actions=[])
         for i, error in enumerate(errorList):
             tempErrorList['time'].append(error['time'])
             tempErrorList['event'].append(error['event'])
             tempErrorList['item'].append(error['item'])
+            tempErrorList['itemID'].append(error['itemID'])
             tempErrorList['details'].append(error['details'])
             tempErrorList['actions'].append(error['actions'])
 
             errorList.pop(i)
-        Logging.debugPrint(2, "Error :" + str(errorList))
-        # error = errorList[0]
-        # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
-        # print(errorList[0])
+
         return json.dumps(tempErrorList)
 
     def getLastErrorTest(self):
@@ -113,7 +112,7 @@ class GetControl:
 
 
     def hardStop(self):
-        print("hard stop")
+        debugPrint(1,"Hard stop has been called")
         d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
         ProfileInstance.getInstance().activeProfile = False
         d_out.update({"IR Lamp 1 PWM DC": 0})
@@ -132,16 +131,36 @@ class GetControl:
         d_out.update({"IR Lamp 14 PWM DC": 0})
         d_out.update({"IR Lamp 15 PWM DC": 0})
         d_out.update({"IR Lamp 16 PWM DC": 0})
-        return "{'result':'success'}"
+
+        HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
+        return {'result':'success'}
 
     def getCompressorTemp(self):
         resp = {'CompressorTemp': 123}
         return json.dumps(resp)
 
+    # def getEventList(self):
+    #     tmp = ProfileInstance.getInstance().systemStatusQueue
+    #     ProfileInstance.getInstance().systemStatusQueue = []
+    #     return str(tmp)
+
     def getEventList(self):
-        tmp = ProfileInstance.getInstance().systemStatusQueue
-        ProfileInstance.getInstance().systemStatusQueue = []
-        return str(tmp)
+        # data unused
+        Logging.debugPrint(2,"Calling: Get Event List")
+        eventList = ProfileInstance.getInstance().systemStatusQueue
+        eventList.append({"time":str(datetime.now()),
+                        "category":"System",
+                        "message":"This is a test event"})
+        tempEventList = dict(time=[],category=[],message=[])
+        for i, event in enumerate(eventList):
+            tempEventList['time'].append(event['time'])
+            tempEventList['category'].append(event['category'])
+            tempEventList['message'].append(event['message'])
+
+            eventList.pop(i)
+        Logging.debugPrint(2, "Events :" + str(eventList))
+
+        return json.dumps(tempEventList)
     
     def getMCCData(self):
         return HardwareStatusInstance.getInstance().ShiCryopump.mcc_status.getJson()

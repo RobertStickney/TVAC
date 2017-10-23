@@ -64,7 +64,7 @@ class TsRegistersUpdater(Thread):
                         
                         Logging.logEvent("Debug","Status Update", 
                            {"message": "Reading and writing with PC 104",
-                             "level":4})
+                             "level":5})
 
                         self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0(),
                                                self.da_io.digital_out.get_c1_b1(),
@@ -85,7 +85,7 @@ class TsRegistersUpdater(Thread):
                     else:
                         Logging.logEvent("Debug","Status Update", 
                            {"message": "Test run of PC 104 loop",
-                             "level":4})
+                             "level":5})
                         time.sleep(5)
 
             except Exception as e:
@@ -101,6 +101,8 @@ class TsRegistersUpdater(Thread):
                 Logging.logEvent("Debug","Status Update", 
                         {"message": "There was a {} error in TsRegistersUpdater. File: {}:{}\n{}".format(exc_type,fname,exc_tb.tb_lineno,e),
                          "level":2})
+                if Logging.debug:
+                    raise e
                 
                 # nicely close things, to open them back up again...
                 userName = os.environ['LOGNAME']

@@ -30,27 +30,6 @@ class ZoneProfileContract:
         self.minHeatError = None
         self.maxHeatPerMin = None
 
-        # if 'zone' in d:
-        #     self.zone = d['zone']
-        # else:
-        #     self.zone = 0
-        # if 'profileuuid' in d:
-        #     self.profileUUID = d['profileuuid']
-        # else:
-        #     self.profileUUID = ''
-        # if 'average' in d:
-        #     self.zone = d['average']
-        # else:
-        #     self.average = 'Average'
-        # if 'thermalprofiles' in d:
-        #     self.thermalProfiles = self.setThermalProfiles(d['thermalprofiles'])
-        # else:
-        #     self.thermalProfiles = ''
-        # if 'thermocouples' in d:
-        #     self.thermocouples = self.setThermocouples(d['thermocouples'])
-        # else:
-        #     self.thermocouples = []
-
 
     def setThermocouples(self, thermocouples):
         self.__lock.acquire()
@@ -98,7 +77,7 @@ class ZoneProfileContract:
         if not mode:
             mode = self.average
         if mode == "Average":
-            temp = (sum(a) / len(a))
+            temp = (sum(tc.getTemp() for tc in self.thermocouples) / len(self.thermocouples))
         if mode == "Min":
             temp = min(self.thermocouples, key=lambda x: x.getTemp()).getTemp()
         if mode == "Max":
