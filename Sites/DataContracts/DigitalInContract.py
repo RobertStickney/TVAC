@@ -72,6 +72,27 @@ class DigitalInContract:
         self.notUsed11 = False            # C 2: Di 30-
         self.LN2en = False                # C 2: Di 31- LN2 flow is enabled
 
+        self.LN2_P_Sol_Open = None      # LN2 Platen Solenoid valve is open?
+        self.LN2_P_Sol_Open_WF = None   # LN2 Platen Solenoid valve open switch wiring fault.
+        self.LN2_P_Sol_Closed = None    # LN2 Platen Solenoid valve is closed?
+        self.LN2_P_Sol_Closed_WF = None  # LN2 Platen Solenoid valve closed switch wiring fault.
+
+        self.LN2_S_Sol_Open = None      # LN2 Shroud Solenoid valve is open?
+        self.LN2_S_Sol_Open_WF = None   # LN2 Shroud Solenoid valve open switch wiring fault.
+        self.LN2_S_Sol_Closed = None    # LN2 Shroud Solenoid valve is closed?
+        self.LN2_S_Sol_Closed_WF = None  # LN2 Shroud Solenoid valve closed switch wiring fault.
+
+        self.CryoP_GV_Open = None       # Cryo Pump Gate valve is open?
+        self.CryoP_GV_Open_WF = None    # Cryo Pump Gate valve open switch wiring fault.
+        self.CryoP_GV_Closed = None     # Cryo Pump Gate valve is closed?
+        self.CryoP_GV_Closed_WF = None  # Cryo Pump Gate valve closed switch wiring fault.
+
+        self.RoughP_Powered = None      # Roughing Pump is Powered?
+        self.RoughP_Powered_WF = None   # Roughing Pump is Powered switch wiring fault.
+        self.RoughP_On_Sw = None        # Roughing Pump is On?
+        self.RoughP_On_Sw_WF = None     # Roughing Pump is On switch wiring fault.
+
+
     def update(self, d):
         self.__lock.acquire()
         if 'C1 B0' in d:
@@ -83,6 +104,10 @@ class DigitalInContract:
             self.pgChamberRelay2 = ((d['C1 B0'] & 0x20) > 0)  # C 1: Di 5
             self.LN2_P_Sol_Open_NC = ((d['C1 B0'] & 0x40) > 0)  # C 1: Di 6
             self.LN2_P_Sol_Open_O = ((d['C1 B0'] & 0x80) > 0)  # C 1: Di 7
+
+            self.LN2_P_Sol_Open = self.LN2_P_Sol_Open_NC and not self.LN2_P_Sol_Open_O
+            self.LN2_P_Sol_Open_WF = self.LN2_P_Sol_Open_NC == self.LN2_P_Sol_Open_O
+
         if 'C1 B1' in d:
             self.LN2_P_Sol_Closed_NC = ((d['C1 B1'] & 0x01) > 0)  # C 1: Di 8
             self.LN2_P_Sol_Closed_O = ((d['C1 B1'] & 0x02) > 0)  # C 1: Di 9
@@ -92,6 +117,19 @@ class DigitalInContract:
             self.LN2_S_Sol_Closed_O = ((d['C1 B1'] & 0x20) > 0)  # C 1: Di 13
             self.CryoP_GV_Open_NC = ((d['C1 B1'] & 0x40) > 0)  # C 1: Di 14
             self.CryoP_GV_Open_O = ((d['C1 B1'] & 0x80) > 0)  # C 1: Di 15
+
+            self.LN2_P_Sol_Closed = self.LN2_P_Sol_Closed_NC and not self.LN2_P_Sol_Closed_O
+            self.LN2_P_Sol_Closed_WF = self.LN2_P_Sol_Closed_NC == self.LN2_P_Sol_Closed_O
+
+            self.LN2_S_Sol_Open = self.LN2_S_Sol_Open_NC and not self.LN2_S_Sol_Open_O
+            self.LN2_S_Sol_Open_WF = self.LN2_S_Sol_Open_NC == self.LN2_S_Sol_Open_O
+
+            self.LN2_S_Sol_Closed = self.LN2_S_Sol_Closed_NC and not self.LN2_S_Sol_Closed_O
+            self.LN2_S_Sol_Closed_WF = self.LN2_S_Sol_Closed_NC == self.LN2_S_Sol_Closed_O
+
+            self.CryoP_GV_Open = self.CryoP_GV_Open_NC and not self.CryoP_GV_Open_O
+            self.CryoP_GV_Open_WF = self.CryoP_GV_Open_NC == self.CryoP_GV_Open_O
+
         if 'C1 B2' in d:
             self.CryoP_GV_Closed_NC = ((d['C1 B2'] & 0x01) > 0)  # C 1: Di 16
             self.CryoP_GV_Closed_O = ((d['C1 B2'] & 0x02) > 0)  # C 1: Di 17
@@ -101,6 +139,16 @@ class DigitalInContract:
             self.RoughP_Pwr_O = ((d['C1 B2'] & 0x20) > 0)  # C 1: Di 21
             self.RoughP_On_NC = ((d['C1 B2'] & 0x40) > 0)  # C 1: Di 22
             self.RoughP_On_O = ((d['C1 B2'] & 0x80) > 0)  # C 1: Di 23
+
+            self.CryoP_GV_Closed = self.CryoP_GV_Closed_NC and not self.CryoP_GV_Closed_O
+            self.CryoP_GV_Closed_WF = self.CryoP_GV_Closed_NC == self.CryoP_GV_Closed_O
+
+            self.RoughP_Powered = self.RoughP_Pwr_NC and not self.RoughP_Pwr_O
+            self.RoughP_Powered_WF = self.RoughP_Pwr_NC == self.RoughP_Pwr_O
+
+            self.RoughP_On_Sw = self.RoughP_On_NC and not self.RoughP_On_O
+            self.RoughP_On_Sw_WF = self.RoughP_On_NC == self.RoughP_On_O
+
         if 'C1 B3' in d:
             self.notUsed1 = ((d['C1 B3'] & 0x01) > 0)  # C 1: Di 24
             self.notUsed2 = ((d['C1 B3'] & 0x02) > 0)  # C 1: Di 25
@@ -162,42 +210,84 @@ class DigitalInContract:
             val = self.pgChamberRelay1
         elif name == 'pgChamberRelay2':
             val = self.pgChamberRelay2
+
+        elif name == 'LN2_P_Sol_Open':
+            val = self.LN2_P_Sol_Open
         elif name == 'LN2_P_Sol_Open_NC':
             val = self.LN2_P_Sol_Open_NC
         elif name == 'LN2_P_Sol_Open_O':
             val = self.LN2_P_Sol_Open_O
+        elif name == 'LN2_P_Sol_Open_WF':
+            val = self.LN2_P_Sol_Open_WF
+
+        elif name == 'LN2_P_Sol_Closed':
+            val = self.LN2_P_Sol_Closed
         elif name == 'LN2_P_Sol_Closed_NC':
             val = self.LN2_P_Sol_Closed_NC
         elif name == 'LN2_P_Sol_Closed_O':
             val = self.LN2_P_Sol_Closed_O
+        elif name == 'LN2_P_Sol_Closed_WF':
+            val = self.LN2_P_Sol_Closed_WF
+
+        elif name == 'LN2_S_Sol_Open':
+            val = self.LN2_S_Sol_Open
         elif name == 'LN2_S_Sol_Open_NC':
             val = self.LN2_S_Sol_Open_NC
         elif name == 'LN2_S_Sol_Open_O':
             val = self.LN2_S_Sol_Open_O
+        elif name == 'LN2_S_Sol_Open_WF':
+            val = self.LN2_S_Sol_Open_WF
+
+        elif name == 'LN2_S_Sol_Closed':
+            val = self.LN2_S_Sol_Closed
         elif name == 'LN2_S_Sol_Closed_NC':
             val = self.LN2_S_Sol_Closed_NC
         elif name == 'LN2_S_Sol_Closed_O':
             val = self.LN2_S_Sol_Closed_O
+        elif name == 'LN2_S_Sol_Closed_WF':
+            val = self.LN2_S_Sol_Closed_WF
+
+        elif name == 'CryoP_GV_Open':
+            val = self.CryoP_GV_Open
         elif name == 'CryoP_GV_Open_NC':
             val = self.CryoP_GV_Open_NC
         elif name == 'CryoP_GV_Open_O':
             val = self.CryoP_GV_Open_O
+        elif name == 'CryoP_GV_Open_WF':
+            val = self.CryoP_GV_Open_WF
+
+        elif name == 'CryoP_GV_Closed':
+            val = self.CryoP_GV_Closed
         elif name == 'CryoP_GV_Closed_NC':
             val = self.CryoP_GV_Closed_NC
         elif name == 'CryoP_GV_Closed_O':
             val = self.CryoP_GV_Closed_O
+        elif name == 'CryoP_GV_Closed_WF':
+            val = self.CryoP_GV_Closed_WF
+
         elif name == 'RoughP_GV_Open':
             val = self.RoughP_GV_Open
         elif name == 'RoughP_GV_Closed':
             val = self.RoughP_GV_Closed
+
+        elif name == 'RoughP_Powered':
+            val = self.RoughP_Powered
         elif name == 'RoughP_Pwr_NC':
             val = self.RoughP_Pwr_NC
         elif name == 'RoughP_Pwr_O':
             val = self.RoughP_Pwr_O
+        elif name == 'RoughP_Powered_WF':
+            val = self.RoughP_Powered_WF
+
+        elif name == 'RoughP_On_Sw':
+            val = self.RoughP_On_Sw
         elif name == 'RoughP_On_NC':
             val = self.RoughP_On_NC
         elif name == 'RoughP_On_O':
             val = self.RoughP_On_O
+        elif name == 'RoughP_On_Sw_WF':
+            val = self.RoughP_On_Sw_WF
+
         # elif name == 'notUsed1':
         #     val = self.notUsed1
         elif name == 'LN2AirOK':

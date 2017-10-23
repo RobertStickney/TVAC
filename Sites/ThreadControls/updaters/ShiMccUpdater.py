@@ -28,6 +28,10 @@ class ShiMccUpdater(Thread):
         self.param_period = 30  # 10 second period
 
     def run(self):
+        if os.name == "posix":
+            userName = os.environ['LOGNAME']
+        else:
+            userName = "user"
         # While true to restart the thread if it errors out
         while True:
             # Catch anything that goes wrong
@@ -41,10 +45,6 @@ class ShiMccUpdater(Thread):
                                 {"message": "Starting Shi Mcc Control Stub Thread",
                                 "level": 2})
 
-                if os.name == "posix":
-                    userName = os.environ['LOGNAME']
-                else:
-                    userName = "user"
                 if "root" in userName:
                     # Live systems go here
                     Logging.logEvent("Debug", "Status Update",

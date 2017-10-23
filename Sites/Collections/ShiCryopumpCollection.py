@@ -41,10 +41,9 @@ class ShiCryopumpCollection:
     def get_compressor(self, name):
         return self.compressor.getVal(name)
 
-    def getJson(self, temp_units = 'K', whichTCs = 'all'):
+    def getJson(self):
         # temp_units values: ['K', 'C', 'F']
         # whichTCs values: ['all', 'Working', 'NotWorking']
-        message = []
         self.__lock.acquire()
         message = ['"time":%s' % self.time]
         self.__lock.release()
@@ -54,7 +53,7 @@ class ShiCryopumpCollection:
                     ]
         return '{' + ','.join(message) + '}'
 
-    def get_json_plots(self, name):
+    def get_json_plots(self):
         self.__lock.acquire()
         message = ['"time":%s,' % self.time]
         self.__lock.release()
