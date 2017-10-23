@@ -7,6 +7,7 @@ from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
 from Logging.Logging import Logging
 from datetime import datetime           #For Testing only - DELETE
+import time                             #For Testing only - DELETE
 
 class GetControl:
 
@@ -100,16 +101,15 @@ class GetControl:
         # ONLY FOR labview testing / design purposes - TO DO DELETE BEFORE DISTRIBUTION
         # Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
         # errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
-        tempErrorList = dict(time=[],event=[],Thermocouple=[],details=[],actions=[])
+        tempErrorList = dict(time=[],event=[],item=[],itemID=[],details=[],actions=[])
         for i in range(0,3):
-            if i==2:
-                tempErrorList['time'].append("2017-10-15 09:57:04.570877")
-            else:
-                tempErrorList['time'].append(str(datetime.now()))
+            tempErrorList['time'].append(str(datetime.now()))
             tempErrorList['event'].append("Bogus Error")
-            tempErrorList['Thermocouple'].append(42)
-            tempErrorList['details'].append("Gremlins have attacked")
+            tempErrorList['item'].append("Cat")
+            tempErrorList['itemID'].append(str(42))            
+            tempErrorList['details'].append(str(i)+" Gremlins have attacked")
             tempErrorList['actions'].append("Coffee")
+            time.sleep(.5)
             #errorList.pop(i)
         print(tempErrorList)
         # error = errorList[0]
