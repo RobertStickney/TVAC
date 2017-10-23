@@ -305,37 +305,62 @@ class DigitalInContract:
         self.__lock.release()
         return val
 
-    def getJson(self):
+    def getJson_bits(self):
         self.__lock.acquire()
-        message = ['{"PG-SW-RoughP-Relay 1":%s,' % json.dumps(self.pgRoughPumpRelay1),
-                   '"PG-SW-RoughP-Relay 2":%s,' % json.dumps(self.pgRoughPumpRelay2),
-                   '"PG-SW-CryoP-Relay 1":%s,' % json.dumps(self.pgCryoPumpRelay1),
-                   '"PG-SW-CryoP-Relay 2":%s,' % json.dumps(self.pgCryoPumpRelay2),
-                   '"PG-SW-Chamber-Relay 1":%s,' % json.dumps(self.pgChamberRelay1),
-                   '"PG-SW-Chamber-Relay 2":%s,' % json.dumps(self.pgChamberRelay2),
-                   '"LN2-P-Sol-Open: NC":%s,' % json.dumps(self.LN2_P_Sol_Open_NC),
-                   '"LN2-P-Sol-Open: O":%s,' % json.dumps(self.LN2_P_Sol_Open_O),
-                   '"LN2-P-Sol-Closed: NC":%s,' % json.dumps(self.LN2_P_Sol_Closed_NC),
-                   '"LN2-P-Sol-Closed: O":%s,' % json.dumps(self.LN2_P_Sol_Closed_O),
-                   '"LN2-S-Sol-Open: NC":%s,' % json.dumps(self.LN2_S_Sol_Open_NC),
-                   '"LN2-S-Sol-Open: O":%s,' % json.dumps(self.LN2_S_Sol_Open_O),
-                   '"LN2-S-Sol-Closed: NC":%s,' % json.dumps(self.LN2_S_Sol_Closed_NC),
-                   '"LN2-S-Sol-Closed: O":%s,' % json.dumps(self.LN2_S_Sol_Closed_O),
-                   '"CryoP-GV-Open: NC":%s,' % json.dumps(self.CryoP_GV_Open_NC),
-                   '"CryoP-GV-Open: O":%s,' % json.dumps(self.CryoP_GV_Open_O),
-                   '"CryoP-GV-Closed: NC":%s,' % json.dumps(self.CryoP_GV_Closed_NC),
-                   '"CryoP-GV-Closed: O":%s,' % json.dumps(self.CryoP_GV_Closed_O),
-                   '"RoughP-GV-Open":%s,' % json.dumps(self.RoughP_GV_Open),
-                   '"RoughP-GV-Closed":%s,' % json.dumps(self.RoughP_GV_Closed),
-                   '"RoughP-Pwr: NC":%s,' % json.dumps(self.RoughP_Pwr_NC),
-                   '"RoughP-Pwr: O":%s,' % json.dumps(self.RoughP_Pwr_O),
-                   '"RoughP-On: NC":%s,' % json.dumps(self.RoughP_On_NC),
-                   '"RoughP-On: O":%s,' % json.dumps(self.RoughP_On_O),
-                   '"notUsed1":%s,' % json.dumps(self.notUsed1),
-                   '"Air supply LN2 OK":%s,' % json.dumps(self.LN2AirOK),
-                   '"Air supply OK":%s,' % json.dumps(self.AirOK),
-                   '"t20":%s,' % json.dumps(self.t20),
-                   '"notUsed7":%s,' % json.dumps(self.notUsed7),
-                   '"LN2-en":%s}' % json.dumps(self.LN2en)]
+        message = ['"LN2-P-Sol-Open: NC":%s' % json.dumps(self.LN2_P_Sol_Open_NC),
+                   '"LN2-P-Sol-Open: O":%s' % json.dumps(self.LN2_P_Sol_Open_O),
+                   '"LN2-P-Sol-Closed: NC":%s' % json.dumps(self.LN2_P_Sol_Closed_NC),
+                   '"LN2-P-Sol-Closed: O":%s' % json.dumps(self.LN2_P_Sol_Closed_O),
+                   '"LN2-S-Sol-Open: NC":%s' % json.dumps(self.LN2_S_Sol_Open_NC),
+                   '"LN2-S-Sol-Open: O":%s' % json.dumps(self.LN2_S_Sol_Open_O),
+                   '"LN2-S-Sol-Closed: NC":%s' % json.dumps(self.LN2_S_Sol_Closed_NC),
+                   '"LN2-S-Sol-Closed: O":%s' % json.dumps(self.LN2_S_Sol_Closed_O),
+                   '"CryoP-GV-Open: NC":%s' % json.dumps(self.CryoP_GV_Open_NC),
+                   '"CryoP-GV-Open: O":%s' % json.dumps(self.CryoP_GV_Open_O),
+                   '"CryoP-GV-Closed: NC":%s' % json.dumps(self.CryoP_GV_Closed_NC),
+                   '"CryoP-GV-Closed: O":%s' % json.dumps(self.CryoP_GV_Closed_O),
+                   '"RoughP-GV-Open":%s' % json.dumps(self.RoughP_GV_Open),
+                   '"RoughP-GV-Closed":%s' % json.dumps(self.RoughP_GV_Closed),
+                   '"RoughP-Pwr: NC":%s' % json.dumps(self.RoughP_Pwr_NC),
+                   '"RoughP-Pwr: O":%s' % json.dumps(self.RoughP_Pwr_O),
+                   '"RoughP-On: NC":%s' % json.dumps(self.RoughP_On_NC),
+                   '"RoughP-On: O":%s' % json.dumps(self.RoughP_On_O),
+                   '"notUsed1":%s' % json.dumps(self.notUsed1),
+                   '"Air supply LN2 OK":%s' % json.dumps(self.LN2AirOK),
+                   '"Air supply OK":%s' % json.dumps(self.AirOK),
+                   '"t20":%s' % json.dumps(self.t20),
+                   '"notUsed7":%s' % json.dumps(self.notUsed7),
+                   '"LN2-en":%s' % json.dumps(self.LN2en),
+                   ]
         self.__lock.release()
-        return ''.join(message)
+        return '{' + ','.join(message) + '}'
+
+    def getJson_Switches(self):
+        self.__lock.acquire()
+        message = ['"LN2-P-Sol-Open":%s' % json.dumps(self.LN2_P_Sol_Open),
+                   '"LN2-P-Sol-Closed":%s' % json.dumps(self.LN2_P_Sol_Closed),
+                   '"LN2-S-Sol-Open":%s' % json.dumps(self.LN2_S_Sol_Open),
+                   '"LN2-S-Sol-Closed":%s' % json.dumps(self.LN2_S_Sol_Closed),
+                   '"CryoP-GV-Open":%s' % json.dumps(self.CryoP_GV_Open),
+                   '"CryoP-GV-Closed":%s' % json.dumps(self.CryoP_GV_Closed),
+                   '"RoughP-GV-Open":%s' % json.dumps(self.RoughP_GV_Open),
+                   '"RoughP-GV-Closed":%s' % json.dumps(self.RoughP_GV_Closed),
+                   '"RoughP Powered":%s' % json.dumps(self.RoughP_Powered),
+                   '"RoughP_On_Sw":%s' % json.dumps(self.RoughP_On_Sw),
+                   ]
+        self.__lock.release()
+        return '{' + ','.join(message) + '}'
+
+    def getJson_Switches_WF(self):
+        self.__lock.acquire()
+        message = ['"LN2-P-Sol-Open: WF":%s' % json.dumps(self.LN2_P_Sol_Open_WF),
+                   '"LN2-P-Sol-Closed: WF":%s' % json.dumps(self.LN2_P_Sol_Closed_WF),
+                   '"LN2-S-Sol-Open: WF":%s' % json.dumps(self.LN2_S_Sol_Open_WF),
+                   '"LN2-S-Sol-Closed: WF":%s' % json.dumps(self.LN2_S_Sol_Closed_WF),
+                   '"CryoP-GV-Open: WF":%s' % json.dumps(self.CryoP_GV_Open_WF),
+                   '"CryoP-GV-Closed: WF":%s' % json.dumps(self.CryoP_GV_Closed_WF),
+                   '"RoughP Powered: WF":%s' % json.dumps(self.RoughP_Powered_WF),
+                   '"RoughP_On_Sw: WF":%s' % json.dumps(self.RoughP_On_Sw_WF),
+                   ]
+        self.__lock.release()
+        return '{' + ','.join(message) + '}'
