@@ -7,31 +7,32 @@ class Shi_MCC_Params_Contract:
     __Lock = threading.RLock()
 
     def __init__(self):
-        self.ElapsedTime = 0
-        self.Failed_RateOfRise_Cycles = 0
-        self.FailedRepurgeCycles = 0
-        self.FirstStageTempCTL = {'method': 0, 'temp': 0}
-        self.LastRateOfRiseValue = 0
-        self.ModuleVersion = ''
-        self.PowerFailureRecovery = 0
-        self.PowerFailureRecoveryStatus = ''
-        self.RegenCycles = 0
-        self.RegenParam = {'0': 0,
-                           '1': 0,
-                           '2': 0,
-                           '3': 0,
-                           '4': 0,
-                           '5': 0,
-                           '6': 0,
-                           'A': 0,
-                           'C': 0,
-                           'G': 0,
-                           'z': 0}
-        self.RegenStartDelay = 0
-        self.RegenStepTimer = 0
-        self.RegenTime = 0
-        self.SecondStageTempCTL = 0
-        self.TcPressureState = False
+        self.ElapsedTime = None
+        self.Failed_RateOfRise_Cycles = None
+        self.FailedRepurgeCycles = None
+        self.FirstStageTempCTL = {'method': None, 'temp': None}
+        self.LastRateOfRiseValue = None
+        self.ModuleVersion = None
+        self.PowerFailureRecovery = None
+        self.PowerFailureRecoveryStatus = None
+        self.RegenCycles = None
+        self.RegenParam = {'0': None,
+                           '1': None,
+                           '2': None,
+                           '3': None,
+                           '4': None,
+                           '5': None,
+                           '6': None,
+                           'A': None,
+                           'C': None,
+                           'G': None,
+                           'z': None,
+                           }
+        self.RegenStartDelay = None
+        self.RegenStepTimer = None
+        self.RegenTime = None
+        self.SecondStageTempCTL = None
+        self.TcPressureState = None
 
     def update(self, d):
         self.__Lock.acquire()
@@ -135,20 +136,21 @@ class Shi_MCC_Params_Contract:
 
     def getJson(self):
         self.__Lock.acquire()
-        message = ['{"Elapsed Time":%s,' % self.ElapsedTime,
-                   '"Failed Rate Of Rise Cycles":%s,' % self.Failed_RateOfRise_Cycles,
-                   '"Failed Repurge Cycles":%s,' % self.FailedRepurgeCycles,
-                   '"First Stage Temp CTL":%s,' % json.dumps(self.FirstStageTempCTL),
-                   '"Last Rate Of Rise Value":%s,' % self.LastRateOfRiseValue,
-                   '"MCC Version":%s,' % self.ModuleVersion,
-                   '"Power Failure Recovery":%s,' % self.PowerFailureRecovery,
-                   '"Power Failure Recovery Status":"%s",' % self.PowerFailureRecoveryStatus,
-                   '"Regen Cycles":%s,' % self.RegenCycles,
-                   '"Regen Param":%s,' % json.dumps(self.RegenParam),
-                   '"Regen Start Delay":%s,' % self.RegenStartDelay,
-                   '"Regen Step Timer":%s,' % self.RegenStepTimer,
-                   '"Regen Time":%s,' % self.RegenTime,
-                   '"Second Stage Temp CTL":%s,' % self.SecondStageTempCTL,
-                   '"Tc Pressure State":%s}' % json.dumps(self.TcPressureState)]
+        message = ['"Elapsed Time":%s' % json.dumps(self.ElapsedTime),
+                   '"Failed Rate Of Rise Cycles":%s' % json.dumps(self.Failed_RateOfRise_Cycles),
+                   '"Failed Repurge Cycles":%s' % json.dumps(self.FailedRepurgeCycles),
+                   '"First Stage Temp CTL":%s' % json.dumps(self.FirstStageTempCTL),
+                   '"Last Rate Of Rise Value":%s' % json.dumps(self.LastRateOfRiseValue),
+                   '"MCC Version":%s' % json.dumps(self.ModuleVersion),
+                   '"Power Failure Recovery":%s' % json.dumps(self.PowerFailureRecovery),
+                   '"Power Failure Recovery Status":%s' % json.dumps(self.PowerFailureRecoveryStatus),
+                   '"Regen Cycles":%s' % json.dumps(self.RegenCycles),
+                   '"Regen Parameters":%s' % json.dumps(self.RegenParam),
+                   '"Regen Start Delay":%s' % json.dumps(self.RegenStartDelay),
+                   '"Regen Step Timer":%s' % json.dumps(self.RegenStepTimer),
+                   '"Regen Time":%s' % json.dumps(self.RegenTime),
+                   '"Second Stage Temp CTL":%s' % json.dumps(self.SecondStageTempCTL),
+                   '"Tc Pressure State":%s' % json.dumps(self.TcPressureState),
+                   ]
         self.__Lock.release()
-        return ''.join(message)
+        return '{' + ','.join(message) + '}'

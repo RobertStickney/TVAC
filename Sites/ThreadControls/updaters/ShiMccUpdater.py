@@ -28,6 +28,10 @@ class ShiMccUpdater(Thread):
         self.param_period = 30  # 10 second period
 
     def run(self):
+        if os.name == "posix":
+            userName = os.environ['LOGNAME']
+        else:
+            userName = "user"
         # While true to restart the thread if it errors out
         while True:
             # Catch anything that goes wrong
@@ -38,10 +42,6 @@ class ShiMccUpdater(Thread):
                                 {"message": "Starting Shi Mcc Control Stub Thread",
                                 "level": 2})
 
-                if os.name == "posix":
-                    userName = os.environ['LOGNAME']
-                else:
-                    userName = "user"
                 if "root" in userName:
                     # Live systems go here
                     Logging.logEvent("Debug", "Status Update",
@@ -92,7 +92,9 @@ class ShiMccUpdater(Thread):
                             else:
                                 self.hw.ShiCryopump.update({'MCC Status': val['Response']})
                             Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Cryopump Stage 1: {:.1f}K; Stage 2: {:.1f}K".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'), self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp')),
+                                             {"message": "Cryopump Stage 1: {:.1f}K; Stage 2: {:.1f}K"
+                                                         "".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'),
+                                                                   self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp')),
                                               "level": 4})
                             if time.time() > next_param_read_time:
                                 val = self.mcc.get_ParamValues()
@@ -193,6 +195,7 @@ class ShiMccUpdater(Thread):
                                   "level": 1})
                 if Logging.debug:
                     raise e
+                self.mcc.close_port()
                 time.sleep(4)
 
     def run_set_cmd(self, function, cmd):

@@ -142,9 +142,8 @@ class GetControl:
         HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
         return {'result':'success'}
 
-    def getCompressorTemp(self):
-        resp = {'CompressorTemp': 123}
-        return json.dumps(resp)
+    def getShiTemps(self):
+        return HardwareStatusInstance.getInstance().ShiCryopump.mcc_status.get_json_plots()
 
     # def getEventList(self):
     #     tmp = ProfileInstance.getInstance().systemStatusQueue

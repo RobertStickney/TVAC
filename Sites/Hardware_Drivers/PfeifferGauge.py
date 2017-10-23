@@ -53,10 +53,13 @@ class PfeifferGauge:
     def Convert_Str2Press(self, buff, inTorr=True):
         if (len(buff) == 6 and buff.isdigit):
             p = float((float(buff[:4]) / 1000.0) * float(10 ** (int(buff[-2:]) - 20)))
-            if inTorr:  ## Return the Pressure in Torr.
-                return p * 0.75006  # hPa to Torr
-            else:  ## Return in hPa gauge default.
-                return p
+            if p > 1e-10:
+                if inTorr:  ## Return the Pressure in Torr.
+                    return p * 0.75006  # hPa to Torr
+                else:  ## Return in hPa gauge default.
+                    return p
+            else:
+                raise ValueError("Convert_Str2Press value of %s below realistic value" % p)
         else:
             raise ValueError("Convert_Str2Press value in: %s" % buff)
 
