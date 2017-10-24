@@ -19,30 +19,17 @@ class ZoneProfileContract:
     __lock = threading.RLock()
 
     def __init__(self, d):
-        if 'zone' in d:
-            self.zone = d['zone']
-        else:
-            self.zone = 0
-        if 'profileuuid' in d:
-            self.profileUUID = d['profileuuid']
-        else:
-            self.profileUUID = ''
-        if 'average' in d:
-            self.zone = d['average']
-        else:
-            self.average = 'Average'
-        if 'thermalprofiles' in d:
-            self.thermalProfiles = self.setThermalProfiles(d['thermalprofiles'])
-        else:
-            self.thermalProfiles = ''
-        if 'thermocouples' in d:
-            self.thermocouples = self.setThermocouples(d['thermocouples'])
-        else:
-            self.thermocouples = []
-
+        self.zone = None
+        self.profileUUID = None
+        self.average = None
+        self.thermalProfiles = None
+        self.thermocouples = None
         self.zoneUUID = False
         self.activeZoneProfile = False
-        self.heatError = None
+        self.maxHeatError = None
+        self.minHeatError = None
+        self.maxHeatPerMin = None
+
 
     def setThermocouples(self, thermocouples):
         self.__lock.acquire()
@@ -63,10 +50,7 @@ class ZoneProfileContract:
 
     def update(self, d):
         self.__lock.acquire()
-        Logging.logEvent("Debug","Data Dump",
-            {"message": "Updating a zone profile",
-             "level":4,
-              "dict":d})
+        Logging.debugPrint(3,"Updating a zone profile", d)
         if 'zone' in d:
             self.zone = d['zone']
         if 'profileuuid' in d:
@@ -79,8 +63,12 @@ class ZoneProfileContract:
             self.thermalProfiles = self.setThermalProfiles(d['thermalprofiles'])
         if 'thermocouples' in d:
             self.thermocouples = self.setThermocouples(d['thermocouples'])
-        if 'heatError' in d: 
-            self.heatError = float(d['heatError'])
+        if 'max_heat_error' in d: 
+            self.maxHeatError = float(d['max_heat_error'])
+        if 'min_heat_error' in d: 
+            self.minHeatError = float(d['min_heat_error'])
+        if 'max_heat_per_min' in d: 
+            self.maxHeatPerMin = float(d['max_heat_per_min'])
         self.__lock.release()
 
 
@@ -89,7 +77,7 @@ class ZoneProfileContract:
         if not mode:
             mode = self.average
         if mode == "Average":
-            temp = (sum(a) / len(a))
+            temp = (sum(tc.getTemp() for tc in self.thermocouples) / len(self.thermocouples))
         if mode == "Min":
             temp = min(self.thermocouples, key=lambda x: x.getTemp()).getTemp()
         if mode == "Max":

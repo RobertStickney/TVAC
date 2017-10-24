@@ -11,8 +11,11 @@ from ThreadControls.controlStubs.LN2ControlStub import LN2ControlStub
 from ThreadControls.controlStubs.VacuumControlStub import VacuumControlStub
 from ThreadControls.updaters.PfeifferGaugeUpdater import PfeifferGaugeUpdater
 from ThreadControls.updaters.ShiMccUpdater import ShiMccUpdater
+from ThreadControls.updaters.ShiCompressorUpdater import ShiCompressorUpdater
 from ThreadControls.updaters.ThermoCoupleUpdater import ThermoCoupleUpdater
+from ThreadControls.updaters.TdkLambdaUpdater import TdkLambdaUpdater
 from ThreadControls.updaters.TsRegistersUpdater import TsRegistersUpdater
+
 
 
 class ThreadCollection:
@@ -28,15 +31,14 @@ class ThreadCollection:
         self.runThreads()
 
         # if there is a half finished profile in the database
-        if not self.zoneProfiles.getActiveProfileStatus():
-            profileName, startTime = self.returnActiveProfile()
-            # If there is one, or if the database is down
-            if profileName:
-                # self.zoneProfiles.activeProfile = True
-                # load up ram (zone collection) with info from the database and the given start time
-                self.zoneProfiles.loadProfile(profileName,startTime)
-                # after it's in memory, run it!
-                self.runProfile(firstStart = False)
+        result = self.returnActiveProfile()
+        Logging.debugPrint(3,"Active Profile?: {}".format(result))
+        if result:
+            Logging.debugPrint(1, "Unfinished profile found: {}".format(str(result['profile_name'])))
+            # load up ram (zone collection) with info from the database and the given start time
+            self.zoneProfiles.loadProfile(result['profile_name'],result['profile_Start_Time'],result['thermal_Start_Time'],result['first_Soak_Start_Time'])
+            # after it's in memory, run it!
+            self.runProfile(firstStart = False)
         # end if no active profile
     #end of function 
 
@@ -46,7 +48,7 @@ class ThreadCollection:
         A helper function that will look in the DB to see if there is any half finished profile instances
         Returns the profile profile_name and Profile ID if there is, False, False if not
         '''
-        sql = "SELECT profile_name, startTime FROM tvac.Profile_Instance WHERE endTime IS NULL;"
+        sql = "SELECT profile_name, profile_Start_Time, thermal_Start_Time, first_Soak_Start_Time FROM tvac.Profile_Instance WHERE endTime IS NULL;"
         try:
             mysql = MySQlConnect()
             mysql.cur.execute(sql)
@@ -56,8 +58,8 @@ class ThreadCollection:
 
         result = mysql.cur.fetchone()
         if not result:
-            return False, False
-        return result['profile_name'], result['startTime']
+            return False
+        return result
         
 
     def createHardwareInterfaces(self,parent):
@@ -67,9 +69,10 @@ class ThreadCollection:
             2: ThermoCoupleUpdater(parent=parent),
             3: PfeifferGaugeUpdater(),
             4: ShiMccUpdater(),
-            # 5: ShiCompressorControlStub)(),
-            6: LN2ControlStub(ThreadCollection=parent),
-            7: VacuumControlStub(),
+            5: ShiCompressorUpdater(),
+            6: TdkLambdaUpdater(),
+            7: LN2ControlStub(ThreadCollection=parent),
+            8: VacuumControlStub(),
             }
 
 
@@ -84,8 +87,9 @@ class ThreadCollection:
             self.dutyCycleThread.daemon = True
             self.dutyCycleThread.start()
         except Exception as e:
-            raise e
-            # TODO: Add an error logger to this error
+            Logging.debugPrint(1, "Error in runThreads, ThreadCollections: {}".format(str(e)))
+            if Logging.debug:
+                raise e
 
 
 
@@ -94,7 +98,7 @@ class ThreadCollection:
         This is a helper function of runProfile that adds the new profile Instance to the DB
         '''
 
-        coloums = "( profile_name, profile_I_ID, startTime )"
+        coloums = "( profile_name, profile_I_ID, profile_Start_Time )"
         values = "( \"{}\",\"{}\", \"{}\" )".format(self.zoneProfiles.profileName,self.zoneProfiles.profileUUID, datetime.datetime.fromtimestamp(time.time()))
         sql = "INSERT INTO tvac.Profile_Instance {} VALUES {};".format(coloums, values)
         # print(sql)
@@ -107,7 +111,7 @@ class ThreadCollection:
 
         return True
 
-
+    # TODO: Should this function be removed I think it is depreacated.
     def runProfile(self, firstStart=True):
         '''
         This assumes a profile is already loaded in RAM, it will start the profile

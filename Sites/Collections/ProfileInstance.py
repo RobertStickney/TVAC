@@ -20,12 +20,17 @@ class ProfileInstance:
             Logging.logEvent("Debug","Status Update", 
                 {"message": "Creating ProfileInstance",
                  "level":2})
-            self.zoneProfiles = ZoneCollection()
+            self.zoneProfiles = ZoneCollection(self)
 
 
             # System Wide stats
             self.activeProfile = False
             self.vacuumWanted = False
+            if Logging.debug:
+                self.recordData = True
+            else:
+                self.recordData = False
+            # TODO: When Profile aborted is vacuumWanted cleared?
 
             self.systemStatusQueue = []
             

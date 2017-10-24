@@ -30,7 +30,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/checkZoneStatus': control.checkTreadStatus,
                 '/getAllThermoCoupleData': control.getAllThermoCoupleData,
                 '/getAllZoneData': control.getAllZoneData,
-                '/getCompressorTemp': control.getCompressorTemp,
+                '/getShiTemps': control.getShiTemps,
                 '/getMCCData': control.getMCCData,
                 '/getPC104_Digital': control.getPC104_Digital,
                 '/getPC104_Analog': control.getPC104_Analog,
@@ -51,12 +51,12 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 {"message": "Sending GET Results",
                  "level":1})
             Logging.logEvent("Debug","Status Update", 
-                {"message": "GET Results: {}".format(result.encode()),
+                {"message": "GET Results: {}".format(str(result).encode()),
                  "level": 5})
 
             # Out the results back to the server
             self.setHeader()
-            self.wfile.write(result.encode())
+            self.wfile.write(str(result).encode())
         except Exception as e:
             # print("There has been an error")
             # FileCreation.pushFile("Error","Get",'{"errorMessage":"%s"}\n'%(e))
@@ -85,16 +85,16 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 {"message": "Received Post Request",
                  "level":1})
             body = self.getBody()
-
-            # You might need to decode the results
-            if type(body) == type(b'a'):
-                body = body.decode("utf-8")
-            contractObj = json.loads(body)
             path = self.path
             
             Logging.logEvent("Debug","Status Update", 
                 {"message": "POST Request Path: {}".format(path),
                  "level":2})
+
+            # You might need to decode the results
+            if type(body) == type(b'a'):
+                body = body.decode("utf-8")
+            contractObj = json.loads(body)
 
             # Based on the path we are given, do different functions
             control = PostControl()
@@ -116,11 +116,11 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 {"message": "Sending POST Results",
                  "level":1})
             Logging.logEvent("Debug","Status Update", 
-                {"message": "POST Results: {}".format(result.replace("\"","'").encode()),
+                {"message": "POST Results: {}".format(str(result).replace("\"","'").encode()),
                  "level":2})
 
             self.setHeader()
-            self.wfile.write(result.encode())
+            self.wfile.write(str(result).encode())
         except Exception as e:
 
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -155,11 +155,3 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
     # def displayZones(self):
     #     profileInstance = ProfileInstance.getInstance()
     #     self.wfile.write(profileInstance.zoneProfiles.getJson().encode())
-
-
-
-
-
-
-
-

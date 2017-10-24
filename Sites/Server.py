@@ -19,8 +19,12 @@ if __name__ == '__main__':
         for arg in sys.argv:
             if arg.startswith("-v"):
                 Logging.verbos = arg.count("v")
+    if(len(sys.argv)>2):
+        for arg in sys.argv:
+            if "--debug" in arg:
+                Logging.debug = True
     Logging.logEvent("Debug","Status Update",
-        {"message": "Debug on: Level {}".format(Logging.verbos),
+        {"message": "Verbos on: Level {}".format(Logging.verbos),
          "level":1})
     PORT = 8000
 
@@ -32,6 +36,9 @@ if __name__ == '__main__':
     profileInstance = ProfileInstance.getInstance()
     threadInstance = ThreadCollectionInstance.getInstance()
 
+    Logging.logEvent("Event","System",
+        {"message": "Server is fully booted",
+        "ProfileInstance": profileInstance.getInstance()})
     Logging.logEvent("Debug","Status Update",
         {"message": "Finished initializing threads and drivers",
          "level":1})

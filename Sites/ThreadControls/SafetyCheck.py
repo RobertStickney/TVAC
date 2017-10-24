@@ -34,6 +34,9 @@ class SafetyCheck(Thread):
 				"Raised Pressure While Testing": False,
 			}
 
+			self.MAX_UUT_TEMP = {} 
+			self.MIN_UUT_TEMP = {}
+
 			SafetyCheck.__instance = self
 			self.parent = parent
 			super(SafetyCheck, self).__init__()
@@ -45,7 +48,7 @@ class SafetyCheck(Thread):
 			# initialization of the safety Thread
 			try:
 				# Temps are in Kelvin
-				MAX_OPERATING_TEMP = 400
+				MAX_OPERATING_TEMP = 450
 				# safe at all lower bounds
 				# MIN_OPERATING_TEMP 
 
@@ -54,8 +57,8 @@ class SafetyCheck(Thread):
 
 				# TODO, make this user defined
 				# These are test values, they will change when the code is written to change them
-				MAX_UUT_TEMP = MAX_OPERATING_TEMP 
-				MIN_UUT_TEMP = 77
+				self.MAX_UUT_TEMP = {} 
+				self.MIN_UUT_TEMP = {}
 
 				SLEEP_TIME = 1 # in seconds
 
@@ -82,9 +85,8 @@ class SafetyCheck(Thread):
 						"Pressure Loss In Profile": False,
 					}
 					TCs = hardwareStatusInstance.Thermocouples.ValidTCs
-					print()
 					for tc in TCs:
-						print("TC: {} - {}".format(tc.Thermocouple, tc.temp))
+						# print("TC: {} - {}".format(tc.Thermocouple, tc.temp))
 						# if there are any TC's higher than max temp
 						if tc.temp > MAX_OPERATING_TEMP:
 							errorDetail = "TC # {} is above MAX_OPERATING_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_OPERATING_TEMP,tc.temp)
@@ -97,16 +99,8 @@ class SafetyCheck(Thread):
 								"actions": ["Turned off heater", "Log Event"]
 								}
 							self.logEvent(error)
-							errorInList = False
-							for tempError in self.errorList:
-								if error["event"] == tempError["event"]:
-									if error["item"] == tempError["item"]:
-										if error['itemID'] == tempError['itemID']:
-											errorInList = True
-
-							if not errorInList: 
-								self.logEvent(error)
-								tempErrorDict[error['event']] = True
+							tempErrorDict[error['event']] = True
+							# end of max operational test
 
 						if tc.userDefined:
 							if tc.temp > MAX_UUT_TEMP:
@@ -121,6 +115,7 @@ class SafetyCheck(Thread):
 									}
 								self.logEvent(error)
 								tempErrorDict[error['event']] = True
+							# end of max user test
 
 							if tc.temp < MIN_UUT_TEMP:
 								errorDetail = "TC # {} is below MIN_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_UUT_TEMP,tc.temp)
@@ -134,33 +129,40 @@ class SafetyCheck(Thread):
 									}
 								self.logEvent(error)
 								tempErrorDict[error['event']] = True
+							# end of min user test
+						# end of user test
 
-						
-						if tc.temp > MAX_TOUCH_TEMP:
-							errorDetail = "TC # {} is above MAX_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_TOUCH_TEMP,tc.temp)
-							error = {
-								"time" : str(datetime.now()),
-								"event":"Human Touch Alarm: High Temperature",
-								"item": "Thermocouple",
-								"itemID": tc.Thermocouple,
-								"details": errorDetail,
-								"actions": ["Log Event"]
-								}
-							self.logEvent(error)
-							tempErrorDict[error['event']] = True
+						# Get the full list
+						OutsideThermoCouples = [101,102]
+						if tc.Thermocouple in OutsideThermoCouples:
+							if tc.temp > MAX_TOUCH_TEMP:
+								errorDetail = "TC # {} is above MAX_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_TOUCH_TEMP,tc.temp)
+								error = {
+									"time" : str(datetime.now()),
+									"event":"Human Touch Alarm: High Temperature",
+									"item": "Thermocouple",
+									"itemID": tc.Thermocouple,
+									"details": errorDetail,
+									"actions": ["Log Event"]
+									}
+								self.logEvent(error)
+								tempErrorDict[error['event']] = True
+							# end of max touch test
 
-						if tc.temp < MIN_TOUCH_TEMP:
-							errorDetail = "TC # {} is below MIN_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_TOUCH_TEMP,tc.temp)
-							error = {
-								"time" : str(datetime.now()),
-								"event":"Human Touch Alarm: Low Temperature",
-								"item": "Thermocouple",
-								"itemID": tc.Thermocouple,
-								"details": errorDetail,
-								"actions": ["Log Event"]
-								}
-							self.logEvent(error)
-							tempErrorDict[error['event']] = True
+							if tc.temp < MIN_TOUCH_TEMP:
+								errorDetail = "TC # {} is below MIN_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_TOUCH_TEMP,tc.temp)
+								error = {
+									"time" : str(datetime.now()),
+									"event":"Human Touch Alarm: Low Temperature",
+									"item": "Thermocouple",
+									"itemID": tc.Thermocouple,
+									"details": errorDetail,
+									"actions": ["Log Event"]
+									}
+								self.logEvent(error)
+								tempErrorDict[error['event']] = True
+							# end of min touch test
+						# if of outside thermaltest
 					# End of TC for loop
 
 					for errorType in self.errorDict:
@@ -190,7 +192,7 @@ class SafetyCheck(Thread):
 					if vacuum and HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure() > 1e-4:
 						d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
 						ProfileInstance.getInstance().activeProfile = False
-						print("ERROR Pressure is above 10^-4.")
+						Logging.debugPrint(1,"ERROR Pressure is above 10^-4.")
 						vacuum = False
 						# TODO: Send Error
 						d_out.update({"IR Lamp 1 PWM DC": 0})
@@ -210,14 +212,19 @@ class SafetyCheck(Thread):
 						d_out.update({"IR Lamp 15 PWM DC": 0})
 						d_out.update({"IR Lamp 16 PWM DC": 0})
 
-	                    # TODO: Turn off heaters
-
-
+						HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
 
 					time.sleep(SLEEP_TIME)
-				# end of while true loop
+				# end of inner while true loop
 			except Exception as e:
-				raise e
+				Logging.debugPrint(1, "Error in Safety Checker: {}".format(str(e)))
+				if Logging.debug:
+					raise e
+				time.sleep(SLEEP_TIME)
+			# end of try/except
+		# end of outer while true
+	# end of run()
+
 
 
 	def logEvent(self, error):
@@ -228,7 +235,6 @@ class SafetyCheck(Thread):
 					if error["item"] == tempError["item"]:
 						if error['itemID'] == tempError['itemID']:
 							errorInList = True
-
 		if not errorInList: 
 			# debugPrint(1, error["details"])
 			self.errorList.append(error)

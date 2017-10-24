@@ -36,9 +36,6 @@ class TsRegistersUpdater(Thread):
             # While true to restart the thread if it errors out
             try:
                 # Thread "Start up" stuff goes here
-                Logging.logEvent("Event","Thread Start", 
-                        {"thread": "TS Registers Control Stub",
-                         "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug","Status Update", 
                 {"message": "Starting TS Registers Control Stub Thread",
                  "level":2,
@@ -67,7 +64,7 @@ class TsRegistersUpdater(Thread):
                         
                         Logging.logEvent("Debug","Status Update", 
                            {"message": "Reading and writing with PC 104",
-                             "level":4})
+                             "level":5})
 
                         self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0(),
                                                self.da_io.digital_out.get_c1_b1(),
@@ -77,8 +74,7 @@ class TsRegistersUpdater(Thread):
                                                self.da_io.digital_out.get_c2_b1(),
                                                self.da_io.digital_out.get_c2_b2(),
                                                self.da_io.digital_out.get_c2_b3()], 2)
-                        if self.da_io.digital_out.getVal('RoughP Start'):
-                            self.da_io.digital_out.update({'RoughP Start': False})
+                        self.Interlocks()
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(1))
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
                         self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(2), 2)
@@ -88,7 +84,7 @@ class TsRegistersUpdater(Thread):
                     else:
                         Logging.logEvent("Debug","Status Update", 
                            {"message": "Test run of PC 104 loop",
-                             "level":4})
+                             "level":5})
                         time.sleep(5)
 
             except Exception as e:
@@ -104,6 +100,8 @@ class TsRegistersUpdater(Thread):
                 Logging.logEvent("Debug","Status Update", 
                         {"message": "There was a {} error in TsRegistersUpdater. File: {}:{}\n{}".format(exc_type,fname,exc_tb.tb_lineno,e),
                          "level":2})
+                if Logging.debug:
+                    raise e
                 
                 # nicely close things, to open them back up again...
                 if os.name == "posix":
@@ -144,12 +142,16 @@ class TsRegistersUpdater(Thread):
         offsets = [.1,.1, .2,.2, .3,.3, .4,.4, .5,.5, .6,.6, .7,.7, .8,.8]
         for i in range(16):
             self.ir_lamp_pwm.append(PWM_Square_Wave(self.pwm_period,
-                                                    offsets[i], 0,
+                                                    offsets[i],
                                                     "IR Lamp "+str(i+1),
                                                     self.da_io.digital_out.update))
 
     def ir_lamp_pwm_stop(self):
         self.ir_lamp_pwm = []
+
+    def interlocks(self):
+        if self.da_io.digital_out.getVal('RoughP Start'):
+            self.da_io.digital_out.update({'RoughP Start': False})
 
 
 if __name__ == '__main__':

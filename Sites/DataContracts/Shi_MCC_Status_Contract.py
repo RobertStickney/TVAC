@@ -1,42 +1,46 @@
-import threading
 import json
+import threading
 
+
+from Logging.Logging import Logging
 
 class Shi_MCC_Status_Contract:
 
     __Lock = threading.RLock()
 
     def __init__(self):
-        self.DutyCycle = 0
-        self.FirstStageTemp = 0
-        self.CryoPump = {'MotorOn': False, 'Ready': False}
-        self.PurgeValveState = False
-        self.RegenError = ''
-        self.RegenStep = ''
-        self.RoughingValveState = False
-        self.RoughingInterlock = {'RoughingPermission': False,
-                                  'RoughingNeeded': False,
-                                  'Cryopumprunning': False}
-        self.SecondStageTemp = 0
-        self.Status = {'PumpOn': False,
-                       'RoughOpen': False,
-                       'PurgeOpen': False,
-                       'ThermocoupleGaugeOn': False,
-                       'PowerFailureOccurred': False}
-        self.TcPressure = 0
+        self.DutyCycle = None
+        self.FirstStageTemp = None
+        self.CryoPump = {'MotorOn': None, 'Ready': None}
+        self.PurgeValveState = None
+        self.RegenError = None
+        self.RegenStep = None
+        self.RoughingValveState = None
+        self.RoughingInterlock = {'RoughingPermission': None,
+                                  'RoughingNeeded': None,
+                                  'Cryopumprunning': None,
+                                  }
+        self.SecondStageTemp = None
+        self.Status = {'PumpOn': None,
+                       'RoughOpen': None,
+                       'PurgeOpen': None,
+                       'ThermocoupleGaugeOn': None,
+                       'PowerFailureOccurred': None,
+                       }
+        self.TcPressure = None
 
     def update(self, d):
         self.__Lock.acquire()
-        if 'Duty Cycle' in d:
-            self.DutyCycle = d['Duty Cycle']
-        if 'Stage 1 Temp' in d:
-            self.FirstStageTemp = d['Stage 1 Temp']
-        if 'Cryo Pump Ready State' in d:
-            self.CryoPump['Motor On'] = d['Cryo Pump Ready State'][0] == '1'
-            self.CryoPump['Ready'   ] = d['Cryo Pump Ready State'][1] == '1'
-        if 'Purge Valve State' in d:
-            self.PurgeValveState = d['Purge Valve State'] == '1'
-        if 'Regen Error' in d:
+        if 'DutyCycle' in d:
+            self.DutyCycle = d['DutyCycle']
+        if 'Stage1Temp' in d:
+            self.FirstStageTemp = d['Stage1Temp']
+        if 'CryoPumpReadyState' in d:
+            self.CryoPump['Motor On'] = d['CryoPumpReadyState'][0] == '1'
+            self.CryoPump['Ready'   ] = d['CryoPumpReadyState'][1] == '1'
+        if 'PurgeValveState' in d:
+            self.PurgeValveState = d['PurgeValveState'] == '1'
+        if 'RegenError' in d:
             self.RegenError = {
                 '@': "@: No Error",
                 'B': "B: Warm up Timeout - Did not reach room temperature within 60 minutes. Normally an indication of lack or purge flow and/or external heater.",
@@ -46,8 +50,8 @@ class Shi_MCC_Status_Contract:
                 'F': "F: Manual Abort - Regeneration was intentionally aborted.",
                 'G': "G: Rough valve timeout - Rough valve was open longer than 60 minutes.",
                 'H': "H: Illegal system state - Redundant software checks prevent unexpected software operation. Contact service center."
-                }[d['Regen Error']]
-        if 'Regen Step' in d:
+                }[d['RegenError']]
+        if 'RegenStep' in d:
             self.RegenStep = {
                 'Z': "Z: Start Delay",
                 'A': "A: 20 second cancellation delay.",
@@ -65,23 +69,23 @@ class Shi_MCC_Status_Contract:
                 'V': "V: Regeneration Aborted",
                 'z': "z: Pump is ready for operation but in stand-by mode.",
                 's': "s: Cryopump is stopped after warm up cycle is completed.",
-                }[d['Regen Step']]
-        if 'Roughing Valve State' in d:
-            self.RoughingValveState = d['Roughing Valve State'] == 1
-        if 'Roughing Interlock' in d:
-            self.RoughingInterlock['Roughing Permission'] = (d['Roughing Interlock'] & 0x01) > 0  # Bit 0
-            self.RoughingInterlock['Roughing Needed'    ] = (d['Roughing Interlock'] & 0x02) > 0  # Bit 0
-            self.RoughingInterlock['Cryopump is running'] = (d['Roughing Interlock'] & 0x04) > 0  # Bit 0
-        if 'Stage 2 Temp' in d:
-            self.SecondStageTemp = d['Stage 2 Temp']
+                }[d['RegenStep']]
+        if 'RoughingValveState' in d:
+            self.RoughingValveState = d['RoughingValveState'] == 1
+        if 'RoughingInterlock' in d:
+            self.RoughingInterlock['Roughing Permission'] = (d['RoughingInterlock'] & 0x01) > 0  # Bit 0
+            self.RoughingInterlock['Roughing Needed'    ] = (d['RoughingInterlock'] & 0x02) > 0  # Bit 0
+            self.RoughingInterlock['Cryopump is running'] = (d['RoughingInterlock'] & 0x04) > 0  # Bit 0
+        if 'Stage2Temp' in d:
+            self.SecondStageTemp = d['Stage2Temp']
         if 'Status' in d:
             self.Status['Pump On'               ] = (d['Status'] & 0x01) > 0  # Bit 0
             self.Status['Rough Open'            ] = (d['Status'] & 0x02) > 0  # Bit 1
             self.Status['Purge Open'            ] = (d['Status'] & 0x04) > 0  # Bit 2
             self.Status['Thermocouple Gauge On' ] = (d['Status'] & 0x08) > 0  # Bit 3
             self.Status['Power Failure Occurred'] = (d['Status'] & 0x20) > 0  # Bit 5
-        if 'Tc Pressure' in d:
-            self.TcPressure = d['Tc Pressure']
+        if 'TcPressure' in d:
+            self.TcPressure = d['TcPressure']
         self.__Lock.release()
 
     def getVal(self, name):
@@ -115,16 +119,25 @@ class Shi_MCC_Status_Contract:
 
     def getJson(self):
         self.__Lock.acquire()
-        message = ['{"DutyCycle":%s,' % json.dumps(self.DutyCycle),
-                   '"Stage1Temp":%s,' % json.dumps(self.FirstStageTemp),
-                   '"CryoPumpReadyState":%s,' % json.dumps(self.CryoPump),
-                   '"PurgeValveState":%s,' % json.dumps(self.PurgeValveState),
-                   '"RegenError":%s,' % json.dumps(self.RegenError),
-                   '"RegenStep":%s,' % json.dumps(self.RegenStep),
-                   '"RoughingValveState":%s,' % json.dumps(self.RoughingValveState),
-                   '"RoughingInterlock":%s,' % json.dumps(self.RoughingInterlock),
-                   '"Stage2Temp":%s,' % json.dumps(self.SecondStageTemp),
-                   '"Status":%s,' % json.dumps(self.Status),
-                   '"TcPressure":%s}' % json.dumps(self.TcPressure)]
+        message = ['"DutyCycle":%s' % json.dumps(self.DutyCycle),
+                   '"Stage1Temp":%s' % json.dumps(self.FirstStageTemp),
+                   '"CryoPumpReadyState":%s' % json.dumps(self.CryoPump),
+                   '"PurgeValveState":%s' % json.dumps(self.PurgeValveState),
+                   '"RegenError":%s' % json.dumps(self.RegenError),
+                   '"RegenStep":%s' % json.dumps(self.RegenStep),
+                   '"RoughingValveState":%s' % json.dumps(self.RoughingValveState),
+                   '"RoughingInterlock":%s' % json.dumps(self.RoughingInterlock),
+                   '"Stage2Temp":%s' % json.dumps(self.SecondStageTemp),
+                   '"Status":%s' % json.dumps(self.Status),
+                   '"TcPressure":%s' % json.dumps(self.TcPressure),
+                   ]
         self.__Lock.release()
-        return ''.join(message)
+        return '{' + ','.join(message) + '}'
+
+    def get_json_plots(self):
+        self.__Lock.acquire()
+        message = ['"Stage1Temp":%s' % json.dumps(self.FirstStageTemp),
+                   '"Stage2Temp":%s' % json.dumps(self.SecondStageTemp),
+                   ]
+        self.__Lock.release()
+        return message
