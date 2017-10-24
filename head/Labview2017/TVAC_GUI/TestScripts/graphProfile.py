@@ -83,7 +83,7 @@ def validateProfile(json,zone,errors):
 		errors+=1	
 	else:
 		for i in range(0,len(zoneData["thermocouples"])):
-			if zoneData["thermocouples"][i] == 0 or zoneData["thermocouples"][i] > 120 or zoneData["thermocouples"][i] <0:
+			if zoneData["thermocouples"][i] == 0 or zoneData["thermocouples"][i] > 80 or zoneData["thermocouples"][i] <0:
 				print("ProfileError : Invalid TC Number for Zone",str(zoneData["zone"]))
 				errors+=1	
 
@@ -293,6 +293,8 @@ def main(args):
 
 	# print(expected_time_values)
 	#print("Program worked!")
+
+
 	if errors == 0:
 		print(JSON.dumps(expected_temps))
 
