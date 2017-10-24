@@ -28,6 +28,10 @@ class ShiMccUpdater(Thread):
         self.param_period = 30  # 10 second period
 
     def run(self):
+        if os.name == "posix":
+            userName = os.environ['LOGNAME']
+        else:
+            userName = "user"
         # While true to restart the thread if it errors out
         while True:
             # Catch anything that goes wrong
@@ -38,34 +42,38 @@ class ShiMccUpdater(Thread):
                                 {"message": "Starting Shi Mcc Control Stub Thread",
                                 "level": 2})
 
-                if os.name == 'posix':
-                    userName = os.environ['LOGNAME']
-                else:
-                    userName = "User"
                 if "root" in userName:
                     # Live systems go here
                     Logging.logEvent("Debug", "Status Update",
                                     {"message": "Power on the Shi Mcc",
                                     "level": 3})
+                    self.mcc.open_port()
                     Currently_powered = self.hw.PC_104.digital_out.getVal('MCC2 Power')
                     self.hw.PC_104.digital_out.update({'MCC2 Power': True})
                     if not Currently_powered:
                         time.sleep(5)
+                    self.mcc.flush_port()
                     # Now send some initialization commands
                     # The maximum second stage temperature the cryopump may start to restart after a power failure.
-                    val = self.mcc.Set_RegenParam('6', 65)
+                    val = self.mcc.Get_RegenParam_6()
                     if val['Error']:
-                        Logging.logEvent("Debug", "Shi MCC Error",
-                                         {"message": "Set_RegenParam: %s" % val['Response'],
-                                          "level": 3})
-                        raise Exception("Shi MCC Error with Set_RegenParam: %s" % val['Response'])
+                        Logging.logEvent("Debug", "Status Update",
+                                         {"message": 'Shi MCC GetRegenParam_6" Error Response: %s' % (val),
+                                          "level": 4})
+                        raise Exception("Shi MCC Error with Get_RegenParam_6: %s" % val['Response'])
+                    else:
+                        if val['Data'] != 65:
+                            self.run_set_cmd(self.mcc.Set_RegenParam, [' ', '6', 65])
                     # 2: Power failure recovery enabled only when T2 is less than the limit set point.
-                    val = self.mcc.Set_PowerFailureRecovery(2)
+                    val = self.mcc.Get_PowerFailureRecovery()
                     if val['Error']:
                         Logging.logEvent("Debug", "Shi MCC Error",
                                          {"message": "Set_RegenParam: %s" % val['Response'],
                                           "level": 3})
                         raise Exception("Shi MCC Error with Set_RegenParam: %s" % val['Response'])
+                    else:
+                        if val['Data'] != 2:
+                            self.run_set_cmd(self.mcc.Set_RegenParam, [' ', 2])
 
                 next_param_read_time = time.time()
                 # setup is done, this loop is the normal thread loop
@@ -84,7 +92,9 @@ class ShiMccUpdater(Thread):
                             else:
                                 self.hw.ShiCryopump.update({'MCC Status': val['Response']})
                             Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Cryopump Stage 1: {:.1f}K; Stage 2: {:.1f}K".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'), self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp')),
+                                             {"message": "Cryopump Stage 1: {:.1f}K; Stage 2: {:.1f}K"
+                                                         "".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'),
+                                                                   self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp')),
                                               "level": 4})
                             if time.time() > next_param_read_time:
                                 val = self.mcc.get_ParamValues()
@@ -185,6 +195,7 @@ class ShiMccUpdater(Thread):
                                   "level": 1})
                 if Logging.debug:
                     raise e
+                self.mcc.close_port()
                 time.sleep(4)
 
     def run_set_cmd(self, function, cmd):

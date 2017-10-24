@@ -6,11 +6,12 @@ from Logging.Logging import Logging
 class PWM_Square_Wave:
 
     # Period must be >= 1 sec
-    def __init__(self, period, offset, min_duty_cycle=0.0, update_key='', update_fun=None):
+    def __init__(self, period, offset, update_key='', update_fun=None):
         self.period = round(period, 1)  # in seoonds
         if period < 1: # seconds
             raise RuntimeError("PWM square wave period must be greater than 1 second, currently: {}".format(period))
-        self.min_dc = self.coerce_to_range(min_duty_cycle, 0.0, 0.99999)
+        self.min_dc = 0    # min is 0
+        self.max_dc = 0.7  # max is 1
         self.duty_cycle = self.min_dc
         self.time_for_next_edge = round(time.time(), 1) + round(offset, 1)
         self.time_last_rising_edge = round(time.time(), 1)
@@ -21,7 +22,7 @@ class PWM_Square_Wave:
 
     def update_waveform_state(self, duty_cycle=None):
         if duty_cycle is not None:
-            duty_cycle = self.coerce_to_range(duty_cycle, self.min_dc)
+            duty_cycle = self.coerce_to_range(duty_cycle, self.min_dc, self.max_dc)
             if self.waveform_state and (duty_cycle < self.duty_cycle):
                 self.time_for_next_edge = self.time_last_rising_edge + round(self.period * duty_cycle, 1)
             self.duty_cycle = duty_cycle
@@ -71,7 +72,7 @@ if __name__ == '__main__':
     duty_cycles = [0, 1]
     pwm_wf = []
     for i in range(len(numbers)):
-        pwm_wf.append(PWM_Square_Wave(5, offsets[i], 0, "IR Lamp "+str(numbers[i]), d_out.update))
+        pwm_wf.append(PWM_Square_Wave(5, offsets[i], "IR Lamp "+str(numbers[i]), d_out.update))
         d_out.update({"IR Lamp " + str(numbers[i]) + " PWM DC": duty_cycles[i]})
         print("Duty Cycle {:d}: {:f}".format(numbers[i], d_out.get_IR_Lamps_pwm_dc(numbers[i])))
     start_time = round(time.time(), 2)

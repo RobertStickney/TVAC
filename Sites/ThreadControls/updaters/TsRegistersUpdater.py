@@ -46,7 +46,7 @@ class TsRegistersUpdater(Thread):
                 if os.name == "posix":
                     userName = os.environ['LOGNAME']
                 else:
-                    userName = "user"
+                    userName = "user" 
                 if "root" in userName:
                     # Root is only in live, might need to change in busy box
                     self.ts_reg.open_Registers()
@@ -74,8 +74,7 @@ class TsRegistersUpdater(Thread):
                                                self.da_io.digital_out.get_c2_b1(),
                                                self.da_io.digital_out.get_c2_b2(),
                                                self.da_io.digital_out.get_c2_b3()], 2)
-                        if self.da_io.digital_out.getVal('RoughP Start'):
-                            self.da_io.digital_out.update({'RoughP Start': False})
+                        self.Interlocks()
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(1))
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
                         self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(2), 2)
@@ -105,7 +104,10 @@ class TsRegistersUpdater(Thread):
                     raise e
                 
                 # nicely close things, to open them back up again...
-                userName = os.environ['LOGNAME']
+                if os.name == "posix":
+                    userName = os.environ['LOGNAME']
+                else:
+                    userName = "user" 
                 if "root" in userName:
                     self.ts_reg.close()
                 time.sleep(4)
@@ -140,12 +142,16 @@ class TsRegistersUpdater(Thread):
         offsets = [.1,.1, .2,.2, .3,.3, .4,.4, .5,.5, .6,.6, .7,.7, .8,.8]
         for i in range(16):
             self.ir_lamp_pwm.append(PWM_Square_Wave(self.pwm_period,
-                                                    offsets[i], 0,
+                                                    offsets[i],
                                                     "IR Lamp "+str(i+1),
                                                     self.da_io.digital_out.update))
 
     def ir_lamp_pwm_stop(self):
         self.ir_lamp_pwm = []
+
+    def interlocks(self):
+        if self.da_io.digital_out.getVal('RoughP Start'):
+            self.da_io.digital_out.update({'RoughP Start': False})
 
 
 if __name__ == '__main__':

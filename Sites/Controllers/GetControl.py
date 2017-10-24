@@ -6,6 +6,8 @@ from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
 from Logging.Logging import Logging
+from datetime import datetime           #For Testing only - DELETE
+import time                             #For Testing only - DELETE
 
 class GetControl:
 
@@ -96,14 +98,19 @@ class GetControl:
         return json.dumps(tempErrorList)
 
     def getLastErrorTest(self):
-        # ONLY FOR labview testing / design purposes - delete later and reference to getLastError?
+        # ONLY FOR labview testing / design purposes - TO DO DELETE BEFORE DISTRIBUTION
         # Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
         # errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
-        tempErrorList = []
-        for i in range(0,7):
-            error="Error something has happened to " +str(i)
-            tempErrorList.append(error)
-            # errorList.pop(i)
+        tempErrorList = dict(time=[],event=[],item=[],itemID=[],details=[],actions=[])
+        for i in range(0,3):
+            tempErrorList['time'].append(str(datetime.now()))
+            tempErrorList['event'].append("Bogus Error")
+            tempErrorList['item'].append("Cat")
+            tempErrorList['itemID'].append(str(42))            
+            tempErrorList['details'].append(str(i)+" Gremlins have attacked")
+            tempErrorList['actions'].append("Coffee")
+            time.sleep(.5)
+            #errorList.pop(i)
         print(tempErrorList)
         # error = errorList[0]
         # ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList = errorList[1:]
@@ -135,9 +142,8 @@ class GetControl:
         HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
         return {'result':'success'}
 
-    def getCompressorTemp(self):
-        resp = {'CompressorTemp': 123}
-        return json.dumps(resp)
+    def getShiTemps(self):
+        return HardwareStatusInstance.getInstance().ShiCryopump.mcc_status.get_json_plots()
 
     # def getEventList(self):
     #     tmp = ProfileInstance.getInstance().systemStatusQueue

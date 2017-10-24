@@ -31,6 +31,7 @@ class ProfileInstance:
                 self.recordData = True
             else:
                 self.recordData = False
+            # TODO: When Profile aborted is vacuumWanted cleared?
 
             self.systemStatusQueue = []
             

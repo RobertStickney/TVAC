@@ -1,5 +1,6 @@
-import threading
 import json
+import threading
+
 
 from Logging.Logging import Logging
 
@@ -8,23 +9,25 @@ class Shi_MCC_Status_Contract:
     __Lock = threading.RLock()
 
     def __init__(self):
-        self.DutyCycle = 0
-        self.FirstStageTemp = 0
-        self.CryoPump = {'MotorOn': False, 'Ready': False}
-        self.PurgeValveState = False
-        self.RegenError = ''
-        self.RegenStep = ''
-        self.RoughingValveState = False
-        self.RoughingInterlock = {'RoughingPermission': False,
-                                  'RoughingNeeded': False,
-                                  'Cryopumprunning': False}
-        self.SecondStageTemp = 0
-        self.Status = {'PumpOn': False,
-                       'RoughOpen': False,
-                       'PurgeOpen': False,
-                       'ThermocoupleGaugeOn': False,
-                       'PowerFailureOccurred': False}
-        self.TcPressure = 0
+        self.DutyCycle = None
+        self.FirstStageTemp = None
+        self.CryoPump = {'MotorOn': None, 'Ready': None}
+        self.PurgeValveState = None
+        self.RegenError = None
+        self.RegenStep = None
+        self.RoughingValveState = None
+        self.RoughingInterlock = {'RoughingPermission': None,
+                                  'RoughingNeeded': None,
+                                  'Cryopumprunning': None,
+                                  }
+        self.SecondStageTemp = None
+        self.Status = {'PumpOn': None,
+                       'RoughOpen': None,
+                       'PurgeOpen': None,
+                       'ThermocoupleGaugeOn': None,
+                       'PowerFailureOccurred': None,
+                       }
+        self.TcPressure = None
 
     def update(self, d):
         self.__Lock.acquire()
@@ -116,16 +119,25 @@ class Shi_MCC_Status_Contract:
 
     def getJson(self):
         self.__Lock.acquire()
-        message = ['{"DutyCycle":%s,' % json.dumps(self.DutyCycle),
-                   '"Stage1Temp":%s,' % json.dumps(self.FirstStageTemp),
-                   '"CryoPumpReadyState":%s,' % json.dumps(self.CryoPump),
-                   '"PurgeValveState":%s,' % json.dumps(self.PurgeValveState),
-                   '"RegenError":%s,' % json.dumps(self.RegenError),
-                   '"RegenStep":%s,' % json.dumps(self.RegenStep),
-                   '"RoughingValveState":%s,' % json.dumps(self.RoughingValveState),
-                   '"RoughingInterlock":%s,' % json.dumps(self.RoughingInterlock),
-                   '"Stage2Temp":%s,' % json.dumps(self.SecondStageTemp),
-                   '"Status":%s,' % json.dumps(self.Status),
-                   '"TcPressure":%s}' % json.dumps(self.TcPressure)]
+        message = ['"DutyCycle":%s' % json.dumps(self.DutyCycle),
+                   '"Stage1Temp":%s' % json.dumps(self.FirstStageTemp),
+                   '"CryoPumpReadyState":%s' % json.dumps(self.CryoPump),
+                   '"PurgeValveState":%s' % json.dumps(self.PurgeValveState),
+                   '"RegenError":%s' % json.dumps(self.RegenError),
+                   '"RegenStep":%s' % json.dumps(self.RegenStep),
+                   '"RoughingValveState":%s' % json.dumps(self.RoughingValveState),
+                   '"RoughingInterlock":%s' % json.dumps(self.RoughingInterlock),
+                   '"Stage2Temp":%s' % json.dumps(self.SecondStageTemp),
+                   '"Status":%s' % json.dumps(self.Status),
+                   '"TcPressure":%s' % json.dumps(self.TcPressure),
+                   ]
         self.__Lock.release()
-        return ''.join(message)
+        return '{' + ','.join(message) + '}'
+
+    def get_json_plots(self):
+        self.__Lock.acquire()
+        message = ['"Stage1Temp":%s' % json.dumps(self.FirstStageTemp),
+                   '"Stage2Temp":%s' % json.dumps(self.SecondStageTemp),
+                   ]
+        self.__Lock.release()
+        return message

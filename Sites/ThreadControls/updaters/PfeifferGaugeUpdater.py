@@ -68,7 +68,10 @@ class PfeifferGaugeUpdater(Thread):
                                 {"message": "Starting Pfeiffer Guage Control Stub Thread",
                                  "level": 2})
 
-                userName = os.environ['LOGNAME']
+                if os.name == "posix":
+                    userName = os.environ['LOGNAME']
+                else:
+                    userName = "user" 
                 if "root" in userName:
                     self.read_all_params()
                 next_pressure_read_time = time.time()

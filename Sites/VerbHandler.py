@@ -30,7 +30,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/checkZoneStatus': control.checkTreadStatus,
                 '/getAllThermoCoupleData': control.getAllThermoCoupleData,
                 '/getAllZoneData': control.getAllZoneData,
-                '/getCompressorTemp': control.getCompressorTemp,
+                '/getShiTemps': control.getShiTemps,
                 '/getMCCData': control.getMCCData,
                 '/getPC104_Digital': control.getPC104_Digital,
                 '/getPC104_Analog': control.getPC104_Analog,
@@ -155,11 +155,3 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
     # def displayZones(self):
     #     profileInstance = ProfileInstance.getInstance()
     #     self.wfile.write(profileInstance.zoneProfiles.getJson().encode())
-
-
-
-
-
-
-
-
