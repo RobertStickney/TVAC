@@ -119,7 +119,7 @@ class GetControl:
 
 
     def hardStop(self):
-        debugPrint(1,"Hard stop has been called")
+        Logging.debugPrint(1,"Hard stop has been called")
         d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
         ProfileInstance.getInstance().activeProfile = False
         d_out.update({"IR Lamp 1 PWM DC": 0})
