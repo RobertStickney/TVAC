@@ -181,8 +181,7 @@ class ZoneCollection:
         except Exception as e:
             Logging.debugPrint(3,"sql: {}".format(sql))
             Logging.debugPrint(1, "Error in saveZone, zoneCollection: {}".format(str(e)))
-            if Logging.debug:
-                raise e
+            raise e
 
         coloums = "( profile_name, zone, set_point, temp_goal, ramp_time, soak_time )"
         values = ""
@@ -200,8 +199,7 @@ class ZoneCollection:
         except Exception as e:
             Logging.debugPrint(3,"sql: {}".format(sql))
             Logging.debugPrint(1, "Error in saveZone, zoneCollection: {}".format(str(e)))
-            if Logging.debug:
-                raise e
+            raise e
 
         #Saving the TC as well 
 
@@ -216,8 +214,7 @@ class ZoneCollection:
         except Exception as e:
             Logging.debugPrint(3,"sql: {}".format(sql))
             Logging.debugPrint(1, "Error in saveZone, zoneCollection: {}".format(str(e)))
-            if Logging.debug:
-                raise e
+            raise e
 
 
         return True

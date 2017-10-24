@@ -26,6 +26,7 @@ class ProfileInstance:
             # System Wide stats
             self.activeProfile = False
             self.vacuumWanted = False
+            self.currentSetpoint = None
             if Logging.debug:
                 self.recordData = True
             else:

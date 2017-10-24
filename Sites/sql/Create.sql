@@ -56,6 +56,15 @@ CREATE TABLE tvac.Profile_Instance(
 	endTime DATETIME NULL
 );
 
+-- DROP TABLE IF EXISTS tvac.Profile_Instance_Setpoint;
+-- CREATE TABLE tvac.Profile_Instance(
+-- 	profile_name varchar(36) NOT NULL,
+-- 	profile_I_ID varchar(36) NOT NULL,
+-- 	setpoint int NOT NULL,
+-- 	ramp_time DATETIME NULL,
+-- 	soak_time DATETIME NULL
+-- );
+
 DROP TABLE IF EXISTS tvac.Thermal_Zone_Profile;
 CREATE TABLE tvac.Thermal_Zone_Profile(
 	profile_name varchar(36) NOT NULL,
@@ -75,14 +84,19 @@ CREATE TABLE tvac.Thermal_Profile(
 	set_point tinyint unsigned NOT NULL,
 	temp_goal decimal(9,4) NOT NULL,
 	ramp_time mediumint unsigned NOT NULL,
-	soak_time mediumint unsigned NOT NULL
+	soak_time mediumint unsigned NOT NULL,
+	UNIQUE KEY(profile_name,zone,set_point)
 );
 
 DROP TABLE IF EXISTS tvac.System_Status;
 CREATE TABLE tvac.System_Status(
 	in_hold BOOLEAN not null default 0,
 	in_pause BOOLEAN not null default 0,
-	vacuum_wanted BOOLEAN not null default 0	
+	in_ramp BOOLEAN not null default 1,
+	record_data BOOLEAN not null default 1,
+
+	vacuum_wanted BOOLEAN not null default 0,
+	setpoint int not null default 0
 );
 INSERT INTO tvac.System_Status () VALUES ();
 -- Change localhost to server IP

@@ -80,7 +80,7 @@ class GetControl:
 
     def getLastError(self):
         # data unused
-        Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
+        Logging.debugPrint(2,"Calling: Get Last Err")  #Todo Change to logEvent()
         errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
         tempErrorList = dict(time=[],event=[],item=[],itemID=[],details=[],actions=[])
         for i, error in enumerate(errorList):
