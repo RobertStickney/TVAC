@@ -228,7 +228,7 @@ class DutyCycleControlStub(Thread):
         self.held   = False
 
         self.currentSetpoint = 0
-        self.ramp = True
+        self.ramp = False
         self.soak = False
 
 
@@ -240,6 +240,9 @@ class DutyCycleControlStub(Thread):
             # Check to make sure there is an active profile
             # and that we are sitting in an operational vacuum
             # and that all drivers and updaters are running
+            print("activeProfile: {}".format(ProfileInstance.getInstance().activeProfile))
+            print("OperationalVacuum: {}".format(HardwareStatusInstance.getInstance().OperationalVacuum))
+            print("getActiveProfileStatus: {}".format(ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus()))
             if ProfileInstance.getInstance().activeProfile and \
                 HardwareStatusInstance.getInstance().OperationalVacuum and \
                 ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus():
@@ -253,7 +256,11 @@ class DutyCycleControlStub(Thread):
                         "ProfileInstance": ProfileInstance.getInstance()})
 
                     # local temp variables for checking state
+                    #TODO: Start time should gotten somewhere else, not made here
                     self.startTime = int(time.time())
+                    currentSetpointTemporary = 0
+                    rampTemporary = False
+                    soakTemporary = True
 
 
                     Logging.logEvent("Debug","Status Update", 
@@ -265,7 +272,6 @@ class DutyCycleControlStub(Thread):
                         if self.zones[zone].zoneProfile.activeZoneProfile:
                             self.zones[zone].maxTempRisePerMin = self.zones[zone].zoneProfile.maxHeatPerMin
                             self.zones[zone].maxTempRisePerUpdate = (self.zones[zone].maxTempRisePerMin/60)*self.updatePeriod
-                            print("maxTempRisePerUpdate: {}".format(self.zones[zone].maxTempRisePerUpdate))
                             self.zones[zone].expected_temp_values, self.expected_time_values = self.zones[zone].createExpectedValues(self.zones[zone].zoneProfile.thermalProfiles, startTime=self.zoneProfiles.thermalStartTime)
                     # Program loop is here
                     while ProfileInstance.getInstance().activeProfile:
@@ -294,22 +300,32 @@ class DutyCycleControlStub(Thread):
                                     self.zones[zone].temp_temperature = self.zones[zone].expected_temp_values[0]
                                     self.zones[zone].expected_temp_values = self.zones[zone].expected_temp_values[1:]
                             self.expected_time_values = self.expected_time_values[1:]
-                            currentSetpointTemp = 0
-                            while currentTime > self.setpoint_start_time[0][0]:
-                                rampTemp = True
-                                soakTemp = False
-                                if currentTime > self.setpoint_start_time[0][1]:
-                                    rampTemp = False
-                                    soakTemp = True
-                                currentSetpointTemp += 1
-                                self.setpoint_start_time = self.setpoint_start_time[1:]
-
-                            # compare the temps just made with the values in self.
-                            # if they are different, or important log it
+                            if len(self.setpoint_start_time) > 0:
+                                if currentTime > self.setpoint_start_time[0][0]:
+                                    rampTemporary = True
+                                    soakTemporary = False
+                                    if currentTime > self.setpoint_start_time[0][1]:
+                                        rampTemporary = False
+                                        soakTemporary = True
+                                        self.setpoint_start_time = self.setpoint_start_time[1:]
+                                        currentSetpointTemporary += 1
+                                    if len(self.setpoint_start_time) <= 0:
+                                        break
 
                             if len(self.expected_time_values) <= 0:
                                 break
 
+                        # compare the temps just made with the values in self.
+                        # if they are different, or important log it
+                        if rampTemporary == True and self.ramp == False:
+                            ProfileInstance.getInstance().setpoint = currentSetpointTemporary
+                            Logging.logEvent("Event","Profile",
+                                {"message":"Profile {} has entered setpoint {} Ramp".format("LOL", currentSetpointTemporary)})
+                        if soakTemporary == True and self.soak == False:
+                            Logging.logEvent("Event","Profile",
+                                {"message":"Profile {} has entered setpoint {} Soak".format("LOL", currentSetpointTemporary-1)})
+                        self.ramp = rampTemporary
+                        self.soak = soakTemporary
                         # With the temp goal tempurture picked, make the duty cycle 
                         for zone in self.zones:
                             if self.zones[zone].zoneProfile.activeZoneProfile:

@@ -45,6 +45,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/pause':control.pauseAllZones,
                 '/resume':control.resumeAllZones,
                 '/unHold':control.unHoldAllZones,
+                '/getTvacStatus': control.getTvacStatus,
             }[path]()
 
             Logging.logEvent("Debug","Status Update",

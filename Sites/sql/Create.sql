@@ -93,8 +93,7 @@ CREATE TABLE tvac.System_Status(
 	in_hold BOOLEAN not null default 0,
 	in_pause BOOLEAN not null default 0,
 	in_ramp BOOLEAN not null default 1,
-	record_data BOOLEAN not null default 1,
-
+	record_data BOOLEAN not null default 1,	
 	vacuum_wanted BOOLEAN not null default 0,
 	setpoint int not null default 0
 );

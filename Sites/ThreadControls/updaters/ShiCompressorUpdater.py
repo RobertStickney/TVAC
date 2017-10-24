@@ -34,9 +34,9 @@ class ShiCompressorUpdater(Thread):
             # This has no check because it should always be running
             try:
                 # Thread "Start up" stuff goes here
-                Logging.logEvent("Event", "Thread Start",
-                                {"thread": "Shi Compressor Updater",
-                                "ProfileInstance": ProfileInstance.getInstance()})
+                # Logging.logEvent("Event", "Thread Start",
+                #                 {"thread": "Shi Compressor Updater",
+                #                 "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug", "Status Update",
                                 {"message": "Starting Shi Compressor Updater",
                                 "level": 2})

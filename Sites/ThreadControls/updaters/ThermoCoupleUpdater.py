@@ -100,13 +100,14 @@ class ThermoCoupleUpdater(Thread):
                         }
                         '''
                         if ProfileInstance.getInstance().recordData:
-                            Logging.logEvent("Event","ThermoCouple Reading",
-                                {"message": "Current TC reading",
-                                 "time":	TCs['time'],
-                                 "tcList":	TCs['tcList'],
+                            # Logging.logEvent("Event","ThermoCouple Reading",
+                                
+                            # )
+                            Logging.logLiveTemperatureData({"message": "Current TC reading",
+                                 "time":    TCs['time'],
+                                 "tcList":  TCs['tcList'],
                                  "profileUUID": ProfileInstance.getInstance().zoneProfiles.profileUUID,
-                                 "ProfileInstance": ProfileInstance.getInstance()}
-                            )
+                                 "ProfileInstance": ProfileInstance.getInstance()})
 
                         Logging.logEvent("Debug","Data Dump",
                             {"message": "Current TC reading",

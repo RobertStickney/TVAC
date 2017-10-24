@@ -145,18 +145,14 @@ class GetControl:
     def getShiTemps(self):
         return HardwareStatusInstance.getInstance().ShiCryopump.mcc_status.get_json_plots()
 
-    # def getEventList(self):
-    #     tmp = ProfileInstance.getInstance().systemStatusQueue
-    #     ProfileInstance.getInstance().systemStatusQueue = []
-    #     return str(tmp)
 
     def getEventList(self):
         # data unused
         Logging.debugPrint(2,"Calling: Get Event List")
         eventList = ProfileInstance.getInstance().systemStatusQueue
-        eventList.append({"time":str(datetime.now()),
-                        "category":"System",
-                        "message":"This is a test event"})
+        # eventList.append({"time":str(datetime.now()),
+        #                 "category":"System",
+        #                 "message":"This is a test event"})
         tempEventList = dict(time=[],category=[],message=[])
         for i, event in enumerate(eventList):
             tempEventList['time'].append(event['time'])
@@ -213,3 +209,15 @@ class GetControl:
 
     def recordData(self):
         ProfileInstance.getInstance().recordData = True
+
+    def getTvacStatus(self):
+        return {
+        "recordData": ProfileInstance.getInstance().recordData,
+        "activeProfile": ProfileInstance.getInstance().activeProfile,
+        "vacuumWanted": ProfileInstance.getInstance().vacuumWanted,
+        "currentSetpoint": ProfileInstance.getInstance().currentSetpoint,
+        "recordData": ProfileInstance.getInstance().recordData,
+        "inRamp": ProfileInstance.getInstance().inRamp,
+        "inHold": ProfileInstance.getInstance().inHold,
+        "inPause": ProfileInstance.getInstance().inPause,
+        }

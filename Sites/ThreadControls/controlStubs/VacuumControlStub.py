@@ -33,10 +33,18 @@ class VacuumControlStub(Thread):
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.profile = ProfileInstance.getInstance()
         self.hw = HardwareStatusInstance.getInstance()
-        self.state = False
+        # for testing
+        self.state = "Operational Vacuum"
         self.oldState = True
 
         self.updatePeriod = 2
+
+        if os.name == "posix":
+            userName = os.environ['LOGNAME']
+        else:
+            userName = "user" 
+        if "root" not in userName: 
+            self.zoneProfiles.updateThermalStartTime(time.time())
 
 
     def run(self):
@@ -54,7 +62,7 @@ class VacuumControlStub(Thread):
                     time.sleep(1)
                 self.determin_current_vacuum_state()
                 while True:
-                    if self.profile.vacuumWanted:
+                    if False and self.profile.vacuumWanted:
                         # With an active profile, we start putting the system under pressure
              
                         Logging.logEvent("Debug","Status Update", 

@@ -142,6 +142,7 @@ class ThreadCollection:
             pass
 
         ProfileInstance.getInstance().activeProfile = True
+        Logging.debugPrint(2,"Setting Active Profile to True")
 
         return "{'result':'success'}"
         
