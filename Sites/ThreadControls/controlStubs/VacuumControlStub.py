@@ -152,62 +152,12 @@ class VacuumControlStub(Thread):
             self.hw.PC_104.digital_out.update({'RoughP Start': True})
         # Todo: Add vacuum not wanted state move.
 
-    def atmosphere(self):
-        '''
-        It enters this state everytime you are at atmosphere pressure
-        '''
-        if self.oldState != self.state:
-            # The system has just crossed over to a new point
-            userName = os.environ['LOGNAME']
-            if "root" in userName:
-                # TODO: Read coldwater value from Compressor
-        
-                # Close Cryopump gate Valve 
-                self.hw.PC_104.digital_out.update({'CryoP GateValve': False})
-                # TODO: Add check for CryoP GateValve closed state.
-                # Prep the on Roughing Pump
-                self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
-                time.sleep(0.2)
-                self.hw.PC_104.digital_out.update({'RoughP GateValve': True})
-                time.sleep(0.2)
-                self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
-                time.sleep(1)  # TODO: replace sleep with Roughing pump Gate valve check and power check
-                # Turn on Roughing Pump
-                self.hw.PC_104.digital_out.update({'RoughP Start': True})
-                # Do we send an alart to the user, if they need to do this phycisally?
-
-            else:
-                print("in Atomo")
-
-
     def state_02(self):  # PullingVac: Start
         if (self.profile.vacuumWanted is True) and \
                 (self.roughPumpPressure < 70):
             self.state = 'PullingVac: RoughingCryoP'
             self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
         # Todo: Add vacuum not wanted state move.
-
-    def roughVacuum(self):
-        '''
-        It enters this state everytime you are between 0.040 torr and 0.005 torr
-        '''
-        if (self.oldState != self.state):  # and (self.oldState == "Atmosphere"):
-            Logging.logEvent("Debug", "Status Update",
-                             {"message": "Entering Rough vacuum. Ruffing the Cryo Pump.",
-                              "level": 1})
-            # The system has just crossed over to a new point
-            userName = os.environ['LOGNAME']
-            if "root" in userName:
-                # open Cryopump-Roughing gate valve
-                self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
-                time.sleep(2)
-                self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
-                self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
-                self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
-            else:
-                Logging.logEvent("Debug", "Status Update",
-                                 {"message": "In Rough vacuum.",
-                                  "level": 4})
 
     def state_03(self):  # PullingVac: RoughingCryoP
         if (self.profile.vacuumWanted is True) and \
@@ -223,27 +173,6 @@ class VacuumControlStub(Thread):
             time.sleep(2)
             self.hw.PC_104.digital_out.update({'RoughP GateValve': True})
         # Todo: Add vacuum not wanted state move.
-
-    def crossoverVacuum(self):
-        '''
-        It enters this state everytime you are between 0.041 torr and 0.005
-        '''
-        if (self.oldState != self.state):
-            Logging.logEvent("Debug", "Status Update",
-                             {"message": "Entering Crossover Vacuum from Rough vacuum. Cryo pump On.",
-                              "level": 1})
-            # The system has just crossed over to a new point
-            userName = os.environ['LOGNAME']
-            if "root" in userName:
-                #TODO: Alert the user they should close o-ring seal 
-                self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
-                time.sleep(2)
-                # Starting the Cryppump:
-                #TODO: starts the Compressor
-                # self.hw.Shi_compressor_Cmds.append([''])
-                self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
-            else:
-                print("In Crossover Vacuum")
 
     def state_04(self):  # PullingVac: CryoCool; Rough Chamber
         if (self.profile.vacuumWanted is True) and \
@@ -264,52 +193,11 @@ class VacuumControlStub(Thread):
             self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
         # Todo: Add vacuum not wanted state move.
 
-    def CryoVacuum(self):
-        '''
-        It enters this state everytime you are between 0.005 torr and 0.00001
-        '''
-        if (self.oldState != self.state):
-            # The system has just crossed over to a new point
-            userName = os.environ['LOGNAME']
-            if "root" in userName:
-
-                # Close the rough gate valve
-                self.hw.PC_104.digital_out.update({'RoughP GateValve': False})
-
-                # wait here until the valve is closed
-                # TODO Replace Sleep with a check of the Gate valve switches
-                time.sleep(4)
-
-                # Open the cryopump gate valve
-                self.hw.PC_104.digital_out.update({'CryoP GateValve': True})
-                # TODO Add a check of the Gate valve switches - Keep Sleep
-                time.sleep(4)
-
-                # Open the cryopump gate valve
-                self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
-                time.sleep(2)
-                self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
-
-            else:
-                print("In Strong Cryo Vacuum")
-        
     def state_05(self):  # PullingVac: Cryo Pumping Chamber
         if (self.profile.vacuumWanted is True) and \
                 (self.chamberPressure < self.opVac):
             self.state = 'PullingVac: Cryo Pumping Chamber'
         # Todo: Add vacuum not wanted state move.
-
-
-    def operationalVacuum(self):
-        '''
-        It enters this state everytime you are lower than 0.00001 torr
-        '''
-        if self.oldState != self.state:
-            # The system has just crossed over to a new point
-            print("In Operational Vacuum")
-            self.zoneProfiles.updateThermalStartTime(time.time())
-            # Bakes ban happen here.
-            # Thermal Profiles can start here
 
     def state_06(self):  # Operational Vacuum: Cryo Pumping
         if (self.profile.vacuumWanted is True) and \
