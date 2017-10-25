@@ -33,10 +33,11 @@ class VacuumControlStub(Thread):
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.profile = ProfileInstance.getInstance()
         self.hw = HardwareStatusInstance.getInstance()
-        self.state = False
+        self.state = None
+        self.opVac = 2e-6
         self.oldState = True
 
-        self.updatePeriod = 2
+        self.updatePeriod = 1
 
 
     def run(self):
@@ -61,8 +62,6 @@ class VacuumControlStub(Thread):
                         {"message": "Running Vacuum Control Stub",
                          "level":4})
                         # Setup code is here
-                        if self.state:  # todo: remove
-                            self.oldState = self.state
 
                         # connection to the MCC
                         # JK, it's already done in the MCC control stub
@@ -82,62 +81,23 @@ class VacuumControlStub(Thread):
                          "level":4})
 
                         {
-                            'Sys Ready Atm':                        self.state_01,
+                            'Atm: Not Ready':                       self.state_00,
+                            'Atm: Sys Ready':                       self.state_01,
                             'PullingVac: Start':                    self.state_02,
                             'PullingVac: RoughingCryoP':            self.state_03,
                             'PullingVac: CryoCool; Rough Chamber':  self.state_04,
                             'PullingVac: Cryo Pumping Chamber':     self.state_05,
-                            'Operational Vacuum':                   self.state_06,
+                            'Operational Vacuum: Cryo Pumping':     self.state_06,
+                            'Operational Vacuum':                   self.state_07,
+                            'Non-Operational High Vacuum':          self.state_08,
                         }[self.state]()
-
-                        # todo: remove <
-                        # Pressure is in Torr and Temperatur>e is in Kelvin.
-                        # calculations to get from here to there
-                        if self.chamberPressure > 300: #torr?
-                            # use the roughing pump to achieve Rough vacuum
-                            # Wait until 0.0.041 tor
-                            self.state = "Atmosphere"
-                        if ((self.oldState != "Crossover Vacuum") and (self.chamberPressure < 300)) or \
-                                ((self.oldState != "Atmosphere") and (self.chamberPressure > 0.046)):
-                            # open Cryopump-Roughing gate valve
-                            # Wait until 0.041 tor
-                            self.state = "Rough Vacuum"
-                        if ((self.oldState != "Cryo Vacuum") and
-                                (self.chamberPressure < 0.040) and
-                                (self.cryoPumpPressure < 0.045)) or \
-                                ((self.oldState == "Cryo Vacuum") and
-                                     (self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') > 20)):
-                            # Alert the user they should close o-ring seal 
-                            # Start the cryopump
-                            self.state = "Crossover Vacuum"
-                        if os.name == "posix":
-                            userName = os.environ['LOGNAME']
-                        else:
-                            userName = "user" 
-                        if "root" in userName:
-                            if (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15 and self.chamberPressure < 0.035):
-                                # Close the rough gate valve
-                                # Open the cryopump gate valve
-                                # Wait until 10e-6 tor
-                                self.state = "Cryo Vacuum"
-                        else:
-                            if self.chamberPressure < 0.005: #torr?
-                                self.state = "Cryo Vacuum"
-                        if self.chamberPressure < 9e-5: #torr?
-                            # Wait for nothing, either the program will end, or be stopped by the safety checker
-                            self.state = "Operational Vacuum"
-
-                        # if Logging.debug:
-                        #     self.state = "Operational Vacuum"
-
-                        # todo: remove  >
+                        # TODO: Add States for Is there some safe way of taking the chamber out of vacuum?
 
                         Logging.logEvent("Debug","Status Update", 
                         {"message": "Current chamber state: {}".format(self.state),
-                         "level":4})
+                         "level": 4})
 
-
-                        if "Operational Vacuum" in self.state:
+                        if "Operational-Vacuum" in self.state:
                             self.hw.OperationalVacuum = True
                         else:
                             # #TODO: If you are in debugging mode, you can run as if you were in vacuum (take this out for last testing)
@@ -146,13 +106,9 @@ class VacuumControlStub(Thread):
                             # else:
                             self.hw.OperationalVacuum = False
 
-                        
-
                         # sleep until the next time around
                         time.sleep(self.updatePeriod)
 
-
-                        # TODO: Is there some safe way of taking the chamber out of vacuum?
                     # End of inner if
                     else: 
                         time.sleep(1)
@@ -172,8 +128,29 @@ class VacuumControlStub(Thread):
         # end of outer while true
     # end of run()
 
-    def state_01(self):  # Sys Ready Atm
-        pass
+    def state_00(self):  # Atm: Not Ready
+        if (self.hw.PC_104.digital_out.getVal('CryoP GateValve') is False) and \
+                (self.hw.PC_104.digital_out.getVal('RoughP GateValve') is False) and \
+                (self.hw.PC_104.digital_out.getVal('RoughP_On_Sw') == False) and \
+                (self.cryoPumpPressure > 100) and \
+                (self.chamberPressure > 100) and \
+                (self.roughPumpPressure > 100):
+            self.state = 'Atm: Sys Ready'
+
+    def state_01(self):  # Atm: Sys Ready
+        if (self.hw.PC_104.digital_out.getVal('CryoP GateValve') is True) or \
+                (self.hw.PC_104.digital_out.getVal('RoughP GateValve') is True) or \
+                (self.hw.PC_104.digital_out.getVal('RoughP_On_Sw') is True):
+            self.state = 'Atm: Not Ready'
+        if self.profile.vacuumWanted is True:
+            self.state = 'PullingVac: Start'
+            self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
+            time.sleep(1)
+            self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
+            time.sleep(1)  # TODO: replace sleep with Roughing pump Gate valve check and power check
+            # Turn on Roughing Pump
+            self.hw.PC_104.digital_out.update({'RoughP Start': True})
+        # Todo: Add vacuum not wanted state move.
 
     def atmosphere(self):
         '''
@@ -204,7 +181,11 @@ class VacuumControlStub(Thread):
 
 
     def state_02(self):  # PullingVac: Start
-        pass
+        if (self.profile.vacuumWanted is True) and \
+                (self.roughPumpPressure < 70):
+            self.state = 'PullingVac: RoughingCryoP'
+            self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
+        # Todo: Add vacuum not wanted state move.
 
     def roughVacuum(self):
         '''
@@ -229,7 +210,19 @@ class VacuumControlStub(Thread):
                                   "level": 4})
 
     def state_03(self):  # PullingVac: RoughingCryoP
-        pass
+        if (self.profile.vacuumWanted is True) and \
+                (self.cryoPumpPressure < 45e-3):
+            self.state = 'PullingVac: CryoCool; Rough Chamber'
+            self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
+            time.sleep(2)
+            self.hw.Shi_Compressor_Cmds.append('on')
+            self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
+            self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
+            time.sleep(4)
+            self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
+            time.sleep(2)
+            self.hw.PC_104.digital_out.update({'RoughP GateValve': True})
+        # Todo: Add vacuum not wanted state move.
 
     def crossoverVacuum(self):
         '''
@@ -253,7 +246,23 @@ class VacuumControlStub(Thread):
                 print("In Crossover Vacuum")
 
     def state_04(self):  # PullingVac: CryoCool; Rough Chamber
-        pass
+        if (self.profile.vacuumWanted is True) and \
+                (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15) and \
+                (self.chamberPressure < 45e-3):
+            self.state = 'PullingVac: Cryo Pumping Chamber'
+            self.hw.PC_104.digital_out.update({'RoughP GateValve': False})
+            # wait here until the valve is closed
+            # TODO Replace Sleep with a check of the Gate valve switches
+            time.sleep(5)
+            # Open the cryopump gate valve
+            self.hw.PC_104.digital_out.update({'CryoP GateValve': True})
+            # TODO Add a check of the Gate valve switches - Keep Sleep
+            time.sleep(10)
+            # Open the cryopump gate valve
+            self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
+            time.sleep(2)
+            self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
+        # Todo: Add vacuum not wanted state move.
 
     def CryoVacuum(self):
         '''
@@ -285,7 +294,11 @@ class VacuumControlStub(Thread):
                 print("In Strong Cryo Vacuum")
         
     def state_05(self):  # PullingVac: Cryo Pumping Chamber
-        pass
+        if (self.profile.vacuumWanted is True) and \
+                (self.chamberPressure < self.opVac):
+            self.state = 'PullingVac: Cryo Pumping Chamber'
+        # Todo: Add vacuum not wanted state move.
+
 
     def operationalVacuum(self):
         '''
@@ -298,7 +311,23 @@ class VacuumControlStub(Thread):
             # Bakes ban happen here.
             # Thermal Profiles can start here
 
-    def state_06(self):  # Operational Vacuum
+    def state_06(self):  # Operational Vacuum: Cryo Pumping
+        if (self.profile.vacuumWanted is True) and \
+                (self.hw.PC_104.digital_out.getVal('CryoP GateValve') is False) and \
+                (self.chamberPressure < self.opVac):
+            self.state = 'Operational Vacuum'
+        if self.chamberPressure > self.opVac:
+            self.state = 'Non-Operational High Vacuum'
+
+    def state_07(self):  # Operational Vacuum
+        if (self.profile.vacuumWanted is True) and \
+                (self.hw.PC_104.digital_out.getVal('CryoP GateValve') is True) and \
+                (self.chamberPressure < self.opVac):
+            self.state = 'Operational Vacuum: Cryo Pumping'
+        if self.chamberPressure > self.opVac:
+            self.state = 'Non-Operational High Vacuum'
+
+    def state_08(self):  # Non-Operational High Vacuum
         pass
 
     def wait_for_hardware(self):
@@ -332,5 +361,13 @@ class VacuumControlStub(Thread):
         return ready
 
     def determin_current_vacuum_state(self):
-        return "sys"
+        if (self.chamberPressure < self.opVac) and \
+                (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 20):
+            if self.hw.PC_104.digital_out.getVal('CryoP GateValve'):
+                return 'Operational Vacuum: Cryo Pumping'
+            else:
+                return 'Operational Vacuum'
+        else:
+            return 'Atm: Sys Ready'
+
     # TODO: Write a wrapper around opening valves to make one final check of the pressures before we open them
