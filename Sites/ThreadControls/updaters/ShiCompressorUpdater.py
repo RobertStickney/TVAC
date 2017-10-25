@@ -126,7 +126,8 @@ class ShiCompressorUpdater(Thread):
                                  {"message": "There was a {} error in ShiCompressorUpdater. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
                                   "level": 2})
-                # raise e
+                if Logging.debug:
+                    raise e
                 self.compressor.close_port()
                 time.sleep(4)
 

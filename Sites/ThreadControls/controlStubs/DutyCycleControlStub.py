@@ -6,6 +6,7 @@ import datetime
 import sys
 import os
 import traceback
+import math
 
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
@@ -93,11 +94,13 @@ class ZoneControlStub():
         generate a list time values and matching temputure values
         '''
         Logging.logEvent("Debug","Status Update", 
-        {"message": "Creating Expected temperature values: {}".format(self.name),
+        {"message": "DCCS: Creating Expected temperature values: {}".format(self.name),
          "level":2})
         intervalTime = self.parent.updatePeriod
         # if given a startTime, use that, otherwise, use current
+        Logging.debugPrint(1,"DCCS: thermalStartTime: {}".format(self.parent.zoneProfiles.thermalStartTime))
         if startTime:
+            Logging.debugPrint(3,"DCCS: Starttime is: {}\t current: {}".format(startTime, time.time()))
             if "datetime.datetime" in str(type(startTime)):
                 startTime = time.mktime(startTime.timetuple())
             currentTime = int(startTime)
@@ -112,7 +115,8 @@ class ZoneControlStub():
         if "root" in userName:
             while True:
                 currentTemp = self.zoneProfile.getTemp(self.zoneProfile.average)
-                if int(currentTemp) != 0:
+                Logging.debugPrint(1,"DCCS: currentTemp: {}".format(currentTemp))
+                if not math.isnan(currentTemp) and int(currentTemp) != 0:
                     break
                 time.sleep(.5)
         else:
@@ -143,7 +147,7 @@ class ZoneControlStub():
                 "TempDelta Total": TempDelta,
                 }
                 Logging.logEvent("Debug","Data Dump", 
-                    {"message": "Setpoint {}: Ramp Status".format(setPoint.thermalsetpoint),
+                    {"message": "DCCS: Setpoint {}: Ramp Status".format(setPoint.thermalsetpoint),
                      "level":3,
                      "dict":debugStatus})
 
@@ -163,7 +167,7 @@ class ZoneControlStub():
             "goal temperature":goalTemp,
             }
             Logging.logEvent("Debug","Data Dump", 
-                {"message": "Setpoint {}: Soak Status".format(setPoint.thermalsetpoint),
+                {"message": "DCCS: Setpoint {}: Soak Status".format(setPoint.thermalsetpoint),
                  "level":3,
                  "dict":debugStatus})
 
@@ -240,31 +244,37 @@ class DutyCycleControlStub(Thread):
             # Check to make sure there is an active profile
             # and that we are sitting in an operational vacuum
             # and that all drivers and updaters are running
-            print("activeProfile: {}".format(ProfileInstance.getInstance().activeProfile))
-            print("OperationalVacuum: {}".format(HardwareStatusInstance.getInstance().OperationalVacuum))
-            print("getActiveProfileStatus: {}".format(ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus()))
+            Logging.debugPrint(3,"DCCS: activeProfile: {}".format(ProfileInstance.getInstance().activeProfile))
+            Logging.debugPrint(3,"DCCS: OperationalVacuum: {}".format(HardwareStatusInstance.getInstance().OperationalVacuum))
+            Logging.debugPrint(3,"DCCS: getActiveProfileStatus: {}".format(ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus()))
             if ProfileInstance.getInstance().activeProfile and \
                 HardwareStatusInstance.getInstance().OperationalVacuum and \
                 ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus():
                 try:
                     Logging.logEvent("Debug","Status Update", 
-                    {"message": "Running Duty Cycle thread",
+                    {"message": "DCCS: Starting Duty Cycle thread",
                      "level":2})
          
                     Logging.logEvent("Event","Start Profile", 
                         {'time': datetime.time(),
                         "ProfileInstance": ProfileInstance.getInstance()})
 
+
+                    ProfileInstance.getInstance().zoneProfiles.updateThermalStartTime(time.time())
+
                     # local temp variables for checking state
                     #TODO: Start time should gotten somewhere else, not made here
-                    self.startTime = int(time.time())
+                    if self.zoneProfiles.thermalStartTime:
+                        self.startTime = self.zoneProfiles.thermalStartTime
+                    else:
+                        self.startTime = int(time.time())
                     currentSetpointTemporary = 0
                     rampTemporary = False
                     soakTemporary = True
 
 
                     Logging.logEvent("Debug","Status Update", 
-                    {"message": "Setting up Platen",
+                    {"message": "DCCS: Setting up Platen",
                      "level":2})
                     HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Setup Platen', ''])
 
@@ -277,7 +287,7 @@ class DutyCycleControlStub(Thread):
                     while ProfileInstance.getInstance().activeProfile:
 
                         Logging.logEvent("Debug","Status Update", 
-                            {"message": "Running Duty Cycle Thread",
+                            {"message": "DCCS: Running Duty Cycle Thread",
                              "level":3})
 
                         # You might need to stay is pause
@@ -318,12 +328,14 @@ class DutyCycleControlStub(Thread):
                         # compare the temps just made with the values in self.
                         # if they are different, or important log it
                         if rampTemporary == True and self.ramp == False:
-                            ProfileInstance.getInstance().setpoint = currentSetpointTemporary
+                            ProfileInstance.getInstance().currentSetpoint = currentSetpointTemporary
                             Logging.logEvent("Event","Profile",
-                                {"message":"Profile {} has entered setpoint {} Ramp".format("LOL", currentSetpointTemporary)})
+                                {"message":"Profile {} has entered setpoint {} Ramp".format("LOL", currentSetpointTemporary),
+                                "ProfileInstance": ProfileInstance.getInstance()})
                         if soakTemporary == True and self.soak == False:
                             Logging.logEvent("Event","Profile",
-                                {"message":"Profile {} has entered setpoint {} Soak".format("LOL", currentSetpointTemporary-1)})
+                                {"message":"Profile {} has entered setpoint {} Soak".format("LOL", currentSetpointTemporary-1),
+                                "ProfileInstance": ProfileInstance.getInstance()})
                         self.ramp = rampTemporary
                         self.soak = soakTemporary
                         # With the temp goal tempurture picked, make the duty cycle 
@@ -373,11 +385,11 @@ class DutyCycleControlStub(Thread):
                     # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
                     self.running = False
                     ProfileInstance.getInstance().zoneProfiles.activeProfile = False
-                    Logging.debugPrint(1, "Error in run, Duty Cycle: {}".format(str(e)))
+                    Logging.debugPrint(1, "DCCS: Error in run, Duty Cycle: {}".format(str(e)))
                     if Logging.debug:
                         raise e
                 # end of try, catch
-            # Sleeping so it doesn't busty wait
+            # Sleeping so it doesn't busy wait
             time.sleep(1)
             # end of running check
         # end of outter while True

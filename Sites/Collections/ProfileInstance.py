@@ -53,9 +53,10 @@ class ProfileInstance:
                 raise e
 
         results = mysql.cur.fetchone()
-        self.inHold = results["in_hold"]
-        self.inPause = results["in_pause"]
-        self.inRamp = results["in_ramp"]
-        self.recordData = results["record_data"]
-        self.vacuumWanted = results["vacuum_wanted"]
-        self.setpoint = results["setpoint"]
+        self.inHold = True if results["in_hold"] else False
+        self.inPause = True if results["in_pause"] else False
+        self.inRamp = True if results["in_ramp"] else False
+        self.recordData = True if results["record_data"] else False
+        self.vacuumWanted = True if results["vacuum_wanted"] else False
+        self.currentSetpoint = results["setpoint"]
+

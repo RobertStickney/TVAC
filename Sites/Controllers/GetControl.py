@@ -119,28 +119,34 @@ class GetControl:
 
 
     def hardStop(self):
-        debugPrint(1,"Hard stop has been called")
-        d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
-        ProfileInstance.getInstance().activeProfile = False
-        d_out.update({"IR Lamp 1 PWM DC": 0})
-        d_out.update({"IR Lamp 2 PWM DC": 0})
-        d_out.update({"IR Lamp 3 PWM DC": 0})
-        d_out.update({"IR Lamp 4 PWM DC": 0})
-        d_out.update({"IR Lamp 5 PWM DC": 0})
-        d_out.update({"IR Lamp 6 PWM DC": 0})
-        d_out.update({"IR Lamp 7 PWM DC": 0})
-        d_out.update({"IR Lamp 8 PWM DC": 0})
-        d_out.update({"IR Lamp 9 PWM DC": 0})
-        d_out.update({"IR Lamp 10 PWM DC": 0})
-        d_out.update({"IR Lamp 11 PWM DC": 0})
-        d_out.update({"IR Lamp 12 PWM DC": 0})
-        d_out.update({"IR Lamp 13 PWM DC": 0})
-        d_out.update({"IR Lamp 14 PWM DC": 0})
-        d_out.update({"IR Lamp 15 PWM DC": 0})
-        d_out.update({"IR Lamp 16 PWM DC": 0})
+        try:
+            Logging.debugPrint(1,"Hard stop has been called")
+            d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
+            ProfileInstance.getInstance().activeProfile = False
+            d_out.update({"IR Lamp 1 PWM DC": 0})
+            d_out.update({"IR Lamp 2 PWM DC": 0})
+            d_out.update({"IR Lamp 3 PWM DC": 0})
+            d_out.update({"IR Lamp 4 PWM DC": 0})
+            d_out.update({"IR Lamp 5 PWM DC": 0})
+            d_out.update({"IR Lamp 6 PWM DC": 0})
+            d_out.update({"IR Lamp 7 PWM DC": 0})
+            d_out.update({"IR Lamp 8 PWM DC": 0})
+            d_out.update({"IR Lamp 9 PWM DC": 0})
+            d_out.update({"IR Lamp 10 PWM DC": 0})
+            d_out.update({"IR Lamp 11 PWM DC": 0})
+            d_out.update({"IR Lamp 12 PWM DC": 0})
+            d_out.update({"IR Lamp 13 PWM DC": 0})
+            d_out.update({"IR Lamp 14 PWM DC": 0})
+            d_out.update({"IR Lamp 15 PWM DC": 0})
+            d_out.update({"IR Lamp 16 PWM DC": 0})
 
-        HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
-        return {'result':'success'}
+            HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
+            Logging.logEvent("Event","Profile",
+                {"message": "Profile Halted:",
+                "ProfileInstance": ProfileInstance.getInstance()})
+            return {'result':'success'}
+        except Exception as e:
+            return {'result':'{}'.format(e)}
 
     def getShiTemps(self):
         return HardwareStatusInstance.getInstance().ShiCryopump.mcc_status.get_json_plots()
@@ -211,13 +217,17 @@ class GetControl:
         ProfileInstance.getInstance().recordData = True
 
     def getTvacStatus(self):
-        return {
+        gauges = HardwareStatusInstance.getInstance().PfeifferGuages
+        out = {
         "recordData": ProfileInstance.getInstance().recordData,
         "activeProfile": ProfileInstance.getInstance().activeProfile,
         "vacuumWanted": ProfileInstance.getInstance().vacuumWanted,
         "currentSetpoint": ProfileInstance.getInstance().currentSetpoint,
-        "recordData": ProfileInstance.getInstance().recordData,
         "inRamp": ProfileInstance.getInstance().inRamp,
         "inHold": ProfileInstance.getInstance().inHold,
         "inPause": ProfileInstance.getInstance().inPause,
+        'CryoPressure': gauges.get_cryopump_pressure(),
+        'ChamberPressure': gauges.get_chamber_pressure(),
+        'RoughingPressure': gauges.get_roughpump_pressure()
         }
+        return json.dumps(out)

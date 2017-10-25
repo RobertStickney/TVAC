@@ -56,14 +56,6 @@ CREATE TABLE tvac.Profile_Instance(
 	endTime DATETIME NULL
 );
 
--- DROP TABLE IF EXISTS tvac.Profile_Instance_Setpoint;
--- CREATE TABLE tvac.Profile_Instance(
--- 	profile_name varchar(36) NOT NULL,
--- 	profile_I_ID varchar(36) NOT NULL,
--- 	setpoint int NOT NULL,
--- 	ramp_time DATETIME NULL,
--- 	soak_time DATETIME NULL
--- );
 
 DROP TABLE IF EXISTS tvac.Thermal_Zone_Profile;
 CREATE TABLE tvac.Thermal_Zone_Profile(
