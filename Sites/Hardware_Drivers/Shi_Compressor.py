@@ -53,6 +53,10 @@ class ShiCompressor:
     def ResponceGood(self, Responce, cmd):
         # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
         # print("Checksum: '" + Responce[-2] + "' Data: '" + Responce[1:-2] + "' Calc cksum: '" + chr(get_checksum(Responce[1:-2])) + "'")
+        # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
+        if len(Responce) < 4:
+            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
+            return False
         if Responce[0] != '$':
             # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "'$' is not the first byte!")
             return False
