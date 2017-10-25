@@ -51,6 +51,8 @@ class ShiCompressorUpdater(Thread):
                                     {"message": "Power on the Shi Compressor",
                                     "level": 3})
                     self.compressor.open_port()
+                    while self.hw.PC_104.digital_out.getVal('CryoP Pwr Relay 1') is None:
+                        time.sleep(1)
                     Currently_powered = self.hw.PC_104.digital_out.getVal('CryoP Pwr Relay 1')
                     self.hw.PC_104.digital_out.update({'CryoP Pwr Relay 1': True})
                     if not Currently_powered:

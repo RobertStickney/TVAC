@@ -20,8 +20,8 @@ class ShiCompressor:
         self.port_listener.start()
         self.port_listener.flush_buffer(1.0)
 
-    def flush_port(self):
-        self.port_listener.flush_buffer(1.0)
+    def flush_port(self, to = 1.0):
+        self.port_listener.flush_buffer(to)
 
     def close_port(self):
         if not self.port.closed:
@@ -34,7 +34,7 @@ class ShiCompressor:
             print("C:--" + msg1.replace('\r', r'\r') + "---")  # TODO: Remove print and msg1
             self.port.write(msg1.encode())
             # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
-            resp = self.port_listener.read_line(0.7).strip()
+            resp = self.port_listener.read_line(2.0).strip()
             print("R:--" + resp.replace('\r', r'\r') + "---")
             if self.ResponceGood(resp, command):
                 data = resp.split(',')
@@ -54,8 +54,8 @@ class ShiCompressor:
         # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
         # print("Checksum: '" + Responce[-2] + "' Data: '" + Responce[1:-2] + "' Calc cksum: '" + chr(get_checksum(Responce[1:-2])) + "'")
         # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
-        if len(Responce) < 4:
-            # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "--- Missing Carriage Return at the end")
+        if len(Responce) < 4:  # Timeout occurred
+            self.port_listener.flush_buffer(2.0)
             return False
         if Responce[0] != '$':
             # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "'$' is not the first byte!")
