@@ -152,7 +152,7 @@ def validateThermocouple(json,jsonTCs,zoneNumber,errors):
 		#print(workingCheck)
 		if workingCheck == False:
 			print("ProfileError : Thermocouple %s, for Zone %s is not a working Thermocouple"
-			 % (str(zoneCheck[i]),str(zoneNumber)))
+			 % (str(zoneCheck[i]),str(json[zoneNumber]["zone"])))
 			errors+=1
 	return errors
 
