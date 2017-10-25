@@ -15,6 +15,7 @@ class ZoneCollection:
         self.profileUUID = uuid.uuid4()
         self.profileName = None
         self.parent = parent
+        self.thermalStartTime = None
 
     def buildCollection(self):
         zoneDictEmpty = {}
@@ -102,6 +103,11 @@ class ZoneCollection:
         If this is a pre exisiting profile we are loading after reboot, a startTime will be given
         this is the startTime of the profileInstance that was/will be ran by the ThreadCollection
         '''
+        if thermalStartTime:
+            Logging.debugPrint(2,"Loading profile {}:\tpst: {}\ttst: {}\tfsst: {}".format(profileName,
+                                profileStartTime, time.mktime(thermalStartTime.timetuple()), firstSoakStartTime))
+        else:
+            Logging.debugPrint(2,"No thermalStartTime")
         try:
             sql = "SELECT zone, average, min_heat_error, max_heat_error, max_heat_per_min FROM tvac.Thermal_Zone_Profile WHERE profile_name=\"{}\";".format(profileName)
             mysql = MySQlConnect()
@@ -181,8 +187,7 @@ class ZoneCollection:
         except Exception as e:
             Logging.debugPrint(3,"sql: {}".format(sql))
             Logging.debugPrint(1, "Error in saveZone, zoneCollection: {}".format(str(e)))
-            if Logging.debug:
-                raise e
+            raise e
 
         coloums = "( profile_name, zone, set_point, temp_goal, ramp_time, soak_time )"
         values = ""
@@ -200,8 +205,7 @@ class ZoneCollection:
         except Exception as e:
             Logging.debugPrint(3,"sql: {}".format(sql))
             Logging.debugPrint(1, "Error in saveZone, zoneCollection: {}".format(str(e)))
-            if Logging.debug:
-                raise e
+            raise e
 
         #Saving the TC as well 
 
@@ -216,8 +220,7 @@ class ZoneCollection:
         except Exception as e:
             Logging.debugPrint(3,"sql: {}".format(sql))
             Logging.debugPrint(1, "Error in saveZone, zoneCollection: {}".format(str(e)))
-            if Logging.debug:
-                raise e
+            raise e
 
 
         return True
@@ -238,7 +241,7 @@ class ZoneCollection:
 
 
     def updateThermalStartTime(self, thermalStartTime):
-        self.thermalStartTime = thermalStartTime
+        # self.thermalStartTime = thermalStartTime
         sql = "update tvac.Profile_Instance set thermal_Start_Time=\"{}\" where thermal_Start_Time is null;".format(datetime.datetime.fromtimestamp(thermalStartTime))
 
         mysql = MySQlConnect()

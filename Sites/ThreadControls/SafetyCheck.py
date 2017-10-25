@@ -189,30 +189,35 @@ class SafetyCheck(Thread):
 					if HardwareStatusInstance.getInstance().OperationalVacuum:
 						vacuum = True
 
-					if vacuum and HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure() > 1e-4:
-						d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
-						ProfileInstance.getInstance().activeProfile = False
-						Logging.debugPrint(1,"ERROR Pressure is above 10^-4.")
-						vacuum = False
-						# TODO: Send Error
-						d_out.update({"IR Lamp 1 PWM DC": 0})
-						d_out.update({"IR Lamp 2 PWM DC": 0})
-						d_out.update({"IR Lamp 3 PWM DC": 0})
-						d_out.update({"IR Lamp 4 PWM DC": 0})
-						d_out.update({"IR Lamp 5 PWM DC": 0})
-						d_out.update({"IR Lamp 6 PWM DC": 0})
-						d_out.update({"IR Lamp 7 PWM DC": 0})
-						d_out.update({"IR Lamp 8 PWM DC": 0})
-						d_out.update({"IR Lamp 9 PWM DC": 0})
-						d_out.update({"IR Lamp 10 PWM DC": 0})
-						d_out.update({"IR Lamp 11 PWM DC": 0})
-						d_out.update({"IR Lamp 12 PWM DC": 0})
-						d_out.update({"IR Lamp 13 PWM DC": 0})
-						d_out.update({"IR Lamp 14 PWM DC": 0})
-						d_out.update({"IR Lamp 15 PWM DC": 0})
-						d_out.update({"IR Lamp 16 PWM DC": 0})
+					if os.name == "posix":
+						userName = os.environ['LOGNAME']
+					else:
+						userName = "user" 
+					if False and "root" in userName:
+						if vacuum and HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure() > 1e-4:
+							d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
+							ProfileInstance.getInstance().activeProfile = False
+							Logging.debugPrint(1,"ERROR Pressure is above 10^-4. ({})".format(HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure()))
+							vacuum = False
+							# TODO: Send Error
+							d_out.update({"IR Lamp 1 PWM DC": 0})
+							d_out.update({"IR Lamp 2 PWM DC": 0})
+							d_out.update({"IR Lamp 3 PWM DC": 0})
+							d_out.update({"IR Lamp 4 PWM DC": 0})
+							d_out.update({"IR Lamp 5 PWM DC": 0})
+							d_out.update({"IR Lamp 6 PWM DC": 0})
+							d_out.update({"IR Lamp 7 PWM DC": 0})
+							d_out.update({"IR Lamp 8 PWM DC": 0})
+							d_out.update({"IR Lamp 9 PWM DC": 0})
+							d_out.update({"IR Lamp 10 PWM DC": 0})
+							d_out.update({"IR Lamp 11 PWM DC": 0})
+							d_out.update({"IR Lamp 12 PWM DC": 0})
+							d_out.update({"IR Lamp 13 PWM DC": 0})
+							d_out.update({"IR Lamp 14 PWM DC": 0})
+							d_out.update({"IR Lamp 15 PWM DC": 0})
+							d_out.update({"IR Lamp 16 PWM DC": 0})
 
-						HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
+							HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
 
 					time.sleep(SLEEP_TIME)
 				# end of inner while true loop

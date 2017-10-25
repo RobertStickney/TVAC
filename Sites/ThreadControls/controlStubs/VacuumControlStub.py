@@ -35,9 +35,15 @@ class VacuumControlStub(Thread):
         self.hw = HardwareStatusInstance.getInstance()
         self.state = None
         self.opVac = 2e-6
-        self.oldState = True
 
         self.updatePeriod = 1
+
+        if os.name == "posix":
+            userName = os.environ['LOGNAME']
+        else:
+            userName = "user" 
+        if "root" not in userName: 
+            self.zoneProfiles.updateThermalStartTime(time.time())
 
 
     def run(self):
@@ -55,7 +61,7 @@ class VacuumControlStub(Thread):
                     time.sleep(1)
                 self.determin_current_vacuum_state()
                 while True:
-                    if self.profile.vacuumWanted:
+                    if False and self.profile.vacuumWanted:
                         # With an active profile, we start putting the system under pressure
              
                         Logging.logEvent("Debug","Status Update", 
@@ -93,10 +99,6 @@ class VacuumControlStub(Thread):
                         }[self.state]()
                         # TODO: Add States for Is there some safe way of taking the chamber out of vacuum?
 
-                        Logging.logEvent("Debug","Status Update", 
-                        {"message": "Current chamber state: {}".format(self.state),
-                         "level": 4})
-
                         if "Operational-Vacuum" in self.state:
                             self.hw.OperationalVacuum = True
                         else:
@@ -105,6 +107,10 @@ class VacuumControlStub(Thread):
                             #     self.hw.OperationalVacuum = True
                             # else:
                             self.hw.OperationalVacuum = False
+
+                        Logging.logEvent("Debug","Status Update", 
+                        {"message": "Current chamber state: {}".format(self.state),
+                         "level": 4})
 
                         # sleep until the next time around
                         time.sleep(self.updatePeriod)

@@ -82,7 +82,7 @@ class GetControl:
 
     def getLastError(self):
         # data unused
-        Logging.debugPrint(2,"Calling: Get Last Error")  #Todo Change to logEvent()
+        Logging.debugPrint(2,"Calling: Get Last Err")  #Todo Change to logEvent()
         errorList = ThreadCollectionInstance.getInstance().threadCollection.safetyThread.errorList
         tempErrorList = dict(time=[],event=[],item=[],itemID=[],details=[],actions=[])
         for i, error in enumerate(errorList):
@@ -119,44 +119,46 @@ class GetControl:
 
 
     def hardStop(self):
-        debugPrint(1,"Hard stop has been called")
-        d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
-        ProfileInstance.getInstance().activeProfile = False
-        d_out.update({"IR Lamp 1 PWM DC": 0})
-        d_out.update({"IR Lamp 2 PWM DC": 0})
-        d_out.update({"IR Lamp 3 PWM DC": 0})
-        d_out.update({"IR Lamp 4 PWM DC": 0})
-        d_out.update({"IR Lamp 5 PWM DC": 0})
-        d_out.update({"IR Lamp 6 PWM DC": 0})
-        d_out.update({"IR Lamp 7 PWM DC": 0})
-        d_out.update({"IR Lamp 8 PWM DC": 0})
-        d_out.update({"IR Lamp 9 PWM DC": 0})
-        d_out.update({"IR Lamp 10 PWM DC": 0})
-        d_out.update({"IR Lamp 11 PWM DC": 0})
-        d_out.update({"IR Lamp 12 PWM DC": 0})
-        d_out.update({"IR Lamp 13 PWM DC": 0})
-        d_out.update({"IR Lamp 14 PWM DC": 0})
-        d_out.update({"IR Lamp 15 PWM DC": 0})
-        d_out.update({"IR Lamp 16 PWM DC": 0})
+        try:
+            Logging.debugPrint(1,"Hard stop has been called")
+            d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
+            ProfileInstance.getInstance().activeProfile = False
+            d_out.update({"IR Lamp 1 PWM DC": 0})
+            d_out.update({"IR Lamp 2 PWM DC": 0})
+            d_out.update({"IR Lamp 3 PWM DC": 0})
+            d_out.update({"IR Lamp 4 PWM DC": 0})
+            d_out.update({"IR Lamp 5 PWM DC": 0})
+            d_out.update({"IR Lamp 6 PWM DC": 0})
+            d_out.update({"IR Lamp 7 PWM DC": 0})
+            d_out.update({"IR Lamp 8 PWM DC": 0})
+            d_out.update({"IR Lamp 9 PWM DC": 0})
+            d_out.update({"IR Lamp 10 PWM DC": 0})
+            d_out.update({"IR Lamp 11 PWM DC": 0})
+            d_out.update({"IR Lamp 12 PWM DC": 0})
+            d_out.update({"IR Lamp 13 PWM DC": 0})
+            d_out.update({"IR Lamp 14 PWM DC": 0})
+            d_out.update({"IR Lamp 15 PWM DC": 0})
+            d_out.update({"IR Lamp 16 PWM DC": 0})
 
-        HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
-        return {'result':'success'}
+            HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
+            Logging.logEvent("Event","Profile",
+                {"message": "Profile Halted:",
+                "ProfileInstance": ProfileInstance.getInstance()})
+            return {'result':'success'}
+        except Exception as e:
+            return {'result':'{}'.format(e)}
 
     def getShiTemps(self):
         return HardwareStatusInstance.getInstance().ShiCryopump.mcc_status.get_json_plots()
 
-    # def getEventList(self):
-    #     tmp = ProfileInstance.getInstance().systemStatusQueue
-    #     ProfileInstance.getInstance().systemStatusQueue = []
-    #     return str(tmp)
 
     def getEventList(self):
         # data unused
         Logging.debugPrint(2,"Calling: Get Event List")
         eventList = ProfileInstance.getInstance().systemStatusQueue
-        eventList.append({"time":str(datetime.now()),
-                        "category":"System",
-                        "message":"This is a test event"})
+        # eventList.append({"time":str(datetime.now()),
+        #                 "category":"System",
+        #                 "message":"This is a test event"})
         tempEventList = dict(time=[],category=[],message=[])
         for i, event in enumerate(eventList):
             tempEventList['time'].append(event['time'])
@@ -213,3 +215,19 @@ class GetControl:
 
     def recordData(self):
         ProfileInstance.getInstance().recordData = True
+
+    def getTvacStatus(self):
+        gauges = HardwareStatusInstance.getInstance().PfeifferGuages
+        out = {
+        "recordData": ProfileInstance.getInstance().recordData,
+        "activeProfile": ProfileInstance.getInstance().activeProfile,
+        "vacuumWanted": ProfileInstance.getInstance().vacuumWanted,
+        "currentSetpoint": ProfileInstance.getInstance().currentSetpoint,
+        "inRamp": ProfileInstance.getInstance().inRamp,
+        "inHold": ProfileInstance.getInstance().inHold,
+        "inPause": ProfileInstance.getInstance().inPause,
+        'CryoPressure': gauges.get_cryopump_pressure(),
+        'ChamberPressure': gauges.get_chamber_pressure(),
+        'RoughingPressure': gauges.get_roughpump_pressure()
+        }
+        return json.dumps(out)

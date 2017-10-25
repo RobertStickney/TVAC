@@ -54,7 +54,7 @@ class ThreadCollection:
             mysql.cur.execute(sql)
             mysql.conn.commit()
         except Exception as e:
-            return False, e
+            return (False, e)
 
         result = mysql.cur.fetchone()
         if not result:
@@ -142,28 +142,10 @@ class ThreadCollection:
             pass
 
         ProfileInstance.getInstance().activeProfile = True
+        Logging.debugPrint(2,"Setting Active Profile to True")
 
         return "{'result':'success'}"
         
-
-
-    # TODO: Check to see if we need this?
-    # commenting this out because I don't think we need it
-    # def runSingleThread(self,data):
-    #     thread = data['zone']
-    #     if self.zoneThreadDict[thread].handeled:
-    #         self.zoneThreadDict[thread] = DutyCycleControlStub(args=(thread,))
-    #     self.zoneThreadDict[thread].running = True
-    #     self.zoneThreadDict[thread].daemon = True
-    #     self.zoneThreadDict[thread].start()
-
-    # TODO Why is this here?
-    # def checkThreadStatus(self):
-    #     for thread in self.zoneThreadDict:
-    #         isAlive = self.zoneThreadDict[thread].is_alive()
-    #         handled = self.zoneThreadDict[thread].handeled
-    #         # print("{} is {} and is {} handled".format(thread, "ALIVE" if isAlive else "DEAD", "NOT" if not handled else ""))
-
     def pause(self,data=None):
         self.dutyCycleThread.paused = True
 
@@ -182,8 +164,3 @@ class ThreadCollection:
         thread = data['zone']
         self.zoneThreadDict[thread].terminate()
         self.zoneThreadDict[thread] = DutyCycleControlStub(args=(thread,))
-
-    # TODO Why is this here?
-    # def calculateRamp(self,data):
-    #     thread = data['zone']
-    #     self.zoneThreadDict[thread].calculateRamp()
