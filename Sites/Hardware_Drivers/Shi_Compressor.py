@@ -32,7 +32,7 @@ class ShiCompressor:
             msg = "${:s}".format(command)
             msg1 = "{:s}{:04X}\r".format(msg, self.crc(msg))
             print("C:--" + msg1.replace('\r', r'\r') + "---")  # TODO: Remove print and msg1
-            self.port.write(msg1.encode())
+            self.port.write(msg1.encode()) 
             # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
             resp = self.port_listener.read_line(0.7).strip()
             print("R:--" + resp.replace('\r', r'\r') + "---")

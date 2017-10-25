@@ -193,7 +193,7 @@ class SafetyCheck(Thread):
 						userName = os.environ['LOGNAME']
 					else:
 						userName = "user" 
-					if False and "root" in userName:
+					if "root" in userName:
 						if vacuum and HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure() > 1e-4:
 							d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
 							ProfileInstance.getInstance().activeProfile = False

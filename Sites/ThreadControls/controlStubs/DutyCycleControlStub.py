@@ -377,6 +377,7 @@ class DutyCycleControlStub(Thread):
                     # self.zoneProfile.activeZoneProfile = False
                     # This assumes all zones have the same end time
                     ProfileInstance.getInstance().activeProfile = False
+                    ProfileInstance.getInstance().vacuumWanted = False
                 except Exception as e:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
