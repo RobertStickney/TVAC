@@ -146,6 +146,9 @@ class TsRegistersUpdater(Thread):
                                                     "IR Lamp "+str(i+1),
                                                     self.da_io.digital_out.update))
 
+    def Interlocks(self):
+        pass
+
     def ir_lamp_pwm_stop(self):
         self.ir_lamp_pwm = []
 
