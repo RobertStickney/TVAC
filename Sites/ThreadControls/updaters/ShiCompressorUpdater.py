@@ -34,9 +34,9 @@ class ShiCompressorUpdater(Thread):
             # This has no check because it should always be running
             try:
                 # Thread "Start up" stuff goes here
-                Logging.logEvent("Event", "Thread Start",
-                                {"thread": "Shi Compressor Updater",
-                                "ProfileInstance": ProfileInstance.getInstance()})
+                # Logging.logEvent("Event", "Thread Start",
+                #                 {"thread": "Shi Compressor Updater",
+                #                 "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug", "Status Update",
                                 {"message": "Starting Shi Compressor Updater",
                                 "level": 2})
@@ -126,7 +126,8 @@ class ShiCompressorUpdater(Thread):
                                  {"message": "There was a {} error in ShiCompressorUpdater. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
                                   "level": 2})
-                # raise e
+                if Logging.debug:
+                    raise e
                 self.compressor.close_port()
                 time.sleep(4)
 

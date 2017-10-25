@@ -36,8 +36,8 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getPC104_Analog': control.getPC104_Analog,
                 '/getPressureGauges': control.getPressureGauges,
                 '/getZoneTemps': control.getZoneTemps,
-                '/getLastError' : control.getLastError,
-                '/getLastErrorTest' : control.getLastErrorTest,
+                '/getLastErr' : control.getLastError,
+                '/getLastErrTest' : control.getLastErrorTest,
                 '/putUnderVacuum':control.putUnderVacuum,
                 '/getEventList':control.getEventList,
                 '/hardStop':control.hardStop,
@@ -45,6 +45,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/pause':control.pauseAllZones,
                 '/resume':control.resumeAllZones,
                 '/unHold':control.unHoldAllZones,
+                '/getTvacStatus': control.getTvacStatus,
             }[path]()
 
             Logging.logEvent("Debug","Status Update",
