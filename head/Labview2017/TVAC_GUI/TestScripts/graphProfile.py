@@ -103,7 +103,7 @@ def validateProfile(json,zone,errors):
 				errors+=1	
 
 
-	if zoneData["maxTemp"] > 500 or zoneData["maxTemp"] < 50:
+	if zoneData["maxTemp"] > 430 or zoneData["maxTemp"] < 50:
 		print("ProfileError : Maximum Temp Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))
 		errors+=1	
 	if zoneData["maxTemp"] <= zoneData["minTemp"]:
@@ -112,7 +112,7 @@ def validateProfile(json,zone,errors):
 	if zoneData["maxTemp"] <= zoneData["minTemp"]:
 		print("ProfileError : Maximum Temp Limit below Minimum Temp Limit for Zone",str(zoneData["zone"]))
 		errors+=1	
-	if zoneData["minTemp"] > 500 or zoneData["minTemp"] < 50:
+	if zoneData["minTemp"] > 430 or zoneData["minTemp"] < 50:
 		print("ProfileError : Minimum Temp Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))		
 		errors+=1	
 
@@ -130,8 +130,9 @@ def validateProfile(json,zone,errors):
 	else:
 		for i in range(0,len(setPtData)):
 			if setPtData[i]["tempgoal"] == 0:
-				print("ProfileError : WARNING Floating Temp Goal Set for Zone %s, Set Point %s"
+				print("ProfileError : Error 0 Degree K Temp Goal Set for Zone %s, Set Point %s"
 				 % (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
+				errors+=1
 
 			elif setPtData[i]["tempgoal"] > zoneData["maxTemp"] or setPtData[i]["tempgoal"] < zoneData["minTemp"]:
 				print("ProfileError : Temperature Goal for Zone %s, Set Point %s violates Max/Min Temp Limits" 
