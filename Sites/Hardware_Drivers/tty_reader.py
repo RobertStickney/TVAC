@@ -6,10 +6,10 @@ from threading import Condition
 
 class TTY_Reader(Thread):
 
-    __lock = Condition()
 
     def __init__(self, fd, group=None, target=None, name=None, args=(), kwargs=None):
         Thread.__init__(self, group=group, target=target, name=name)
+        self.__lock = Condition()
         self.args = args
         self.kwargs = kwargs
         self.tty_fd = fd
@@ -29,6 +29,7 @@ class TTY_Reader(Thread):
                     self.buffer.insert(0, "")
                     self.__lock.notify()
 
+
     def flush_buffer(self, delay_for_read=0.0):
         if delay_for_read > 0:
             time.sleep(delay_for_read)
@@ -40,7 +41,10 @@ class TTY_Reader(Thread):
             if len(self.buffer) > 1:
                 line = self.buffer.pop()
             else:
+                # print("A: {}".format(time_out))
                 self.__lock.wait(time_out)  # wait for a new line to put onto the buffer
+                # if time_out != 2.0:
+                #     print("self.buffer: {}".format(self.buffer))
                 if len(self.buffer) > 1:
                     line = self.buffer.pop()
                 elif len(self.buffer) == 1:

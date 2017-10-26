@@ -42,7 +42,7 @@ class HardwareStatusInstance:
             else:
                 userName = "user" 
             if "root" in userName:
-                self.OperationalVacuum = True
+                self.OperationalVacuum = False
             else:
                 self.OperationalVacuum = True
 

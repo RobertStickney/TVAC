@@ -33,16 +33,23 @@ class VacuumControlStub(Thread):
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.profile = ProfileInstance.getInstance()
         self.hw = HardwareStatusInstance.getInstance()
-        self.state = None
-        self.opVac = 2e-6
+        self.state = None;
+        self.opVac = 9e-6
 
         self.updatePeriod = 1
+
+        # # FOR TESTING ################################
+        # self.state = "Operational Vacuum"
+        # self.hw.OperationalVacuum = True
+        # # FOR TESTING ################################
 
         if os.name == "posix":
             userName = os.environ['LOGNAME']
         else:
             userName = "user" 
-        if "root" not in userName: 
+        if "root" in userName:
+            pass
+        else: 
             self.zoneProfiles.updateThermalStartTime(time.time())
 
 
@@ -54,70 +61,67 @@ class VacuumControlStub(Thread):
                 {"message": "Starting VacuumControlStub",
                  "level":2})            
             try:
-                while self.wait_for_hardware():  # Wait for hardware drivers to read sensors.
+                while not self.wait_for_hardware():  # Wait for hardware drivers to read sensors.
                     Logging.logEvent("Debug", "Status Update",
                                      {"message": "VacuumControlStub waiting for the hardware to be read.",
-                                      "level": 5})
+                                      "level": 3})
                     time.sleep(1)
-                self.determin_current_vacuum_state()
+                self.cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
+                self.chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
+                self.roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
+
+                self.state = self.determin_current_vacuum_state()
                 while True:
-                    if False and self.profile.vacuumWanted:
-                        # With an active profile, we start putting the system under pressure
-             
-                        Logging.logEvent("Debug","Status Update", 
-                        {"message": "Running Vacuum Control Stub",
-                         "level":4})
-                        # Setup code is here
+                    # With an active profile, we start putting the system under pressure
+         
+                    Logging.logEvent("Debug","Status Update", 
+                    {"message": "Running Vacuum Control Stub",
+                     "level":4})
+                    # Setup code is here
 
-                        # connection to the MCC
-                        # JK, it's already done in the MCC control stub
+                    # connection to the MCC
+                    # JK, it's already done in the MCC control stub
 
-                        # Reading of pressure gauges, to figure out where the system is
+                    # Reading of pressure gauges, to figure out where the system is
 
-                        # When you know what the pressure is, you know what to do go get into pressure
-                        self.cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
-                        self.chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
-                        self.roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
+                    # When you know what the pressure is, you know what to do go get into pressure
+                    self.cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
+                    self.chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
+                    self.roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
 
-                        # learning from Zoneprofiles what vacuum state the system needs to be in
-                        # If it's here, you want the vacuum to be on
-                        
-                        Logging.logEvent("Debug","Status Update", 
-                        {"message": "Current chamber pressure: {}".format(self.chamberPressure),
-                         "level":4})
+                    # learning from Zoneprofiles what vacuum state the system needs to be in
+                    # If it's here, you want the vacuum to be on
+                    
+                    Logging.logEvent("Debug","Status Update", 
+                    {"message": "Current chamber pressure: {}".format(self.chamberPressure),
+                     "level":4})
 
-                        {
-                            'Atm: Not Ready':                       self.state_00,
-                            'Atm: Sys Ready':                       self.state_01,
-                            'PullingVac: Start':                    self.state_02,
-                            'PullingVac: RoughingCryoP':            self.state_03,
-                            'PullingVac: CryoCool; Rough Chamber':  self.state_04,
-                            'PullingVac: Cryo Pumping Chamber':     self.state_05,
-                            'Operational Vacuum: Cryo Pumping':     self.state_06,
-                            'Operational Vacuum':                   self.state_07,
-                            'Non-Operational High Vacuum':          self.state_08,
-                        }[self.state]()
-                        # TODO: Add States for Is there some safe way of taking the chamber out of vacuum?
+                    {
+                        'Atm: Not Ready':                       self.state_00,
+                        'Atm: Sys Ready':                       self.state_01,
+                        'PullingVac: Start':                    self.state_02,
+                        'PullingVac: RoughingCryoP':            self.state_03,
+                        'PullingVac: CryoCool; Rough Chamber':  self.state_04,
+                        'PullingVac: Cryo Pumping Chamber':     self.state_05,
+                        'Operational Vacuum: Cryo Pumping':     self.state_06,
+                        'Operational Vacuum':                   self.state_07,
+                        'Non-Operational High Vacuum':          self.state_08,
+                    }[self.state]()
+                    # TODO: Add States for Is there some safe way of taking the chamber out of vacuum?
 
-                        if "Operational-Vacuum" in self.state:
-                            self.hw.OperationalVacuum = True
-                        else:
-                            # #TODO: If you are in debugging mode, you can run as if you were in vacuum (take this out for last testing)
-                            # if Logging.debug:
-                            #     self.hw.OperationalVacuum = True
-                            # else:
-                            self.hw.OperationalVacuum = False
+                    if "Operational Vacuum" in self.state:
+                        self.hw.OperationalVacuum = True
+                    else:
+                        # #TODO: If you are in debugging mode, you can run as if you were in vacuum (take this out for last testing)
+                        self.hw.OperationalVacuum = False
 
-                        Logging.logEvent("Debug","Status Update", 
-                        {"message": "Current chamber state: {}".format(self.state),
-                         "level": 4})
+                    Logging.logEvent("Debug","Status Update", 
+                    {"message": "Current chamber state: {}".format(self.state),
+                     "level": 3})
 
-                        # sleep until the next time around
-                        time.sleep(self.updatePeriod)
+                    # sleep until the next time around
+                    time.sleep(self.updatePeriod)
 
-                    # End of inner if
-                    else: 
-                        time.sleep(1)
                 # end of inner while True
             except Exception as e:
 
@@ -226,22 +230,14 @@ class VacuumControlStub(Thread):
 
     def wait_for_hardware(self):
         ready = True
-        ready &= self.hw.PC_104.digital_out.getVal('LN2_P_Sol_Open') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('LN2_P_Sol_Open_WF') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('LN2_P_Sol_Closed') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('LN2_P_Sol_Closed_WF') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('LN2_S_Sol_Open') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('LN2_S_Sol_Open_WF') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('LN2_S_Sol_Closed') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('LN2_S_Sol_Closed_WF') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('CryoP_GV_Open') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('CryoP_GV_Open_WF') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('CryoP_GV_Closed') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('CryoP_GV_Closed_WF') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('RoughP_Powered') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('RoughP_Powered_WF') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('RoughP_On_Sw') is not None
-        ready &= self.hw.PC_104.digital_out.getVal('RoughP_On_Sw_WF') is not None
+        ready &= self.hw.PC_104.digital_in.getVal('CryoP_GV_Open') is not None
+        ready &= self.hw.PC_104.digital_in.getVal('CryoP_GV_Open_WF') is not None
+        ready &= self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed') is not None
+        ready &= self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed_WF') is not None
+        ready &= self.hw.PC_104.digital_in.getVal('RoughP_Powered') is not None
+        ready &= self.hw.PC_104.digital_in.getVal('RoughP_Powered_WF') is not None
+        ready &= self.hw.PC_104.digital_in.getVal('RoughP_On_Sw') is not None
+        ready &= self.hw.PC_104.digital_in.getVal('RoughP_On_Sw_WF') is not None
         ready &= self.hw.PfeifferGuages.get_roughpump_pressure() is not None
         ready &= self.hw.PfeifferGuages.get_chamber_pressure() is not None
         ready &= self.hw.PfeifferGuages.get_cryopump_pressure() is not None
@@ -252,6 +248,32 @@ class VacuumControlStub(Thread):
         ready &= self.hw.ShiCryopump.get_compressor('Helium Discharge Temperature') is not None
         ready &= self.hw.ShiCryopump.get_compressor('Water Outlet Temperature') is not None
         ready &= self.hw.ShiCryopump.get_compressor('System ON') is not None
+        # for testing...
+        # ready = True
+        # ready &= self.hw.PfeifferGuages.get_roughpump_pressure() is not None
+        # ready &= self.hw.PfeifferGuages.get_chamber_pressure() is not None
+        # ready &= self.hw.PfeifferGuages.get_cryopump_pressure() is not None
+        print("ready: {}".format(ready))
+
+        if not ready:
+            out = "CryoP_GV_Open: {}\n".format(self.hw.PC_104.digital_in.getVal('CryoP_GV_Open'))
+            out += "RoughP_Powered: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_Powered'))
+            out += "RoughP_Powered_WF: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_Powered_WF'))
+            out += "RoughP_On_Sw: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'))
+            out += "RoughP_On_Sw_WF: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_On_Sw_WF'))
+            out += "get_roughpump_pressure: {}\n".format(self.hw.PfeifferGuages.get_roughpump_pressure())
+            out += "get_chamber_pressure: {}\n".format(self.hw.PfeifferGuages.get_chamber_pressure())
+            out += "get_cryopump_pressure: {}\n".format(self.hw.PfeifferGuages.get_cryopump_pressure())
+            out += "Elapsed Time: {}\n".format(self.hw.ShiCryopump.get_mcc_params('Elapsed Time'))
+            out += "Tc Pressure State: {}\n".format(self.hw.ShiCryopump.get_mcc_params('Tc Pressure State'))
+            out += "Stage 1 Temp: {}\n".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'))
+            out += "Stage 2 Temp: {}\n".format(self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp'))
+            out += "Helium Discharge Temperature: {}\n".format(self.hw.ShiCryopump.get_compressor('Helium Discharge Temperature'))
+            out += "Water Outlet Temperature: {}\n".format(self.hw.ShiCryopump.get_compressor('Water Outlet Temperature'))
+            out += "System ON: {}\n".format(self.hw.ShiCryopump.get_compressor('System ON'))
+            Logging.debugPrint(3, out)
+        
+
         return ready
 
     def determin_current_vacuum_state(self):

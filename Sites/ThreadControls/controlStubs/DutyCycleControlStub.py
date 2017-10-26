@@ -244,9 +244,6 @@ class DutyCycleControlStub(Thread):
             # Check to make sure there is an active profile
             # and that we are sitting in an operational vacuum
             # and that all drivers and updaters are running
-            Logging.debugPrint(3,"DCCS: activeProfile: {}".format(ProfileInstance.getInstance().activeProfile))
-            Logging.debugPrint(3,"DCCS: OperationalVacuum: {}".format(HardwareStatusInstance.getInstance().OperationalVacuum))
-            Logging.debugPrint(3,"DCCS: getActiveProfileStatus: {}".format(ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus()))
             if ProfileInstance.getInstance().activeProfile and \
                 HardwareStatusInstance.getInstance().OperationalVacuum and \
                 ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus():
@@ -336,6 +333,7 @@ class DutyCycleControlStub(Thread):
                             Logging.logEvent("Event","Profile",
                                 {"message":"Profile {} has entered setpoint {} Soak".format("LOL", currentSetpointTemporary-1),
                                 "ProfileInstance": ProfileInstance.getInstance()})
+                            ProfileInstance.getInstance.inRamp = False
                         self.ramp = rampTemporary
                         self.soak = soakTemporary
                         # With the temp goal tempurture picked, make the duty cycle 
@@ -377,6 +375,7 @@ class DutyCycleControlStub(Thread):
                     # self.zoneProfile.activeZoneProfile = False
                     # This assumes all zones have the same end time
                     ProfileInstance.getInstance().activeProfile = False
+                    ProfileInstance.getInstance().vacuumWanted = False
                 except Exception as e:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -389,6 +388,10 @@ class DutyCycleControlStub(Thread):
                     if Logging.debug:
                         raise e
                 # end of try, catch
+            else:
+                Logging.debugPrint(3,"DCCS: activeProfile: {}".format(ProfileInstance.getInstance().activeProfile))
+                Logging.debugPrint(3,"DCCS: OperationalVacuum: {}".format(HardwareStatusInstance.getInstance().OperationalVacuum))
+                Logging.debugPrint(3,"DCCS: getActiveProfileStatus: {}".format(ProfileInstance.getInstance().zoneProfiles.getActiveProfileStatus()))
             # Sleeping so it doesn't busy wait
             time.sleep(1)
             # end of running check
