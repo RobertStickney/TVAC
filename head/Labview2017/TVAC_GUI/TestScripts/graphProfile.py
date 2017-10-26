@@ -90,7 +90,6 @@ def validateProfile(json,zone,errors):
 	if zoneData["average"] == "":
 		zoneData["average"] == "Max"
 
-
 	if len(zoneData["thermocouples"]) == 0:
 		print("ProfileError : No Thermcouples selected for Zone",str(zoneData["zone"]))
 		errors+=1	
@@ -132,10 +131,19 @@ def validateProfile(json,zone,errors):
 				 % (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
 				errors+=1
 
-			elif setPtData[i]["tempgoal"] > zoneData["maxTemp"] or setPtData[i]["tempgoal"] < zoneData["minTemp"]:
+			if setPtData[i]["tempgoal"] > zoneData["maxTemp"] or setPtData[i]["tempgoal"] < zoneData["minTemp"]:
 				print("ProfileError : Temperature Goal for Zone %s, Set Point %s violates Max/Min Temp Limits" 
 					% (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
 				errors+=1	
+
+			if setPtData[i]["ramp"] == 0:
+				print("ProfileError : Ramp Time for Zone %s, Set Point %s is set to 0"
+				 % (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
+
+
+			if setPtData[i]["soakduration"] == 0:
+				print("ProfileError : Soak Time for Zone %s, Set Point %s is set to 0"
+				 % (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
 
 	#print(setPtData[0]["tempgoal"])
 
@@ -145,13 +153,19 @@ def validateThermocouple(json,jsonTCs,zoneNumber,errors):
 	zoneCheck=json[zoneNumber]["thermocouples"]
 
 	num=len(zoneCheck)
-	for i in range(0,num):
-		workingCheck=jsonTCs[zoneCheck[i]-1]["working"]
 
-		if workingCheck == False:
-			print("ProfileError : Thermocouple %s, for Zone %s is not a working Thermocouple"
-			 % (str(zoneCheck[i]),str(json[zoneNumber]["zone"])))
-			errors+=1
+	if num == 0:
+		print("ProfileError : No Thermcouples selected for Zone",json[zoneNumber]["zone"])
+		errors+=1
+	else:
+
+		for i in range(0,num):
+			workingCheck=jsonTCs[zoneCheck[i]-1]["working"]
+
+			if workingCheck == False:
+				print("ProfileError : Thermocouple %s, for Zone %s is not a working Thermocouple"
+				 % (str(zoneCheck[i]),str(json[zoneNumber]["zone"])))
+				errors+=1
 	return errors
 
 def closeErrorWindow(root): 
@@ -309,10 +323,12 @@ def main(args):
 
 	expected_temps=dict(time=[],zone1=[],zone2=[],zone3=[],zone4=[],zone5=[],zone6=[],zone7=[],zone8=[],zone9=[])
 
-	for i in range(0,8):
+	for i in range(0,9):
 		try:
 			errors=validateThermocouple(json,jsonTCs,i,errors)
+
 			expected_temp_values, expected_time_values = createExpectedValues(json,jsonTCs,i)
+
 			errors=validateProfile(json,i,errors)
 
 			for j in range(0,len(expected_temp_values)):
