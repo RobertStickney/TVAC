@@ -203,33 +203,19 @@ def createExpectedValues(setPoints,startTime=None):
 
 	return expected_temp_values, expected_time_values
 
-def getLiveTempFromDB():
+def getLiveTempFromDB(startingPoint):
 	mysql = MySQlConnect()
-	# These two can be combined into one sql statement...if I have time look into that
-	sql = "SELECT profile_name, startTime, endTime FROM tvac.Profile_Instance WHERE profile_name like \"coldRampAndSoak\";"
-	mysql = MySQlConnect()
-	try:
-		mysql.cur.execute(sql)
-		mysql.conn.commit()
-	except Exception as e:
-		raise e
-		return False
-
-	result = mysql.cur.fetchone()
-	if not result:
-		return False
-
-	sql = "SELECT * FROM tvac.Real_Temperture WHERE time>\"{}\";".format(result['startTime'],result['endTime'])
+	sql = "SELECT * FROM tvac.Real_Temperature WHERE time>\"{}\";".format(startingPoint)
 
 	mysql.cur.execute(sql)
 	mysql.conn.commit()
 	results = {}
 	for row in mysql.cur:
 		tmp = results.get(row["time"], [])
-		tmp.append([row["thermocouple"], float(row["temperture"])])
+		tmp.append([row["thermocouple"], float(row["temperature"])])
 		results[row['time']] = tmp
-		# print("{},{},{},zone".format(row["time"],row["thermocouple"],row["temperture"]))
-	return result['profile_name'], results
+		# print("{},{},{},zone".format(row["time"],row["thermocouple"],row["temperature"]))
+	return "Temp since {}".format(startingPoint), results
 
 def getExpectedFromDB():
 	mysql = MySQlConnect()
@@ -246,7 +232,7 @@ def getExpectedFromDB():
 	if not result:
 		return False
 
-	sql = "SELECT * FROM tvac.Expected_Temperture WHERE time>\"{}\";".format(result['startTime'])
+	sql = "SELECT * FROM tvac.Expected_Temperature WHERE time>\"{}\";".format(result['startTime'])
 
 	mysql.cur.execute(sql)
 	mysql.conn.commit()
@@ -254,7 +240,7 @@ def getExpectedFromDB():
 	for row in mysql.cur:
 		# print(row)
 		tmp = results.get(row["time"], [])
-		tmp.append([row["zone"], float(row["temperture"])])
+		tmp.append([row["zone"], float(row["temperature"])])
 		results[row['time']] = tmp
 	return result['profile_name'], results
 
@@ -288,7 +274,7 @@ def main(args):
 		if overlay:
 			plt.plot(expected_time_values,expected_temp_values, label="Expected Results")
 			plt.legend(loc='upper left')
-		profile_I_ID, results = getLiveTempFromDB()
+		profile_I_ID, results = getLiveTempFromDB("2017-10-25 13:19:00")
 		# print(results)
 		time_values = []
 		tc_data = {}
@@ -338,7 +324,7 @@ def main(args):
 			# plt.plot(real_time_values,real_temp_values)
 		plt.legend(loc='upper left')
 
-		plt.ylabel('Temperture')
+		plt.ylabel('Temperature')
 		plt.xlabel('Time')
 		plt.title(profile_I_ID)
 		# plt.pause(5)
