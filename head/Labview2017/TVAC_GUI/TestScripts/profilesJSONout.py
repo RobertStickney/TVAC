@@ -15,7 +15,7 @@ class MySQlConnect:
 		if os.name == "posix":
 			userName = os.environ['LOGNAME']
 		else:
-			userName=str(os.getlogin)
+			userName=os.getlogin()
 		if "admin" in userName or (len(sys.argv) > 1 and sys.argv[1] =="--live"):
 			user = "TVAC_Admin"
 			host = "192.168.99.10"
@@ -38,9 +38,9 @@ def getProfilesfromDB():
 
 	mysql.cur.execute(sql)
 	mysql.conn.commit()
-	results = []
+	results = dict(profile_name=[])
 	for row in mysql.cur:
-		results.append(row["profile_name"])
+		results["profile_name"].append(row["profile_name"])
 		# print("{},{},{},zone".format(row["time"],row["thermocouple"],row["temperature"]))
 	return results
 
