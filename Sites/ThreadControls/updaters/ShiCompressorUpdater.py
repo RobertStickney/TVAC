@@ -24,7 +24,7 @@ class ShiCompressorUpdater(Thread):
 
         self.compressor = ShiCompressor()
         self.hw = HardwareStatusInstance.getInstance()
-        self.compressor_read_period = 1  # 0.5s loop period
+        self.compressor_read_period = 4  # 0.5s loop period
         self.op_hours_read_period = 120  # 120s = 2 min read period
 
     def run(self):
