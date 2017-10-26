@@ -15,8 +15,7 @@ class MySQlConnect:
 		if os.name == "posix":
 			userName = os.environ['LOGNAME']
 		else:
-			user=os.getlogin
-			userName=user
+			userName=str(os.getlogin)
 		if "admin" in userName or (len(sys.argv) > 1 and sys.argv[1] =="--live"):
 			user = "TVAC_Admin"
 			host = "192.168.99.10"
