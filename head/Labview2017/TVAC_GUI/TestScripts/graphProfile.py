@@ -17,13 +17,11 @@ def createExpectedValues(json,jsonTCs,zoneNumber,startTime=None):
 
 	numberThermocouples=len(json[zoneNumber]["thermocouples"])
 	tc=json[zoneNumber]["thermocouples"]
-
 	sumTC=0
 
 	for i in range(0,numberThermocouples):
-		sumTC += sumTC+jsonTCs[tc[i]]["temp"]
-
-	avgTC = sumTC / numberThermocouples
+		sumTC += float(jsonTCs[tc[i]-1]["temp"])
+	avgTC = float(sumTC / numberThermocouples)
 
 	currentTemp = avgTC
 
@@ -148,8 +146,8 @@ def validateThermocouple(json,jsonTCs,zoneNumber,errors):
 
 	num=len(zoneCheck)
 	for i in range(0,num):
-		workingCheck=jsonTCs[zoneCheck[i]]["working"]
-		#print(workingCheck)
+		workingCheck=jsonTCs[zoneCheck[i]-1]["working"]
+
 		if workingCheck == False:
 			print("ProfileError : Thermocouple %s, for Zone %s is not a working Thermocouple"
 			 % (str(zoneCheck[i]),str(json[zoneNumber]["zone"])))
@@ -327,8 +325,6 @@ def main(args):
 
 	# print(expected_time_values)
 	#print("Program worked!")
-
-
 	if errors == 0:
 		print(JSON.dumps(expected_temps))
 
