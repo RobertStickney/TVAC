@@ -28,9 +28,12 @@ class MySQlConnect:
 		self.cur = self.conn.cursor(pymysql.cursors.DictCursor)
 
 
-def getLiveTempFromDB(startingPoint):
+def getLiveTempFromDB(inputStartTime, inputEndTime=None):
 	mysql = MySQlConnect()
-	sql = "SELECT * FROM tvac.Real_Temperature WHERE time>\"{}\";".format(startingPoint)
+	if inputEndTime:
+		sql = "SELECT * FROM tvac.Real_Temperature WHERE time>\"{}\" and time<\"{}\";".format(inputStartTime,inputEndTime)
+	else:
+		sql = "SELECT * FROM tvac.Real_Temperature WHERE time>\"{}\";".format(inputStartTime)
 
 	mysql.cur.execute(sql)
 	mysql.conn.commit()
@@ -40,7 +43,7 @@ def getLiveTempFromDB(startingPoint):
 		tmp.append([row["thermocouple"], float(row["temperature"])])
 		results[row['time']] = tmp
 		# print("{},{},{},zone".format(row["time"],row["thermocouple"],row["temperature"]))
-	return "Temp since {}".format(startingPoint), results
+	return "Temp since {}".format(inputStartTime), results
 
 def utc_to_local(utc_dt):
     return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
@@ -48,27 +51,33 @@ def utc_to_local(utc_dt):
 
 def main(args):
 	# Get live data
+	inputStartTime = None
+	inputEndTime = None
 	if len(args) > 1:
-		inputTime = args[1]
+		inputStartTime = args[1]
+		if len(args) > 2:
+			inputEndTime = args[2]
 	else:
 		print("Error")
 		quit()
-	profile_I_ID, results = getLiveTempFromDB(inputTime)
+
+	profile_I_ID, results = getLiveTempFromDB(inputStartTime,inputEndTime)
 	time_values = []
 	tc_data = {}
-	firstTime = sorted(results)[0]
-	for time_value in sorted(results):
-		time_values.append(utc_to_local(time_value))
-		# time_values.append(time_value)
-		# print("{} -> {}".format(time_value, results[time_value]))
-		for thermocouple in results[time_value]:
-			tmp = tc_data.get(thermocouple[0], [])
-			tmp.append(thermocouple[1])
-			tc_data[thermocouple[0]] = tmp
-	# print("time,tc,temp")
-	# for i, time in enumerate(time_values):
-	# 	for tc in tc_data:
-	# 		print("{},{},{}".format(time_values[i],tc,tc_data[tc][i]))
+	if results:
+		firstTime = sorted(results)[0]
+		for time_value in sorted(results):
+			time_values.append(utc_to_local(time_value))
+			# time_values.append(time_value)
+			# print("{} -> {}".format(time_value, results[time_value]))
+			for thermocouple in results[time_value]:
+				tmp = tc_data.get(thermocouple[0], [])
+				tmp.append(thermocouple[1])
+				tc_data[thermocouple[0]] = tmp
+		# print("time,tc,temp")
+		# for i, time in enumerate(time_values):
+		# 	for tc in tc_data:
+		# 		print("{},{},{}".format(time_values[i],tc,tc_data[tc][i]))
 
 	out = {"time_values:":str(time_values),
 			"tc_data": tc_data}
