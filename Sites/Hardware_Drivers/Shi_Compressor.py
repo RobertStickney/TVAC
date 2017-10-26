@@ -94,7 +94,7 @@ class ShiCompressor:
                 }
 
     def get_status_bits(self):
-        resp = int(self.send_cmd('STA').split(',')[1], 16)
+        resp = int(self.send_cmd('STA')[0], 16)
         return {'RS-232 Config': 'Read Only' if resp & 0x8000 else 'Command and Read',
                 'Solenoid ON':       True if resp & 0x100 else False,
                 'Pressure Alarm':    True if resp & 0x80 else False,

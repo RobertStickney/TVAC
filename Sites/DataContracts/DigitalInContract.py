@@ -92,7 +92,6 @@ class DigitalInContract:
         self.RoughP_On_Sw = None        # Roughing Pump is On?
         self.RoughP_On_Sw_WF = None     # Roughing Pump is On switch wiring fault.
 
-
     def update(self, d):
         self.__lock.acquire()
         if 'C1 B0' in d:
