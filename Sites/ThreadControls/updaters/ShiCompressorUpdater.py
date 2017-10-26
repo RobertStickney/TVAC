@@ -76,11 +76,6 @@ class ShiCompressorUpdater(Thread):
                                 val.update(self.compressor.get_id())
                                 next_op_hours_read_time += self.op_hours_read_period
                             self.hw.ShiCryopump.update({'Compressor': val})
-                            Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Cryopump Stage 1: {:.1f}K; Stage 2: {:.1f}K"
-                                                         "".format(self.hw.ShiCryopump.get_compressor('Stage 1 Temp'),
-                                                                   self.hw.ShiCryopump.get_compressor('Stage 2 Temp')),
-                                              "level": 4})
 
                             while len(self.hw.Shi_Compressor_Cmds):
                                 cmd = self.hw.Shi_Compressor_Cmds.pop()

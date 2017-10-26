@@ -64,7 +64,7 @@ class TsRegistersUpdater(Thread):
                         
                         Logging.logEvent("Debug","Status Update", 
                            {"message": "Reading and writing with PC 104",
-                             "level":5})
+                             "level":4})
 
                         self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0(),
                                                self.da_io.digital_out.get_c1_b1(),
