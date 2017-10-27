@@ -80,7 +80,7 @@ class ShiCryopumpCollection:
 
     def get_json_plots(self):
         self.__lock.acquire()
-        message = ['"time":%s,' % self.time]
+        message = ['"time":%s' % self.time]
         self.__lock.release()
         message += self.mcc_status.get_json_plots()
         message += self.compressor.get_json_plots()
