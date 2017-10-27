@@ -20,8 +20,8 @@ class ShiCompressor:
         self.port_listener.start()
         self.port_listener.flush_buffer(1.0)
 
-    def flush_port(self):
-        self.port_listener.flush_buffer(1.0)
+    def flush_port(self, to = 1.0):
+        self.port_listener.flush_buffer(to)
 
     def close_port(self):
         if not self.port.closed:
@@ -31,17 +31,18 @@ class ShiCompressor:
         for tries in range(3):
             msg = "${:s}".format(command)
             msg1 = "{:s}{:04X}\r".format(msg, self.crc(msg))
-            print("C:--" + msg1.replace('\r', r'\r') + "---")  # TODO: Remove print and msg1
-            self.port.write(msg1.encode())
+            # print("C:--" + msg1.replace('\r', r'\r') + "---")  # TODO: Remove print and msg1
+            self.port.write(msg1.encode()) 
             # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
-            resp = self.port_listener.read_line(0.7).strip()
-            print("R:--" + resp.replace('\r', r'\r') + "---")
+            resp = self.port_listener.read_line(6.0)
+            # print("R:--" + resp.replace('\r', r'\r') + "---")
+            resp = resp.strip()
             if self.ResponceGood(resp, command):
                 data = resp.split(',')
                 if len(data) >= 2:
                     break
             Logging.logEvent("Debug", "Status Update",
-                             {"message": "SHI Compressor send_cmd try #{:d}".format(tries),
+                             {"message": "SHI Compressor send_cmd try #{:d}".format(tries+1),
                               "level": 1})
         else:
             Logging.logEvent("Debug", "Status Update",
@@ -53,15 +54,22 @@ class ShiCompressor:
     def ResponceGood(self, Responce, cmd):
         # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
         # print("Checksum: '" + Responce[-2] + "' Data: '" + Responce[1:-2] + "' Calc cksum: '" + chr(get_checksum(Responce[1:-2])) + "'")
+        # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---")
+        # print("Responce {} for {}".format(Responce.replace('\r', r'\r'), cmd))
+        
+        if len(Responce) < 4:  # Timeout occurred
+            self.port_listener.flush_buffer(2.0)
+            return False
         if Responce[0] != '$':
             # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "'$' is not the first byte!")
             return False
-        if not cmd in Responce:
+        if not (cmd in Responce):
             # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "'$' is not the first byte!")
             return False
-        if Responce[-4:] != '{:04X}'.format(self.crc(Responce[:-4])):
+        if Responce.strip()[-4:] != '{:04X}'.format(self.crc(Responce[:-4])):
             # TODO: Change to error event print("R:--" + Responce.replace('\r', r'\r') + "---", "Checksum: " + chr(self.crc(Responce(:-4])))
             return False
+        # print("Responce {} is good".format(Responce))
         return True  # Yea!! responce seems ok
 
     # Commands:
@@ -90,7 +98,7 @@ class ShiCompressor:
                 }
 
     def get_status_bits(self):
-        resp = int(self.send_cmd('STA').split(',')[1], 16)
+        resp = int(self.send_cmd('STA')[0], 16)
         return {'RS-232 Config': 'Read Only' if resp & 0x8000 else 'Command and Read',
                 'Solenoid ON':       True if resp & 0x100 else False,
                 'Pressure Alarm':    True if resp & 0x80 else False,

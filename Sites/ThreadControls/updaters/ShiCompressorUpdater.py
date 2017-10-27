@@ -24,7 +24,7 @@ class ShiCompressorUpdater(Thread):
 
         self.compressor = ShiCompressor()
         self.hw = HardwareStatusInstance.getInstance()
-        self.compressor_read_period = 1  # 0.5s loop period
+        self.compressor_read_period = 4  # 0.5s loop period
         self.op_hours_read_period = 120  # 120s = 2 min read period
 
     def run(self):
@@ -34,9 +34,9 @@ class ShiCompressorUpdater(Thread):
             # This has no check because it should always be running
             try:
                 # Thread "Start up" stuff goes here
-                Logging.logEvent("Event", "Thread Start",
-                                {"thread": "Shi Compressor Updater",
-                                "ProfileInstance": ProfileInstance.getInstance()})
+                # Logging.logEvent("Event", "Thread Start",
+                #                 {"thread": "Shi Compressor Updater",
+                #                 "ProfileInstance": ProfileInstance.getInstance()})
                 Logging.logEvent("Debug", "Status Update",
                                 {"message": "Starting Shi Compressor Updater",
                                 "level": 2})
@@ -51,6 +51,8 @@ class ShiCompressorUpdater(Thread):
                                     {"message": "Power on the Shi Compressor",
                                     "level": 3})
                     self.compressor.open_port()
+                    while self.hw.PC_104.digital_out.getVal('CryoP Pwr Relay 1') is None:
+                        time.sleep(1)
                     Currently_powered = self.hw.PC_104.digital_out.getVal('CryoP Pwr Relay 1')
                     self.hw.PC_104.digital_out.update({'CryoP Pwr Relay 1': True})
                     if not Currently_powered:
@@ -74,11 +76,6 @@ class ShiCompressorUpdater(Thread):
                                 val.update(self.compressor.get_id())
                                 next_op_hours_read_time += self.op_hours_read_period
                             self.hw.ShiCryopump.update({'Compressor': val})
-                            Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Cryopump Stage 1: {:.1f}K; Stage 2: {:.1f}K"
-                                                         "".format(self.hw.ShiCryopump.get_compressor('Stage 1 Temp'),
-                                                                   self.hw.ShiCryopump.get_compressor('Stage 2 Temp')),
-                                              "level": 4})
 
                             while len(self.hw.Shi_Compressor_Cmds):
                                 cmd = self.hw.Shi_Compressor_Cmds.pop()
@@ -126,7 +123,8 @@ class ShiCompressorUpdater(Thread):
                                  {"message": "There was a {} error in ShiCompressorUpdater. File: {}:{}\n{}".format(
                                      exc_type, fname, exc_tb.tb_lineno, e),
                                   "level": 2})
-                # raise e
+                if Logging.debug:
+                    raise e
                 self.compressor.close_port()
                 time.sleep(4)
 

@@ -1,3 +1,5 @@
+import os
+
 from Collections.ThermocoupleCollection import ThermocoupleCollection
 from Collections.PfeifferGaugeCollection import PfeifferGaugeCollection
 from Collections.ShiCryopumpCollection import ShiCryopumpCollection
@@ -35,6 +37,13 @@ class HardwareStatusInstance:
             self.PC_104 = PC_104_Instance.getInstance()
 
             # System Wide Stats
-            self.OperationalVacuum = False
+            if os.name == "posix":
+                userName = os.environ['LOGNAME']
+            else:
+                userName = "user" 
+            if "root" in userName:
+                self.OperationalVacuum = True
+            else:
+                self.OperationalVacuum = True
 
             HardwareStatusInstance.__instance = self

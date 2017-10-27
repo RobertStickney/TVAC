@@ -64,7 +64,7 @@ class TsRegistersUpdater(Thread):
                         
                         Logging.logEvent("Debug","Status Update", 
                            {"message": "Reading and writing with PC 104",
-                             "level":5})
+                             "level":4})
 
                         self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0(),
                                                self.da_io.digital_out.get_c1_b1(),
@@ -145,6 +145,9 @@ class TsRegistersUpdater(Thread):
                                                     offsets[i],
                                                     "IR Lamp "+str(i+1),
                                                     self.da_io.digital_out.update))
+
+    def Interlocks(self):
+        pass
 
     def ir_lamp_pwm_stop(self):
         self.ir_lamp_pwm = []

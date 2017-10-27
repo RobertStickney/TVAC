@@ -86,7 +86,6 @@ class SafetyCheck(Thread):
 					}
 					TCs = hardwareStatusInstance.Thermocouples.ValidTCs
 					for tc in TCs:
-						# print("TC: {} - {}".format(tc.Thermocouple, tc.temp))
 						# if there are any TC's higher than max temp
 						if tc.temp > MAX_OPERATING_TEMP:
 							errorDetail = "TC # {} is above MAX_OPERATING_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_OPERATING_TEMP,tc.temp)
@@ -103,33 +102,35 @@ class SafetyCheck(Thread):
 							# end of max operational test
 
 						if tc.userDefined:
-							if tc.temp > MAX_UUT_TEMP:
-								errorDetail = "TC # {} is above MAX_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_UUT_TEMP,tc.temp)
-								error = {
-									"time" : str(datetime.now()),
-									"event":"Product Saver Alarm: High Temperature",
-									"item": "Thermocouple",
-									"itemID": tc.Thermocouple,
-									"details": errorDetail,
-									"actions": ["Turned off heater", "Log Event"]
-									}
-								self.logEvent(error)
-								tempErrorDict[error['event']] = True
-							# end of max user test
+							# print("tc: {} zone: {}".format(tc.Thermocouple,tc.zone))
+							if tc.zone != 0:
+								if tc.temp > ProfileInstance.getInstance().zoneProfiles.getZone(tc.zone).maxHeatError:
+									errorDetail = "TC # {} is above MAX_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,ProfileInstance.getInstance().zoneProfiles.getZone(tc.zone).maxHeatError,tc.temp)
+									error = {
+										"time" : str(datetime.now()),
+										"event":"Product Saver Alarm: High Temperature",
+										"item": "Thermocouple",
+										"itemID": tc.Thermocouple,
+										"details": errorDetail,
+										"actions": ["Turned off heater", "Log Event"]
+										}
+									self.logEvent(error)
+									tempErrorDict[error['event']] = True
+								# end of max user test
 
-							if tc.temp < MIN_UUT_TEMP:
-								errorDetail = "TC # {} is below MIN_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_UUT_TEMP,tc.temp)
-								error = {
-									"time" : str(datetime.now()),
-									"event":"Product Saver Alarm: Low Temperature",
-									"item": "Thermocouple",
-									"itemID": tc.Thermocouple,
-									"details": errorDetail,
-									"actions": ["Turned off LN flow", "Log Event"]
-									}
-								self.logEvent(error)
-								tempErrorDict[error['event']] = True
-							# end of min user test
+								if tc.temp < ProfileInstance.getInstance().zoneProfiles.getZone(tc.zone).minHeatError:
+									errorDetail = "TC # {} is below MIN_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,ProfileInstance.getInstance().zoneProfiles.getZone(tc.zone).minHeatError,tc.temp)
+									error = {
+										"time" : str(datetime.now()),
+										"event":"Product Saver Alarm: Low Temperature",
+										"item": "Thermocouple",
+										"itemID": tc.Thermocouple,
+										"details": errorDetail,
+										"actions": ["Turned off LN flow", "Log Event"]
+										}
+									self.logEvent(error)
+									tempErrorDict[error['event']] = True
+								# end of min user test
 						# end of user test
 
 						# Get the full list
@@ -189,30 +190,35 @@ class SafetyCheck(Thread):
 					if HardwareStatusInstance.getInstance().OperationalVacuum:
 						vacuum = True
 
-					if vacuum and HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure() > 1e-4:
-						d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
-						ProfileInstance.getInstance().activeProfile = False
-						Logging.debugPrint(1,"ERROR Pressure is above 10^-4.")
-						vacuum = False
-						# TODO: Send Error
-						d_out.update({"IR Lamp 1 PWM DC": 0})
-						d_out.update({"IR Lamp 2 PWM DC": 0})
-						d_out.update({"IR Lamp 3 PWM DC": 0})
-						d_out.update({"IR Lamp 4 PWM DC": 0})
-						d_out.update({"IR Lamp 5 PWM DC": 0})
-						d_out.update({"IR Lamp 6 PWM DC": 0})
-						d_out.update({"IR Lamp 7 PWM DC": 0})
-						d_out.update({"IR Lamp 8 PWM DC": 0})
-						d_out.update({"IR Lamp 9 PWM DC": 0})
-						d_out.update({"IR Lamp 10 PWM DC": 0})
-						d_out.update({"IR Lamp 11 PWM DC": 0})
-						d_out.update({"IR Lamp 12 PWM DC": 0})
-						d_out.update({"IR Lamp 13 PWM DC": 0})
-						d_out.update({"IR Lamp 14 PWM DC": 0})
-						d_out.update({"IR Lamp 15 PWM DC": 0})
-						d_out.update({"IR Lamp 16 PWM DC": 0})
+					if os.name == "posix":
+						userName = os.environ['LOGNAME']
+					else:
+						userName = "user" 
+					if "root" in userName:
+						if vacuum and HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure() > 1e-4:
+							d_out = HardwareStatusInstance.getInstance().PC_104.digital_out
+							ProfileInstance.getInstance().activeProfile = False
+							Logging.debugPrint(1,"ERROR Pressure is above 10^-4. ({})".format(HardwareStatusInstance.getInstance().PfeifferGuages.get_chamber_pressure()))
+							vacuum = False
+							# TODO: Send Error
+							d_out.update({"IR Lamp 1 PWM DC": 0})
+							d_out.update({"IR Lamp 2 PWM DC": 0})
+							d_out.update({"IR Lamp 3 PWM DC": 0})
+							d_out.update({"IR Lamp 4 PWM DC": 0})
+							d_out.update({"IR Lamp 5 PWM DC": 0})
+							d_out.update({"IR Lamp 6 PWM DC": 0})
+							d_out.update({"IR Lamp 7 PWM DC": 0})
+							d_out.update({"IR Lamp 8 PWM DC": 0})
+							d_out.update({"IR Lamp 9 PWM DC": 0})
+							d_out.update({"IR Lamp 10 PWM DC": 0})
+							d_out.update({"IR Lamp 11 PWM DC": 0})
+							d_out.update({"IR Lamp 12 PWM DC": 0})
+							d_out.update({"IR Lamp 13 PWM DC": 0})
+							d_out.update({"IR Lamp 14 PWM DC": 0})
+							d_out.update({"IR Lamp 15 PWM DC": 0})
+							d_out.update({"IR Lamp 16 PWM DC": 0})
 
-						HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
+							HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
 
 					time.sleep(SLEEP_TIME)
 				# end of inner while true loop

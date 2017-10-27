@@ -39,8 +39,8 @@ class DigitalInContract:
         self.notUsed6 = False             # C 1: Di 29- Unassigned channel 29
         self.LN2AirOK = False             # C 1: Di 30- 100 psi Air supply connected to the LN2 supply valves
         self.AirOK = False                # C 1: Di 31- 100 psi Air supply connected to the TVAC
-        self.t20 = False                  # C 2: Di 0 -
-        self.t21 = False                  # C 2: Di 1 -
+        self.front_door_closed = False    # C 2: Di 0 -
+        self.back_door_closed = False     # C 2: Di 1 -
         self.t22 = False                  # C 2: Di 2 -
         self.t23 = False                  # C 2: Di 3 -
         self.t24 = False                  # C 2: Di 4 -
@@ -91,7 +91,6 @@ class DigitalInContract:
         self.RoughP_Powered_WF = None   # Roughing Pump is Powered switch wiring fault.
         self.RoughP_On_Sw = None        # Roughing Pump is On?
         self.RoughP_On_Sw_WF = None     # Roughing Pump is On switch wiring fault.
-
 
     def update(self, d):
         self.__lock.acquire()
@@ -159,8 +158,8 @@ class DigitalInContract:
             self.LN2AirOK = ((d['C1 B3'] & 0x40) > 0)  # C 1: Di 30
             self.AirOK = ((d['C1 B3'] & 0x80) > 0)  # C 1: Di 31
         if 'C2 B0' in d:
-            self.t20 = ((d['C2 B0'] & 0x01) > 0)  # C 2: Di 0
-            self.t21 = ((d['C2 B0'] & 0x02) > 0)  # C 2: Di 1
+            self.front_door_closed = ((d['C2 B0'] & 0x01) > 0)  # C 2: Di 0
+            self.back_door_closed = ((d['C2 B0'] & 0x02) > 0)  # C 2: Di 1
             self.t22 = ((d['C2 B0'] & 0x04) > 0)  # C 2: Di 2
             self.t23 = ((d['C2 B0'] & 0x08) > 0)  # C 2: Di 3
             self.t24 = ((d['C2 B0'] & 0x10) > 0)  # C 2: Di 4
@@ -294,8 +293,10 @@ class DigitalInContract:
             val = self.LN2AirOK
         elif name == 'AirOK':
             val = self.AirOK
-        # elif name == 't20':
-        #     val = self.t20
+        elif name == 'front_door_closed':
+            val = self.front_door_closed
+        elif name == 'back_door_closed':
+            val = self.back_door_closed
         # elif name == 'notUsed7':
         #     val = self.notUsed7
         elif name == 'LN2en':
@@ -328,7 +329,8 @@ class DigitalInContract:
                    '"notUsed1":%s' % json.dumps(self.notUsed1),
                    '"Air supply LN2 OK":%s' % json.dumps(self.LN2AirOK),
                    '"Air supply OK":%s' % json.dumps(self.AirOK),
-                   '"t20":%s' % json.dumps(self.t20),
+                   '"Front Door Closed":%s' % json.dumps(self.front_door_closed),
+                   '"Back Door Closed":%s' % json.dumps(self.back_door_closed),
                    '"notUsed7":%s' % json.dumps(self.notUsed7),
                    '"LN2-en":%s' % json.dumps(self.LN2en),
                    ]

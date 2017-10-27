@@ -135,7 +135,8 @@ class PfeifferGaugeUpdater(Thread):
                              {"message": "Current Pressure in Chamber is {}".format(self.gauges.get_chamber_pressure()),
                               "level": 4})
                     if __name__ != '__main__':
-                        self.logPressureData()
+                        if ProfileInstance.getInstance().recordData:
+                            self.logPressureData()
                     currentTime = time.time()
                     if currentTime < next_pressure_read_time:
                         time.sleep(next_pressure_read_time - currentTime)

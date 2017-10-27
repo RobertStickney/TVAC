@@ -1,6 +1,6 @@
 from Logging.MySql import MySQlConnect
 import math
-import datetime
+from datetime import datetime
 import time
 
 class Logging(object):
@@ -22,9 +22,13 @@ class Logging(object):
 				print("Error: Thread '{}' has had an error of type {}. Restarting thread now...".format(data['thread'],data['type']))
 		elif category is "Event":
 			# if "Thread Start" in logType:
-			currentTime = datetime.datetime.now()
+			currentTime = datetime.now()
 			print("Event- {}: {}".format(logType,data.get("message"),currentTime))
-
+			systemStatusQueue = data["ProfileInstance"].systemStatusQueue
+			eventList = systemStatusQueue
+			eventList.append({"time":str(datetime.now()),
+				"category":logType,
+				"message":data.get("message")})
 			# try:
 			# 	systemStatusQueue = data["ProfileInstance"].systemStatusQueue
 			# 	systemStatusQueue.append("[ '{}','{}', '{}' ]".format(category,logType, data.get("thread")))
@@ -64,7 +68,7 @@ class Logging(object):
 						print("{}  {}".format(prefix,entry))
 			else:
 				coloums = "( message, created )"
-				values = "( \"{}\",\"{}\" )".format("{}".format(string),datetime.datetime.fromtimestamp(time.time()))
+				values = "( \"{}\",\"{}\" )".format("{}".format(string),datetime.fromtimestamp(time.time()))
 				sql = "INSERT INTO tvac.Debug {} VALUES {};".format(coloums, values)
 				# print(sql)
 				try:
@@ -94,7 +98,7 @@ class Logging(object):
 		values = ""
 		for i in range(len(expected_temp_values)):
 			time = expected_time_values[i]
-			time = datetime.datetime.fromtimestamp(time)
+			time = datetime.fromtimestamp(time)
 
 			temperature = expected_temp_values[i]
 			values += "( \"{}\", \"{}\", {}, {} ),\n".format(profile, time.strftime('%Y-%m-%d %H:%M:%S'), int(zone[4:]), temperature)
