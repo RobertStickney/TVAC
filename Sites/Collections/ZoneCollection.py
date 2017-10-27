@@ -2,6 +2,7 @@ import uuid
 import datetime
 import time
 from DataContracts.ZoneProfileContract import ZoneProfileContract
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 
 from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
@@ -62,12 +63,17 @@ class ZoneCollection:
             Logging.debugPrint(3,"sql: {}".format(sql))
             Logging.debugPrint(1, "Error in loadThermoCouples, zoneCollection: {}".format(str(e)))
             if Logging.debug:
-                raise e
+                raise e2
 
         results = mysql.cur.fetchall()
         TCs = []
+        tcList = HardwareStatusInstance.getInstance().Thermocouples.tcList
         for result in results:
             TCs.append(int(result['thermocouple']))
+
+        for tc in tcList:
+            if tc.Thermocouple in TCs:
+                tc.update({"zone":"zone"+str(int(result['zone'])),"userDefined":True})
         return TCs
 
     def loadThermalProfiles(self, profileName, zone):

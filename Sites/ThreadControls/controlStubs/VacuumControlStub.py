@@ -64,14 +64,19 @@ class VacuumControlStub(Thread):
                 while not self.wait_for_hardware():  # Wait for hardware drivers to read sensors.
                     Logging.logEvent("Debug", "Status Update",
                                      {"message": "VacuumControlStub waiting for the hardware to be read.",
-                                      "level": 3})
+                                      "level": 4})
                     time.sleep(1)
                 self.cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
                 self.chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
                 self.roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
 
                 self.state = self.determin_current_vacuum_state()
+
+
+                self.hw.OperationalVacuum = True
                 while True:
+                    while True:
+                        time.sleep(1)
                     # With an active profile, we start putting the system under pressure
          
                     Logging.logEvent("Debug","Status Update", 
@@ -248,14 +253,11 @@ class VacuumControlStub(Thread):
         ready &= self.hw.ShiCryopump.get_compressor('Helium Discharge Temperature') is not None
         ready &= self.hw.ShiCryopump.get_compressor('Water Outlet Temperature') is not None
         ready &= self.hw.ShiCryopump.get_compressor('System ON') is not None
-        # for testing...
-        # ready = True
-        # ready &= self.hw.PfeifferGuages.get_roughpump_pressure() is not None
-        # ready &= self.hw.PfeifferGuages.get_chamber_pressure() is not None
-        # ready &= self.hw.PfeifferGuages.get_cryopump_pressure() is not None
-        print("ready: {}".format(ready))
-
-        if not ready:
+        if os.name == "posix":
+            userName = os.environ['LOGNAME']
+        else:
+            userName = "user"
+        if not ready and "root" in userName:
             out = "CryoP_GV_Open: {}\n".format(self.hw.PC_104.digital_in.getVal('CryoP_GV_Open'))
             out += "RoughP_Powered: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_Powered'))
             out += "RoughP_Powered_WF: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_Powered_WF'))

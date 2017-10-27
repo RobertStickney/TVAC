@@ -86,7 +86,6 @@ class SafetyCheck(Thread):
 					}
 					TCs = hardwareStatusInstance.Thermocouples.ValidTCs
 					for tc in TCs:
-						# print("TC: {} - {}".format(tc.Thermocouple, tc.temp))
 						# if there are any TC's higher than max temp
 						if tc.temp > MAX_OPERATING_TEMP:
 							errorDetail = "TC # {} is above MAX_OPERATING_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_OPERATING_TEMP,tc.temp)
@@ -103,33 +102,35 @@ class SafetyCheck(Thread):
 							# end of max operational test
 
 						if tc.userDefined:
-							if tc.temp > MAX_UUT_TEMP:
-								errorDetail = "TC # {} is above MAX_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_UUT_TEMP,tc.temp)
-								error = {
-									"time" : str(datetime.now()),
-									"event":"Product Saver Alarm: High Temperature",
-									"item": "Thermocouple",
-									"itemID": tc.Thermocouple,
-									"details": errorDetail,
-									"actions": ["Turned off heater", "Log Event"]
-									}
-								self.logEvent(error)
-								tempErrorDict[error['event']] = True
-							# end of max user test
+							# print("tc: {} zone: {}".format(tc.Thermocouple,tc.zone))
+							if tc.zone != 0:
+								if tc.temp > ProfileInstance.getInstance().zoneProfiles.getZone(tc.zone).maxHeatError:
+									errorDetail = "TC # {} is above MAX_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,ProfileInstance.getInstance().zoneProfiles.getZone(tc.zone).maxHeatError,tc.temp)
+									error = {
+										"time" : str(datetime.now()),
+										"event":"Product Saver Alarm: High Temperature",
+										"item": "Thermocouple",
+										"itemID": tc.Thermocouple,
+										"details": errorDetail,
+										"actions": ["Turned off heater", "Log Event"]
+										}
+									self.logEvent(error)
+									tempErrorDict[error['event']] = True
+								# end of max user test
 
-							if tc.temp < MIN_UUT_TEMP:
-								errorDetail = "TC # {} is below MIN_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,MIN_UUT_TEMP,tc.temp)
-								error = {
-									"time" : str(datetime.now()),
-									"event":"Product Saver Alarm: Low Temperature",
-									"item": "Thermocouple",
-									"itemID": tc.Thermocouple,
-									"details": errorDetail,
-									"actions": ["Turned off LN flow", "Log Event"]
-									}
-								self.logEvent(error)
-								tempErrorDict[error['event']] = True
-							# end of min user test
+								if tc.temp < ProfileInstance.getInstance().zoneProfiles.getZone(tc.zone).minHeatError:
+									errorDetail = "TC # {} is below MIN_UUT_TEMP ({}). Currently {}c".format(tc.Thermocouple,ProfileInstance.getInstance().zoneProfiles.getZone(tc.zone).minHeatError,tc.temp)
+									error = {
+										"time" : str(datetime.now()),
+										"event":"Product Saver Alarm: Low Temperature",
+										"item": "Thermocouple",
+										"itemID": tc.Thermocouple,
+										"details": errorDetail,
+										"actions": ["Turned off LN flow", "Log Event"]
+										}
+									self.logEvent(error)
+									tempErrorDict[error['event']] = True
+								# end of min user test
 						# end of user test
 
 						# Get the full list

@@ -1,7 +1,7 @@
 zone1,zone2,zone3,zone4,zone5,zone6,zone7,zone8,zone9
 Max,,Max,,,,,,
 11 90,,15 16 17 18 19 20,,,,,,
-350,,350,,,,,,
+350,,300,,,,,,
 10,,10,,,,,,
 6.4,,6.4,,,,,,
 setpt,ramptime,soaktime,zone1,zone2,zone3,zone4,zone5,zone6,zone7,zone8,zone9

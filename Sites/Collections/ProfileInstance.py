@@ -26,7 +26,8 @@ class ProfileInstance:
 
 
             # System Wide stats
-            self.activeProfile = False
+            # TODO: change this back to false
+            self.activeProfile = True
             self.vacuumWanted = False
             # TODO: When Profile aborted is vacuumWanted cleared?
             self.currentSetpoint = None

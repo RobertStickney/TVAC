@@ -30,28 +30,29 @@ class TdkLambdaUpdater(Thread):
         self.ps_read_peroid = 4.0  # 0.5s loop period
 
     # def logVoltagesData(self):
-    #     coloums = "( profile_I_ID, guage, pressure, time )"
-    #     values  = "( \"{}\",{},{},\"{}\" ),\n".format(self.zoneProfiles.profileUUID,
-    #                                            self.gauges.get_cryopump_address(),
-    #                                            self.gauges.get_cryopump_pressure(),
-    #                                            datetime.datetime.fromtimestamp(time.time()))
-    #     values += "( \"{}\",{},{},\"{}\" ),\n".format(self.zoneProfiles.profileUUID,
-    #                                            self.gauges.get_chamber_address(),
-    #                                            self.gauges.get_chamber_pressure(),
-    #                                            datetime.datetime.fromtimestamp(time.time()))
-    #     values += "( \"{}\",{},{},\"{}\" )".format(self.zoneProfiles.profileUUID,
-    #                                         self.gauges.get_roughpump_address(),
-    #                                         self.gauges.get_roughpump_pressure(),
-    #                                         datetime.datetime.fromtimestamp(time.time()))
-    #     sql = "INSERT INTO tvac.Pressure {} VALUES {};".format(coloums, values)
-    #     # print(sql)
-    #     mysql = MySQlConnect()
-    #     try:
-    #         mysql.cur.execute(sql)
-    #         mysql.conn.commit()
-    #     except Exception as e:
-    #         raise e
-    #         #return e
+      # TODO: delete or update DB to hold this
+        # coloums = "( profile_I_ID, guage, pressure, time )"
+        # values  = "( \"{}\",{},{},\"{}\" ),\n".format(self.zoneProfiles.profileUUID,
+        #                                        self.gauges.get_cryopump_address(),
+        #                                        self.gauges.get_cryopump_pressure(),
+        #                                        datetime.datetime.fromtimestamp(time.time()))
+        # values += "( \"{}\",{},{},\"{}\" ),\n".format(self.zoneProfiles.profileUUID,
+        #                                        self.gauges.get_chamber_address(),
+        #                                        self.gauges.get_chamber_pressure(),
+        #                                        datetime.datetime.fromtimestamp(time.time()))
+        # values += "( \"{}\",{},{},\"{}\" )".format(self.zoneProfiles.profileUUID,
+        #                                     self.gauges.get_roughpump_address(),
+        #                                     self.gauges.get_roughpump_pressure(),
+        #                                     datetime.datetime.fromtimestamp(time.time()))
+        # sql = "INSERT INTO tvac.Pressure {} VALUES {};".format(coloums, values)
+        # # print(sql)
+        # mysql = MySQlConnect()
+        # try:
+        #     mysql.cur.execute(sql)
+        #     mysql.conn.commit()
+        # except Exception as e:
+        #     raise e
+        #     #return e
 
     def run(self):
         '''
@@ -105,14 +106,6 @@ class TdkLambdaUpdater(Thread):
                                 ps.update(self.pwr_supply.get_out())
                                 ps.update(self.pwr_supply.get_mode())
                             self.hw.TdkLambda_PS.update(update_power_supplies)
-                            # Logging.logEvent("Debug", "Status Update",
-                            #                  {"message": "Reading and writing with PfeifferGaugeControlStub.\nCryopump: {:f}; Chamber: {:f}; RoughPump: {:f}\n".format(
-                            #                      self.gauges.get_cryopump_pressure(),
-                            #                      self.gauges.get_chamber_pressure(),
-                            #                      self.gauges.get_roughpump_pressure()
-                            #                  ),
-                            #                   "level": 4})
-                            # cmd[0] = location; cmd[1] = value; cmd[2] = Volts or Current
                             while len(self.hw.TdkLambda_Cmds):
                                 self.Process_Commands(self.hw.TdkLambda_Cmds.pop(0))
 
@@ -131,26 +124,6 @@ class TdkLambdaUpdater(Thread):
                         Logging.logEvent("Debug", "Status Update",
                                          {"message": "Test run of TDK Lambda Power Supplies loop",
                                           "level": 4})
-                        # if first:
-                        #     # TODO: Test the system at differnt starting pressures, it could restart at any point
-                        #     # What happens when pressure in roughing  is more than cryo?
-                        #     self.hw.TdkLambda_PS.update([{'addr': 1, 'voltage programmed': 1000},
-                        #                          {'addr': 2, 'voltage programmed': 0.00001},
-                        #                          {'addr': 3, 'voltage programmed': 999}],
-                        #                          {'addr': 4, 'voltage programmed': 999}])
-                        #     first = False
-                        #     goingUp = False
-                        # else:
-                        #     print("get_pressure_chamber: "+ str(self.hw.TdkLambda_PS.get_chamber_pressure()))
-                        #     if True or self.hw.TdkLambda_PS.get_chamber_pressure() > 0.0000001 and not goingUp:
-                        #         self.hw.TdkLambda_PS.update([{'addr': 1, 'Pressure': self.gauges.get_cryopump_pressure()/2.5},
-                        #                                      {'addr': 2, 'Pressure': self.gauges.get_chamber_pressure()/5},
-                        #                                      {'addr': 3, 'Pressure': self.gauges.get_roughpump_pressure()/3}])
-                        #     else:
-                        #         goingUp = True
-                        #         self.gauges.update([{'addr': 1, 'Pressure': self.gauges.get_cryopump_pressure()*2.5},
-                        #                                      {'addr': 2, 'Pressure': self.gauges.get_chamber_pressure()*5},
-                        #                                      {'addr': 3, 'Pressure': self.gauges.get_roughpump_pressure()*3}])
                         # Just to see the screen for longer
                         time.sleep(5)
 

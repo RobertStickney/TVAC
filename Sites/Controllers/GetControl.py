@@ -215,11 +215,14 @@ class GetControl:
 
     def recordData(self):
         ProfileInstance.getInstance().recordData = True
+    def StoprecordData(self):
+        ProfileInstance.getInstance().recordData = False
 
     def getTvacStatus(self):
         gauges = HardwareStatusInstance.getInstance().PfeifferGuages
         out = {
         "recordData": ProfileInstance.getInstance().recordData,
+        "OperationalVacuum": HardwareStatusInstance.getInstance().OperationalVacuum,
         "activeProfile": ProfileInstance.getInstance().activeProfile,
         "vacuumWanted": ProfileInstance.getInstance().vacuumWanted,
         "currentSetpoint": ProfileInstance.getInstance().currentSetpoint,

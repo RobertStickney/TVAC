@@ -28,6 +28,8 @@ class ThermocoupleContract:
             self.userDefined = d['userDefined']
         if 'alarm' in d:
             self.alarm = d['alarm']
+        if 'zone' in d:
+            self.zone = d['zone']
         self.__lock.release()
 
     def getNum(self):
