@@ -58,12 +58,12 @@ class VacuumControlStub(Thread):
         while True:
             # This has no startup, but should wait until all drivers and updaters are running
             Logging.logEvent("Debug","Status Update",
-                {"message": "Starting VacuumControlStub",
+                {"message": "VCS: Starting VacuumControlStub",
                  "level":2})            
             try:
                 while not self.wait_for_hardware():  # Wait for hardware drivers to read sensors.
                     Logging.logEvent("Debug", "Status Update",
-                                     {"message": "VacuumControlStub waiting for the hardware to be read.",
+                                     {"message": "VCS: VacuumControlStub waiting for the hardware to be read.",
                                       "level": 4})
                     time.sleep(1)
                 self.cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
@@ -75,12 +75,10 @@ class VacuumControlStub(Thread):
 
                 self.hw.OperationalVacuum = True
                 while True:
-                    while True:
-                        time.sleep(1)
                     # With an active profile, we start putting the system under pressure
          
                     Logging.logEvent("Debug","Status Update", 
-                    {"message": "Running Vacuum Control Stub",
+                    {"message": "VCS: Running Vacuum Control Stub",
                      "level":4})
                     # Setup code is here
 
@@ -98,7 +96,7 @@ class VacuumControlStub(Thread):
                     # If it's here, you want the vacuum to be on
                     
                     Logging.logEvent("Debug","Status Update", 
-                    {"message": "Current chamber pressure: {}".format(self.chamberPressure),
+                    {"message": "VCS: Current chamber pressure: {}".format(self.chamberPressure),
                      "level":4})
 
                     {
@@ -121,7 +119,7 @@ class VacuumControlStub(Thread):
                         self.hw.OperationalVacuum = False
 
                     Logging.logEvent("Debug","Status Update", 
-                    {"message": "Current chamber state: {}".format(self.state),
+                    {"message": "VCS: Current chamber state: {}".format(self.state),
                      "level": 3})
 
                     # sleep until the next time around
@@ -136,7 +134,7 @@ class VacuumControlStub(Thread):
 
                 # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
                 ProfileInstance.getInstance().zoneProfiles.activeProfile = False
-                Logging.debugPrint(1, "Error in check run, vacuum Control Stub: {}".format(str(e)))
+                Logging.debugPrint(1, "VCS: Error in check run, vacuum Control Stub: {}".format(str(e)))
                 if Logging.debug:
                     raise e
             # end of try, catch

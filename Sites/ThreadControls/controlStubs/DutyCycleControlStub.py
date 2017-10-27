@@ -131,6 +131,7 @@ class ZoneControlStub():
             goalTemp = setPoint.tempGoal
             rampTime = setPoint.ramp
             soakTime = setPoint.soakduration
+            currentTime2 = time.time()
             # skip ramp section if rampTime == 0
             if rampTime:
                 TempDelta = goalTemp-currentTemp
@@ -153,12 +154,15 @@ class ZoneControlStub():
                      "dict":debugStatus})
 
                 # setting all values all for ramp
+                notUsed = 0
                 for i, tempSetPoint in enumerate(range(currentTime,rampEndTime, intervalTime)):
-                    if tempSetPoint > time.time():
+                    if tempSetPoint > currentTime2:
                         x = tempSetPoint
-                        y = currentTemp + (i*intervalTemp)
+                        y = currentTemp + ((i-notUsed)*intervalTemp)
                         expected_time_values.append(tempSetPoint)
                         expected_temp_values.append(y)
+                    else:
+                        notUsed += 1
             else:
                 rampEndTime = currentTime
             self.parent.setpoint_start_time.append([currentTime,0])
@@ -176,12 +180,11 @@ class ZoneControlStub():
             #Setting all soak values
             self.parent.setpoint_start_time[-1][1] = rampEndTime
             for tempSetPoint in range(rampEndTime, rampEndTime+soakTime, intervalTime):
-                if tempSetPoint > time.time():
+                if tempSetPoint > currentTime2:
                     x = tempSetPoint
                     y = goalTemp
                     expected_time_values.append(tempSetPoint)
                     expected_temp_values.append(y)
-
             currentTime = rampEndTime+soakTime
             currentTemp = goalTemp
         # end of for loop, end generating outputs
@@ -232,7 +235,7 @@ class DutyCycleControlStub(Thread):
             }
 
 
-        self.currentSetpoint = 0
+        self.currentSetpoint = 1
         self.ramp = False
         self.soak = False
 
@@ -267,7 +270,7 @@ class DutyCycleControlStub(Thread):
                         self.startTime = self.zoneProfiles.thermalStartTime
                     else:
                         self.startTime = int(time.time())
-                    currentSetpointTemporary = 0
+                    currentSetpointTemporary = 1
                     rampTemporary = False
                     soakTemporary = True
 
@@ -303,8 +306,8 @@ class DutyCycleControlStub(Thread):
 
                         # this will find the time value matching the current time
                         # and give us the temp value it should be at that time.
-                        print("currentTime: {}".format(currentTime))
-                        print("expected_time_values: {}".format(self.expected_time_values))
+                        # print("currentTime: {}".format(currentTime))
+                        # print("expected_time_values: {}".format(self.expected_time_values))
                         while currentTime > self.expected_time_values[0]:
 
                             for zone in self.zones:
@@ -335,10 +338,11 @@ class DutyCycleControlStub(Thread):
                                 {"message":"Profile {} has entered setpoint {} Ramp".format(ProfileInstance.getInstance().zoneProfiles.profileName, currentSetpointTemporary),
                                 "ProfileInstance": ProfileInstance.getInstance()})
                         if soakTemporary == True and self.soak == False:
-                            Logging.logEvent("Event","Profile",
-                                {"message":"Profile {} has entered setpoint {} Soak".format(ProfileInstance.getInstance().zoneProfiles.profileName, currentSetpointTemporary-1),
-                                "ProfileInstance": ProfileInstance.getInstance()})
-                            ProfileInstance.getInstance.inRamp = False
+                            if currentSetpointTemporary > 1:
+                                Logging.logEvent("Event","Profile",
+                                    {"message":"Profile {} has entered setpoint {} Soak".format(ProfileInstance.getInstance().zoneProfiles.profileName, currentSetpointTemporary-1),
+                                    "ProfileInstance": ProfileInstance.getInstance()})
+                                ProfileInstance.getInstance.inRamp = False
                         self.ramp = rampTemporary
                         self.soak = soakTemporary
                         # With the temp goal tempurture picked, make the duty cycle 
