@@ -170,13 +170,25 @@ class GetControl:
 
         return json.dumps(tempEventList)
     
-    def getMCCData(self):
-        return HardwareStatusInstance.getInstance().ShiCryopump.mcc_status.getJson()
+    def getCryoPump_status(self):
+        return HardwareStatusInstance.getInstance().ShiCryopump.getJson()
+
+    def getCryoPump_plots(self):
+        return HardwareStatusInstance.getInstance().ShiCryopump.get_json_plots()
 
     def getPC104_Digital(self):
         pins = HardwareStatusInstance.getInstance().PC_104
-        return '{"out":%s,"in":%s}' % (pins.digital_out.getJson(),
-                                       pins.digital_in.getJson())
+        return '{"out":%s,"in bits":%s,"in sw":%s,"sw wf":%s}' % (
+            pins.digital_out.getJson(),
+            pins.digital_in.getJson_bits(),
+            pins.digital_in.getJson_Switches(),
+            pins.digital_in.getJson_Switches_WF())
+
+    def getPC104_Switches(self):
+        pins = HardwareStatusInstance.getInstance().PC_104
+        return '{"in sw":%s,"sw wf":%s}' % (
+            pins.digital_in.getJson_Switches(),
+            pins.digital_in.getJson_Switches_WF())
 
     def getPC104_Analog(self):
         pins = HardwareStatusInstance.getInstance().PC_104

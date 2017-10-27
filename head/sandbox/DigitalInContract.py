@@ -204,8 +204,8 @@ class DigitalInContract:
             val = self.LN2AirOK
         elif name == 'AirOK':
             val = self.AirOK
-        # elif name == 't20':
-        #     val = self.t20
+        # elif name == 'front_door_closed':
+        #     val = self.front_door_closed
         # elif name == 'notUsed7':
         #     val = self.notUsed7
         elif name == 'LN2en':
@@ -245,7 +245,7 @@ class DigitalInContract:
         #message.append('"notUsed1":%s,' % json.dumps(self.notUsed1)) uncomment when this is used
         message.append('"Air supply LN2 OK":%s,' % json.dumps(self.LN2AirOK))
         message.append('"Air supply OK":%s,' % json.dumps(self.AirOK))
-        #message.append('"t20":%s,' % json.dumps(self.t20)) uncomment when this is used
+        #message.append('"front_door_closed":%s,' % json.dumps(self.front_door_closed)) uncomment when this is used
         #message.append('"notUsed7":%s,' % json.dumps(self.notUsed7)) uncomment when this is used
         message.append('"LN2-en":%s}' % json.dumps(self.LN2en))
         self.__lock.release()
