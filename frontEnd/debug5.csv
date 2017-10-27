@@ -1,0 +1,8 @@
+zone1,zone2,zone3,zone4,zone5,zone6,zone7,zone8,zone9,,,
+Max,Min,,,,,,,Average,,,
+3 ,6 ,,,,,,,76 77 78 79 80 ,,,
+350,350,,,,,,,350,,,
+50,50,,,,,,,50,,,
+1,1,,,,,,,1,,,
+setpt,ramptime,soaktime,zone1,zone2,zone3,zone4,zone5,zone6,zone7,zone8,zone9
+1,300,600,310,305,,,,,,,307

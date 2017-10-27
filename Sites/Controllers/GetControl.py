@@ -222,7 +222,7 @@ class GetControl:
 
     def runProfile(self):
         threadInstance = ThreadCollectionInstance.getInstance()
-        result = threadInstance.threadCollection.runProfile();
+        result = threadInstance.threadCollection.runProfile()
         return result
 
     def recordData(self):
