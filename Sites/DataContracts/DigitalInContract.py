@@ -308,7 +308,13 @@ class DigitalInContract:
 
     def getJson_bits(self):
         self.__lock.acquire()
-        message = ['"LN2-P-Sol-Open: NC":%s' % json.dumps(self.LN2_P_Sol_Open_NC),
+        message = ['"PG-SW-RoughP-Relay 1":%s' % json.dumps(self.pgRoughPumpRelay1),
+                   '"PG-SW-RoughP-Relay 2":%s' % json.dumps(self.pgRoughPumpRelay2),
+                   '"PG-SW-CryoP-Relay 1":%s' % json.dumps(self.pgCryoPumpRelay1),
+                   '"PG-SW-CryoP-Relay 2":%s' % json.dumps(self.pgCryoPumpRelay2),
+                   '"PG-SW-Chamber-Relay 1":%s' % json.dumps(self.pgChamberRelay1),
+                   '"PG-SW-Chamber-Relay 2":%s' % json.dumps(self.pgChamberRelay2),
+                   '"LN2-P-Sol-Open: NC":%s' % json.dumps(self.LN2_P_Sol_Open_NC),
                    '"LN2-P-Sol-Open: O":%s' % json.dumps(self.LN2_P_Sol_Open_O),
                    '"LN2-P-Sol-Closed: NC":%s' % json.dumps(self.LN2_P_Sol_Closed_NC),
                    '"LN2-P-Sol-Closed: O":%s' % json.dumps(self.LN2_P_Sol_Closed_O),
