@@ -145,7 +145,7 @@ class Shi_Mcc:
         # return self.send_cmd("XOI??")
         val = self.Send_cmd("XOI??")
         if not val['Error']:
-            val['Data'] = (int(val['Response'])/23) * 100
+            val['Data'] = round((int(val['Response'])/23.0) * 100.0, 2)
         return val
 
     # 2.5 • Elapsed Time pg:8
@@ -267,7 +267,7 @@ class Shi_Mcc:
     def Start_Regen(self, num):
         if (num < 0) | (num > 4):
             # TODO: Change to error event print('First stage control method is out of range (0-4): {:d}'.format(num))
-            return self.Format_Responce("Temp out of range: " + str(num), error=True)
+            return self.Format_Responce("Start Regen Number of range: " + str(num), error=True)
         return self.Send_cmd("N{0:d}".format(num))
 
     # 2.17 • Regeneration Cycles pg:15

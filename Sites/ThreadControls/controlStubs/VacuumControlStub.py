@@ -34,7 +34,11 @@ class VacuumControlStub(Thread):
         self.profile = ProfileInstance.getInstance()
         self.hw = HardwareStatusInstance.getInstance()
         self.state = None;
-        self.opVac = 9e-6
+        self.pres_opVac = 9e-6
+        self.pres_atm = 100
+        self.pres_cryoP_Prime = 45e-6
+        self.pres_chamber_crossover = 40e-6
+        self.pres_chamber_ = 40e-6
 
         self.updatePeriod = 1
 
@@ -150,6 +154,7 @@ class VacuumControlStub(Thread):
                 (self.roughPumpPressure > 100):
             self.state = 'Atm: Sys Ready'
 
+
     def state_01(self):  # Atm: Sys Ready
         if (self.hw.PC_104.digital_out.getVal('CryoP GateValve') is True) or \
                 (self.hw.PC_104.digital_out.getVal('RoughP GateValve') is True) or \
@@ -207,26 +212,28 @@ class VacuumControlStub(Thread):
         # Todo: Add vacuum not wanted state move.
 
     def state_05(self):  # PullingVac: Cryo Pumping Chamber
-        if (self.profile.vacuumWanted is True) and \
-                (self.chamberPressure < self.opVac):
-            self.state = 'PullingVac: Cryo Pumping Chamber'
+        if (self.chamberPressure < self.pres_opVac):
+            self.state = 'Operational Vacuum'
         # Todo: Add vacuum not wanted state move.
 
     def state_06(self):  # Operational Vacuum: Cryo Pumping
-        if (self.profile.vacuumWanted is True) and \
-                (self.hw.PC_104.digital_out.getVal('CryoP GateValve') is False) and \
-                (self.chamberPressure < self.opVac):
-            self.state = 'Operational Vacuum'
-        if self.chamberPressure > self.opVac:
+        if self.chamberPressure > self.pres_opVac:
             self.state = 'Non-Operational High Vacuum'
+        elif self.hw.ShiCryopump.is_cryopump_cold():
+            self.state = 'Operational Vacuum'
+            self.hw.PC_104.digital_out.update({'CryoP GateValve': False})
 
     def state_07(self):  # Operational Vacuum
-        if (self.profile.vacuumWanted is True) and \
-                (self.hw.PC_104.digital_out.getVal('CryoP GateValve') is True) and \
-                (self.chamberPressure < self.opVac):
-            self.state = 'Operational Vacuum: Cryo Pumping'
-        if self.chamberPressure > self.opVac:
+        if self.chamberPressure > self.pres_opVac:
             self.state = 'Non-Operational High Vacuum'
+        elif (not self.hw.ShiCryopump.is_cryopump_cold()) and \
+                (self.cryoPumpPressure < self.chamberPressure) and \
+                (not self.hw.ShiCryopump.is_regen_active()):
+            self.state = 'Operational Vacuum: Cryo Pumping'
+            self.hw.PC_104.digital_out.update({'CryoP GateValve': True})
+            time.sleep(5)
+        else:
+            self.hw.PC_104.digital_out.update({'CryoP GateValve': False})
 
     def state_08(self):  # Non-Operational High Vacuum
         pass
@@ -244,6 +251,7 @@ class VacuumControlStub(Thread):
         ready &= self.hw.PfeifferGuages.get_roughpump_pressure() is not None
         ready &= self.hw.PfeifferGuages.get_chamber_pressure() is not None
         ready &= self.hw.PfeifferGuages.get_cryopump_pressure() is not None
+        ready &= self.hw.ShiCryopump.is_cryopump_cold() is not None
         ready &= self.hw.ShiCryopump.get_mcc_params('Elapsed Time') is not None
         ready &= self.hw.ShiCryopump.get_mcc_params('Tc Pressure State') is not None
         ready &= self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') is not None
@@ -272,17 +280,11 @@ class VacuumControlStub(Thread):
             out += "Water Outlet Temperature: {}\n".format(self.hw.ShiCryopump.get_compressor('Water Outlet Temperature'))
             out += "System ON: {}\n".format(self.hw.ShiCryopump.get_compressor('System ON'))
             Logging.debugPrint(3, out)
-        
-
         return ready
 
     def determin_current_vacuum_state(self):
-        if (self.chamberPressure < self.opVac) and \
-                (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 20):
-            if self.hw.PC_104.digital_out.getVal('CryoP GateValve'):
-                return 'Operational Vacuum: Cryo Pumping'
-            else:
-                return 'Operational Vacuum'
+        if (self.chamberPressure < self.pres_opVac):  ##
+            return 'Operational Vacuum'
         else:
             return 'Atm: Sys Ready'
 
