@@ -11,7 +11,7 @@ class Shi_MCC_Status_Contract:
     def __init__(self):
         self.DutyCycle = None
         self.FirstStageTemp = None
-        self.CryoPump = {'MotorOn': None, 'Ready': None}
+        self.CryoPump = {'Motor On': None, 'Ready': None}
         self.PurgeValveState = None
         self.RegenError = None
         self.RegenStep = None
