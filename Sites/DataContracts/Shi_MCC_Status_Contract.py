@@ -11,7 +11,7 @@ class Shi_MCC_Status_Contract:
     def __init__(self):
         self.DutyCycle = None
         self.FirstStageTemp = None
-        self.CryoPump = {'MotorOn': None, 'Ready': None}
+        self.CryoPump = {'Motor On': None, 'Ready': None}
         self.PurgeValveState = None
         self.RegenError = None
         self.RegenStep = None
@@ -121,13 +121,13 @@ class Shi_MCC_Status_Contract:
         self.__Lock.acquire()
         message = ['"Duty Cycle (0-100)":%s' % json.dumps(self.DutyCycle),
                    '"1st stage Temp (K)":%s' % json.dumps(self.FirstStageTemp),
-                   '"Cryo PumpReady State":%s' % json.dumps(self.CryoPump),
+                   '"Cryo Pump Motor":%s' % json.dumps(self.CryoPump),
                    '"Purge Valve State":%s' % json.dumps(self.PurgeValveState),
                    '"Regen Error":%s' % json.dumps(self.RegenError),
                    '"Regen Step":%s' % json.dumps(self.RegenStep),
                    '"Roughing Valve State":%s' % json.dumps(self.RoughingValveState),
                    '"Roughing Interlock":%s' % json.dumps(self.RoughingInterlock),
-                   '"2st stage Temp (K)":%s' % json.dumps(self.SecondStageTemp),
+                   '"2nd stage Temp (K)":%s' % json.dumps(self.SecondStageTemp),
                    '"Status":%s' % json.dumps(self.Status),
                    '"Tc Pressure":%s' % json.dumps(self.TcPressure),
                    ]
@@ -138,7 +138,7 @@ class Shi_MCC_Status_Contract:
         self.__Lock.acquire()
         message = ['"Duty Cycle (0-100)":%s' % json.dumps(self.DutyCycle),
                    '"1st stage Temp (K)":%s' % json.dumps(self.FirstStageTemp),
-                   '"2st stage Temp (K)":%s' % json.dumps(self.SecondStageTemp),
+                   '"2nd stage Temp (K)":%s' % json.dumps(self.SecondStageTemp),
                    ]
         self.__Lock.release()
         return message

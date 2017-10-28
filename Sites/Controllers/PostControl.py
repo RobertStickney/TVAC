@@ -50,7 +50,21 @@ class PostControl:
         threadInstance.threadCollection.calculateRamp(data)
         return "{'result':'success'}"
 
-    ## Todo: These functions are for engeering tests only Remove from deliverable.
+    def SendHwCmd(self, data):
+        if type(data) is not list:
+            return '{"result":"Needs a json dictionary of a cmds."}'
+        hw = HardwareStatusInstance.getInstance()
+        Logging.debugPrint(3,"POST: SendHwCmd '%s'" % data)
+        if data[0] == "Shi_MCC_Cmds":  # ['cmd', arg, arg,... arg]
+            hw.Shi_MCC_Cmds.append(data[1:])
+        elif data[0] == "Shi_Compressor_Cmds":  # 'cmd'
+            hw.Shi_Compressor_Cmds.append(data[1])
+        elif data[0] == "TdkLambda_Cmds":  # ['cmd', arg, arg,... arg]
+            hw.TdkLambda_Cmds.append(data[1:])
+        else:
+            return '{"result":"Unknown Hardware Target."}'
+        return '{"result":"success"}'
+
     def setPC104_Digital(self, data):
         pins = HardwareStatusInstance.getInstance().PC_104
         Logging.debugPrint(3,"POST: setPC104_Digital '%s'" % data)

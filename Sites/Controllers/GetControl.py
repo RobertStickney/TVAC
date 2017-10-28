@@ -170,8 +170,11 @@ class GetControl:
 
         return json.dumps(tempEventList)
     
-    def getCryoPump_status(self):
-        return HardwareStatusInstance.getInstance().ShiCryopump.getJson()
+    def getCryoPump_Status(self):
+        return HardwareStatusInstance.getInstance().ShiCryopump.getJson_Status()
+
+    def getCryoPump_Params(self):
+        return HardwareStatusInstance.getInstance().ShiCryopump.getJson_Params()
 
     def getCryoPump_plots(self):
         return HardwareStatusInstance.getInstance().ShiCryopump.get_json_plots()

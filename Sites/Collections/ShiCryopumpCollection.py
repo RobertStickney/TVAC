@@ -78,6 +78,18 @@ class ShiCryopumpCollection:
                     ]
         return '{' + ','.join(message) + '}'
 
+    def getJson_Status(self):
+        self.__lock.acquire()
+        message = ['"time":"%s"' % self.time]
+        self.__lock.release()
+        message += ['"MCC Status":%s' % self.mcc_status.getJson(),
+                    '"Compressor":%s' % self.compressor.getJson(),
+                    ]
+        return '{' + ','.join(message) + '}'
+
+    def getJson_Params(self):
+        return self.mcc_params.getJson()
+
     def get_json_plots(self):
         self.__lock.acquire()
         message = ['"time":"%s"' % self.time]

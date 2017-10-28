@@ -31,7 +31,8 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getAllThermoCoupleData': control.getAllThermoCoupleData,
                 '/getAllZoneData': control.getAllZoneData,
                 '/getShiTemps': control.getShiTemps,
-                '/getCryoPump_status': control.getCryoPump_status,
+                '/getCryoPump_Status': control.getCryoPump_Status,
+                '/getCryoPump_Params': control.getCryoPump_Params,
                 '/getCryoPump_plots': control.getCryoPump_plots,
                 '/getPC104_Digital': control.getPC104_Digital,
                 '/getPC104_Switches': control.getPC104_Switches,
@@ -114,8 +115,9 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/releaseHoldZone': control.releaseHoldSingleThread,
                 '/abortZone': control.abortSingleThread,
                 '/calculateRamp': control.calculateRamp,
-                '/setPC104Digital': control.setPC104_Digital,  # TODO: Remove this Engeering function!
-                '/setPC104Analog': control.setPC104_Analog  # TODO: Remove this Engeering function!
+                '/SendHwCmd': control.SendHwCmd,
+                '/setPC104Digital': control.setPC104_Digital,
+                '/setPC104Analog': control.setPC104_Analog,
             }[path](contractObj)
 
             Logging.logEvent("Debug","Status Update", 
