@@ -57,11 +57,11 @@ class PostControl:
         Logging.debugPrint(3,"POST: SendHwCmd '%s'" % data)
         for cmd_target in data.keys():
             if cmd_target == "Shi_MCC_Cmds":  # ['cmd', arg, arg,... arg]
-                hw.Shi_MCC_Cmds.append(data(cmd_target))
+                hw.Shi_MCC_Cmds.append(data[cmd_target])
             elif cmd_target == "Shi_Compressor_Cmds":  # 'cmd'
-                hw.Shi_Compressor_Cmds.append(data(cmd_target))
+                hw.Shi_Compressor_Cmds.append(data[cmd_target])
             elif cmd_target == "TdkLambda_Cmds":  # ['cmd', arg, arg,... arg]
-                hw.TdkLambda_Cmds.append(data(cmd_target))
+                hw.TdkLambda_Cmds.append(data[cmd_target])
             else:
                 return '{"result":"Unknown Hardware Target."}'
         return '{"result":"success"}' '{"Shi_MCC_Cmds":["%s","%s",%d]}'
