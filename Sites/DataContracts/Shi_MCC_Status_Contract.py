@@ -121,7 +121,7 @@ class Shi_MCC_Status_Contract:
         self.__Lock.acquire()
         message = ['"Duty Cycle (0-100)":%s' % json.dumps(self.DutyCycle),
                    '"1st stage Temp (K)":%s' % json.dumps(self.FirstStageTemp),
-                   '"Cryo PumpReady State":%s' % json.dumps(self.CryoPump),
+                   '"Cryo Pump Motor":%s' % json.dumps(self.CryoPump),
                    '"Purge Valve State":%s' % json.dumps(self.PurgeValveState),
                    '"Regen Error":%s' % json.dumps(self.RegenError),
                    '"Regen Step":%s' % json.dumps(self.RegenStep),
