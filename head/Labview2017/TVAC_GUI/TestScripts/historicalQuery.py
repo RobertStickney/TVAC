@@ -144,14 +144,14 @@ def main(args):
 
 	for tc in tc_data:
 		#if tc in importantTCs:
-		ax1.plot_date(time_values,tc_data[tc], '-', linewidth=1,label=str(tc))
+		ax1.plot_date(time_values,tc_data[tc], '.',label=str(tc))
 		ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %H:%M:%S'))
 		plt.gcf().autofmt_xdate()
 		length=len(tc_data[tc])
 		#print(tc)
 
 	for guage in guage_data:
-		ax2.plot(ptime_values,guage_data[guage], label=str(guage))
+		ax2.plot(ptime_values,guage_data[guage],'.', label=str(guage))
 		ax2.set_yscale('log')
 		ax2.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %H:%M:%S'))
 		plt.gcf().autofmt_xdate()	
