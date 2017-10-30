@@ -151,10 +151,13 @@ def main(args):
 		#print(tc)
 
 	for guage in guage_data:
-		ax2.plot(ptime_values,guage_data[guage],'.', label=str(guage))
-		ax2.set_yscale('log')
-		ax2.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %H:%M:%S'))
-		plt.gcf().autofmt_xdate()	
+		try:
+			ax2.plot(ptime_values,guage_data[guage],'.', label=str(guage))
+			ax2.set_yscale('log')
+			ax2.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %H:%M:%S'))
+			plt.gcf().autofmt_xdate()
+		except:
+			print "Pressure Plotting Error"	
 
 	keys = tc_data.keys()
 
