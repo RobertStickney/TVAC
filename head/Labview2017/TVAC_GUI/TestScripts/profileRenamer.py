@@ -67,8 +67,10 @@ def main(args):
 		print(JSON.dumps({"Error":"Input not given"}))
 		quit()
 	affected_rows = renameProfile(oldName,newName)
-
-	out = {"affected_rows":str(affected_rows)}
+	if affected_rows != 0:
+		out = "Successfully changed name to: " + str(newName)
+	else:
+		out = "Error while renaming profile " + str(oldName) + " to " +str(newName)
 	print(JSON.dumps(out))
 
 
