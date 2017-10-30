@@ -157,7 +157,7 @@ def main(args):
 			ax2.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %H:%M:%S'))
 			plt.gcf().autofmt_xdate()
 		except:
-			print "Pressure Plotting Error"	
+			print("Pressure Plotting Error")
 
 	keys = tc_data.keys()
 
