@@ -49,7 +49,7 @@ def getLiveTempFromDB(startingPoint,endingPoint,time_start):
 	mysql.conn.commit()
 
 	time_two=time.time()
-	print("Time to Query",time_two-time_start)
+	#print("Time to Query (s): ",time_two-time_start)
 
 	data_csv = dict(time=[],thermocouple=[],temperature=[])
 	results={}
@@ -64,7 +64,6 @@ def getLiveTempFromDB(startingPoint,endingPoint,time_start):
 		tmp.append([row["thermocouple"], float(row["temperature"])])
 		results[row['time']] = tmp
 
-	print("Time to sql record from query: ", time.time()-time_two)	
 	return "Temp since {}".format(startingPoint), results, data_csv
 
 def getPressureDataFromDB(startingPoint,endingPoint):
@@ -123,8 +122,13 @@ def utc_to_local(utc_dt):
 
 def main(args):
 	time_start=time.time()
+
 	startTime = args[1]
 	endTime = args[2]
+
+	if len(args)>4:
+		temp_file=args[3]
+		pressure_file=args[4]
 
 	#print(args[1])
 	#print(args[2])
@@ -143,22 +147,23 @@ def main(args):
 
 	print("Time to Pressure End ",time.time()-time_start)
 
-	a=np.array(tdata_csv["time"])
-	b=np.array(tdata_csv["thermocouple"])
-	c=np.array(tdata_csv["temperature"])
-	#print(results)
-	df = pd.DataFrame({"time" : a, "thermocouple" : b, "temperature": c})
-	df=df[['time','thermocouple','temperature']]
-	df.to_csv("dict_temp.csv", index=False)
+	if len(args)>4:
+		a=np.array(tdata_csv["time"])
+		b=np.array(tdata_csv["thermocouple"])
+		c=np.array(tdata_csv["temperature"])
+		#print(results)
+		df = pd.DataFrame({"time" : a, "thermocouple" : b, "temperature": c})
+		df=df[['time','thermocouple','temperature']]
+		df.to_csv(temp_file, index=False)
 
-	d=np.array(pdata_csv["time"])
-	e=np.array(pdata_csv["guage"])
-	f=np.array(pdata_csv["pressure"])
-	print(np.size(d), np.size(e),np.size(f))
-	#print(results)
-	df2 = pd.DataFrame({"time" : d, "guage" : e, "pressure": f})
-	df2=df2[['time','guage','pressure']]
-	df2.to_csv("dict_pressure.csv", index=False)
+		d=np.array(pdata_csv["time"])
+		e=np.array(pdata_csv["guage"])
+		f=np.array(pdata_csv["pressure"])
+		#print(np.size(d), np.size(e),np.size(f))
+		#print(results)
+		df2 = pd.DataFrame({"time" : d, "guage" : e, "pressure": f})
+		df2=df2[['time','guage','pressure']]
+		df2.to_csv(pressure_file, index=False)
 
 
 	for time_value in sorted(results):
@@ -194,9 +199,6 @@ def main(args):
 	# 		print("{},{},{}".format(time_values[i],tc,tc_data[tc][i]))
 	fig,(ax1,ax2)=plt.subplots(1,2,figsize=(9,7))
 
-	print("Time to PreGraph",time.time()-time_start)
-
-
 	for tc in tc_data:
 		#if tc in importantTCs:
 		ax1.plot_date(time_values,tc_data[tc], '.',label=str(tc))
@@ -216,24 +218,6 @@ def main(args):
 
 	keys = tc_data.keys()
 
-
-	#outputData=np.empty([len(keys),length,2])
-	# increment=0
-	# for tc in tc_data:
-	# 	for j in range(0,length):
-	# 		outputData[increment,j,0]=time_values[j]
-	# 		temp=tc_data[tc]
-	# 		outputData[increment,j,1]=temp[j]
-
-	# 	increment+=1	
-
-	# print(outputData)
-
-	# temp=outputData.reshape(1,length*len(keys)*2)
-	# print(temp)
-
-	# np.savetxt('test.csv',temp,fmt='%5s',delimiter=',')
-
 	ax1.legend()
 	ax2.legend()
 	#ax1.legend(bbox_to_anchor=(-.01, 0, 1, 1), bbox_transform=plt.gcf().transFigure)
@@ -246,7 +230,6 @@ def main(args):
 	ax2.set_xlabel('Time')
 	ax2.set_title("Pressure")
 
-	print("Time to finish: ",time.time()-time_start)
 	#plt.savefig('graph1.png')
 	plt.show()
 
