@@ -12,6 +12,8 @@ from matplotlib import dates
 import numpy as np
 import csv
 
+import time
+
 import matplotlib
 
 class MySQlConnect:
@@ -39,19 +41,24 @@ def unwrapJSON(json):
 	# print(json)
 	return json['profiles'][0]['thermalprofiles']
 
-def getLiveTempFromDB(startingPoint,endingPoint):
+def getLiveTempFromDB(startingPoint,endingPoint,time_start):
 	mysql = MySQlConnect()
 	sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\");".format(startingPoint,endingPoint)
 	#sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\");".format(startingPoint)
 	#print(sql)
 	mysql.cur.execute(sql)
 	mysql.conn.commit()
+
+	time_two=time.time()
+	print("Time to Query",time_two-time_start)
+
 	results = {}
 	for row in mysql.cur:
 		tmp = results.get(row["time"], [])
 		tmp.append([row["thermocouple"], float(row["temperature"])])
 		results[row['time']] = tmp
 		#print("{},{},{}".format(row["time"],row["thermocouple"],row["temperature"]))
+	print("Time to sql record from query: ", time.time()-time_two)	
 	return "Temp since {}".format(startingPoint), results
 
 def getPressureDataFromDB(startingPoint,endingPoint):
@@ -103,15 +110,17 @@ def utc_to_local(utc_dt):
 
 
 def main(args):
-
+	time_start=time.time()
 	startTime = args[1]
 	endTime = args[2]
 
 	#print(args[1])
 	#print(args[2])
-
-	profile_I_ID, results = getLiveTempFromDB(startTime,endTime)
+	print("Querying Temperatures...")
+	profile_I_ID, results = getLiveTempFromDB(startTime,endTime,time_start)
+	print("Querying Pressures...")
 	pressure=getPressureDataFromDB(startTime,endTime)
+
 	# print(results)
 	time_values = []
 	ptime_values = []
@@ -119,6 +128,9 @@ def main(args):
 	tc_data = {}
 	guage_data = {}	
 	#firstTime = sorted(results)[0]
+
+	print("Time to Pressure End ",time.time()-time_start)
+
 	for time_value in sorted(results):
 
 		time_values.append(dates.date2num(datetime.strptime(str(time_value),'%Y-%m-%d %H:%M:%S')))
@@ -141,6 +153,9 @@ def main(args):
 	# 	for tc in tc_data:
 	# 		print("{},{},{}".format(time_values[i],tc,tc_data[tc][i]))
 	fig,(ax1,ax2)=plt.subplots(1,2,figsize=(9,7))
+
+	print("Time to PreGraph",time.time()-time_start)
+
 
 	for tc in tc_data:
 		#if tc in importantTCs:
@@ -194,7 +209,7 @@ def main(args):
 	ax2.set_xlabel('Time')
 	ax2.set_title("Pressure")
 
-
+	print("Time to finish: ",time.time()-time_start)
 	#plt.savefig('graph1.png')
 	plt.show()
 
