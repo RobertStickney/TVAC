@@ -11,9 +11,9 @@ import matplotlib.dates as mdates
 from matplotlib import dates
 import numpy as np
 import csv
+import pandas as pd
 
-import time
-
+import calendar
 import matplotlib
 
 class MySQlConnect:
@@ -44,22 +44,28 @@ def unwrapJSON(json):
 def getLiveTempFromDB(startingPoint,endingPoint,time_start):
 	mysql = MySQlConnect()
 	sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\");".format(startingPoint,endingPoint)
-	#sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\");".format(startingPoint)
-	#print(sql)
+
 	mysql.cur.execute(sql)
 	mysql.conn.commit()
 
 	time_two=time.time()
 	print("Time to Query",time_two-time_start)
 
-	results = {}
+	data_csv = dict(time=[],thermocouple=[],temperature=[])
+	results={}
 	for row in mysql.cur:
+		
+		tmp=dates.date2num(datetime.strptime(str(row["time"]),'%Y-%m-%d %H:%M:%S'))
+		data_csv["time"].append(tmp)
+		data_csv["thermocouple"].append(row["thermocouple"])
+		data_csv["temperature"].append(float(row["temperature"]))
+
 		tmp = results.get(row["time"], [])
 		tmp.append([row["thermocouple"], float(row["temperature"])])
 		results[row['time']] = tmp
-		#print("{},{},{}".format(row["time"],row["thermocouple"],row["temperature"]))
+
 	print("Time to sql record from query: ", time.time()-time_two)	
-	return "Temp since {}".format(startingPoint), results
+	return "Temp since {}".format(startingPoint), results, data_csv
 
 def getPressureDataFromDB(startingPoint,endingPoint):
 	mysql = MySQlConnect()
@@ -68,15 +74,21 @@ def getPressureDataFromDB(startingPoint,endingPoint):
 	mysql.cur.execute(sql)
 	mysql.conn.commit()
 
+	data_csv = dict(time=[],guage=[],pressure=[])
 	results = {}
 	for row in mysql.cur:
-		#print(row)
+
+		tmp=dates.date2num(datetime.strptime(str(row["time"]),'%Y-%m-%d %H:%M:%S'))
+		data_csv["time"].append(tmp)
+		data_csv["guage"].append(row["guage"])
+		data_csv["pressure"].append(float(row["pressure"]))
+
 		tmp = results.get(row["time"], [])
 		tmp.append([row["guage"], float(row["pressure"])])
 		results[row['time']] = tmp
 		#print("{},{},{},zone".format(row["time"],row["guage"],row["pressure"]))
 	#print(results)
-	return results	
+	return results, data_csv	
 
 def getExpectedFromDB():
 	mysql = MySQlConnect()
@@ -117,9 +129,9 @@ def main(args):
 	#print(args[1])
 	#print(args[2])
 	print("Querying Temperatures...")
-	profile_I_ID, results = getLiveTempFromDB(startTime,endTime,time_start)
+	profile_I_ID, results, tdata_csv = getLiveTempFromDB(startTime,endTime,time_start)
 	print("Querying Pressures...")
-	pressure=getPressureDataFromDB(startTime,endTime)
+	pressure, pdata_csv=getPressureDataFromDB(startTime,endTime)
 
 	# print(results)
 	time_values = []
@@ -131,23 +143,51 @@ def main(args):
 
 	print("Time to Pressure End ",time.time()-time_start)
 
+	a=np.array(tdata_csv["time"])
+	b=np.array(tdata_csv["thermocouple"])
+	c=np.array(tdata_csv["temperature"])
+	#print(results)
+	df = pd.DataFrame({"time" : a, "thermocouple" : b, "temperature": c})
+	df=df[['time','thermocouple','temperature']]
+	df.to_csv("dict_temp.csv", index=False)
+
+	d=np.array(pdata_csv["time"])
+	e=np.array(pdata_csv["guage"])
+	f=np.array(pdata_csv["pressure"])
+	print(np.size(d), np.size(e),np.size(f))
+	#print(results)
+	df2 = pd.DataFrame({"time" : d, "guage" : e, "pressure": f})
+	df2=df2[['time','guage','pressure']]
+	df2.to_csv("dict_pressure.csv", index=False)
+
+
 	for time_value in sorted(results):
 
 		time_values.append(dates.date2num(datetime.strptime(str(time_value),'%Y-%m-%d %H:%M:%S')))
-
 		for thermocouple in results[time_value]:
 			tmp = tc_data.get(thermocouple[0], [])
 			tmp.append(thermocouple[1])
 			tc_data[thermocouple[0]] = tmp
 
 	for time_value in sorted(pressure):
+
+		utc_epoch = calendar.timegm(time.strptime(str(time_value),'%Y-%m-%d %H:%M:%S'))
+
+#		if utc_epoch < 1509472800:
+#			ptime_values.append(dates.date2num(datetime.strptime(str(time_value),'%Y-%m-%d %H:%M:%S')))
 		
 		ptime_values.append(dates.date2num(datetime.strptime(str(time_value),'%Y-%m-%d %H:%M:%S')))
 
 		for guage in pressure[time_value]:
+			#print(pressure[time_value])
 			tmp = guage_data.get(guage[0], [])
 			tmp.append(guage[1])
-			guage_data[guage[0]] = tmp	
+			guage_data[guage[0]] = tmp
+
+	#data=data.decode('utf-8')
+
+
+
 	#print("time,tc,temp")
 	# for i, time in enumerate(time_values):
 	# 	for tc in tc_data:
@@ -176,19 +216,16 @@ def main(args):
 
 	keys = tc_data.keys()
 
-	print(length)
 
-	print(len(keys))
+	#outputData=np.empty([len(keys),length,2])
+	# increment=0
+	# for tc in tc_data:
+	# 	for j in range(0,length):
+	# 		outputData[increment,j,0]=time_values[j]
+	# 		temp=tc_data[tc]
+	# 		outputData[increment,j,1]=temp[j]
 
-	outputData=np.empty([len(keys),length,2])
-	increment=0
-	for tc in tc_data:
-		for j in range(0,length):
-			outputData[increment,j,0]=time_values[j]
-			temp=tc_data[tc]
-			outputData[increment,j,1]=temp[j]
-
-		increment+=1	
+	# 	increment+=1	
 
 	# print(outputData)
 
