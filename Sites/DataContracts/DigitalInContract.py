@@ -92,6 +92,8 @@ class DigitalInContract:
         self.RoughP_On_Sw = None        # Roughing Pump is On?
         self.RoughP_On_Sw_WF = None     # Roughing Pump is On switch wiring fault.
 
+        self.chamber_closed = None      # When True the chamber is closed.
+
     def update(self, d):
         self.__lock.acquire()
         if 'C1 B0' in d:
@@ -166,6 +168,9 @@ class DigitalInContract:
             self.t25 = ((d['C2 B0'] & 0x20) > 0)  # C 2: Di 5
             self.t26 = ((d['C2 B0'] & 0x40) > 0)  # C 2: Di 6
             self.t27 = ((d['C2 B0'] & 0x80) > 0)  # C 2: Di 7
+
+            self.chamber_closed = self.front_door_closed and self.back_door_closed
+
         if 'C2 B1' in d:
             self.t28 = ((d['C2 B1'] & 0x01) > 0)  # C 2: Di 8
             self.t29 = ((d['C2 B1'] & 0x02) > 0)  # C 2: Di 9
@@ -297,6 +302,8 @@ class DigitalInContract:
             val = self.front_door_closed
         elif name == 'back_door_closed':
             val = self.back_door_closed
+        elif name == 'Chamber Closed':
+            val = self.chamber_closed
         # elif name == 'notUsed7':
         #     val = self.notUsed7
         elif name == 'LN2en':
@@ -337,6 +344,7 @@ class DigitalInContract:
                    '"Air supply OK":%s' % json.dumps(self.AirOK),
                    '"Front Door Closed":%s' % json.dumps(self.front_door_closed),
                    '"Back Door Closed":%s' % json.dumps(self.back_door_closed),
+                   '"Chamber Closed":%s' % json.dumps(self.chamber_closed),
                    '"notUsed7":%s' % json.dumps(self.notUsed7),
                    '"LN2-en":%s' % json.dumps(self.LN2en),
                    ]
@@ -355,6 +363,7 @@ class DigitalInContract:
                    '"RoughP-GV-Closed":%s' % json.dumps(self.RoughP_GV_Closed),
                    '"RoughP Powered":%s' % json.dumps(self.RoughP_Powered),
                    '"RoughP_On_Sw":%s' % json.dumps(self.RoughP_On_Sw),
+                   '"Chamber Closed":%s' % json.dumps(self.chamber_closed),
                    ]
         self.__lock.release()
         return '{' + ','.join(message) + '}'

@@ -26,7 +26,10 @@ class PfeifferGaugeUpdater(Thread):
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.Pgauge = PfeifferGauge()
-        self.gauges = HardwareStatusInstance.getInstance().PfeifferGuages
+        self.hw = HardwareStatusInstance.getInstance()
+        self.gauges = self.hw.PfeifferGuages
+        self.arc_cutoff_pressure_high = 10  # 10 Torr
+        self.arc_cutoff_pressure_low = 40e-3  # 40 mTorr == 40e-3 Torr == 4e-2 Torr == 0.04 Torr
         self.pressure_read_peroid = 0.5  # 0.5s loop period
         self.param_period = 5  # 5 second period
 
@@ -83,12 +86,17 @@ class PfeifferGaugeUpdater(Thread):
                             self.gauges.update([{'addr': 1, 'Pressure': self.Pgauge.GetPressure(1)},
                                                 {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
                                                 {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
+                            self.hw.ChamberPowerLockout = True if \
+                                (self.gauges.get_chamber_pressure > self.arc_cutoff_pressure_low) and \
+                                (self.gauges.get_chamber_pressure < self.arc_cutoff_pressure_high) else False
                             Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Reading and writing with PfeifferGaugeUpdater.\nCryopump: {:f}; Chamber: {:f}; RoughPump: {:f}\n".format(
-                                                 self.gauges.get_cryopump_pressure(),
-                                                 self.gauges.get_chamber_pressure(),
-                                                 self.gauges.get_roughpump_pressure()
-                                             ),
+                                             {"message": "Reading and writing with PfeifferGaugeUpdater.\n"
+                                                         "Cryopump: {:f}; Chamber: {:f}; "
+                                                         "RoughPump: {:f}; chamberPwrLockout: {:s}\n"
+                                                         "".format(self.gauges.get_cryopump_pressure(),
+                                                                   self.gauges.get_chamber_pressure(),
+                                                                   self.gauges.get_roughpump_pressure(),
+                                                                   str(self.hw.ChamberPowerLockout)),
                                               "level": 4})
                             if time.time() > next_param_read_time:
                                 self.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),

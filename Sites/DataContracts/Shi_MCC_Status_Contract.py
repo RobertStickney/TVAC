@@ -110,6 +110,8 @@ class Shi_MCC_Status_Contract:
             val = self.SecondStageTemp
         elif name == 'Status':
             val = self.Status.copy()
+        elif name == 'PumpOn?':
+            val = self.Status['Pump On']
         elif name == 'Tc Pressure':
             val = self.TcPressure
         else:  # Unknown Value!

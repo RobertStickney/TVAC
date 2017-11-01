@@ -236,16 +236,17 @@ class GetControl:
     def getTvacStatus(self):
         gauges = HardwareStatusInstance.getInstance().PfeifferGuages
         out = {
-        "recordData": ProfileInstance.getInstance().recordData,
-        "OperationalVacuum": HardwareStatusInstance.getInstance().OperationalVacuum,
-        "activeProfile": ProfileInstance.getInstance().activeProfile,
-        "vacuumWanted": ProfileInstance.getInstance().vacuumWanted,
-        "currentSetpoint": ProfileInstance.getInstance().currentSetpoint,
-        "inRamp": ProfileInstance.getInstance().inRamp,
-        "inHold": ProfileInstance.getInstance().inHold,
-        "inPause": ProfileInstance.getInstance().inPause,
-        'CryoPressure': gauges.get_cryopump_pressure(),
-        'ChamberPressure': gauges.get_chamber_pressure(),
-        'RoughingPressure': gauges.get_roughpump_pressure()
-        }
+            "recordData": ProfileInstance.getInstance().recordData,
+            "OperationalVacuum": HardwareStatusInstance.getInstance().OperationalVacuum,
+            "activeProfile": ProfileInstance.getInstance().activeProfile,
+            "vacuumWanted": ProfileInstance.getInstance().vacuumWanted,
+            "currentSetpoint": ProfileInstance.getInstance().currentSetpoint,
+            "inRamp": ProfileInstance.getInstance().inRamp,
+            "inHold": ProfileInstance.getInstance().inHold,
+            "inPause": ProfileInstance.getInstance().inPause,
+            'CryoPressure': gauges.get_cryopump_pressure(),
+            'ChamberPressure': gauges.get_chamber_pressure(),
+            'RoughingPressure': gauges.get_roughpump_pressure(),
+            "ChamberPowerLockoutPressure": HardwareStatusInstance.getInstance().ChamberPowerLockout,
+            }
         return json.dumps(out)

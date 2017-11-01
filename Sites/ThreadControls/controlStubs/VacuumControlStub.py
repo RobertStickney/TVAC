@@ -34,7 +34,7 @@ class VacuumControlStub(Thread):
         self.profile = ProfileInstance.getInstance()
         self.hw = HardwareStatusInstance.getInstance()
         self.state = None;
-        self.pres_opVac = 9e-6
+        self.pres_opVac = 9e-5
         self.pres_atm = 100
         self.pres_cryoP_Prime = 45e-6
         self.pres_chamber_crossover = 40e-6
@@ -77,7 +77,7 @@ class VacuumControlStub(Thread):
                 self.state = self.determin_current_vacuum_state()
 
 
-                self.hw.OperationalVacuum = True
+                # self.hw.OperationalVacuum = True
                 while True:
                     # With an active profile, we start putting the system under pressure
          
@@ -114,7 +114,8 @@ class VacuumControlStub(Thread):
                         'Operational Vacuum':                   self.state_07,
                         'Non-Operational High Vacuum':          self.state_08,
                     }[self.state]()
-                    # TODO: Add States for Is there some safe way of taking the chamber out of vacuum?
+
+                    self.hw.VacuumState = self.state
 
                     if "Operational Vacuum" in self.state:
                         self.hw.OperationalVacuum = True
@@ -248,11 +249,12 @@ class VacuumControlStub(Thread):
         ready &= self.hw.PC_104.digital_in.getVal('RoughP_Powered_WF') is not None
         ready &= self.hw.PC_104.digital_in.getVal('RoughP_On_Sw') is not None
         ready &= self.hw.PC_104.digital_in.getVal('RoughP_On_Sw_WF') is not None
+        ready &= self.hw.PC_104.digital_in.getVal('Chamber_Closed') is not None
         ready &= self.hw.PfeifferGuages.get_roughpump_pressure() is not None
         ready &= self.hw.PfeifferGuages.get_chamber_pressure() is not None
         ready &= self.hw.PfeifferGuages.get_cryopump_pressure() is not None
         ready &= self.hw.ShiCryopump.is_cryopump_cold() is not None
-        ready &= self.hw.ShiCryopump.get_mcc_params('Elapsed Time') is not None
+        ready &= self.hw.ShiCryopump.get_mcc_params('Tc Pressure') is not None
         ready &= self.hw.ShiCryopump.get_mcc_params('Tc Pressure State') is not None
         ready &= self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') is not None
         ready &= self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') is not None
@@ -287,5 +289,3 @@ class VacuumControlStub(Thread):
             return 'Operational Vacuum'
         else:
             return 'Atm: Sys Ready'
-
-    # TODO: Write a wrapper around opening valves to make one final check of the pressures before we open them

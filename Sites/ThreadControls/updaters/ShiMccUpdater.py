@@ -125,9 +125,19 @@ class ShiMccUpdater(Thread):
                                 elif 'Close_PurgeValve' == cmd[0]:  # 2.15 • Purge On/Off/Query pg:14
                                     self.run_set_cmd(self.mcc.Close_PurgeValve, cmd)
                                 elif 'Open_PurgeValve' == cmd[0]:  # 2.15 • Purge On/Off/Query pg:14
-                                    self.run_set_cmd(self.mcc.Open_PurgeValve, cmd)
+                                    if self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed'):
+                                        self.run_set_cmd(self.mcc.Open_PurgeValve, cmd)
+                                    else:
+                                        Logging.logEvent("Debug", "Status Update",
+                                                 {"message": 'Cryopump Gate Valve not closed. Purge valve not opened.',
+                                                  "level": 2})
                                 elif 'Start_Regen' == cmd[0]:  # 2.16 • Regeneration pg:14
-                                    self.run_set_cmd(self.mcc.Start_Regen, cmd)
+                                    if self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed'):
+                                        self.run_set_cmd(self.mcc.Start_Regen, cmd)
+                                    else:
+                                        Logging.logEvent("Debug", "Status Update",
+                                                 {"message": 'Cryopump Gate Valve not closed. Regen not started.',
+                                                  "level": 2})
                                 elif 'Set_RegenParam' == cmd[0]:  # 2.19 • Regeneration Parameters pg:16
                                     self.run_set_cmd(self.mcc.Set_RegenParam, cmd)
                                     val = self.mcc.Get_RegenParam(cmd[1])

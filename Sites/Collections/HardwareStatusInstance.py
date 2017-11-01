@@ -45,5 +45,9 @@ class HardwareStatusInstance:
                 self.OperationalVacuum = False
             else:
                 self.OperationalVacuum = True
+            self.VacuumState = None
+
+            # True when chamber is at low dielectric pressure.
+            self.ChamberPowerLockout = True
 
             HardwareStatusInstance.__instance = self
