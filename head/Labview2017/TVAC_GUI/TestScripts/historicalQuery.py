@@ -12,6 +12,7 @@ from matplotlib import dates
 import numpy as np
 import csv
 import pandas as pd
+from operator import itemgetter
 
 import calendar
 import matplotlib
@@ -156,12 +157,13 @@ def main(args):
 		df=df[['time','thermocouple','temperature']]
 		df.to_csv(temp_file, index=False)
 
-		d=np.array(pdata_csv["time"])
-		e=np.array(pdata_csv["guage"])
-		f=np.array(pdata_csv["pressure"])
+	pTime=np.array(pdata_csv["time"])
+	pGuage=np.array(pdata_csv["guage"])
+	pPressure=np.array(pdata_csv["pressure"])
 		#print(np.size(d), np.size(e),np.size(f))
 		#print(results)
-		df2 = pd.DataFrame({"time" : d, "guage" : e, "pressure": f})
+	if len(args)>4:
+		df2 = pd.DataFrame({"time" : pTime, "guage" : pGuage, "pressure": pPressure})
 		df2=df2[['time','guage','pressure']]
 		df2.to_csv(pressure_file, index=False)
 
@@ -174,29 +176,39 @@ def main(args):
 			tmp.append(thermocouple[1])
 			tc_data[thermocouple[0]] = tmp
 
-	for time_value in sorted(pressure):
+# 	for time_value in sorted(pressure):
 
-		utc_epoch = calendar.timegm(time.strptime(str(time_value),'%Y-%m-%d %H:%M:%S'))
+# 		utc_epoch = calendar.timegm(time.strptime(str(time_value),'%Y-%m-%d %H:%M:%S'))
 
-#		if utc_epoch < 1509472800:
-#			ptime_values.append(dates.date2num(datetime.strptime(str(time_value),'%Y-%m-%d %H:%M:%S')))
+# #		if utc_epoch < 1509472800:
+# #			ptime_values.append(dates.date2num(datetime.strptime(str(time_value),'%Y-%m-%d %H:%M:%S')))
 		
-		ptime_values.append(dates.date2num(datetime.strptime(str(time_value),'%Y-%m-%d %H:%M:%S')))
+# 		ptime_values.append(dates.date2num(datetime.strptime(str(time_value),'%Y-%m-%d %H:%M:%S')))
 
-		for guage in pressure[time_value]:
-			#print(pressure[time_value])
-			tmp = guage_data.get(guage[0], [])
-			tmp.append(guage[1])
-			guage_data[guage[0]] = tmp
+# 		for guage in pressure[time_value]:
+# 			#print(pressure[time_value])
+# 			tmp = guage_data.get(guage[0], [])
+# 			tmp.append(guage[1])
+# 			guage_data[guage[0]] = tmp
+	master_pressure=[pTime,pGuage,pPressure]
 
-	#data=data.decode('utf-8')
+	guage1=np.empty([2,len(pTime)])
+	guage2=np.empty([2,len(pGuage)])
+	guage3=np.empty([2,len(pPressure)])
+	master_pressure=sorted(master_pressure,key=itemgetter(0))
+
+	for time_value in range(0,len(pTime)):
+		if pGuage[time_value] == 1:
+			guage1[0,time_value] = pTime[time_value]
+			guage1[1,time_value] = pPressure[time_value]
+		if pGuage[time_value] == 2:
+			guage2[0,time_value] = pTime[time_value]
+			guage2[1,time_value] = pPressure[time_value]
+		if pGuage[time_value] == 3:
+			guage3[0,time_value] = pTime[time_value]
+			guage3[1,time_value] = pPressure[time_value]
 
 
-
-	#print("time,tc,temp")
-	# for i, time in enumerate(time_values):
-	# 	for tc in tc_data:
-	# 		print("{},{},{}".format(time_values[i],tc,tc_data[tc][i]))
 	fig,(ax1,ax2)=plt.subplots(1,2,figsize=(9,7))
 
 	for tc in tc_data:
@@ -207,14 +219,14 @@ def main(args):
 		length=len(tc_data[tc])
 		#print(tc)
 
-	for guage in guage_data:
-		try:
-			ax2.plot(ptime_values,guage_data[guage],'.', label=str(guage))
-			ax2.set_yscale('log')
-			ax2.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %H:%M:%S'))
-			plt.gcf().autofmt_xdate()
-		except:
-			print("Pressure Plotting Error")
+
+	ax2.plot(guage1[0,:],guage1[1,:],'.', label=str('Guage 1'))
+	ax2.plot(guage2[0,:],guage2[1,:],'.', label=str("Guage 2"))
+	ax2.plot(guage3[0,:],guage3[1,:],'.', label=str("Guage 3"))
+	ax2.set_yscale('log')
+	#ax2.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %H:%M:%S'))
+	plt.gcf().autofmt_xdate()
+
 
 	keys = tc_data.keys()
 
