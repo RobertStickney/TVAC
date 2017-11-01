@@ -1,0 +1,8 @@
+zone1,zone2,zone3,zone4,zone5,zone6,zone7,zone8,zone9,,,
+Average,,,,,,,,,,,
+2 ,,,,,,,,,,,
+305,,,,,,,,,,,
+290,,,,,,,,,,,
+2,,,,,,,,,,,
+setpt,ramptime,soaktime,zone1,zone2,zone3,zone4,zone5,zone6,zone7,zone8,zone9
+1,2,5,302,,,,,,,,

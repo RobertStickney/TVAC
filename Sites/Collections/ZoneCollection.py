@@ -168,7 +168,7 @@ class ZoneCollection:
             # TODO: This needs to be fixed
             self.parent.getInstance().vacuumWanted = True
 
-            return {'result':'success'}
+            return "{'result':'success'}"
         except Exception as e:
             return {'result':'{}'.format(str(e))}
         
