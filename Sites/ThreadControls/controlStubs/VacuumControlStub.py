@@ -227,7 +227,6 @@ class VacuumControlStub(Thread):
                 self.state = 'Non-Operational Vacuum'
 
     def state_04(self):  # PullingVac: CryoCool; Rough Chamber
-        print('---------> Is Cryopump ready: {} <------'.format(self.hw.ShiCryopump.is_cryopump_ready()))
         if self.profile.vacuumWanted:
             if self.hw.ShiCryopump.is_cryopump_ready() and \
                     (self.chamberPressure < self.pres_chamber_crossover):
