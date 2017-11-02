@@ -76,6 +76,8 @@ class TsRegistersUpdater(Thread):
                                                self.da_io.digital_out.get_c2_b1(),
                                                self.da_io.digital_out.get_c2_b2(),
                                                self.da_io.digital_out.get_c2_b3()], 2)
+                        if self.da_io.digital_out.getVal('RoughP Start'):
+                            self.da_io.digital_out.update({'RoughP Start': False})
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(1))
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
                         self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(2), 2)
@@ -150,8 +152,6 @@ class TsRegistersUpdater(Thread):
     def interlocks(self):
         MinRoughingPressure = 10e-3
 
-        if self.da_io.digital_out.getVal('RoughP Start'):
-            self.da_io.digital_out.update({'RoughP Start': False})
         if self.hw.ChamberPowerLockout:  # Disallow heaters when chamber is at low dielectric pressure.
             self.da_io.digital_out.update({'C1 B2': 0x00})  # IR lamp 1-8
             self.da_io.digital_out.update({'C1 B3': 0x00})  # IR lamp 9-16
