@@ -33,7 +33,7 @@ class ShiCryopumpCollection:
             self.compressor.update(d['Compressor'])
 
     def is_cryopump_cold(self):
-        temp = self.mcc_status.FirstStageTemp
+        temp = self.mcc_status.SecondStageTemp
         return None if (temp is None) else (temp < 40)
 
     def is_regen_active(self):
@@ -50,11 +50,11 @@ class ShiCryopumpCollection:
             return True
 
     def cryopump_needs_regen(self):
-        temp = self.mcc_status.FirstStageTemp
+        temp = self.mcc_status.SecondStageTemp
         return None if (temp is None) else (temp > 20)
 
     def cryopump_wants_regen_soon(self):
-        temp = self.mcc_status.FirstStageTemp
+        temp = self.mcc_status.SecondStageTemp
         return None if (temp is None) else (temp > 18)
 
     def get_mcc_status(self, name):

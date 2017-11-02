@@ -254,6 +254,9 @@ class VacuumControlStub(Thread):
         ready &= self.hw.PfeifferGuages.get_chamber_pressure() is not None
         ready &= self.hw.PfeifferGuages.get_cryopump_pressure() is not None
         ready &= self.hw.ShiCryopump.is_cryopump_cold() is not None
+        ready &= self.hw.ShiCryopump.is_regen_active() is not None
+        ready &= self.hw.ShiCryopump.cryopump_needs_regen() is not None
+        ready &= self.hw.ShiCryopump.cryopump_wants_regen_soon() is not None
         ready &= self.hw.ShiCryopump.get_mcc_params('Tc Pressure') is not None
         ready &= self.hw.ShiCryopump.get_mcc_params('Tc Pressure State') is not None
         ready &= self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') is not None
@@ -271,10 +274,14 @@ class VacuumControlStub(Thread):
             out += "RoughP_Powered_WF: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_Powered_WF'))
             out += "RoughP_On_Sw: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'))
             out += "RoughP_On_Sw_WF: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_On_Sw_WF'))
-            out += "Chamber_Closed: {}\n".format(self.hw.PC_104.digital_in.getVal('Chamber_Closed'))
+            out += "Chamber Closed: {}\n".format(self.hw.PC_104.digital_in.getVal('Chamber Closed'))
             out += "get_roughpump_pressure: {}\n".format(self.hw.PfeifferGuages.get_roughpump_pressure())
             out += "get_chamber_pressure: {}\n".format(self.hw.PfeifferGuages.get_chamber_pressure())
             out += "get_cryopump_pressure: {}\n".format(self.hw.PfeifferGuages.get_cryopump_pressure())
+            out += "Is Cryopump Cold: {}\n".format(self.hw.ShiCryopump.is_cryopump_cold())
+            out += "Is Regen Active: {}\n".format(self.hw.ShiCryopump.is_regen_active())
+            out += "Cryopump needs Regen: {}\n".format(self.hw.ShiCryopump.cryopump_needs_regen())
+            out += "Cryopump wants Regen soon: {}\n".format(self.hw.ShiCryopump.cryopump_wants_regen_soon())
             out += "Tc Pressure: {}\n".format(self.hw.ShiCryopump.get_mcc_status('Tc Pressure'))
             out += "Tc Pressure State: {}\n".format(self.hw.ShiCryopump.get_mcc_params('Tc Pressure State'))
             out += "Stage 1 Temp: {}\n".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'))
