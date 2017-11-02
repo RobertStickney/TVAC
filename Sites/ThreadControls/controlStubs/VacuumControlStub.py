@@ -36,9 +36,11 @@ class VacuumControlStub(Thread):
         self.state = None;
         self.pres_opVac = 9e-5
         self.pres_atm = 100
-        self.pres_cryoP_Prime = 45e-6
-        self.pres_chamber_crossover = 40e-6
-        self.pres_chamber_ = 40e-6
+        self.pres_cryoP_Prime = 40e-3
+        self.pres_chamber_crossover = 25e-3
+        self.pres_chamber_max_crossover = 40e-3
+        self.pres_min_roughing = 9e-4
+        self.pres_ruffon = 70
 
         self.updatePeriod = 1
 
@@ -104,15 +106,17 @@ class VacuumControlStub(Thread):
                      "level":4})
 
                     {
-                        'Atm: Not Ready':                       self.state_00,
-                        'Atm: Sys Ready':                       self.state_01,
+                        'Atm: Chamber: CryoP: Vac':             self.state_00,
+                        'Atm: Chamber: CryoP: Atm':             self.state_01,
                         'PullingVac: Start':                    self.state_02,
                         'PullingVac: RoughingCryoP':            self.state_03,
                         'PullingVac: CryoCool; Rough Chamber':  self.state_04,
-                        'PullingVac: Cryo Pumping Chamber':     self.state_05,
-                        'Operational Vacuum: Cryo Pumping':     self.state_06,
-                        'Operational Vacuum':                   self.state_07,
-                        'Non-Operational High Vacuum':          self.state_08,
+                        'PullingVac: M CryoCool; Rough Chamber':self.state_05,
+                        'PullingVac: Cryo Pumping; Cross Over': self.state_06,
+                        'PullingVac: Cryo Pumping Chamber':     self.state_07,
+                        'Operational Vacuum: Cryo Pumping':     self.state_08,
+                        'Operational Vacuum':                   self.state_09,
+                        'Non-Operational Vacuum':               self.state_10,
                     }[self.state]()
 
                     self.hw.VacuumState = self.state
@@ -146,98 +150,217 @@ class VacuumControlStub(Thread):
         # end of outer while true
     # end of run()
 
-    def state_00(self):  # Atm: Not Ready
-        if (self.hw.PC_104.digital_out.getVal('CryoP GateValve') is False) and \
-                (self.hw.PC_104.digital_out.getVal('RoughP GateValve') is False) and \
-                (self.hw.PC_104.digital_out.getVal('RoughP_On_Sw') == False) and \
-                (self.cryoPumpPressure > 100) and \
-                (self.chamberPressure > 100) and \
-                (self.roughPumpPressure > 100):
-            self.state = 'Atm: Sys Ready'
+    def state_00(self):  # Atm: Chamber: CryoP: Vac
+        if (self.cryoPumpPressure > self.pres_atm) and \
+                (self.chamberPressure > self.pres_atm):
+            self.state = 'Atm: Chamber: CryoP: Atm'
+        if self.chamberPressure < self.pres_ruffon:
+            self.state = 'Non-Operational Vacuum'
+        if self.profile.vacuumWanted:
+            if self.cryoPumpPressure < self.pres_cryoP_Prime:
+                if self.hw.ShiCryopump.get_mcc_status('Roughing Valve State'):
+                    self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
+                    self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
+                    self.hw.Shi_Compressor_Cmds.append('on')
+                    self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
+                    self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
+                    self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
+                if not self.hw.ShiCryopump.get_mcc_status('Roughing Valve State'):
+                    self.state = 'PullingVac: CryoCool; Rough Chamber'
+            else:
+                if not self.hw.PC_104.digital_in.getVal('RoughP_Powered'):
+                    self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
+                    Logging.debugPrint(3, "Vacuum Ctl (@Atm): Applying power to the Ruffing Pump")
+                else:
+                    if not self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'):
+                        self.hw.PC_104.digital_out.update({'RoughP Start': True})  # Turn on Roughing Pump
+                        self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
+                        Logging.debugPrint(3, "Vacuum Ctl (@Atm): Switching on the Ruffing Pump")
+                    else:
+                        self.state = 'PullingVac: Start'
 
-
-    def state_01(self):  # Atm: Sys Ready
-        if (self.hw.PC_104.digital_out.getVal('CryoP GateValve') is True) or \
-                (self.hw.PC_104.digital_out.getVal('RoughP GateValve') is True) or \
-                (self.hw.PC_104.digital_out.getVal('RoughP_On_Sw') is True):
-            self.state = 'Atm: Not Ready'
-        if self.profile.vacuumWanted is True:
-            self.state = 'PullingVac: Start'
-            self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
-            time.sleep(1)
-            self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
-            time.sleep(1)  # TODO: replace sleep with Roughing pump Gate valve check and power check
-            # Turn on Roughing Pump
-            self.hw.PC_104.digital_out.update({'RoughP Start': True})
-        # Todo: Add vacuum not wanted state move.
+    def state_01(self):  # Atm: Chamber: CryoP: Atm
+        if self.cryoPumpPressure < self.pres_ruffon:
+            self.state = 'Atm: Chamber: CryoP: Vac'
+        if self.chamberPressure < self.pres_ruffon:
+            self.state = 'Non-Operational Vacuum'
+        if self.profile.vacuumWanted:
+            if not self.hw.PC_104.digital_in.getVal('RoughP_Powered'):
+                self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
+                Logging.debugPrint(3, "Vacuum Ctl (@Atm): Applying power to the Ruffing Pump")
+            else:
+                if not self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'):
+                    self.hw.PC_104.digital_out.update({'RoughP Start': True})  # Turn on Roughing Pump
+                    self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
+                    Logging.debugPrint(3, "Vacuum Ctl (@Atm): Switching on the Ruffing Pump")
+                else:
+                    self.state = 'PullingVac: Start'
 
     def state_02(self):  # PullingVac: Start
-        if (self.profile.vacuumWanted is True) and \
-                (self.roughPumpPressure < 70):
-            self.state = 'PullingVac: RoughingCryoP'
-            self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
-        # Todo: Add vacuum not wanted state move.
+        if self.profile.vacuumWanted:
+            if self.roughPumpPressure < self.pres_ruffon:
+                self.state = 'PullingVac: RoughingCryoP'
+                self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
+                self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
+        else:
+            self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
+            self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
+            self.state = 'Non-Operational Vacuum'
 
     def state_03(self):  # PullingVac: RoughingCryoP
-        if (self.profile.vacuumWanted is True) and \
-                (self.cryoPumpPressure < 45e-3):
-            self.state = 'PullingVac: CryoCool; Rough Chamber'
-            self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
-            time.sleep(2)
-            self.hw.Shi_Compressor_Cmds.append('on')
-            self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
-            self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
-            time.sleep(4)
-            self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
-            time.sleep(2)
-            self.hw.PC_104.digital_out.update({'RoughP GateValve': True})
-        # Todo: Add vacuum not wanted state move.
+        if self.profile.vacuumWanted:
+            if self.cryoPumpPressure < self.pres_cryoP_Prime:
+                if self.hw.ShiCryopump.get_mcc_status('Roughing Valve State'):
+                    self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
+                    self.hw.Shi_Compressor_Cmds.append('on')
+                    self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
+                    self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
+                    self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
+                if not self.hw.ShiCryopump.get_mcc_status('Roughing Valve State'):
+                    self.state = 'PullingVac: CryoCool; Rough Chamber'
+            else:
+                if self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'):
+                    self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
+                else:
+                    self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
+                    self.state = 'Atm: Chamber: CryoP: Atm'
+        else:
+            if (not self.hw.ShiCryopump.get_mcc_status('Roughing Valve State')) and \
+                    (not self.hw.PC_104.digital_in.getVal('RoughP_On_Sw')):
+                self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
+                self.state = 'Non-Operational Vacuum'
 
     def state_04(self):  # PullingVac: CryoCool; Rough Chamber
-        if (self.profile.vacuumWanted is True) and \
-                (self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') < 15) and \
-                (self.chamberPressure < 45e-3):
-            self.state = 'PullingVac: Cryo Pumping Chamber'
-            self.hw.PC_104.digital_out.update({'RoughP GateValve': False})
+        if self.profile.vacuumWanted:
+            if self.hw.ShiCryopump.is_cryopump_ready and \
+                    (self.chamberPressure < self.pres_chamber_crossover):
+                self.state = 'Cryo Pumping; Cross Over'
+            elif self.chamberPressure < self.pres_min_roughing:
+                self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
+            else:
+                if self.hw.PC_104.digital_in.getVal('RoughP_Powered'):
+                    if self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'):
+                        if self.chamberPressure > self.roughPumpPressure:
+                            self.hw.PC_104.digital_out.update({'RoughP GateValve': True})
+                            Logging.debugPrint(3, "Vacuum Ctl (@OpVac): Ruffing the Chamber")
+                    else:
+                        self.hw.PC_104.digital_out.update({'RoughP Start': True})  # Turn on Roughing Pump
+                        self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
+                        Logging.debugPrint(3, "Vacuum Ctl (@OpVac): Switching on the Ruffing Pump")
+                else:
+                    self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
+                    Logging.debugPrint(3, "Vacuum Ctl (@OpVac): Applying power to the Ruffing Pump")
+
+        else:
+            if not self.hw.ShiCryopump.get_mcc_status('PumpOn?'):
+                self.state = 'PullingVac: M CryoCool; Rough Chamber'
+
+    def state_05(self):  # PullingVac: M CryoCool; Rough Chamber
+        if self.profile.vacuumWanted:
+            if self.hw.ShiCryopump.get_mcc_status('PumpOn?') and \
+                    self.hw.ShiCryopump.is_cryopump_ready and \
+                    (self.chamberPressure < self.pres_chamber_crossover):
+                self.state = 'Cryo Pumping; Cross Over'
+        else:
+            if (not self.hw.ShiCryopump.get_mcc_status('Roughing Valve State')) and \
+                    (not self.hw.PC_104.digital_in.getVal('RoughP_On_Sw')):
+                self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
+                self.state = 'Non-Operational Vacuum'
+
+    def state_06(self):  # Cryo Pumping; Cross Over
+        self.hw.PC_104.digital_out.update({'RoughP GateValve': False})
             # wait here until the valve is closed
             # TODO Replace Sleep with a check of the Gate valve switches
-            time.sleep(5)
+        time.sleep(10)
             # Open the cryopump gate valve
-            self.hw.PC_104.digital_out.update({'CryoP GateValve': True})
-            # TODO Add a check of the Gate valve switches - Keep Sleep
-            time.sleep(10)
-            # Open the cryopump gate valve
+        self.hw.PC_104.digital_out.update({'CryoP GateValve': True})
+        if self.hw.PC_104.digital_in.getVal('CryoP_GV_Open'):
             self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
-            time.sleep(2)
             self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
-        # Todo: Add vacuum not wanted state move.
+            self.state = 'PullingVac: Cryo Pumping Chamber'
 
-    def state_05(self):  # PullingVac: Cryo Pumping Chamber
+
+    def state_07(self):  # PullingVac: Cryo Pumping Chamber
         if (self.chamberPressure < self.pres_opVac):
             self.state = 'Operational Vacuum'
-        # Todo: Add vacuum not wanted state move.
+        if not self.hw.ShiCryopump.get_mcc_status('PumpOn?'):
+            self.state = 'Non-Operational Vacuum'
 
-    def state_06(self):  # Operational Vacuum: Cryo Pumping
+
+    def state_08(self):  # Operational Vacuum: Cryo Pumping
         if self.chamberPressure > self.pres_opVac:
-            self.state = 'Non-Operational High Vacuum'
-        elif self.hw.ShiCryopump.is_cryopump_cold():
+            self.state = 'Non-Operational Vacuum'
+        elif not self.hw.ShiCryopump.is_cryopump_cold() or \
+                (not self.hw.PC_104.digital_in.getVal('CryoP_GV_Open')):
             self.state = 'Operational Vacuum'
             self.hw.PC_104.digital_out.update({'CryoP GateValve': False})
 
-    def state_07(self):  # Operational Vacuum
+    def state_09(self):  # Operational Vacuum
         if self.chamberPressure > self.pres_opVac:
-            self.state = 'Non-Operational High Vacuum'
-        elif (not self.hw.ShiCryopump.is_cryopump_cold()) and \
-                (self.cryoPumpPressure < self.chamberPressure) and \
+            self.state = 'Non-Operational Vacuum'
+        elif (self.hw.ShiCryopump.is_cryopump_ready()) and \
+                ((self.cryoPumpPressure*0.1) < self.chamberPressure) and \
                 (not self.hw.ShiCryopump.is_regen_active()):
             self.state = 'Operational Vacuum: Cryo Pumping'
             self.hw.PC_104.digital_out.update({'CryoP GateValve': True})
-            time.sleep(5)
+        elif self.profile.vacuumWanted and \
+                (not self.hw.ShiCryopump.is_regen_active()) and \
+                (not self.hw.ShiCryopump.get_mcc_status('PumpOn?')):
+            if self.cryoPumpPressure < self.pres_cryoP_Prime:
+                self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
+                self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
+                self.hw.Shi_Compressor_Cmds.append('on')
+                self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
+                self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
+                self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
+                self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
+                Logging.debugPrint(3, "Vacuum Ctl (@OpVac): Starting the Cryo Pump; Roughing Pump Off.")
+            else:
+                if self.hw.PC_104.digital_in.getVal('RoughP_Powered'):
+                    if self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'):
+                        self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
+                        self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
+                        Logging.debugPrint(3, "Vacuum Ctl (@OpVac): Ruffing the Cryo Pump")
+                    else:
+                        self.hw.PC_104.digital_out.update({'RoughP Start': True})  # Turn on Roughing Pump
+                        self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
+                        Logging.debugPrint(3, "Vacuum Ctl (@OpVac): Switching on the Ruffing Pump")
+                else:
+                    self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
+                    Logging.debugPrint(3, "Vacuum Ctl (@OpVac): Applying power to the Ruffing Pump")
         else:
             self.hw.PC_104.digital_out.update({'CryoP GateValve': False})
 
-    def state_08(self):  # Non-Operational High Vacuum
-        pass
+    def state_10(self):  # Non-Operational Vacuum
+        if self.chamberPressure < self.pres_opVac:
+            self.state = 'Operational Vacuum'
+        if self.chamberPressure > self.pres_atm:
+            if self.cryoPumpPressure < self.pres_ruffon:
+                self.state = 'Atm: Chamber: CryoP: Vac'
+            else:
+                self.state = 'Atm: Chamber: CryoP: Atm'
+        if self.profile.vacuumWanted:
+            if self.cryoPumpPressure < self.pres_cryoP_Prime:
+                if self.hw.ShiCryopump.get_mcc_status('Roughing Valve State'):
+                    self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
+                    self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
+                    self.hw.Shi_Compressor_Cmds.append('on')
+                    self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
+                    self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
+                    self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
+                if not self.hw.ShiCryopump.get_mcc_status('Roughing Valve State'):
+                    self.state = 'PullingVac: CryoCool; Rough Chamber'
+            else:
+                if not self.hw.PC_104.digital_in.getVal('RoughP_Powered'):
+                    self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
+                    Logging.debugPrint(3, "Vacuum Ctl (@Atm): Applying power to the Ruffing Pump")
+                else:
+                    if not self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'):
+                        self.hw.PC_104.digital_out.update({'RoughP Start': True})  # Turn on Roughing Pump
+                        self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
+                        Logging.debugPrint(3, "Vacuum Ctl (@Atm): Switching on the Ruffing Pump")
+                    else:
+                        self.state = 'PullingVac: Start'
 
     def wait_for_hardware(self):
         ready = True
@@ -260,6 +383,7 @@ class VacuumControlStub(Thread):
         ready &= self.hw.ShiCryopump.get_compressor('Helium Discharge Temperature') is not None
         ready &= self.hw.ShiCryopump.get_compressor('Water Outlet Temperature') is not None
         ready &= self.hw.ShiCryopump.get_compressor('System ON') is not None
+        ready &= self.profile.vacuumWanted is not None
         if os.name == "posix":
             userName = os.environ['LOGNAME']
         else:
@@ -283,12 +407,36 @@ class VacuumControlStub(Thread):
             out += "Stage 2 Temp: {}     \n".format(self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp'))
             out += "Helium Discharge Temp: {}\n".format(self.hw.ShiCryopump.get_compressor('Helium Discharge Temperature'))
             out += "Water Outlet Temperature: {}\n".format(self.hw.ShiCryopump.get_compressor('Water Outlet Temperature'))
-            out += "System ON: {}\n     <-------->".format(self.hw.ShiCryopump.get_compressor('System ON'))
+            out += "System ON: {}\n               ".format(self.hw.ShiCryopump.get_compressor('System ON'))
+            out += "Vacuum Wanted: {}\n     <-------->".format(self.profile.vacuumWanted)
             Logging.debugPrint(3, out)
         return ready
 
     def determin_current_vacuum_state(self):
-        if (self.chamberPressure < self.pres_opVac):  ##
+        if self.chamberPressure < self.pres_opVac:  ##
             return 'Operational Vacuum'
-        else:
-            return 'Atm: Sys Ready'
+        if self.chamberPressure < self.pres_chamber_crossover:  ##
+            if self.hw.ShiCryopump.get_mcc_status('PumpOn?') and \
+                    self.hw.ShiCryopump.is_cryopump_cold() and \
+                    (not self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed')):
+                self.hw.PC_104.digital_out.update({'CryoP GateValve': True})
+                return 'PullingVac: Cryo Pumping Chamber'
+        if self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'):
+            if self.hw.ShiCryopump.get_mcc_status('Roughing Valve State'):
+                self.hw.PC_104.digital_out.update({'RoughP GateValve': False})
+                self.hw.PC_104.digital_out.update({'CryoP GateValve': False})
+                if self.hw.ShiCryopump.is_regen_active():
+                    pass
+                else:
+                    return 'PullingVac: RoughingCryoP'
+            else:
+                if self.hw.PC_104.digital_out.getVal('RoughP GateValve'):
+                    if self.hw.ShiCryopump.get_mcc_status('PumpOn?'):
+                        self.hw.PC_104.digital_out.update({'CryoP GateValve': False})
+                        return 'PullingVac: CryoCool; Rough Chamber'
+                    else:
+                        return 'PullingVac: M CryoCool; Rough Chamber'
+                else:  # Both Roughing valves are closed
+                    pass  # leave the roughing pump on
+
+        return 'Non-Operational Vacuum'

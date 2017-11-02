@@ -34,7 +34,11 @@ class ShiCryopumpCollection:
 
     def is_cryopump_cold(self):
         temp = self.mcc_status.SecondStageTemp
-        return None if (temp is None) else (temp < 40)
+        return None if (temp is None) else (temp < 50)
+
+    def is_cryopump_ready(self):
+        temp = self.mcc_status.SecondStageTemp
+        return None if (temp is None) else (temp < 14)
 
     def is_regen_active(self):
         step = self.mcc_status.getVal('Regen Step')

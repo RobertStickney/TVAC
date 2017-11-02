@@ -150,22 +150,30 @@ class TsRegistersUpdater(Thread):
                                                     self.da_io.digital_out.update))
 
     def interlocks(self):
-        MinRoughingPressure = 10e-3
+        arc_cutoff_pressure_high = 10  # 10 Torr
+        arc_cutoff_pressure_low = 40e-3  # 40 mTorr == 40e-3 Torr == 4e-2 Torr == 0.04 Torr
+        MinRoughingPressure = 20e-3  # TODO: Change back to 8e-4 when done testing
+        maxCrossoverPressure = 40e-3  # 40 mTorr
 
-        if self.hw.ChamberPowerLockout:  # Disallow heaters when chamber is at low dielectric pressure.
+        cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
+        chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
+        roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
+
+        ChamberPowerLockout = True if (chamberPressure > arc_cutoff_pressure_low) and \
+                                      (chamberPressure < arc_cutoff_pressure_high) else False
+        if ChamberPowerLockout:  # Disallow heaters when chamber is at low dielectric pressure.
             self.da_io.digital_out.update({'C1 B2': 0x00})  # IR lamp 1-8
             self.da_io.digital_out.update({'C1 B3': 0x00})  # IR lamp 9-16
+
         if self.hw.VacuumState is not None:
-            # When you know what the pressure is, you know what to do go get into pressure
-            cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
-            chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
-            roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
             if self.da_io.digital_in.getVal('Chamber_Closed'):
                 if not self.hw.OperationalVacuum:  # Disallow heaters when not at operational vacuum.
                     self.da_io.digital_out.update({'C1 B2': 0x00})  # IR lamp 1-8
                     self.da_io.digital_out.update({'C1 B3': 0x00})  # IR lamp 9-16
                 if chamberPressure < MinRoughingPressure:
                     self.da_io.digital_out.update({'RoughP GateValve': False})
+                if chamberPressure > maxCrossoverPressure:
+                    self.da_io.digital_out.update({'CryoP GateValve': False})
                 if chamberPressure < (cryoPumpPressure*0.1):
                     self.da_io.digital_out.update({'CryoP GateValve': False})
                 if not self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed'):
