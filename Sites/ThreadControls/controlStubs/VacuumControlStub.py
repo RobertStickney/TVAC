@@ -249,7 +249,7 @@ class VacuumControlStub(Thread):
         ready &= self.hw.PC_104.digital_in.getVal('RoughP_Powered_WF') is not None
         ready &= self.hw.PC_104.digital_in.getVal('RoughP_On_Sw') is not None
         ready &= self.hw.PC_104.digital_in.getVal('RoughP_On_Sw_WF') is not None
-        ready &= self.hw.PC_104.digital_in.getVal('Chamber_Closed') is not None
+        ready &= self.hw.PC_104.digital_in.getVal('Chamber Closed') is not None
         ready &= self.hw.PfeifferGuages.get_roughpump_pressure() is not None
         ready &= self.hw.PfeifferGuages.get_chamber_pressure() is not None
         ready &= self.hw.PfeifferGuages.get_cryopump_pressure() is not None
