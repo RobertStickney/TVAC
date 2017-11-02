@@ -66,7 +66,7 @@ class PfeifferGaugeUpdater(Thread):
             try:
                 # Thread "Start up" stuff goes here
                 Logging.logEvent("Debug", "Status Update",
-                                {"message": "Starting Pfeiffer Guage Control Stub Thread",
+                                {"message": "Starting Pfeiffer Guage Updater Thread",
                                  "level": 2})
 
                 if os.name == "posix":
@@ -86,12 +86,10 @@ class PfeifferGaugeUpdater(Thread):
                                                 {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
                             Logging.logEvent("Debug", "Status Update",
                                              {"message": "Reading and writing with PfeifferGaugeUpdater.\n"
-                                                         "Cryopump: {:f}; Chamber: {:f}; "
-                                                         "RoughPump: {:f}; chamberPwrLockout: {:s}\n"
+                                                         "Cryopump: {:f}; Chamber: {:f}; RoughPump: {:f}\n"
                                                          "".format(self.gauges.get_cryopump_pressure(),
                                                                    self.gauges.get_chamber_pressure(),
-                                                                   self.gauges.get_roughpump_pressure(),
-                                                                   str(self.hw.ChamberPowerLockout)),
+                                                                   self.gauges.get_roughpump_pressure()),
                                               "level": 4})
                             if time.time() > next_param_read_time:
                                 self.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),
