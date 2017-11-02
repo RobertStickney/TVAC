@@ -87,8 +87,8 @@ class PfeifferGaugeUpdater(Thread):
                                                 {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
                                                 {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
                             self.hw.ChamberPowerLockout = True if \
-                                (self.gauges.get_chamber_pressure > self.arc_cutoff_pressure_low) and \
-                                (self.gauges.get_chamber_pressure < self.arc_cutoff_pressure_high) else False
+                                (self.gauges.get_chamber_pressure() > self.arc_cutoff_pressure_low) and \
+                                (self.gauges.get_chamber_pressure() < self.arc_cutoff_pressure_high) else False
                             Logging.logEvent("Debug", "Status Update",
                                              {"message": "Reading and writing with PfeifferGaugeUpdater.\n"
                                                          "Cryopump: {:f}; Chamber: {:f}; "

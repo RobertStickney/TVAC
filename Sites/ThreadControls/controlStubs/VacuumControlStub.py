@@ -242,13 +242,9 @@ class VacuumControlStub(Thread):
     def wait_for_hardware(self):
         ready = True
         ready &= self.hw.PC_104.digital_in.getVal('CryoP_GV_Open') is not None
-        ready &= self.hw.PC_104.digital_in.getVal('CryoP_GV_Open_WF') is not None
         ready &= self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed') is not None
-        ready &= self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed_WF') is not None
         ready &= self.hw.PC_104.digital_in.getVal('RoughP_Powered') is not None
-        ready &= self.hw.PC_104.digital_in.getVal('RoughP_Powered_WF') is not None
         ready &= self.hw.PC_104.digital_in.getVal('RoughP_On_Sw') is not None
-        ready &= self.hw.PC_104.digital_in.getVal('RoughP_On_Sw_WF') is not None
         ready &= self.hw.PC_104.digital_in.getVal('Chamber Closed') is not None
         ready &= self.hw.PfeifferGuages.get_roughpump_pressure() is not None
         ready &= self.hw.PfeifferGuages.get_chamber_pressure() is not None
@@ -270,10 +266,9 @@ class VacuumControlStub(Thread):
             userName = "user"
         if not ready and "root" in userName:
             out = "CryoP_GV_Open: {}\n".format(self.hw.PC_104.digital_in.getVal('CryoP_GV_Open'))
+            out += "CryoP_GV_Closed: {}\n".format(self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed'))
             out += "RoughP_Powered: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_Powered'))
-            out += "RoughP_Powered_WF: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_Powered_WF'))
             out += "RoughP_On_Sw: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'))
-            out += "RoughP_On_Sw_WF: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_On_Sw_WF'))
             out += "Chamber Closed: {}\n".format(self.hw.PC_104.digital_in.getVal('Chamber Closed'))
             out += "get_roughpump_pressure: {}\n".format(self.hw.PfeifferGuages.get_roughpump_pressure())
             out += "get_chamber_pressure: {}\n".format(self.hw.PfeifferGuages.get_chamber_pressure())
@@ -286,7 +281,7 @@ class VacuumControlStub(Thread):
             out += "Tc Pressure State: {}\n".format(self.hw.ShiCryopump.get_mcc_params('Tc Pressure State'))
             out += "Stage 1 Temp: {}\n".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'))
             out += "Stage 2 Temp: {}\n".format(self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp'))
-            out += "Helium Discharge Temperature: {}\n".format(self.hw.ShiCryopump.get_compressor('Helium Discharge Temperature'))
+            out += "Helium Discharge Temp: {}\n".format(self.hw.ShiCryopump.get_compressor('Helium Discharge Temperature'))
             out += "Water Outlet Temperature: {}\n".format(self.hw.ShiCryopump.get_compressor('Water Outlet Temperature'))
             out += "System ON: {}\n".format(self.hw.ShiCryopump.get_compressor('System ON'))
             Logging.debugPrint(3, out)

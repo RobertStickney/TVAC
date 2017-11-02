@@ -40,7 +40,7 @@ class ShiCryopumpCollection:
         step = self.mcc_status.getVal('Regen Step')
         if step is None:
             return None
-        print('Regen Step: {:s}'.format(step))
+        # print('Regen Step: {:s}'.format(step))
         if step.startswith('P:') or \
                 step.startswith('V:') or \
                 step.startswith('z:') or \
