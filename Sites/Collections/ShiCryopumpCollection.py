@@ -37,7 +37,7 @@ class ShiCryopumpCollection:
         return None if (temp is None) else (temp < 40)
 
     def is_regen_active(self):
-        step = self.mcc_status.getVal('RegenStep')
+        step = self.mcc_status.getVal('Regen Step')
         if step is None:
             return None
         print('Regen Step: {:s}'.format(step))
