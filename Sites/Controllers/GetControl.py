@@ -246,6 +246,5 @@ class GetControl:
             'CryoPressure': gauges.get_cryopump_pressure(),
             'ChamberPressure': gauges.get_chamber_pressure(),
             'RoughingPressure': gauges.get_roughpump_pressure(),
-            "ChamberPowerLockoutPressure": HardwareStatusInstance.getInstance().ChamberPowerLockout,
             }
         return json.dumps(out)
