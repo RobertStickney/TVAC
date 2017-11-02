@@ -255,10 +255,12 @@ class VacuumControlStub(Thread):
 
     def state_05(self):  # PullingVac: M CryoCool; Rough Chamber
         if self.profile.vacuumWanted:
-            if self.hw.ShiCryopump.get_mcc_status('PumpOn?') and \
-                    self.hw.ShiCryopump.is_cryopump_ready() and \
-                    (self.chamberPressure < self.pres_chamber_crossover):
-                self.state = 'Cryo Pumping; Cross Over'
+            if self.hw.ShiCryopump.get_mcc_status('PumpOn?'):
+                if self.hw.ShiCryopump.is_cryopump_ready() and \
+                        (self.chamberPressure < self.pres_chamber_crossover):
+                    self.state = 'Cryo Pumping; Cross Over'
+                else:
+                    self.state = 'PullingVac: CryoCool; Rough Chamber'
         else:
             if (not self.hw.ShiCryopump.get_mcc_status('Roughing Valve State')) and \
                     (not self.hw.PC_104.digital_in.getVal('RoughP_On_Sw')):
