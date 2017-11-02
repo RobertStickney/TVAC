@@ -67,7 +67,7 @@ class VacuumControlStub(Thread):
             try:
                 while not self.wait_for_hardware():  # Wait for hardware drivers to read sensors.
                     Logging.logEvent("Debug", "Status Update",
-                                     {"message": "VCS: VacuumControlStub waiting for the hardware to be read.",
+                                     {"message": "VCS: VacuumControlStub waiting for hardware to read the sensors.",
                                       "level": 4})
                     time.sleep(1)
                 self.cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
@@ -271,10 +271,11 @@ class VacuumControlStub(Thread):
             out += "RoughP_Powered_WF: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_Powered_WF'))
             out += "RoughP_On_Sw: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'))
             out += "RoughP_On_Sw_WF: {}\n".format(self.hw.PC_104.digital_in.getVal('RoughP_On_Sw_WF'))
+            out += "Chamber_Closed: {}\n".format(self.hw.PC_104.digital_in.getVal('Chamber_Closed'))
             out += "get_roughpump_pressure: {}\n".format(self.hw.PfeifferGuages.get_roughpump_pressure())
             out += "get_chamber_pressure: {}\n".format(self.hw.PfeifferGuages.get_chamber_pressure())
             out += "get_cryopump_pressure: {}\n".format(self.hw.PfeifferGuages.get_cryopump_pressure())
-            out += "Elapsed Time: {}\n".format(self.hw.ShiCryopump.get_mcc_params('Elapsed Time'))
+            out += "Tc Pressure: {}\n".format(self.hw.ShiCryopump.get_mcc_status('Tc Pressure'))
             out += "Tc Pressure State: {}\n".format(self.hw.ShiCryopump.get_mcc_params('Tc Pressure State'))
             out += "Stage 1 Temp: {}\n".format(self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp'))
             out += "Stage 2 Temp: {}\n".format(self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp'))

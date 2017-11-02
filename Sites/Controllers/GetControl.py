@@ -67,6 +67,18 @@ class GetControl:
         except Exception as e:
             return "{'error':'{}'}".format(e)
 
+    def VacuumNotNeeded(self):
+        try:
+            profile = ProfileInstance.getInstance()
+            if not profile.activeProfile:
+                profile.vacuumWanted = False
+                return "{'result':'success'}"
+            else:
+                return "{'result':'Not Changed: Active Profile Running.'}"
+
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
+
     def getAllZoneData(self):
         # This doesn't work...
         Logging.debugPrint(2, "Calling: getAllZoneData")  #Todo Change to logEvent()
@@ -206,8 +218,19 @@ class GetControl:
 
     def recordData(self):
         ProfileInstance.getInstance().recordData = True
+
     def StoprecordData(self):
         ProfileInstance.getInstance().recordData = False
+
+    def doRegen(self):
+        try:
+            pass
+            return "{'result':'success'}"
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
+
+    def getVacuumState(self):
+        return json.dumps({"VacuumState": HardwareStatusInstance.getInstance().VacuumState})
 
     def getTvacStatus(self):
         gauges = HardwareStatusInstance.getInstance().PfeifferGuages

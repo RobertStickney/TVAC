@@ -41,17 +41,19 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/getZoneTemps': control.getZoneTemps,
                 '/getLastErr' : control.getLastError,
                 '/putUnderVacuum':control.putUnderVacuum,
+                '/VacuumNotNeeded':control.VacuumNotNeeded,
                 '/getEventList':control.getEventList,
                 '/hardStop':control.hardStop,
                 '/hold':control.holdAllZones,
                 '/pause':control.pauseAllZones,
                 '/resume':control.resumeAllZones,
                 '/unHold':control.unHoldAllZones,
+                '/getVacuumState': control.getVacuumState,
+                '/doRegen': control.doRegen,
                 '/getTvacStatus': control.getTvacStatus,
                 '/StoprecordData': control.StoprecordData,
                 '/recordData': control.recordData,
-                    
-            }[path]()
+                }[path]()
 
             Logging.logEvent("Debug","Status Update",
                 {"message": "Sending GET Results",
