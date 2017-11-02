@@ -253,7 +253,7 @@ class VacuumControlStub(Thread):
         ready &= self.hw.ShiCryopump.is_regen_active() is not None
         ready &= self.hw.ShiCryopump.cryopump_needs_regen() is not None
         ready &= self.hw.ShiCryopump.cryopump_wants_regen_soon() is not None
-        ready &= self.hw.ShiCryopump.get_mcc_params('Tc Pressure') is not None
+        ready &= self.hw.ShiCryopump.get_mcc_status('Tc Pressure') is not None
         ready &= self.hw.ShiCryopump.get_mcc_params('Tc Pressure State') is not None
         ready &= self.hw.ShiCryopump.get_mcc_status('Stage 1 Temp') is not None
         ready &= self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp') is not None
@@ -283,7 +283,7 @@ class VacuumControlStub(Thread):
             out += "Stage 2 Temp: {}     \n".format(self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp'))
             out += "Helium Discharge Temp: {}\n".format(self.hw.ShiCryopump.get_compressor('Helium Discharge Temperature'))
             out += "Water Outlet Temperature: {}\n".format(self.hw.ShiCryopump.get_compressor('Water Outlet Temperature'))
-            out += "System ON: {}\n<------------->".format(self.hw.ShiCryopump.get_compressor('System ON'))
+            out += "System ON: {}\n     <-------->".format(self.hw.ShiCryopump.get_compressor('System ON'))
             Logging.debugPrint(3, out)
         return ready
 
