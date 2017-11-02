@@ -227,6 +227,7 @@ class VacuumControlStub(Thread):
                 self.state = 'Non-Operational Vacuum'
 
     def state_04(self):  # PullingVac: CryoCool; Rough Chamber
+        print('---------> Is Cryopump ready: {} <------'.format(self.hw.ShiCryopump.is_cryopump_ready))
         if self.profile.vacuumWanted:
             if self.hw.ShiCryopump.is_cryopump_ready and \
                     (self.chamberPressure < self.pres_chamber_crossover):
@@ -311,6 +312,7 @@ class VacuumControlStub(Thread):
                 self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
                 self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
                 self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
+                time.sleep(5)
                 self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
                 Logging.debugPrint(3, "Vacuum Ctl (@OpVac): Starting the Cryo Pump; Roughing Pump Off.")
             else:
