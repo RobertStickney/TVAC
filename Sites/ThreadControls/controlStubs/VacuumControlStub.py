@@ -230,7 +230,7 @@ class VacuumControlStub(Thread):
         if self.profile.vacuumWanted:
             if self.hw.ShiCryopump.is_cryopump_ready() and \
                     (self.chamberPressure < self.pres_chamber_crossover):
-                self.state = 'Cryo Pumping; Cross Over'
+                self.state = 'PullingVac: Cryo Pumping; Cross Over'
             elif self.chamberPressure < self.pres_min_roughing:
                 self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
             else:
@@ -258,7 +258,7 @@ class VacuumControlStub(Thread):
             if self.hw.ShiCryopump.get_mcc_status('PumpOn?'):
                 if self.hw.ShiCryopump.is_cryopump_ready() and \
                         (self.chamberPressure < self.pres_chamber_crossover):
-                    self.state = 'Cryo Pumping; Cross Over'
+                    self.state = 'PullingVac: Cryo Pumping; Cross Over'
                 else:
                     self.state = 'PullingVac: CryoCool; Rough Chamber'
         else:
@@ -267,7 +267,7 @@ class VacuumControlStub(Thread):
                 self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
                 self.state = 'Non-Operational Vacuum'
 
-    def state_06(self):  # Cryo Pumping; Cross Over
+    def state_06(self):  # PullingVac: Cryo Pumping; Cross Over
         self.hw.PC_104.digital_out.update({'RoughP GateValve': False})
             # wait here until the valve is closed
             # TODO Replace Sleep with a check of the Gate valve switches
