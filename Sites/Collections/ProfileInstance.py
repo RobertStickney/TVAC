@@ -27,7 +27,7 @@ class ProfileInstance:
 
             # System Wide stats
             self.activeProfile = False
-            self.vacuumWanted = False
+            self.vacuumWanted = False  # Can This init to None? Does this save to DB when changed by UI?
             # TODO: When Profile aborted is vacuumWanted cleared?
             self.currentSetpoint = None
             self.recordData = False

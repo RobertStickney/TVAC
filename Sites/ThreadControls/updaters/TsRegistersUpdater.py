@@ -9,7 +9,7 @@ if __name__ == '__main__':
 from Collections.PC_104_Instance import PC_104_Instance
 from Hardware_Drivers.TS_Registers import TS_Registers
 from Hardware_Drivers.PWM_Square_Wave import PWM_Square_Wave
-from Collections.ProfileInstance import ProfileInstance
+from Collections.HardwareStatusInstance import HardwareStatusInstance
 
 from Logging.Logging import Logging
 
@@ -24,6 +24,7 @@ class TsRegistersUpdater(Thread):
 
         self.ts_reg = TS_Registers()
         self.da_io = PC_104_Instance.getInstance()
+        self.hw = HardwareStatusInstance.getInstance()
         self.adc_period = 0.0125  # adc_clock*8 = 0.1s loop period
         self.pwm_period = 10  # 10 second pwm period
         # self.pwm_min_dc_sec = 1  # minimum Duty Cycle of 1 second
@@ -66,6 +67,7 @@ class TsRegistersUpdater(Thread):
                            {"message": "Reading and writing with PC 104",
                              "level":4})
 
+                        self.interlocks()
                         self.ts_reg.do_write4([self.da_io.digital_out.get_c1_b0(),
                                                self.da_io.digital_out.get_c1_b1(),
                                                self.da_io.digital_out.get_c1_b2(),
@@ -74,7 +76,8 @@ class TsRegistersUpdater(Thread):
                                                self.da_io.digital_out.get_c2_b1(),
                                                self.da_io.digital_out.get_c2_b2(),
                                                self.da_io.digital_out.get_c2_b3()], 2)
-                        self.Interlocks()
+                        if self.da_io.digital_out.getVal('RoughP Start'):
+                            self.da_io.digital_out.update({'RoughP Start': False})
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(1))
                         self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
                         self.ts_reg.dac_write(self.da_io.analog_out.get_dac_counts(2), 2)
@@ -146,15 +149,42 @@ class TsRegistersUpdater(Thread):
                                                     "IR Lamp "+str(i+1),
                                                     self.da_io.digital_out.update))
 
-    def Interlocks(self):
-        pass
+    def interlocks(self):
+        arc_cutoff_pressure_high = 10  # 10 Torr
+        arc_cutoff_pressure_low = 40e-3  # 40 mTorr == 40e-3 Torr == 4e-2 Torr == 0.04 Torr
+        MinRoughingPressure = 20e-3  # TODO: Change back to 8e-4 when done testing
+        maxCrossoverPressure = 40e-3  # 40 mTorr
+
+        cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
+        chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
+        roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
+
+        ChamberPowerLockout = True if (chamberPressure > arc_cutoff_pressure_low) and \
+                                      (chamberPressure < arc_cutoff_pressure_high) else False
+        if ChamberPowerLockout:  # Disallow heaters when chamber is at low dielectric pressure.
+            self.da_io.digital_out.update({'C1 B2': 0x00})  # IR lamp 1-8
+            self.da_io.digital_out.update({'C1 B3': 0x00})  # IR lamp 9-16
+
+        if self.hw.VacuumState is not None:
+            if self.da_io.digital_in.getVal('Chamber_Closed'):
+                if not self.hw.OperationalVacuum:  # Disallow heaters when not at operational vacuum.
+                    self.da_io.digital_out.update({'C1 B2': 0x00})  # IR lamp 1-8
+                    self.da_io.digital_out.update({'C1 B3': 0x00})  # IR lamp 9-16
+                if chamberPressure < MinRoughingPressure:
+                    self.da_io.digital_out.update({'RoughP GateValve': False})
+                if chamberPressure > maxCrossoverPressure:
+                    self.da_io.digital_out.update({'CryoP GateValve': False})
+                if chamberPressure < (cryoPumpPressure*0.1):
+                    self.da_io.digital_out.update({'CryoP GateValve': False})
+                if not self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed'):
+                    self.da_io.digital_out.update({'RoughP GateValve': False})
+                if self.da_io.digital_out.getVal('RoughP GateValve'):
+                    self.da_io.digital_out.update({'CryoP GateValve': False})
+            else:  # Chamber is open Debug state.
+                pass
 
     def ir_lamp_pwm_stop(self):
         self.ir_lamp_pwm = []
-
-    def interlocks(self):
-        if self.da_io.digital_out.getVal('RoughP Start'):
-            self.da_io.digital_out.update({'RoughP Start': False})
 
 
 if __name__ == '__main__':

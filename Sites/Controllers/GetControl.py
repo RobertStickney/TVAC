@@ -67,6 +67,18 @@ class GetControl:
         except Exception as e:
             return "{'error':'{}'}".format(e)
 
+    def VacuumNotNeeded(self):
+        try:
+            profile = ProfileInstance.getInstance()
+            if not profile.activeProfile:
+                profile.vacuumWanted = False
+                return "{'result':'success'}"
+            else:
+                return "{'result':'Not Changed: Active Profile Running.'}"
+
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
+
     def getAllZoneData(self):
         # This doesn't work...
         Logging.debugPrint(2, "Calling: getAllZoneData")  #Todo Change to logEvent()
@@ -206,22 +218,33 @@ class GetControl:
 
     def recordData(self):
         ProfileInstance.getInstance().recordData = True
+
     def StoprecordData(self):
         ProfileInstance.getInstance().recordData = False
+
+    def doRegen(self):
+        try:
+            pass
+            return "{'result':'success'}"
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
+
+    def getVacuumState(self):
+        return json.dumps({"VacuumState": HardwareStatusInstance.getInstance().VacuumState})
 
     def getTvacStatus(self):
         gauges = HardwareStatusInstance.getInstance().PfeifferGuages
         out = {
-        "recordData": ProfileInstance.getInstance().recordData,
-        "OperationalVacuum": HardwareStatusInstance.getInstance().OperationalVacuum,
-        "activeProfile": ProfileInstance.getInstance().activeProfile,
-        "vacuumWanted": ProfileInstance.getInstance().vacuumWanted,
-        "currentSetpoint": ProfileInstance.getInstance().currentSetpoint,
-        "inRamp": ProfileInstance.getInstance().inRamp,
-        "inHold": ProfileInstance.getInstance().inHold,
-        "inPause": ProfileInstance.getInstance().inPause,
-        'CryoPressure': gauges.get_cryopump_pressure(),
-        'ChamberPressure': gauges.get_chamber_pressure(),
-        'RoughingPressure': gauges.get_roughpump_pressure()
-        }
+            "recordData": ProfileInstance.getInstance().recordData,
+            "OperationalVacuum": HardwareStatusInstance.getInstance().OperationalVacuum,
+            "activeProfile": ProfileInstance.getInstance().activeProfile,
+            "vacuumWanted": ProfileInstance.getInstance().vacuumWanted,
+            "currentSetpoint": ProfileInstance.getInstance().currentSetpoint,
+            "inRamp": ProfileInstance.getInstance().inRamp,
+            "inHold": ProfileInstance.getInstance().inHold,
+            "inPause": ProfileInstance.getInstance().inPause,
+            'CryoPressure': gauges.get_cryopump_pressure(),
+            'ChamberPressure': gauges.get_chamber_pressure(),
+            'RoughingPressure': gauges.get_roughpump_pressure(),
+            }
         return json.dumps(out)

@@ -26,7 +26,8 @@ class PfeifferGaugeUpdater(Thread):
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
         self.Pgauge = PfeifferGauge()
-        self.gauges = HardwareStatusInstance.getInstance().PfeifferGuages
+        self.hw = HardwareStatusInstance.getInstance()
+        self.gauges = self.hw.PfeifferGuages
         self.pressure_read_peroid = 0.5  # 0.5s loop period
         self.param_period = 5  # 5 second period
 
@@ -65,7 +66,7 @@ class PfeifferGaugeUpdater(Thread):
             try:
                 # Thread "Start up" stuff goes here
                 Logging.logEvent("Debug", "Status Update",
-                                {"message": "Starting Pfeiffer Guage Control Stub Thread",
+                                {"message": "Starting Pfeiffer Guage Updater Thread",
                                  "level": 2})
 
                 if os.name == "posix":
@@ -84,11 +85,11 @@ class PfeifferGaugeUpdater(Thread):
                                                 {'addr': 2, 'Pressure': self.Pgauge.GetPressure(2)},
                                                 {'addr': 3, 'Pressure': self.Pgauge.GetPressure(3)}])
                             Logging.logEvent("Debug", "Status Update",
-                                             {"message": "Reading and writing with PfeifferGaugeUpdater.\nCryopump: {:f}; Chamber: {:f}; RoughPump: {:f}\n".format(
-                                                 self.gauges.get_cryopump_pressure(),
-                                                 self.gauges.get_chamber_pressure(),
-                                                 self.gauges.get_roughpump_pressure()
-                                             ),
+                                             {"message": "Reading and writing with PfeifferGaugeUpdater.\n"
+                                                         "Cryopump: {:f}; Chamber: {:f}; RoughPump: {:f}\n"
+                                                         "".format(self.gauges.get_cryopump_pressure(),
+                                                                   self.gauges.get_chamber_pressure(),
+                                                                   self.gauges.get_roughpump_pressure()),
                                               "level": 4})
                             if time.time() > next_param_read_time:
                                 self.gauges.update([{'addr': 1, 'error': self.Pgauge.GetError(1),

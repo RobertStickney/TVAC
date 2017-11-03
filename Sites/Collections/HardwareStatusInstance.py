@@ -45,5 +45,6 @@ class HardwareStatusInstance:
                 self.OperationalVacuum = False
             else:
                 self.OperationalVacuum = True
+            self.VacuumState = None
 
             HardwareStatusInstance.__instance = self
