@@ -79,7 +79,7 @@ class VacuumControlStub(Thread):
                 self.state = self.determin_current_vacuum_state()
                 Logging.logEvent("Event", "Vacuum State",
                                  {"message": "Starting Vacuum State: '{}'".format(self.state),
-                                  "Vacuum State": self.state})
+                                  "ProfileInstance": ProfileInstance.getInstance()})
 
                 # self.hw.OperationalVacuum = True
                 while True:
@@ -137,7 +137,7 @@ class VacuumControlStub(Thread):
                     if old_state != self.state:
                         Logging.logEvent("Event", "Vacuum State",
                                          {"message": "New Vacuum State: '{}'".format(self.state),
-                                          "Vacuum State": self.state})
+                                          "ProfileInstance": ProfileInstance.getInstance()})
 
                     # sleep until the next time around
                     time.sleep(self.updatePeriod)
