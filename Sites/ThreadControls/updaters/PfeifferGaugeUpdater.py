@@ -97,6 +97,9 @@ class PfeifferGaugeUpdater(Thread):
                                                     {'addr': 2, 'error': self.Pgauge.GetError(2),
                                                                 'cc on': self.Pgauge.GetCCstate(2)},
                                                     {'addr': 3, 'error': self.Pgauge.GetError(3)}])
+                                if __name__ != '__main__':
+                                    if ProfileInstance.getInstance().recordData:
+                                        self.logPressureData()
                                 next_param_read_time += self.param_period
                         except ValueError as err:
                             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -135,9 +138,6 @@ class PfeifferGaugeUpdater(Thread):
                     Logging.logEvent("Debug", "Status Update",
                              {"message": "Current Pressure in Chamber is {}".format(self.gauges.get_chamber_pressure()),
                               "level": 4})
-                    if __name__ != '__main__':
-                        if ProfileInstance.getInstance().recordData:
-                            self.logPressureData()
                     currentTime = time.time()
                     if currentTime < next_pressure_read_time:
                         time.sleep(next_pressure_read_time - currentTime)
