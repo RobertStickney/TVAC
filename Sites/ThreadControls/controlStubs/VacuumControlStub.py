@@ -77,7 +77,9 @@ class VacuumControlStub(Thread):
                 self.roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
 
                 self.state = self.determin_current_vacuum_state()
-
+                Logging.logEvent("Event", "Vacuum State",
+                                 {"message": "Starting Vacuum State: '{}'".format(self.state),
+                                  "ProfileInstance": ProfileInstance.getInstance()})
 
                 # self.hw.OperationalVacuum = True
                 while True:
@@ -105,9 +107,10 @@ class VacuumControlStub(Thread):
                     {"message": "VCS: Current chamber pressure: {}".format(self.chamberPressure),
                      "level":4})
 
+                    old_state = self.state
                     {
-                        'Atm: Chamber: CryoP: Vac':             self.state_00,
-                        'Atm: Chamber: CryoP: Atm':             self.state_01,
+                        'Chamber: Atm; CryoP: Vac':             self.state_00,
+                        'Chamber: Atm; CryoP: Atm':             self.state_01,
                         'PullingVac: Start':                    self.state_02,
                         'PullingVac: RoughingCryoP':            self.state_03,
                         'PullingVac: CryoCool; Rough Chamber':  self.state_04,
@@ -131,6 +134,11 @@ class VacuumControlStub(Thread):
                     {"message": "VCS: Current chamber state: {}".format(self.state),
                      "level": 3})
 
+                    if old_state != self.state:
+                        Logging.logEvent("Event", "Vacuum State",
+                                         {"message": "New Vacuum State: '{}'".format(self.state),
+                                          "ProfileInstance": ProfileInstance.getInstance()})
+
                     # sleep until the next time around
                     time.sleep(self.updatePeriod)
 
@@ -150,10 +158,10 @@ class VacuumControlStub(Thread):
         # end of outer while true
     # end of run()
 
-    def state_00(self):  # Atm: Chamber: CryoP: Vac
+    def state_00(self):  # Chamber: Atm; CryoP: Vac
         if (self.cryoPumpPressure > self.pres_atm) and \
                 (self.chamberPressure > self.pres_atm):
-            self.state = 'Atm: Chamber: CryoP: Atm'
+            self.state = 'Chamber: Atm; CryoP: Atm'
         if self.chamberPressure < self.pres_ruffon:
             self.state = 'Non-Operational Vacuum'
         if self.profile.vacuumWanted:
@@ -177,9 +185,9 @@ class VacuumControlStub(Thread):
                     else:
                         self.state = 'PullingVac: Start'
 
-    def state_01(self):  # Atm: Chamber: CryoP: Atm
+    def state_01(self):  # Chamber: Atm; CryoP: Atm
         if self.cryoPumpPressure < self.pres_ruffon:
-            self.state = 'Atm: Chamber: CryoP: Vac'
+            self.state = 'Chamber: Atm; CryoP: Vac'
         if self.chamberPressure < self.pres_ruffon:
             self.state = 'Non-Operational Vacuum'
         if self.profile.vacuumWanted:
@@ -219,7 +227,7 @@ class VacuumControlStub(Thread):
                     self.hw.Shi_MCC_Cmds.append(['Open_RoughingValve'])
                 else:
                     self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
-                    self.state = 'Atm: Chamber: CryoP: Atm'
+                    self.state = 'Chamber: Atm; CryoP: Atm'
         else:
             if (not self.hw.ShiCryopump.get_mcc_status('Roughing Valve State')) and \
                     (not self.hw.PC_104.digital_in.getVal('RoughP_On_Sw')):
@@ -339,9 +347,9 @@ class VacuumControlStub(Thread):
             self.state = 'Operational Vacuum'
         if self.chamberPressure > self.pres_atm:
             if self.cryoPumpPressure < self.pres_ruffon:
-                self.state = 'Atm: Chamber: CryoP: Vac'
+                self.state = 'Chamber: Atm; CryoP: Vac'
             else:
-                self.state = 'Atm: Chamber: CryoP: Atm'
+                self.state = 'Chamber: Atm; CryoP: Atm'
         if self.profile.vacuumWanted:
             if self.cryoPumpPressure < self.pres_cryoP_Prime:
                 self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
