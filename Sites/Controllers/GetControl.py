@@ -94,10 +94,12 @@ class GetControl:
     def StopCryoPump(self):
         try:
             profile = ProfileInstance.getInstance()
-            if not ProfileInstance.getInstance().activeProfile:
+            if not profile.activeProfile:
                 profile.vacuumWanted = False
                 hw = HardwareStatusInstance.getInstance()
                 hw.PC_104.digital_out.update({'CryoP GateValve': False})
+
+                # TODO: Wait until gate is closed
                 hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOff'])
                 hw.Shi_Compressor_Cmds.append('off')
                 return "{'result':'success'}"
@@ -109,8 +111,7 @@ class GetControl:
     def StopRoughingPump(self):
         try:
             profile = ProfileInstance.getInstance()
-            if not ProfileInstance.getInstance().activeProfile:
-                profile.vacuumWanted = False
+            if not profile.activeProfile:
                 pins = HardwareStatusInstance.getInstance().PC_104.digital_out
                 pins.update({'RoughP GateValve': False})
                 # wait here until the valve is closed
@@ -172,6 +173,7 @@ class GetControl:
             d_out.update({"IR Lamp 15 PWM DC": 0})
             d_out.update({"IR Lamp 16 PWM DC": 0})
 
+            HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Disable All Output'])
             HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
             HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Shroud Duty Cycle', 0])
             Logging.logEvent("Event","Profile",
