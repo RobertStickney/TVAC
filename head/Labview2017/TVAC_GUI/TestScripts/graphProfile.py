@@ -100,7 +100,7 @@ def validateProfile(json,zone,errors):
 				errors+=1	
 
 
-	if zoneData["maxTemp"] > 430 or zoneData["maxTemp"] < 50:
+	if zoneData["maxTemp"] > 423 or zoneData["maxTemp"] < 70:
 		print("ProfileError : Maximum Temp Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))
 		errors+=1	
 	if zoneData["maxTemp"] == zoneData["minTemp"]:
@@ -109,7 +109,7 @@ def validateProfile(json,zone,errors):
 	if zoneData["maxTemp"] < zoneData["minTemp"]:
 		print("ProfileError : Maximum Temp Limit below Minimum Temp Limit for Zone",str(zoneData["zone"]))
 		errors+=1	
-	if zoneData["minTemp"] > 430 or zoneData["minTemp"] < 50:
+	if zoneData["minTemp"] > 423 or zoneData["minTemp"] < 70:
 		print("ProfileError : Minimum Temp Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))		
 		errors+=1	
 
@@ -139,11 +139,13 @@ def validateProfile(json,zone,errors):
 			if setPtData[i]["ramp"] == 0:
 				print("ProfileError : Ramp Time for Zone %s, Set Point %s is set to 0"
 				 % (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
+				errors+=1
 
 
 			if setPtData[i]["soakduration"] == 0:
 				print("ProfileError : Soak Time for Zone %s, Set Point %s is set to 0"
 				 % (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
+				errors+=1
 
 	#print(setPtData[0]["tempgoal"])
 
@@ -161,8 +163,9 @@ def validateThermocouple(json,jsonTCs,zoneNumber,errors):
 
 		for i in range(0,num):
 			workingCheck=jsonTCs[zoneCheck[i]-1]["working"]
+			zeroCheck=jsonTCs[zoneCheck[i]-1]["temp"]
 
-			if workingCheck == False:
+			if workingCheck == False or zeroCheck == 0 :
 				print("ProfileError : Thermocouple %s, for Zone %s is not a working Thermocouple"
 				 % (str(zoneCheck[i]),str(json[zoneNumber]["zone"])))
 				errors+=1
@@ -236,21 +239,21 @@ def generateJSON(fileName):
 						soakTime = line[2]
 						goalTemp = line[3+j]
 						goalTemp=goalTemp.rstrip()
-
-						# print(setPoint)
+						# print(zone)
+						#print(setPoint)
 						# print(rampTime)
 						# print(soakTime)
 						# print(goalTemp)
 
-
-						tempSetpoint = {
-						"zone":zone,
-						"setPoint":setPoint,
-						"rampTime":rampTime,
-						"soakTime":soakTime,
-						"goalTemp":goalTemp,
-						}
-						setpoints.append(tempSetpoint)
+						if soakTime >= 0 and goalTemp >= 0:
+							tempSetpoint = {
+							"zone":zone,
+							"setPoint":setPoint,
+							"rampTime":rampTime,
+							"soakTime":soakTime,
+							"goalTemp":goalTemp,
+							}
+							setpoints.append(tempSetpoint)
 
 						#print(tempSetpoint)
 				if i > 0:

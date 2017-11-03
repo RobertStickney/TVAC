@@ -38,77 +38,80 @@ def unwrapJSON(json):
 	return json['profiles'][0]['thermalprofiles']
 
 def getLiveTempFromDB(startingPoint,endingPoint,time_start,tcSelection):
-	mysql = MySQlConnect()
-	if tcSelection == '111':
-		sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\");".format(startingPoint,endingPoint)
-	if tcSelection == '100':
-		sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND thermocouple<76;".format(startingPoint,endingPoint)
-	if tcSelection == '110':
-		sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND (thermocouple<76 or thermocouple>95);".format(startingPoint,endingPoint)
-	if tcSelection == '101':
-		sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND (thermocouple<81);".format(startingPoint,endingPoint)
-	if tcSelection == '010':
-		sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND (thermocouple>95);".format(startingPoint,endingPoint)
-	if tcSelection == '011':
-		sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND ((thermocouple>76 and thermocouple<81) or thermocouple>95);".format(startingPoint,endingPoint)
-	if tcSelection == '001':
-		sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND (thermocouple>76 and thermocouple<81);".format(startingPoint,endingPoint)
-
-	mysql.cur.execute(sql)
-	mysql.conn.commit()
-	time_two=time.time()
-	#print("Time to Query (s): ",time_two-time_start)
-
 	data_csv = dict(time=[],thermocouple=[],temperature=[])
 	results={}
-	for row in mysql.cur:
-		
-		tmp=mdates.date2num(datetime.strptime(str(row["time"]),'%Y-%m-%d %H:%M:%S'))
-		data_csv["time"].append(tmp)
-		data_csv["thermocouple"].append(row["thermocouple"])
-		data_csv["temperature"].append(float(row["temperature"]))
+	if tcSelection !='000':
+		mysql = MySQlConnect()
+		if tcSelection == '111':
+			sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\");".format(startingPoint,endingPoint)
+		if tcSelection == '100':
+			sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND thermocouple<76;".format(startingPoint,endingPoint)
+		if tcSelection == '110':
+			sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND (thermocouple<76 or thermocouple>95);".format(startingPoint,endingPoint)
+		if tcSelection == '101':
+			sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND (thermocouple<81);".format(startingPoint,endingPoint)
+		if tcSelection == '010':
+			sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND (thermocouple>95);".format(startingPoint,endingPoint)
+		if tcSelection == '011':
+			sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND ((thermocouple>76 and thermocouple<81) or thermocouple>95);".format(startingPoint,endingPoint)
+		if tcSelection == '001':
+			sql = "SELECT * FROM tvac.real_temperature WHERE (time > \"{}\") AND (time<\"{}\") AND (thermocouple>76 and thermocouple<81);".format(startingPoint,endingPoint)
 
-		tmp = results.get(row["time"], [])
-		tmp.append([row["thermocouple"], float(row["temperature"])])
-		results[row['time']] = tmp
 
+		mysql.cur.execute(sql)
+		mysql.conn.commit()
+		time_two=time.time()
+		#print("Time to Query (s): ",time_two-time_start)
+
+
+		for row in mysql.cur:
+			
+			tmp=mdates.date2num(datetime.strptime(str(row["time"]),'%Y-%m-%d %H:%M:%S'))
+			data_csv["time"].append(tmp)
+			data_csv["thermocouple"].append(row["thermocouple"])
+			data_csv["temperature"].append(float(row["temperature"]))
+
+			tmp = results.get(row["time"], [])
+			tmp.append([row["thermocouple"], float(row["temperature"])])
+			results[row['time']] = tmp
 	return "Temp since {}".format(startingPoint), results, data_csv
 
 def getPressureDataFromDB(startingPoint,endingPoint,gaugeSelection):
-	mysql = MySQlConnect()
-	# These two can be combined into one sql statement...if I have time look into that
-	if gaugeSelection == '111':
-		sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\");".format(startingPoint,endingPoint)	
-	if gaugeSelection == '100':
-		sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND guage=1;".format(startingPoint,endingPoint)	
-	if gaugeSelection == '110':
-		sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND (guage=1 OR guage=2);".format(startingPoint,endingPoint)	
-	if gaugeSelection == '101':
-		sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND (guage=1 OR guage=3);".format(startingPoint,endingPoint)	
-	if gaugeSelection == '010':
-		sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND guage=2;".format(startingPoint,endingPoint)	
-	if gaugeSelection == '011':
-		sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND (guage=2 OR guage=3);".format(startingPoint,endingPoint)	
-	if gaugeSelection == '001':
-		sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND guage=3;".format(startingPoint,endingPoint)	
-
-	mysql.cur.execute(sql)
-	mysql.conn.commit()
-
 	data_csv = dict(time=[],guage=[],pressure=[])
 	results = {}
-	for row in mysql.cur:
+	if gaugeSelection !='000':
+		mysql = MySQlConnect()
+		# These two can be combined into one sql statement...if I have time look into that
+		if gaugeSelection == '111':
+			sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\");".format(startingPoint,endingPoint)	
+		if gaugeSelection == '100':
+			sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND guage=1;".format(startingPoint,endingPoint)	
+		if gaugeSelection == '110':
+			sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND (guage=1 OR guage=2);".format(startingPoint,endingPoint)	
+		if gaugeSelection == '101':
+			sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND (guage=1 OR guage=3);".format(startingPoint,endingPoint)	
+		if gaugeSelection == '010':
+			sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND guage=2;".format(startingPoint,endingPoint)	
+		if gaugeSelection == '011':
+			sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND (guage=2 OR guage=3);".format(startingPoint,endingPoint)	
+		if gaugeSelection == '001':
+			sql = "SELECT * FROM tvac.Pressure WHERE (time > \"{}\") AND (time<\"{}\") AND guage=3;".format(startingPoint,endingPoint)	
 
-		tmp=mdates.date2num(datetime.strptime(str(row["time"]),'%Y-%m-%d %H:%M:%S'))
-		data_csv["time"].append(tmp)
-		#print(row["guage"])
-		data_csv["guage"].append(row["guage"])
-		data_csv["pressure"].append(float(row["pressure"]))
+		mysql.cur.execute(sql)
+		mysql.conn.commit()
 
-		tmp = results.get(row["time"], [])
-		tmp.append([row["guage"], float(row["pressure"])])
-		results[row['time']] = tmp
-		#print("{},{},{},zone".format(row["time"],row["guage"],row["pressure"]))
+		for row in mysql.cur:
+
+			tmp=mdates.date2num(datetime.strptime(str(row["time"]),'%Y-%m-%d %H:%M:%S'))
+			data_csv["time"].append(tmp)
+			#print(row["guage"])
+			data_csv["guage"].append(row["guage"])
+			data_csv["pressure"].append(float(row["pressure"]))
+
+			tmp = results.get(row["time"], [])
+			tmp.append([row["guage"], float(row["pressure"])])
+			results[row['time']] = tmp
+			#print("{},{},{},zone".format(row["time"],row["guage"],row["pressure"]))
 	#print(results)
 	return "Pressure since {}".format(startingPoint), results, data_csv	
 
@@ -160,8 +163,10 @@ def main(args):
 		temp_file=args[5]
 		pressure_file=args[6]
 
+
 	print("Querying Temperatures...")
 	profile_I_ID, results, tdata_csv = getLiveTempFromDB(startTime,endTime,time_start,tcSelection)
+
 	print("Querying Pressures...")
 	pressureID, pressure, pdata_csv=getPressureDataFromDB(startTime,endTime,gaugeSelection)
 
@@ -222,12 +227,17 @@ def main(args):
 
 	fig,(ax1,ax2)=plt.subplots(1,2,figsize=(14,8),sharex=False)
 
+
 	for tc in tc_data:
-		#if tc in importantTCs:
-		ax1.plot_date(time_values,tc_data[tc], '-',label=str(tc))
-		ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %H:%M:%S'))
-		plt.gcf().autofmt_xdate()
-		length=len(tc_data[tc])
+		try:
+			ax1.plot_date(time_values,tc_data[tc], '-',label=str(tc))
+			ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %H:%M:%S'))
+			plt.gcf().autofmt_xdate()
+			length=len(tc_data[tc])
+			ax1.legend(bbox_to_anchor=(0., 1.075, 1., .102), loc=3,
+           ncol=5, mode="expand", borderaxespad=0.2)
+		except:
+			print("No TC Data")
 		#print(tc)
 
 	#print(min(pTime),max(pTime))
@@ -251,13 +261,9 @@ def main(args):
 	#plt.gcf().autofmt_xdate()
 
 
-	keys = tc_data.keys()
-
-	ax1.legend()
 	ax2.legend()
 	#ax1.legend(bbox_to_anchor=(-.01, 0, 1, 1), bbox_transform=plt.gcf().transFigure)
-	ax1.legend(bbox_to_anchor=(0., 1.075, 1., .102), loc=3,
-           ncol=5, mode="expand", borderaxespad=0.2)
+
 	ax1.set_ylabel('Temperature [K]')
 	ax1.set_xlabel('Time')	
 	ax1.set_title(profile_I_ID)
