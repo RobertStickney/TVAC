@@ -53,7 +53,9 @@ class TsRegistersUpdater(Thread):
                     self.ts_reg.open_Registers()
                     self.da_io.digital_out.update(self.ts_reg.dio_read4(1, False))
                     self.da_io.digital_out.update(self.ts_reg.dio_read4(2, False))
-                    time.sleep(2)
+                    self.da_io.digital_in.update(self.ts_reg.dio_read4(1))
+                    self.da_io.digital_in.update(self.ts_reg.dio_read4(2))
+                    time.sleep(1)
                     self.time_test = time.time()
                     # self.ts_reg.start_adc(1, 7, int(32e6 * self.adc_period))
                     self.ts_reg.start_adc(1, 7, 4000000)
@@ -157,10 +159,11 @@ class TsRegistersUpdater(Thread):
 
         cryoPumpPressure = self.hw.PfeifferGuages.get_cryopump_pressure()
         chamberPressure = self.hw.PfeifferGuages.get_chamber_pressure()
-        roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
+        # roughPumpPressure = self.hw.PfeifferGuages.get_roughpump_pressure()
 
-        ChamberPowerLockout = True if (chamberPressure > arc_cutoff_pressure_low) and \
-                                      (chamberPressure < arc_cutoff_pressure_high) else False
+        ChamberPowerLockout = True if (chamberPressure is None) or \
+                                      ((chamberPressure > arc_cutoff_pressure_low) and
+                                       (chamberPressure < arc_cutoff_pressure_high)) else True
         if ChamberPowerLockout:  # Disallow heaters when chamber is at low dielectric pressure.
             self.da_io.digital_out.update({'C1 B2': 0x00})  # IR lamp 1-8
             self.da_io.digital_out.update({'C1 B3': 0x00})  # IR lamp 9-16
