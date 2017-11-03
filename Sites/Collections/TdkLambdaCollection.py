@@ -38,6 +38,22 @@ class TdkLambdaCollection:
     def get_shroud_right_addr(self):
         return self.TdkLambda_ps[3].GetAddress()
 
+    def get_platen_left(self):
+        return self.TdkLambda_ps[0]
+
+    def get_platen_right(self):
+        return self.TdkLambda_ps[1]
+
+    def get_shroud_left(self):
+        return self.TdkLambda_ps[2]
+
+    def get_shroud_right(self):
+        return self.TdkLambda_ps[3]
+
+
+
+
+
     def get_val(self, addr, name):
         return self.getPS(addr).get_val(name)
 

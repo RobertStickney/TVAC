@@ -158,7 +158,7 @@ class ZoneControlStub():
                 for i, tempSetPoint in enumerate(range(currentTime,rampEndTime, intervalTime)):
                     if tempSetPoint > currentTime2:
                         x = tempSetPoint
-                        y = currentTemp + ((i-notUsed)*intervalTemp)
+                        y = currentTemp + ((i)*intervalTemp)
                         expected_time_values.append(tempSetPoint)
                         expected_temp_values.append(y)
                     else:
@@ -293,8 +293,6 @@ class DutyCycleControlStub(Thread):
                              "level":3})
 
                         # You might need to stay is pause
-                        self.checkPause()
-                        self.checkHold()
 
                         # get current time
                         currentTime = time.time()
@@ -330,6 +328,8 @@ class DutyCycleControlStub(Thread):
                             if len(self.expected_time_values) <= 0:
                                 break
 
+                        self.checkPause()
+                        self.checkHold()
                         # compare the temps just made with the values in self.
                         # if they are different, or important log it
                         if rampTemporary == True and self.ramp == False:
@@ -443,11 +443,12 @@ class DutyCycleControlStub(Thread):
 
                 Logging.logEvent("Event","Hold Start", 
                 {"message": "In hold for first time",
-                "level":3})
+                "ProfileInstance"     : ProfileInstance.getInstance()})
                 while ProfileInstance.getInstance().inHold:
                     for zone in self.zones:
                         if self.zones[zone].zoneProfile.activeZoneProfile:
                             zone = self.zones[zone]
+                            # self.temp_temperature = 
                             zone.updateDutyCycle()
                     time.sleep(.5)
 
@@ -456,16 +457,17 @@ class DutyCycleControlStub(Thread):
                 self.startTime = self.startTime + holdTime
                 Logging.logEvent("Event","HoldEnd", 
                 {"message": "Just Left hold",
-                "level":3})
+                "ProfileInstance"     : ProfileInstance.getInstance()})
                 Logging.logEvent("Debug","Status Update", 
                 {"message": "Leaving hold after {} seconds in hold, new startTime {}".format(holdTime, self.startTime),
-                "level":3})
+                "ProfileInstance"     : ProfileInstance.getInstance(),
+                "level":2})
                 # regenerate expected time, moving things forward to account for hold
                 for zone in self.zones:
                     if self.zones[zone].zoneProfile.activeZoneProfile:
                         self.zones[zone].expected_temp_values, self.expected_time_values = self.zones[zone].createExpectedValues(self.zones[zone].zoneProfile.thermalProfiles, startTime=self.startTime)
         except Exception as e:
-            Logging.debugPrint(1, "Error in check Hold, Duty Cycle: {}".format(str(e)))
+            Logging.debugPrint(1, "DCCS: Error in check Hold, Duty Cycle: {}".format(str(e)))
             if Logging.debug:
                 raise e
 

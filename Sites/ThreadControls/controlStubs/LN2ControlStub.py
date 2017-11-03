@@ -122,7 +122,7 @@ class LN2ControlStub(Thread):
                         raise e
                 # end of try catch
             else:
-                Logging.debugPrint(3,"LN2: AP: {}, Vacuum: {}".format(ProfileInstance.getInstance().activeProfile,HardwareStatusInstance.getInstance().OperationalVacuum))
+                Logging.debugPrint(4,"LN2: AP: {}, Vacuum: {}".format(ProfileInstance.getInstance().activeProfile,HardwareStatusInstance.getInstance().OperationalVacuum))
             # end of If should be running
             time.sleep(self.SLEEP_TIME)
 

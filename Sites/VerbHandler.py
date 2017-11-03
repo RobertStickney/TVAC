@@ -119,6 +119,9 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/SendHwCmd': control.SendHwCmd,
                 '/setPC104Digital': control.setPC104_Digital,
                 '/setPC104Analog': control.setPC104_Analog,
+                '/heatUpPlaten':control.heatUpPlaten,
+                '/heatUpShroud':control.heatUpShroud,
+
             }[path](contractObj)
 
             Logging.logEvent("Debug","Status Update", 

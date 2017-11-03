@@ -129,6 +129,7 @@ class GetControl:
             d_out.update({"IR Lamp 16 PWM DC": 0})
 
             HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
+            HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Shroud Duty Cycle', 0])
             Logging.logEvent("Event","Profile",
                 {"message": "Profile Halted:",
                 "ProfileInstance": ProfileInstance.getInstance()})

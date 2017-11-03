@@ -134,7 +134,7 @@ class SafetyCheck(Thread):
 						# end of user test
 
 						# Get the full list
-						OutsideThermoCouples = [101,102]
+						OutsideThermoCouples = [89,90]
 						if tc.Thermocouple in OutsideThermoCouples:
 							if tc.temp > MAX_TOUCH_TEMP:
 								errorDetail = "TC # {} is above MAX_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_TOUCH_TEMP,tc.temp)

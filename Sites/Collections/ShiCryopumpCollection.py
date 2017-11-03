@@ -71,8 +71,6 @@ class ShiCryopumpCollection:
         return self.compressor.getVal(name)
 
     def getJson(self):
-        # temp_units values: ['K', 'C', 'F']
-        # whichTCs values: ['all', 'Working', 'NotWorking']
         self.__lock.acquire()
         message = ['"time":"%s"' % self.time]
         self.__lock.release()

@@ -77,6 +77,39 @@ class PostControl:
         pins.analog_out.update(data)
         return "{'result':'success'}"
 
+    def heatUpShroud(self, data):
+        dutyCycle = data['dutyCycle']
+        tdKs = HardwareStatusInstance.getInstance().TdkLambda_PS
+        if ProfileInstance.getInstance().activeProfile:
+            if dutyCycle == 0:
+                if tdKs.get_shroud_left().output_enable or tdKs.get_shroud_left().output_enable:
+                    HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Disable Shroud Output'])
+                    return "{'result':'Disabled Shroud'}"
+                else:
+                    return "{'result':'Shroud Off'}"
+            else:
+                if not (tdKs.get_shroud_left().output_enable or tdKs.get_shroud_left().output_enable):
+                    HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Setup Shroud'])
+                HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Shroud Duty Cycle', dutyCycle])
+                return "{'result':'Shroud duty cycle set'}"
+        else:
+            return "{'result':'Not used in Profile'}"
 
-
+    def heatUpPlaten(self, data):
+        dutyCycle = data['dutyCycle']
+        tdKs = HardwareStatusInstance.getInstance().TdkLambda_PS
+        if ProfileInstance.getInstance().activeProfile:
+            if dutyCycle == 0:
+                if tdKs.get_shroud_left().output_enable or tdKs.get_shroud_left().output_enable:
+                    HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Disable Platen Output'])
+                    return "{'result':'Disabled Platen'}"
+                else:
+                    return "{'result':'Platen Off'}"
+            else:
+                if not (tdKs.get_shroud_left().output_enable or tdKs.get_shroud_left().output_enable):
+                    HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Setup Platen'])
+                HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', dutyCycle])
+                return "{'result':'Platen duty cycle set'}"
+        else:
+            return "{'result':'Not used in Profile'}"
 
