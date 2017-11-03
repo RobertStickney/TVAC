@@ -1,4 +1,5 @@
 import json
+import time
 
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
@@ -75,7 +76,50 @@ class GetControl:
                 return "{'result':'success'}"
             else:
                 return "{'result':'Not Changed: Active Profile Running.'}"
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
 
+    def StopCryoPumpingChamber(self):
+        try:
+            profile = ProfileInstance.getInstance()
+            if not profile.activeProfile:
+                profile.vacuumWanted = False
+                HardwareStatusInstance.getInstance().PC_104.digital_out.update({'CryoP GateValve': False})
+                return "{'result':'success'}"
+            else:
+                return "{'result':'Not Changed: Active Profile Running.'}"
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
+
+    def StopCryoPump(self):
+        try:
+            profile = ProfileInstance.getInstance()
+            if not ProfileInstance.getInstance().activeProfile:
+                profile.vacuumWanted = False
+                hw = HardwareStatusInstance.getInstance()
+                hw.PC_104.digital_out.update({'CryoP GateValve': False})
+                hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOff'])
+                hw.Shi_Compressor_Cmds.append('off')
+                return "{'result':'success'}"
+            else:
+                return "{'result':'Not Changed: Active Profile Running.'}"
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
+
+    def StopRoughingPump(self):
+        try:
+            profile = ProfileInstance.getInstance()
+            if not ProfileInstance.getInstance().activeProfile:
+                profile.vacuumWanted = False
+                pins = HardwareStatusInstance.getInstance().PC_104.digital_out
+                pins.update({'RoughP GateValve': False})
+                # wait here until the valve is closed
+                time.sleep(5)
+                pins.update({'RoughP Pwr Relay': False})
+                pins.update({'RoughP PurgeGass': False})
+                return "{'result':'success'}"
+            else:
+                return "{'result':'Not Changed: Active Profile Running.'}"
         except Exception as e:
             return "{'error':'{}'}".format(e)
 

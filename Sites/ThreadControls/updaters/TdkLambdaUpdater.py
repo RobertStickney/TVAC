@@ -209,14 +209,42 @@ class TdkLambdaUpdater(Thread):
                                  {
                                      "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
                                      "level": 3})
+        elif 'Enable Shroud Output' == cmd[0]:  # Duty cycle is a value from 0-1
+            if self.hw.OperationalVacuum:
+                self.run_set_cmd(self.hw.TdkLambda_PS.get_shroud_left_addr(),
+                                 self.pwr_supply.set_out, True)
+                self.run_set_cmd(self.hw.TdkLambda_PS.get_shroud_right_addr(),
+                                 self.pwr_supply.set_out, True)
+            else:
+                Logging.logEvent("Debug", "Status Update",
+                                 {
+                                     "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
+                                     "level": 3})
         elif 'Setup Platen' == cmd[0]:  # Duty cycle is a value from 0-1
             Logging.logEvent("Debug", "Status Update",
              {
-             "message": 'Setting up Platen',
+             "message": 'Setting up Platen Heaters',
              "level": 2})
             if self.hw.OperationalVacuum:
                 for addr in [self.hw.TdkLambda_PS.get_platen_left_addr(),
                              self.hw.TdkLambda_PS.get_platen_right_addr()]:
+                    self.pwr_supply.set_addr(addr)
+                    self.pwr_supply.set_pc(0.0)
+                    self.pwr_supply.set_pv(0.0)
+                    self.pwr_supply.set_out_on()
+            else:
+                Logging.logEvent("Debug", "Status Update",
+                                 {
+                                     "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
+                                     "level": 3})
+        elif 'Setup Shroud' == cmd[0]:  # Duty cycle is a value from 0-1
+            Logging.logEvent("Debug", "Status Update",
+                             {
+                                 "message": 'Setting up Shroud Heaters',
+                                 "level": 2})
+            if self.hw.OperationalVacuum:
+                for addr in [self.hw.TdkLambda_PS.get_shroud_left_addr(),
+                             self.hw.TdkLambda_PS.get_shroud_right_addr()]:
                     self.pwr_supply.set_addr(addr)
                     self.pwr_supply.set_pc(0.0)
                     self.pwr_supply.set_pv(0.0)
@@ -240,6 +268,11 @@ class TdkLambdaUpdater(Thread):
                              self.pwr_supply.set_out, False)
             self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_right_addr(),
                              self.pwr_supply.set_out, False)
+        elif 'Disable Shroud Output' == cmd[0]:  # Duty cycle is a value from 0-1
+            self.run_set_cmd(self.hw.TdkLambda_PS.get_shroud_left_addr(),
+                             self.pwr_supply.set_out, False)
+            self.run_set_cmd(self.hw.TdkLambda_PS.get_shroud_right_addr(),
+                             self.pwr_supply.set_out, False)
         elif 'Platen Duty Cycle' == cmd[0]:  # Duty cycle is a value from 0-1
             if self.hw.OperationalVacuum:
                 if cmd[1] > 1:
@@ -252,6 +285,26 @@ class TdkLambdaUpdater(Thread):
                 voltage = current * 80.0
                 for addr in [self.hw.TdkLambda_PS.get_platen_left_addr(),
                              self.hw.TdkLambda_PS.get_platen_right_addr()]:
+                    self.pwr_supply.set_addr(addr)
+                    self.pwr_supply.set_pc(current)
+                    self.pwr_supply.set_pv(voltage)
+            else:
+                Logging.logEvent("Debug", "Status Update",
+                                 {
+                                     "message": 'TDK Lambda Powers Supply Cant be turned on when not in Operational vacuum',
+                                     "level": 3})
+        elif 'Shroud Duty Cycle' == cmd[0]:  # Duty cycle is a value from 0-1
+            if self.hw.OperationalVacuum:
+                if cmd[1] > 1:
+                    dutycycle = 1.0
+                elif cmd[1] < 0:
+                    dutycycle = 0.0
+                else:
+                    dutycycle = float(cmd[1])
+                current = 3 * dutycycle
+                voltage = current * 80.0
+                for addr in [self.hw.TdkLambda_PS.get_shroud_left_addr(),
+                             self.hw.TdkLambda_PS.get_shroud_right_addr()]:
                     self.pwr_supply.set_addr(addr)
                     self.pwr_supply.set_pc(current)
                     self.pwr_supply.set_pv(voltage)
