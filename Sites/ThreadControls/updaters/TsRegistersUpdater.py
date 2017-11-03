@@ -163,7 +163,7 @@ class TsRegistersUpdater(Thread):
 
         ChamberPowerLockout = True if (chamberPressure is None) or \
                                       ((chamberPressure > arc_cutoff_pressure_low) and
-                                       (chamberPressure < arc_cutoff_pressure_high)) else True
+                                       (chamberPressure < arc_cutoff_pressure_high)) else False
         if ChamberPowerLockout:  # Disallow heaters when chamber is at low dielectric pressure.
             self.da_io.digital_out.update({'C1 B2': 0x00})  # IR lamp 1-8
             self.da_io.digital_out.update({'C1 B3': 0x00})  # IR lamp 9-16
