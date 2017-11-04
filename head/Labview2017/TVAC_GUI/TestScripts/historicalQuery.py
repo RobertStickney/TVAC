@@ -117,32 +117,31 @@ def getPressureDataFromDB(startingPoint,endingPoint,gaugeSelection):
 	#print(results)
 	return "Pressure since {}".format(startingPoint), results, data_csv	
 
-def getExpectedFromDB():
-	mysql = MySQlConnect()
-	# These two can be combined into one sql statement...if I have time look into that
-	sql = "SELECT profile_name, startTime, endTime FROM tvac.Profile_Instance WHERE profile_name like \"coldRampAndSoak\";"
-	mysql = MySQlConnect()
-	try:
-		mysql.cur.execute(sql)
-		mysql.conn.commit()
-	except Exception as e:
-		return False
+def getExpectedTempFromDB(startingPoint,endingPoint):
+	data_csv = dict(time=[],zone=[],temperature=[])
+	results={}
 
-	result = mysql.cur.fetchone()
-	if not result:
-		return False
+	mysql = MySQlConnect()
+	sql = "SELECT * FROM tvac.expected_temperature WHERE (time > \"{}\") AND (time<\"{}\");".format(startingPoint,endingPoint)
 
-	sql = "SELECT * FROM tvac.Expected_Temperature WHERE time>\"{}\";".format(result['startTime'])
 
 	mysql.cur.execute(sql)
 	mysql.conn.commit()
-	results = {}
+	time_two=time.time()
+	#print("Time to Query (s): ",time_two-time_start)
+
+
 	for row in mysql.cur:
-		# print(row)
+		
+		tmp=mdates.date2num(datetime.strptime(str(row["time"]),'%Y-%m-%d %H:%M:%S'))
+		data_csv["time"].append(tmp)
+		data_csv["zone"].append(row["zone"])
+		data_csv["temperature"].append(float(row["temperature"]))
+
 		tmp = results.get(row["time"], [])
 		tmp.append([row["zone"], float(row["temperature"])])
 		results[row['time']] = tmp
-	return result['profile_name'], results
+	return "Expected Temp since {}".format(startingPoint), results, data_csv
 
 def utc_to_local(utc_dt):
     return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
@@ -159,28 +158,35 @@ def main(args):
 
 	gaugeSelection=args[3]
 	tcSelection=args[4]
+	expectedSelection=args[5]
 
 
-	if len(args)>6:
-		temp_file=args[5]
-		pressure_file=args[6]
+	if len(args)>7:
+		temp_file=args[6]
+		pressure_file=args[7]
 
 
 	print("Querying Temperatures...")
 	profile_I_ID, results, tdata_csv = getLiveTempFromDB(startTime,endTime,time_start,tcSelection)
+
+	if expectedSelection=='1':
+		print("Querying Expected Temperatures...")
+		profile_expTemp, expectedT, expdata_csv=getExpectedTempFromDB(startTime,endTime)
 
 	print("Querying Pressures...")
 	pressureID, pressure, pdata_csv=getPressureDataFromDB(startTime,endTime,gaugeSelection)
 
 	time_values = []
 	ptime_values = []
+	etime_values = []
 
+	exp_data={}
 	tc_data = {}
 	guage_data = {}	
 
 	print("Time to Pressure End ",time.time()-time_start)
 
-	if len(args)>6:
+	if len(args)>7:
 		a=np.array(tdata_csv["time"])
 		b=np.array(tdata_csv["thermocouple"])
 		c=np.array(tdata_csv["temperature"])
@@ -193,7 +199,7 @@ def main(args):
 	pGuage=np.array(pdata_csv["guage"])
 	pPressure=np.array(pdata_csv["pressure"])
 
-	if len(args)>6:
+	if len(args)>7:
 		df2 = pd.DataFrame({"time" : pTime, "guage" : pGuage, "pressure": pPressure})
 		df2=df2[['time','guage','pressure']]
 		df2.to_csv(pressure_file, index=False)
@@ -206,6 +212,15 @@ def main(args):
 			tmp = tc_data.get(thermocouple[0], [])
 			tmp.append(thermocouple[1])
 			tc_data[thermocouple[0]] = tmp
+	if expectedSelection == '1':
+		for time_value in sorted(expectedT):
+			converted_time=mdates.date2num(datetime.strptime(str(time_value),'%Y-%m-%d %H:%M:%S'))
+			etime_values.append(converted_time)
+			# print(converted_time)
+			for zone in expectedT[time_value]:
+				tmp = exp_data.get(zone[0], [])
+				tmp.append(zone[1])
+				exp_data[zone[0]] = tmp
 
 	guage1=[]
 	xg1=[]
@@ -241,6 +256,14 @@ def main(args):
 		except:
 			print("No TC Data")
 		#print(tc)
+	if expectedSelection == '1':
+		for zone in exp_data:
+			try:
+				ax1.plot_date(etime_values,exp_data[zone], '-',label=("Zone "+str(zone)))
+				ax1.legend(bbox_to_anchor=(0., 1.075, 1., .102), loc=3,			
+	           ncol=5, mode="expand", borderaxespad=0.2)
+			except:
+				print("No Expected Temp Data")
 
 	#print(min(pTime),max(pTime))
 
