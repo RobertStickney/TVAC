@@ -22,7 +22,7 @@ class ThreadCollection:
 
     def __init__(self):
         # self.zoneThreadDict = self.createZoneCollection()
-        self.dutyCycleThread = DutyCycleControlStub()
+        self.dutyCycleThread = DutyCycleControlStub(parent=self)
         self.hardwareInterfaceThreadDict = self.createHardwareInterfaces(parent=self)
         self.safetyThread = SafetyCheck(parent=self)
 
@@ -68,9 +68,9 @@ class ThreadCollection:
             1: TsRegistersUpdater(parent=parent),
             2: ThermoCoupleUpdater(parent=parent),
             3: PfeifferGaugeUpdater(),
-            4: ShiMccUpdater(),
-            5: ShiCompressorUpdater(),
-            6: TdkLambdaUpdater(),
+            4: ShiMccUpdater(parent=parent),
+            5: ShiCompressorUpdater(parent=parent),
+            6: TdkLambdaUpdater(parent=parent),
             7: LN2ControlStub(ThreadCollection=parent),
             8: VacuumControlStub(),
             }

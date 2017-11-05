@@ -53,10 +53,10 @@ class VacuumControlStub(Thread):
             userName = os.environ['LOGNAME']
         else:
             userName = "user" 
-        if "root" in userName:
-            pass
-        else: 
-            self.zoneProfiles.updateThermalStartTime(time.time())
+        # if "root" in userName:
+        #     pass
+        # else: 
+        #     self.zoneProfiles.updateThermalStartTime(time.time())
 
 
     def run(self):
@@ -129,7 +129,7 @@ class VacuumControlStub(Thread):
 
                     Logging.logEvent("Debug","Status Update", 
                     {"message": "VCS: Current chamber state: {}".format(self.state),
-                     "level": 3})
+                     "level": 4})
 
                     # sleep until the next time around
                     time.sleep(self.updatePeriod)
@@ -303,6 +303,7 @@ class VacuumControlStub(Thread):
                 (self.cryoPumpPressure < self.chamberPressure) and \
                 (not self.hw.ShiCryopump.is_regen_active()):
             self.state = 'Operational Vacuum: Cryo Pumping'
+            Logging.debugPrint(2,"Vacuum Ctl (@OpVac): Switching from OV to OV:CP")
             self.hw.PC_104.digital_out.update({'CryoP GateValve': True})
         elif self.profile.vacuumWanted and \
                 (not self.hw.ShiCryopump.is_regen_active()) and \
@@ -408,8 +409,8 @@ class VacuumControlStub(Thread):
             out += "Stage 2 Temp: {}     \n".format(self.hw.ShiCryopump.get_mcc_status('Stage 2 Temp'))
             out += "Helium Discharge Temp: {}\n".format(self.hw.ShiCryopump.get_compressor('Helium Discharge Temperature'))
             out += "Water Outlet Temperature: {}\n".format(self.hw.ShiCryopump.get_compressor('Water Outlet Temperature'))
-            out += "System ON: {}\n               ".format(self.hw.ShiCryopump.get_compressor('System ON'))
-            out += "Vacuum Wanted: {}\n     <-------->".format(self.profile.vacuumWanted)
+            out += "System ON: {}\n".format(self.hw.ShiCryopump.get_compressor('System ON'))
+            out += "Vacuum Wanted: {}\n<-------->".format(self.profile.vacuumWanted)
             Logging.debugPrint(3, out)
         return ready
 

@@ -6,6 +6,7 @@ from Collections.HardwareStatusInstance import HardwareStatusInstance
 from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
 from Logging.Logging import Logging
+from Logging.MySql import MySQlConnect
 
 class GetControl:
 
@@ -64,8 +65,14 @@ class GetControl:
     def putUnderVacuum(self):
         try:
             ProfileInstance.getInstance().vacuumWanted = True
+            sql = "UPDATE System_Status SET vacuum_wanted=1;"
+            mysql = MySQlConnect()
+            mysql.cur.execute(sql)
+            mysql.conn.commit()
             return "{'result':'success'}"
         except Exception as e:
+            Logging.debugPrint(3,"sql: {}".format(sql))
+            Logging.debugPrint(1, "Error in ThreadCollection, holdThread: {}".format(str(e)))
             return "{'error':'{}'}".format(e)
 
     def VacuumNotNeeded(self):
@@ -73,10 +80,16 @@ class GetControl:
             profile = ProfileInstance.getInstance()
             if not profile.activeProfile:
                 profile.vacuumWanted = False
+                sql = "UPDATE System_Status SET vacuum_wanted=0;"
+                mysql = MySQlConnect()
+                mysql.cur.execute(sql)
+                mysql.conn.commit()
                 return "{'result':'success'}"
             else:
                 return "{'result':'Not Changed: Active Profile Running.'}"
         except Exception as e:
+            Logging.debugPrint(3,"sql: {}".format(sql))
+            Logging.debugPrint(1, "Error in ThreadCollection, holdThread: {}".format(str(e)))
             return "{'error':'{}'}".format(e)
 
     def StopCryoPumpingChamber(self):
@@ -84,11 +97,18 @@ class GetControl:
             profile = ProfileInstance.getInstance()
             if not profile.activeProfile:
                 profile.vacuumWanted = False
+                sql = "UPDATE System_Status SET vacuum_wanted=0;"
+                mysql = MySQlConnect()
+                mysql.cur.execute(sql)
+                mysql.conn.commit()
+
                 HardwareStatusInstance.getInstance().PC_104.digital_out.update({'CryoP GateValve': False})
                 return "{'result':'success'}"
             else:
                 return "{'result':'Not Changed: Active Profile Running.'}"
         except Exception as e:
+            Logging.debugPrint(3,"sql: {}".format(sql))
+            Logging.debugPrint(1, "Error in ThreadCollection, holdThread: {}".format(str(e)))
             return "{'error':'{}'}".format(e)
 
     def StopCryoPump(self):
@@ -96,6 +116,10 @@ class GetControl:
             profile = ProfileInstance.getInstance()
             if not profile.activeProfile:
                 profile.vacuumWanted = False
+                sql = "UPDATE System_Status SET vacuum_wanted=0;"
+                mysql = MySQlConnect()
+                mysql.cur.execute(sql)
+                mysql.conn.commit()
                 hw = HardwareStatusInstance.getInstance()
                 hw.PC_104.digital_out.update({'CryoP GateValve': False})
 
@@ -106,6 +130,8 @@ class GetControl:
             else:
                 return "{'result':'Not Changed: Active Profile Running.'}"
         except Exception as e:
+            Logging.debugPrint(3,"sql: {}".format(sql))
+            Logging.debugPrint(1, "Error in ThreadCollection, holdThread: {}".format(str(e)))
             return "{'error':'{}'}".format(e)
 
     def StopRoughingPump(self):
@@ -293,5 +319,8 @@ class GetControl:
             'CryoPressure': gauges.get_cryopump_pressure(),
             'ChamberPressure': gauges.get_chamber_pressure(),
             'RoughingPressure': gauges.get_roughpump_pressure(),
+            "VacuumState": HardwareStatusInstance.getInstance().VacuumState,
             }
+        if not ProfileInstance.getInstance().activeProfile:
+            out["inRamp"] = None
         return json.dumps(out)

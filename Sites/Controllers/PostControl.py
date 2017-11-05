@@ -99,8 +99,6 @@ class PostControl:
     def heatUpPlaten(self, data):
         dutyCycle = float(data['dutyCycle'])
         tdKs = HardwareStatusInstance.getInstance().TdkLambda_PS
-        tdKs.get_platen_left().output_enable = True
-        tdKs.get_platen_right().output_enable = True
         if not ProfileInstance.getInstance().activeProfile:
             if dutyCycle == 0:
                 if tdKs.get_platen_left().output_enable or tdKs.get_platen_right().output_enable:

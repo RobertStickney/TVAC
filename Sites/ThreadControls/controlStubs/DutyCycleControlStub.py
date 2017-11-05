@@ -6,7 +6,7 @@ import datetime
 import sys
 import os
 import traceback
-import math
+
 
 from Collections.ProfileInstance import ProfileInstance
 from Collections.HardwareStatusInstance import HardwareStatusInstance
@@ -108,20 +108,22 @@ class ZoneControlStub():
         else:
             currentTime = int(time.time())
 
-        # This loop is to hold the program here until the temperature vaules have been loaded
-        if os.name == 'posix':
-            userName = os.environ['LOGNAME']
-        else:
-            userName = "User"
-        if "root" in userName:
-            while True:
-                currentTemp = self.zoneProfile.getTemp(self.zoneProfile.average)
-                Logging.debugPrint(1,"DCCS: currentTemp: {}".format(currentTemp))
-                if not math.isnan(currentTemp) and int(currentTemp) != 0:
-                    break
-                time.sleep(.5)
-        else:
-            currentTemp = self.zoneProfile.getTemp(self.zoneProfile.average)
+        sql = "SELECT zone{}_Temp FROM tvac.Profile_Instance where endTime is null;".format(self.zoneProfile.zone)
+        mysql = MySQlConnect()
+        try:
+            mysql.cur.execute(sql)
+            mysql.conn.commit()
+        except Exception as e:
+            Logging.debugPrint(3,"sql: {}".format(sql))
+            Logging.debugPrint(1, "Error in loadThermoProfiles, zoneCollection: {}".format(str(e)))
+            if Logging.debug:
+                raise e
+
+        result = mysql.cur.fetchone()
+        print("result: {}".format(result))
+        currentTemp = result["zone{}_Temp".format(self.zoneProfile.zone)]
+        currentTemp = float(currentTemp)
+        print("currentTemp: {}".format(currentTemp))
 
         expected_temp_values = []
         expected_time_values = []
@@ -210,13 +212,13 @@ class DutyCycleControlStub(Thread):
     It also generates the expected temp values at the given time 
     '''
 
-    def __init__(self):
+    def __init__(self, parent=None):
         Logging.logEvent("Debug","Status Update", 
         {"message": "Creating DutyCycleControlStub",
          "level":2})
 
         self.zoneProfiles = ProfileInstance.getInstance().zoneProfiles
-
+        self.parent = parent
         Thread.__init__(self)
         self.updatePeriod = ProfileInstance.getInstance().zoneProfiles.updatePeriod
         self.d_out        = HardwareStatusInstance.getInstance().PC_104.digital_out
@@ -398,10 +400,22 @@ class DutyCycleControlStub(Thread):
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                     print("Error: {} in file {}:{}".format(exc_type, fname, exc_tb.tb_lineno))
 
-                    # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
+
                     self.running = False
                     ProfileInstance.getInstance().zoneProfiles.activeProfile = False
                     Logging.debugPrint(1, "DCCS: Error in run, Duty Cycle: {}".format(str(e)))
+                    Logging.logEvent("Error", "Duty Cycle Control Stub Thread",
+                     {"type": exc_type,
+                      "filename": fname,
+                      "line": exc_tb.tb_lineno,
+                      "thread": "DutyCycleControlStub",
+                      "ThreadCollection":self.parent,
+                      "item":"Duty Cycle Control Stub",
+                      "itemID":-1,
+                      "details":"There is a software error ({})".format(e)
+                    })
+
+
                     if Logging.debug:
                         raise e
                 # end of try, catch

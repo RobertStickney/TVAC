@@ -3,6 +3,8 @@ import math
 from datetime import datetime
 import time
 
+
+
 class Logging(object):
 	"""
 	Logging is a static class that will take and filter every kind of
@@ -20,6 +22,18 @@ class Logging(object):
 			if "Hardware Interface Thread" in logType:
 				# in here check if 'type' is a buffer error, if so suggest checking connection to device
 				print("Error: Thread '{}' has had an error of type {}. Restarting thread now...".format(data['thread'],data['type']))
+
+			errorList = data["ThreadCollection"].safetyThread.errorList
+			error = {
+				"time" : str(datetime.now()),
+				"event":"Hardware Interface Error",
+				"item": data['item'],
+				"itemID": data['itemID'],
+				"details": data['details'],
+				"actions": ["Not Here"]
+				}
+			errorList.append(error)
+			print(error)
 		elif category is "Event":
 			# if "Thread Start" in logType:
 			currentTime = datetime.now()
@@ -29,23 +43,16 @@ class Logging(object):
 			eventList.append({"time":str(datetime.now()),
 				"category":logType,
 				"message":data.get("message")})
-			# try:
-			# 	systemStatusQueue = data["ProfileInstance"].systemStatusQueue
-			# 	systemStatusQueue.append("[ '{}','{}', '{}' ]".format(category,logType, data.get("thread")))
-			# except Exception as e:
-			# 	Logging.debugPrint(1, "Error in Logging, LogEvent: {}".format(e))
-			# 	if Logging.debug:
-			# 		raise e
 
-			# coloums = "( event_type, details )"
-			# values = "( \"{}\",\"{}\" )".format(category,logType)
-			# sql = "INSERT INTO tvac.Event {} VALUES {};".format(coloums, values)
-			# try:
-			# 	mysql = MySQlConnect()
-			# 	mysql.cur.execute(sql)
-			# 	mysql.conn.commit()
-			# except Exception as e:
-			# 	Logging.debugPrint(1, "Error: {}".format(e))
+			coloums = "( event_type, details )"
+			values = "( \"{}\",\"{}\" )".format(logType,data.get("message"))
+			sql = "INSERT INTO tvac.Event {} VALUES {};".format(coloums, values)
+			try:
+				mysql = MySQlConnect()
+				mysql.cur.execute(sql)
+				mysql.conn.commit()
+			except Exception as e:
+				Logging.debugPrint(1, "Error: {}".format(e))
 		elif category is "Debug":
 			if "Status Update" in logType:
 				Logging.debugPrint(data["level"],data['message'])
