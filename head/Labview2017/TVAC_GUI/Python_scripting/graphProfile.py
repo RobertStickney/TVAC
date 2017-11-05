@@ -7,8 +7,10 @@ import requests
 import time
 
 
-def createExpectedValues(json,jsonTCs,zoneNumber,startTime=None):
+def createExpectedValues(json,jsonTCs,zoneNumber,errors,startTime=None):
 	#print(setPoints)
+	zoneData=json[zoneNumber]
+
 	intervalTime = 5
 	if startTime:
 		currentTime = int(startTime)
@@ -38,10 +40,13 @@ def createExpectedValues(json,jsonTCs,zoneNumber,startTime=None):
 		rampTime = setPoint["ramp"]
 		soakTime = setPoint["soakduration"]
 
-
 		# skip ramp section if rampTime == 0
 		if rampTime:
 			TempDelta = goalTemp-currentTemp
+			if abs(TempDelta/(rampTime/60.0)) > zoneData["maxSlope"]:
+				errors += 1
+				print("ProfileError : Ramp Time too short or Max Temp Slope too low to meet temperature goal for Zone %s, Ramp %s" % (str(zoneData["zone"]),str(setPoint["thermalsetpoint"])))
+
 			numberOfJumps = rampTime/intervalTime
 			intervalTemp = TempDelta/numberOfJumps
 			rampEndTime = currentTime+rampTime
@@ -72,7 +77,7 @@ def createExpectedValues(json,jsonTCs,zoneNumber,startTime=None):
 	# end of for loop, end generating outputs
 
 
-	return expected_temp_values, expected_time_values
+	return expected_temp_values, expected_time_values, errors
 
 
 def unwrapJSON(json,zone):
@@ -330,7 +335,7 @@ def main(args):
 		try:
 			errors=validateThermocouple(json,jsonTCs,i,errors)
 
-			expected_temp_values, expected_time_values = createExpectedValues(json,jsonTCs,i)
+			expected_temp_values, expected_time_values,errors = createExpectedValues(json,jsonTCs,i,errors)
 
 			errors=validateProfile(json,i,errors)
 
