@@ -70,10 +70,16 @@ class Shi_Compressor_Contract:
             val = self.return_pressure
         elif name == 'Helium Discharge Temperature':
             val = self.helium_temp
+            if val != None:
+                val += 273.15
         elif name == 'Water Inlet Temperature':
             val = self.water_in_temp
+            if val != None:
+                val += 273.15            
         elif name == 'Water Outlet Temperature':
             val = self.water_out_temp
+            if val != None:
+                val += 273.15           
         elif name == 'Firmware Version':
             val = self.firmware_version
         elif name == 'Operating Hours Elapsed':
@@ -108,9 +114,9 @@ class Shi_Compressor_Contract:
     def getJson(self):
         self.__Lock.acquire()
         message = ['"Helium Return Pressure (psig)":%s' % json.dumps(self.return_pressure),
-                   '"Helium Discharge Temp (C)":%s' % json.dumps(self.helium_temp),
-                   '"Water Inlet Temp (C)":%s' % json.dumps(self.water_in_temp),
-                   '"Water Outlet Temp (C)":%s' % json.dumps(self.water_out_temp),
+                   '"Helium Discharge Temp (K)":%s' % json.dumps(self.helium_temp),
+                   '"Water Inlet Temp (K)":%s' % json.dumps(self.water_in_temp),
+                   '"Water Outlet Temp (K)":%s' % json.dumps(self.water_out_temp),
                    '"Firmware Version":%s' % json.dumps(self.firmware_version),
                    '"Operating Hours Elapsed":%s' % json.dumps(self.op_hours),
                    '"RS-232 Config":%s' % json.dumps(self.rs232_config),
@@ -123,9 +129,9 @@ class Shi_Compressor_Contract:
     def get_json_plots(self):
         self.__Lock.acquire()
         message = ['"Helium Return Pressure (psig)":%s' % json.dumps(self.return_pressure),
-                   '"Helium Discharge Temp (C)":%s' % json.dumps(self.helium_temp),
-                   '"Water Inlet Temp (C)":%s' % json.dumps(self.water_in_temp),
-                   '"Water Outlet Temp (C)":%s' % json.dumps(self.water_out_temp),
+                   '"Helium Discharge Temp (K)":%s' % json.dumps(self.helium_temp),
+                   '"Water Inlet Temp (K)":%s' % json.dumps(self.water_in_temp),
+                   '"Water Outlet Temp (K)":%s' % json.dumps(self.water_out_temp),
                    ]
         self.__Lock.release()
         return message
