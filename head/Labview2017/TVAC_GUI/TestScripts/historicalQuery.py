@@ -132,7 +132,6 @@ def getExpectedTempFromDB(startingPoint,endingPoint):
 
 
 	for row in mysql.cur:
-		
 		tmp=mdates.date2num(datetime.strptime(str(row["time"]),'%Y-%m-%d %H:%M:%S'))
 		data_csv["time"].append(tmp)
 		data_csv["zone"].append(row["zone"])
@@ -168,13 +167,17 @@ def main(args):
 
 	print("Querying Temperatures...")
 	profile_I_ID, results, tdata_csv = getLiveTempFromDB(startTime,endTime,time_start,tcSelection)
+	print("Rows returned: ", len(results))
 
 	if expectedSelection=='1':
 		print("Querying Expected Temperatures...")
 		profile_expTemp, expectedT, expdata_csv=getExpectedTempFromDB(startTime,endTime)
+		print("Rows returned: ", len(expectedT))
+
 
 	print("Querying Pressures...")
 	pressureID, pressure, pdata_csv=getPressureDataFromDB(startTime,endTime,gaugeSelection)
+	print("Rows returned: ", len(pressure))
 
 	time_values = []
 	ptime_values = []
@@ -213,14 +216,42 @@ def main(args):
 			tmp.append(thermocouple[1])
 			tc_data[thermocouple[0]] = tmp
 	if expectedSelection == '1':
-		for time_value in sorted(expectedT):
-			converted_time=mdates.date2num(datetime.strptime(str(time_value),'%Y-%m-%d %H:%M:%S'))
-			etime_values.append(converted_time)
-			# print(converted_time)
-			for zone in expectedT[time_value]:
-				tmp = exp_data.get(zone[0], [])
-				tmp.append(zone[1])
-				exp_data[zone[0]] = tmp
+
+		eTime=np.array(expdata_csv["time"])
+		eZone=np.array(expdata_csv["zone"])
+		eTemp=np.array(expdata_csv["temperature"])
+
+		eYaxis=dict(zone1=[],zone2=[],zone3=[],zone4=[],zone5=[],zone6=[],zone7=[],zone8=[],zone9=[])
+		eXaxis=dict(zone1=[],zone2=[],zone3=[],zone4=[],zone5=[],zone6=[],zone7=[],zone8=[],zone9=[])
+
+		for time_value in range(0,len(eTime)):
+			if eZone[time_value] == 1:
+				eYaxis["zone1"].append(eTemp[time_value])
+				eXaxis["zone1"].append(eTime[time_value])
+			if eZone[time_value] == 2:
+				eYaxis["zone2"].append(eTemp[time_value])
+				eXaxis["zone2"].append(eTime[time_value])
+			if eZone[time_value] == 3:
+				eYaxis["zone3"].append(eTemp[time_value])
+				eXaxis["zone3"].append(eTime[time_value])
+			if eZone[time_value] == 4:
+				eYaxis["zone4"].append(eTemp[time_value])
+				eXaxis["zone4"].append(eTime[time_value])	
+			if eZone[time_value] == 5:
+				eYaxis["zone5"].append(eTemp[time_value])
+				eXaxis["zone5"].append(eTime[time_value])
+			if eZone[time_value] == 6:
+				eYaxis["zone6"].append(eTemp[time_value])
+				eXaxis["zone6"].append(eTime[time_value])
+			if eZone[time_value] == 7:
+				eYaxis["zone7"].append(eTemp[time_value])
+				eXaxis["zone7"].append(eTime[time_value])	
+			if eZone[time_value] == 8:
+				eYaxis["zone8"].append(eTemp[time_value])
+				eXaxis["zone8"].append(eTime[time_value])
+			if eZone[time_value] == 9:
+				eYaxis["zone9"].append(eTemp[time_value])
+				eXaxis["zone9"].append(eTime[time_value])	
 
 	guage1=[]
 	xg1=[]
@@ -257,13 +288,15 @@ def main(args):
 			print("No TC Data")
 		#print(tc)
 	if expectedSelection == '1':
-		for zone in exp_data:
-			try:
-				ax1.plot_date(etime_values,exp_data[zone], '-',label=("Zone "+str(zone)))
-				ax1.legend(bbox_to_anchor=(0., 1.075, 1., .102), loc=3,			
-	           ncol=5, mode="expand", borderaxespad=0.2)
-			except:
-				print("No Expected Temp Data")
+		for zone in range(0,9):
+			zoneStr="zone"+str(zone+1)
+			if len(eXaxis[zoneStr]) != 0:
+				ax1.plot_date(eXaxis[zoneStr],eYaxis[zoneStr], '-',label=("Zone "+str(zone+1)))
+
+		ax1.legend(bbox_to_anchor=(0., 1.075, 1., .102), loc=3,			
+       ncol=5, mode="expand", borderaxespad=0.2)
+			#except:
+				#print("No Expected Temp Data")
 
 	#print(min(pTime),max(pTime))
 
