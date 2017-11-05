@@ -70,16 +70,10 @@ class Shi_Compressor_Contract:
             val = self.return_pressure
         elif name == 'Helium Discharge Temperature':
             val = self.helium_temp
-            if val != None:
-                val += 273.15
         elif name == 'Water Inlet Temperature':
-            val = self.water_in_temp
-            if val != None:
-                val += 273.15            
+            val = self.water_in_temp         
         elif name == 'Water Outlet Temperature':
-            val = self.water_out_temp
-            if val != None:
-                val += 273.15           
+            val = self.water_out_temp        
         elif name == 'Firmware Version':
             val = self.firmware_version
         elif name == 'Operating Hours Elapsed':
