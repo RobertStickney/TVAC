@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 [{"zone":1,"average":"Average","thermocouples":[11],"maxTemp":400,"minTemp":77,"maxSlope":20,"thermalprofiles":[{"thermalsetpoint":1,"tempgoal":300,"ramp":6000,"soakduration":3000}]},{"zone":4,"average":"Average","thermocouples":[11],"maxTemp":423,"minTemp":77,"maxSlope":20,"thermalprofiles":[{"thermalsetpoint":1,"tempgoal":410,"ramp":6000,"soakduration":3000}]},{"zone":7,"average":"Average","thermocouples":[11],"maxTemp":400,"minTemp":77,"maxSlope":20,"thermalprofiles":[{"thermalsetpoint":1,"tempgoal":280,"ramp":6000,"soakduration":3000}]},{"zone":9,"average":"Average","thermocouples":[16],"maxTemp":423,"minTemp":77,"maxSlope":20,"thermalprofiles":[{"thermalsetpoint":1,"tempgoal":420,"ramp":6000,"soakduration":3000}]}]
+=======
+[{"zone":8,"average":"Average","thermocouples":[5],"maxTemp":310,"minTemp":77,"maxSlope":10,"thermalprofiles":[{"thermalsetpoint":1,"tempgoal":300,"ramp":600,"soakduration":60}]}]
+>>>>>>> 58aa5b4f4d9af76ac14fc9359c2cf8b5585a606f
