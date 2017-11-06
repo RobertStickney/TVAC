@@ -7,8 +7,10 @@ import requests
 import time
 
 
-def createExpectedValues(json,jsonTCs,zoneNumber,startTime=None):
+def createExpectedValues(json,jsonTCs,zoneNumber,errors,startTime=None):
 	#print(setPoints)
+	zoneData=json[zoneNumber]
+
 	intervalTime = 5
 	if startTime:
 		currentTime = int(startTime)
@@ -38,10 +40,13 @@ def createExpectedValues(json,jsonTCs,zoneNumber,startTime=None):
 		rampTime = setPoint["ramp"]
 		soakTime = setPoint["soakduration"]
 
-
 		# skip ramp section if rampTime == 0
 		if rampTime:
 			TempDelta = goalTemp-currentTemp
+			if abs(TempDelta/(rampTime/60.0)) > zoneData["maxSlope"]:
+				errors += 1
+				print("ProfileError : Ramp Time too short or Max Temp Slope too low to meet temperature goal for Zone %s, Ramp %s" % (str(zoneData["zone"]),str(setPoint["thermalsetpoint"])))
+
 			numberOfJumps = rampTime/intervalTime
 			intervalTemp = TempDelta/numberOfJumps
 			rampEndTime = currentTime+rampTime
@@ -72,7 +77,7 @@ def createExpectedValues(json,jsonTCs,zoneNumber,startTime=None):
 	# end of for loop, end generating outputs
 
 
-	return expected_temp_values, expected_time_values
+	return expected_temp_values, expected_time_values, errors
 
 
 def unwrapJSON(json,zone):
@@ -100,7 +105,7 @@ def validateProfile(json,zone,errors):
 				errors+=1	
 
 
-	if zoneData["maxTemp"] > 430 or zoneData["maxTemp"] < 50:
+	if zoneData["maxTemp"] > 423 or zoneData["maxTemp"] < 70:
 		print("ProfileError : Maximum Temp Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))
 		errors+=1	
 	if zoneData["maxTemp"] == zoneData["minTemp"]:
@@ -109,7 +114,7 @@ def validateProfile(json,zone,errors):
 	if zoneData["maxTemp"] < zoneData["minTemp"]:
 		print("ProfileError : Maximum Temp Limit below Minimum Temp Limit for Zone",str(zoneData["zone"]))
 		errors+=1	
-	if zoneData["minTemp"] > 430 or zoneData["minTemp"] < 50:
+	if zoneData["minTemp"] > 423 or zoneData["minTemp"] < 70:
 		print("ProfileError : Minimum Temp Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))		
 		errors+=1	
 
@@ -139,11 +144,13 @@ def validateProfile(json,zone,errors):
 			if setPtData[i]["ramp"] == 0:
 				print("ProfileError : Ramp Time for Zone %s, Set Point %s is set to 0"
 				 % (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
+				errors+=1
 
 
 			if setPtData[i]["soakduration"] == 0:
 				print("ProfileError : Soak Time for Zone %s, Set Point %s is set to 0"
 				 % (str(zoneData["zone"]),str(setPtData[i]["thermalsetpoint"])))
+				errors+=1
 
 	#print(setPtData[0]["tempgoal"])
 
@@ -161,8 +168,9 @@ def validateThermocouple(json,jsonTCs,zoneNumber,errors):
 
 		for i in range(0,num):
 			workingCheck=jsonTCs[zoneCheck[i]-1]["working"]
+			zeroCheck=jsonTCs[zoneCheck[i]-1]["temp"]
 
-			if workingCheck == False:
+			if workingCheck == False or zeroCheck == 0 :
 				print("ProfileError : Thermocouple %s, for Zone %s is not a working Thermocouple"
 				 % (str(zoneCheck[i]),str(json[zoneNumber]["zone"])))
 				errors+=1
@@ -236,21 +244,21 @@ def generateJSON(fileName):
 						soakTime = line[2]
 						goalTemp = line[3+j]
 						goalTemp=goalTemp.rstrip()
-
-						# print(setPoint)
+						# print(zone)
+						#print(setPoint)
 						# print(rampTime)
 						# print(soakTime)
 						# print(goalTemp)
 
-
-						tempSetpoint = {
-						"zone":zone,
-						"setPoint":setPoint,
-						"rampTime":rampTime,
-						"soakTime":soakTime,
-						"goalTemp":goalTemp,
-						}
-						setpoints.append(tempSetpoint)
+						if soakTime >= 0 and goalTemp >= 0:
+							tempSetpoint = {
+							"zone":zone,
+							"setPoint":setPoint,
+							"rampTime":rampTime,
+							"soakTime":soakTime,
+							"goalTemp":goalTemp,
+							}
+							setpoints.append(tempSetpoint)
 
 						#print(tempSetpoint)
 				if i > 0:
@@ -327,7 +335,7 @@ def main(args):
 		try:
 			errors=validateThermocouple(json,jsonTCs,i,errors)
 
-			expected_temp_values, expected_time_values = createExpectedValues(json,jsonTCs,i)
+			expected_temp_values, expected_time_values,errors = createExpectedValues(json,jsonTCs,i,errors)
 
 			errors=validateProfile(json,i,errors)
 
