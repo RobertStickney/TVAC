@@ -240,8 +240,6 @@ class ZoneCollection:
             mysql = MySQlConnect()
             mysql.cur.execute(sql)
             mysql.conn.commit()
-            except Exception as e:
-                raise e
 
             results = mysql.cur.fetchall()
             if results:
