@@ -412,9 +412,10 @@ class Shi_Mcc:
 
     def Set_RegenStartDelay(self, delay):
         print('----------> Set_RegenStartDelay to {:d}. <----------'.format(delay))
-        if (delay < 0) | (delay > 59994):
+        if (delay < 0) or (delay > 59994):
             # TODO: Change to error event print('Regeneration Start Delay out is of range (0-59994): {:d}'.format(delay))
             return self.Format_Responce("Regeneration Start Delay out of range: " + str(delay), error=True)
+        print('----------> Set_RegenStartDelay to {:d}. <----------'.format(delay))
         return self.Send_cmd("j{0:d}".format(delay))
 
     # 2.22 • Regeneration Step Timer pg:18

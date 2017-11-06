@@ -149,8 +149,7 @@ class ShiMccUpdater(Thread):
                                         self.hw.ShiCryopump.update({'MCC Params': {"Regen Param_%s" % cmd[1]: val['Data']}})
                                 elif 'RegenStartDelay' == cmd[0]:  # 2.21 • Regeneration Start Delay pg.18
                                     self.run_set_cmd(self.mcc.Set_RegenStartDelay, cmd)
-                                    self.run_get_cmd(self.mcc.Get_RegenStartDelay,
-                                                     "Regen Start Delay")
+                                    self.run_get_cmd(self.mcc.Get_RegenStartDelay, "Regen Start Delay")
                                 elif 'Open_RoughingValve' == cmd[0]:  # 2.24 • Rough On/Off/Query pg:19
                                     self.run_set_cmd(self.mcc.Open_RoughingValve, cmd)
                                 elif 'Close_RoughingValve' == cmd[0]:  # 2.24 • Rough On/Off/Query pg:19
