@@ -81,10 +81,11 @@ class ShiCompressor:
         # $TEA: Read all temperatures
         # Command with checksum and carriage return = $TEAA4B9<cr>
         # Response: $TEA,T1,T2,T3,T4,<crc-16><cr>
+        # Default output is in Celsius - so converted to Kelvin
         resp = self.send_cmd('TEA')
-        return {'Helium Discharge Temperature': int(resp[0]),
-                'Water Outlet Temperature': int(resp[1]),
-                'Water Inlet Temperature': int(resp[2]),
+        return {'Helium Discharge Temperature': int(resp[0])+273,
+                'Water Outlet Temperature': int(resp[1])+273,
+                'Water Inlet Temperature': int(resp[2])+273,
                 }
 
     def get_pressure(self):

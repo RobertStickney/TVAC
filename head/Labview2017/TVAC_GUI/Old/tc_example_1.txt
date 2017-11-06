@@ -1,1 +1,0 @@
-{"time":2017-08-18 13:23:35.562316,TCs:[{"thermocouple":1,"time":0,"temp":0,"working":False}]}
