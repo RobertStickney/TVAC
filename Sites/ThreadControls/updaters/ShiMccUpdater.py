@@ -218,6 +218,9 @@ class ShiMccUpdater(Thread):
             val = fun(cmd[1],cmd[2])
         else:
             raise Exception('run_cmd has to many arguments')
+        Logging.logEvent("Debug", "Status Update",
+                         {"message": 'Shi MCC Set_"%s" Error Response: %s' % (cmd[0], val),
+                          "level": 3})
         if val['Error']:
             Logging.logEvent("Debug", "Status Update",
                              {"message": 'Shi MCC Set_"%s" Error Response: %s' % (cmd[0], val),
