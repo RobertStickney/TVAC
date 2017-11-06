@@ -53,6 +53,15 @@ CREATE TABLE tvac.Profile_Instance(
 	profile_Start_Time DATETIME NOT NULL,
 	thermal_Start_Time DATETIME NULL,
 	first_Soak_Start_Time DATETIME NULL,
+	zone1_Temp decimal(10,4) NULL,
+	zone2_Temp decimal(10,4) NULL,
+	zone3_Temp decimal(10,4) NULL,
+	zone4_Temp decimal(10,4) NULL,
+	zone5_Temp decimal(10,4) NULL,
+	zone6_Temp decimal(10,4) NULL,
+	zone7_Temp decimal(10,4) NULL,
+	zone8_Temp decimal(10,4) NULL,
+	zone9_Temp decimal(10,4) NULL,
 	endTime DATETIME NULL
 );
 

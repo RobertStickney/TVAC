@@ -22,7 +22,7 @@ class ThreadCollection:
 
     def __init__(self):
         # self.zoneThreadDict = self.createZoneCollection()
-        self.dutyCycleThread = DutyCycleControlStub()
+        self.dutyCycleThread = DutyCycleControlStub(parent=self)
         self.hardwareInterfaceThreadDict = self.createHardwareInterfaces(parent=self)
         self.safetyThread = SafetyCheck(parent=self)
 
@@ -68,9 +68,9 @@ class ThreadCollection:
             1: TsRegistersUpdater(parent=parent),
             2: ThermoCoupleUpdater(parent=parent),
             3: PfeifferGaugeUpdater(),
-            4: ShiMccUpdater(),
-            5: ShiCompressorUpdater(),
-            6: TdkLambdaUpdater(),
+            4: ShiMccUpdater(parent=parent),
+            5: ShiCompressorUpdater(parent=parent),
+            6: TdkLambdaUpdater(parent=parent),
             7: LN2ControlStub(ThreadCollection=parent),
             8: VacuumControlStub(),
             }
@@ -111,7 +111,6 @@ class ThreadCollection:
 
         return True
 
-    # TODO: Should this function be removed I think it is depreacated.
     def runProfile(self, firstStart=True):
         '''
         This assumes a profile is already loaded in RAM, it will start the profile
@@ -154,10 +153,30 @@ class ThreadCollection:
 
     def holdThread(self,data=None):
         Logging.debugPrint(3,"Holding Zones")
-        self.dutyCycleThread.held = True
+        ProfileInstance.getInstance().inHold = True
+        sql = "UPDATE System_Status SET in_hold=1;"
+        mysql = MySQlConnect()
+        try:
+            mysql.cur.execute(sql)
+            mysql.conn.commit()
+        except Exception as e:
+            Logging.debugPrint(3,"sql: {}".format(sql))
+            Logging.debugPrint(1, "Error in ThreadCollection, holdThread: {}".format(str(e)))
+            if Logging.debug:
+                raise e
 
     def releaseHoldThread(self,data=None):
-        self.dutyCycleThread.held = False
+        ProfileInstance.getInstance().inHold = False
+        sql = "UPDATE System_Status SET in_hold=0;"
+        mysql = MySQlConnect()
+        try:
+            mysql.cur.execute(sql)
+            mysql.conn.commit()
+        except Exception as e:
+            Logging.debugPrint(3,"sql: {}".format(sql))
+            Logging.debugPrint(1, "Error in ThreadCollection, holdThread: {}".format(str(e)))
+            if Logging.debug:
+                raise e
 
 
     def abortThread(self,data):

@@ -43,8 +43,11 @@ class HardwareStatusInstance:
                 userName = "user" 
             if "root" in userName:
                 self.OperationalVacuum = False
+                # self.OperationalVacuum = True
+                
             else:
                 self.OperationalVacuum = True
             self.VacuumState = None
+            # self.VacuumState = "Operational Vacuum"
 
             HardwareStatusInstance.__instance = self

@@ -46,6 +46,7 @@ class LN2ControlStub(Thread):
                     # some start up stuff here
                     ln2_max = 0.1
                     ln2_min = -0.2 
+                    valveMax = 4095/2
                     time.sleep(self.SLEEP_TIME)
                     # hwStatus = self.hardwareStatus.getInstance()
                     if os.name == "posix":
@@ -55,15 +56,6 @@ class LN2ControlStub(Thread):
 
                     # Normal program loop
                     while ProfileInstance.getInstance().activeProfile and HardwareStatusInstance.getInstance().OperationalVacuum:
-                        # TODO: make sure this commented section can be deleted
-                        # if "root" in userName:
-                        #     Logging.debugPrint(3, "LN2: Pulling live data") #carry over from TCUpdater - What does this do/is it needed?
-                        #     # Hasn't been tested yet
-                        #     # LN2Platen = LN2Out.getLN2platen() for now use shroud
-                        #     LN2Shroud = a_out.getLN2shroud()  # is this current LN2 val needed?
-                        # else:
-                        #     Logging.debugPrint(3, "LN2: Generating test data for TC")
-
                         dutycyclelist = []
                         platenDuty = None
                         for zoneStr in self.ThreadCollection.dutyCycleThread.zones:
@@ -86,9 +78,9 @@ class LN2ControlStub(Thread):
                                 d_out.update({'LN2-S Sol': True})
                                 # 2500 is the point the valve should be opened too
                                 #a_out.update({'LN2 Shroud': 4095, 'LN2 Platen': 4095})
-                                PercentVavleopen = 4095*(dutycyclemin-ln2_max)/(ln2_min-ln2_max)
+                                PercentVavleopen = valveMax*(dutycyclemin-ln2_max)/(ln2_min-ln2_max)
                                 if dutycyclemin < ln2_min:
-                                    PercentVavleopen = 4095
+                                    PercentVavleopen = valveMax
                                 a_out.update({'LN2 Shroud': PercentVavleopen})
                                 Logging.debugPrint(3,"The Shroud LN2 should be on {}".format(PercentVavleopen))
                             else:
@@ -104,9 +96,9 @@ class LN2ControlStub(Thread):
                                 d_out.update({'LN2-P Sol': True})
                                 # 2500 is the point the valve should be opened too
                                 #a_out.update({'LN2 Shroud': 4095, 'LN2 Platen': 4095})
-                                PercentVavleopen = 4095*(platenDuty-ln2_max)/(ln2_min-ln2_max)
+                                PercentVavleopen = valveMax*(platenDuty-ln2_max)/(ln2_min-ln2_max)
                                 if platenDuty < ln2_min:
-                                    PercentVavleopen = 4095
+                                    PercentVavleopen = valveMax
                                 a_out.update({'LN2 Platen': PercentVavleopen})
                                 Logging.debugPrint(3,"The Platen LN2 should be on {}".format(PercentVavleopen))
                             else:
@@ -122,7 +114,7 @@ class LN2ControlStub(Thread):
                         raise e
                 # end of try catch
             else:
-                Logging.debugPrint(3,"LN2: AP: {}, Vacuum: {}".format(ProfileInstance.getInstance().activeProfile,HardwareStatusInstance.getInstance().OperationalVacuum))
+                Logging.debugPrint(4,"LN2: AP: {}, Vacuum: {}".format(ProfileInstance.getInstance().activeProfile,HardwareStatusInstance.getInstance().OperationalVacuum))
             # end of If should be running
             time.sleep(self.SLEEP_TIME)
 

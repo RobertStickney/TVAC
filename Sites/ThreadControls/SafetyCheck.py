@@ -134,7 +134,7 @@ class SafetyCheck(Thread):
 						# end of user test
 
 						# Get the full list
-						OutsideThermoCouples = [101,102]
+						OutsideThermoCouples = []
 						if tc.Thermocouple in OutsideThermoCouples:
 							if tc.temp > MAX_TOUCH_TEMP:
 								errorDetail = "TC # {} is above MAX_TOUCH_TEMP ({}). Currently {}c".format(tc.Thermocouple,MAX_TOUCH_TEMP,tc.temp)
@@ -246,9 +246,7 @@ class SafetyCheck(Thread):
 			self.errorList.append(error)
 			# print(self.errorList)
 
-		Logging.logEvent("Error","", 
-			{"message": "Running Safety Checker Thread",
-			 "level":3})
+		Logging.debugPrint(4,"Running Safety Checker Thread")
 		# Not sure what to do with this
 		if not self.errorDict[error["event"]]:
 			# The error has not been on, and is now on

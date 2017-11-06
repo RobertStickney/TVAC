@@ -5,7 +5,7 @@ import os
 
 from Controllers.PostControl import PostControl
 from Controllers.GetControl import GetControl
-# from Collections.ProfileInstance import ProfileInstance
+from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
 
 from Logging.Logging import Logging
 
@@ -69,7 +69,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
             self.setHeader()
             self.wfile.write(str(result).encode())
         except Exception as e:
-            # print("There has been an error")
+            # print("There has been an error").
             # FileCreation.pushFile("Error","Get",'{"errorMessage":"%s"}\n'%(e))
 
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -78,7 +78,11 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 {"type": exc_type,
                  "filename": fname,
                  "line": exc_tb.tb_lineno,
-                 "thread": "Verb Handler"
+                 "thread": "Verb Handler",
+                 "ThreadCollection":ThreadCollectionInstance.getInstance().threadCollection,
+                 "item":"Server",
+                 "itemID":-1,
+                 "details":"PATH: {} is not recognized".format(path)
                 })
             Logging.logEvent("Debug","Status Update", 
                 {"message": "There was a {} error in Server (GET Handler). File: {}:{}".format(exc_type,fname,exc_tb.tb_lineno),
@@ -122,6 +126,9 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/SendHwCmd': control.SendHwCmd,
                 '/setPC104Digital': control.setPC104_Digital,
                 '/setPC104Analog': control.setPC104_Analog,
+                '/heatUpPlaten':control.heatUpPlaten,
+                '/heatUpShroud':control.heatUpShroud,
+
             }[path](contractObj)
 
             Logging.logEvent("Debug","Status Update", 

@@ -17,7 +17,10 @@ class ShiCompressor:
     def open_port(self):
         self.port = open('/dev/ttyxuart1', 'r+b', buffering=0)
         self.port_listener.get_fd(self.port)
-        self.port_listener.start()
+        try:
+            self.port_listener.start()
+        except Exception as e:
+            pass
         self.port_listener.flush_buffer(1.0)
 
     def flush_port(self, to = 1.0):
