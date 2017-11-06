@@ -147,7 +147,7 @@ class Shi_Mcc:
         # return self.send_cmd("XOI??")
         val = self.Send_cmd("XOI??")
         if not val['Error']:
-            val['Data'] = round((int(val['Response'])/23.0) * 100.0, 2)
+            val['Data'] = round((int(val['Response'])/35.0) * 100.0, 2)
         return val
 
     # 2.5 • Elapsed Time pg:8
@@ -406,8 +406,10 @@ class Shi_Mcc:
     def Get_RegenStartDelay(self):  # Command Ex: "$j?[\r"
         # return self.send_cmd("j?")
         val = self.Send_cmd("j?")
+        print('----------> Get_RegenStartDelay: "{}"". <----------'.format(val['Response']))
         if not val['Error']:
             val['Data'] = int(val['Response'])
+            print('----------> Get_RegenStartDelay to {:d}. <----------'.format(val['Data']))
         return val
 
     def Set_RegenStartDelay(self, delay):

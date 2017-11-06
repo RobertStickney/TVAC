@@ -168,7 +168,7 @@ class VacuumControlStub(Thread):
                 self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
                 self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
                 self.hw.Shi_Compressor_Cmds.append('on')
-                self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
+                self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 2])
                 self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
                 self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
                 self.state = 'PullingVac: CryoCool; Rough Chamber'
@@ -217,7 +217,7 @@ class VacuumControlStub(Thread):
             if self.cryoPumpPressure < self.pres_cryoP_Prime:
                 self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
                 self.hw.Shi_Compressor_Cmds.append('on')
-                self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
+                self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 2])
                 self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
                 self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
                 self.state = 'PullingVac: CryoCool; Rough Chamber'
@@ -365,7 +365,7 @@ class VacuumControlStub(Thread):
                 self.hw.Shi_MCC_Cmds.append(['Close_PurgeValve'])
                 self.hw.Shi_MCC_Cmds.append(['Close_RoughingValve'])
                 self.hw.Shi_Compressor_Cmds.append('on')
-                self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 3])
+                self.hw.Shi_MCC_Cmds.append(['FirstStageTempCTL', 50, 2])
                 self.hw.Shi_MCC_Cmds.append(['SecondStageTempCTL', 10])
                 self.hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOn'])
                 self.state = 'PullingVac: CryoCool; Rough Chamber'
