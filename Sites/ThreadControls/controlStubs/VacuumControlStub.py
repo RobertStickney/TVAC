@@ -304,10 +304,12 @@ class VacuumControlStub(Thread):
 
 
     def state_08(self):  # Operational Vacuum: Cryo Pumping
+        print('------> Cryo P and Cp Gv Closed = {} <-----'.format(self.hw.PC_104.digital_in.getVal('CryoP-GV-Closed')))
         if self.chamberPressure > self.pres_opVac:
             self.state = 'Non-Operational Vacuum'
         elif self.hw.PC_104.digital_in.getVal('CryoP-GV-Closed'):
             self.state = 'Operational Vacuum'
+            print('------> Changing to Op Vac <-----')
         elif not self.hw.ShiCryopump.is_cryopump_cold():
             self.state = 'Operational Vacuum'
             self.hw.PC_104.digital_out.update({'CryoP GateValve': False})
