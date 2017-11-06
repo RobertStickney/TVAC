@@ -147,7 +147,7 @@ class Shi_Mcc:
         # return self.send_cmd("XOI??")
         val = self.Send_cmd("XOI??")
         if not val['Error']:
-            val['Data'] = round((int(val['Response'])/23.0) * 100.0, 2)
+            val['Data'] = round((int(val['Response'])/35.0) * 100.0, 2)
         return val
 
     # 2.5 • Elapsed Time pg:8
@@ -411,7 +411,7 @@ class Shi_Mcc:
         return val
 
     def Set_RegenStartDelay(self, delay):
-        if (delay < 0) | (delay > 59994):
+        if (delay < 0) or (delay > 59994):
             # TODO: Change to error event print('Regeneration Start Delay out is of range (0-59994): {:d}'.format(delay))
             return self.Format_Responce("Regeneration Start Delay out of range: " + str(delay), error=True)
         return self.Send_cmd("j{0:d}".format(delay))

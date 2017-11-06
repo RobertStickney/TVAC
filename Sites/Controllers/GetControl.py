@@ -122,7 +122,7 @@ class GetControl:
                 mysql.conn.commit()
                 hw = HardwareStatusInstance.getInstance()
                 hw.PC_104.digital_out.update({'CryoP GateValve': False})
-
+                time.sleep(5)
                 # TODO: Wait until gate is closed
                 hw.Shi_MCC_Cmds.append(['Turn_CryoPumpOff'])
                 hw.Shi_Compressor_Cmds.append('off')
@@ -297,8 +297,23 @@ class GetControl:
 
     def doRegen(self):
         try:
-            pass
-            return "{'result':'success'}"
+            hw = HardwareStatusInstance.getInstance()
+            if not hw.ShiCryopump.is_regen_active():
+                hw.Shi_MCC_Cmds.append(['Start_Regen', 1])
+                return "{'result':'success'}"
+            else:
+                return "{'result':'Cryopump not generating so Can't abort regeneration cycle.'}"
+        except Exception as e:
+            return "{'error':'{}'}".format(e)
+
+    def abortRegen(self):
+        try:
+            hw = HardwareStatusInstance.getInstance()
+            if hw.ShiCryopump.is_regen_active():
+                hw.Shi_MCC_Cmds.append(['Start_Regen', 0])
+                return "{'result':'success'}"
+            else:
+                return "{'result':'Cryopump not generating so Can't abort regeneration cycle.'}"
         except Exception as e:
             return "{'error':'{}'}".format(e)
 
@@ -306,7 +321,7 @@ class GetControl:
         return json.dumps({"VacuumState": HardwareStatusInstance.getInstance().VacuumState})
 
     def getTvacStatus(self):
-        gauges = HardwareStatusInstance.getInstance().PfeifferGuages
+        hw = HardwareStatusInstance.getInstance()
         out = {
             "recordData": ProfileInstance.getInstance().recordData,
             "OperationalVacuum": HardwareStatusInstance.getInstance().OperationalVacuum,
@@ -316,9 +331,10 @@ class GetControl:
             "inRamp": ProfileInstance.getInstance().inRamp,
             "inHold": ProfileInstance.getInstance().inHold,
             "inPause": ProfileInstance.getInstance().inPause,
-            'CryoPressure': gauges.get_cryopump_pressure(),
-            'ChamberPressure': gauges.get_chamber_pressure(),
-            'RoughingPressure': gauges.get_roughpump_pressure(),
+            'inCryoPumpRegen': hw.ShiCryopump.is_regen_active(),
+            'CryoPressure': hw.PfeifferGuages.get_cryopump_pressure(),
+            'ChamberPressure': hw.PfeifferGuages.get_chamber_pressure(),
+            'RoughingPressure': hw.PfeifferGuages.get_roughpump_pressure(),
             "VacuumState": HardwareStatusInstance.getInstance().VacuumState,
             }
         if not ProfileInstance.getInstance().activeProfile:

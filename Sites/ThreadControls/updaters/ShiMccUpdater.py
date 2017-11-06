@@ -132,12 +132,10 @@ class ShiMccUpdater(Thread):
                                                  {"message": 'Cryopump Gate Valve not closed. Purge valve not opened.',
                                                   "level": 2})
                                 elif 'Start_Regen' == cmd[0]:  # 2.16 • Regeneration pg:14
-                                    if self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed'):
-                                        self.run_set_cmd(self.mcc.Start_Regen, cmd)
-                                    else:
-                                        Logging.logEvent("Debug", "Status Update",
-                                                 {"message": 'Cryopump Gate Valve not closed. Regen not started.',
-                                                  "level": 2})
+                                    self.run_set_cmd(self.mcc.Start_Regen, cmd)
+                                    Logging.logEvent("Event", "Cryopump Regeneration",
+                                                     {"message": "Cryopump regeneration starting",
+                                                      "ProfileInstance": ProfileInstance.getInstance()})
                                 elif 'Set_RegenParam' == cmd[0]:  # 2.19 • Regeneration Parameters pg:16
                                     self.run_set_cmd(self.mcc.Set_RegenParam, cmd)
                                     val = self.mcc.Get_RegenParam(cmd[1])
@@ -149,8 +147,7 @@ class ShiMccUpdater(Thread):
                                         self.hw.ShiCryopump.update({'MCC Params': {"Regen Param_%s" % cmd[1]: val['Data']}})
                                 elif 'RegenStartDelay' == cmd[0]:  # 2.21 • Regeneration Start Delay pg.18
                                     self.run_set_cmd(self.mcc.Set_RegenStartDelay, cmd)
-                                    self.run_get_cmd(self.mcc.Get_RegenStartDelay,
-                                                     "Regen Start Delay")
+                                    self.run_get_cmd(self.mcc.Get_RegenStartDelay, "Regen Start Delay")
                                 elif 'Open_RoughingValve' == cmd[0]:  # 2.24 • Rough On/Off/Query pg:19
                                     self.run_set_cmd(self.mcc.Open_RoughingValve, cmd)
                                 elif 'Close_RoughingValve' == cmd[0]:  # 2.24 • Rough On/Off/Query pg:19
@@ -210,26 +207,26 @@ class ShiMccUpdater(Thread):
                 self.mcc.close_port()
                 time.sleep(4)
 
-    def run_set_cmd(self, function, cmd):
+    def run_set_cmd(self, fun, cmd):
         if len(cmd) <= 1:
-            val = function()
+            val = fun()
         elif len(cmd) == 2:
-            val = function(cmd[1])
+            val = fun(cmd[1])
         elif len(cmd) == 3:
-            val = function(cmd[1],cmd[2])
+            val = fun(cmd[1],cmd[2])
         else:
             raise Exception('run_cmd has to many arguments')
         if val['Error']:
             Logging.logEvent("Debug", "Status Update",
                              {"message": 'Shi MCC Set_"%s" Error Response: %s' % (cmd[0], val),
-                              "level": 4})
+                              "level": 3})
 
     def run_get_cmd(self, fun, key):
         val = fun()
         if val['Error']:
             Logging.logEvent("Debug", "Status Update",
                              {"message": 'Shi MCC Get_"%s" Error Response: %s' % (key, val),
-                              "level": 4})
+                              "level": 3})
         else:
             if 'Data' in val:
                 self.hw.ShiCryopump.update({'MCC Params': {key: val['Data']}})

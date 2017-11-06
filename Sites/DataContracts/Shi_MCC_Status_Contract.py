@@ -106,6 +106,8 @@ class Shi_MCC_Status_Contract:
             val = self.RoughingValveState
         elif name == 'Roughing Interlock':
             val = self.RoughingInterlock.copy()
+        elif name == 'Roughing Interlock: Roughing Needed':
+            val = self.RoughingInterlock['Roughing Needed']
         elif name == 'Stage 2 Temp':
             val = self.SecondStageTemp
         elif name == 'Status':

@@ -53,6 +53,7 @@ class VerbHandler(http.server.BaseHTTPRequestHandler):
                 '/unHold':control.unHoldAllZones,
                 '/getVacuumState': control.getVacuumState,
                 '/doRegen': control.doRegen,
+                '/abortRegen': control.abortRegen,
                 '/getTvacStatus': control.getTvacStatus,
                 '/StoprecordData': control.StoprecordData,
                 '/recordData': control.recordData,
