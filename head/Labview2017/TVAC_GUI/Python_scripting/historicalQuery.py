@@ -260,7 +260,6 @@ def main(args):
 	guage3=[]
 	xg3=[]
 
-
 	for time_value in range(0,len(pTime)):
 		#print(pTime[time_value])
 		if pGuage[time_value] == 1:
