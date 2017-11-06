@@ -1,1 +1,1 @@
-[{"zone":1,"average":"Average","thermocouples":[11],"maxTemp":400,"minTemp":80,"maxSlope":1,"thermalprofiles":[{"thermalsetpoint":1,"tempgoal":300,"ramp":60,"soakduration":120}]}]
+[{"zone":8,"average":"Average","thermocouples":[5],"maxTemp":310,"minTemp":77,"maxSlope":10,"thermalprofiles":[{"thermalsetpoint":1,"tempgoal":300,"ramp":600,"soakduration":60}]}]
