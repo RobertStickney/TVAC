@@ -133,7 +133,7 @@ class ShiMccUpdater(Thread):
                                                   "level": 2})
                                 elif 'Start_Regen' == cmd[0]:  # 2.16 • Regeneration pg:14
                                     self.run_set_cmd(self.mcc.Start_Regen, cmd)
-                                    Logging.logEvent("Event", "Vacuum State",
+                                    Logging.logEvent("Event", "Cryopump Regeneration",
                                                      {"message": "Cryopump regeneration starting",
                                                       "ProfileInstance": ProfileInstance.getInstance()})
                                 elif 'Set_RegenParam' == cmd[0]:  # 2.19 • Regeneration Parameters pg:16

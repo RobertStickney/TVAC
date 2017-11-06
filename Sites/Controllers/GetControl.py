@@ -298,7 +298,7 @@ class GetControl:
     def doRegen(self):
         try:
             hw = HardwareStatusInstance.getInstance()
-            if hw.ShiCryopump.is_regen_active():
+            if not hw.ShiCryopump.is_regen_active():
                 hw.Shi_MCC_Cmds.append(['Start_Regen', 1])
                 return "{'result':'success'}"
             else:

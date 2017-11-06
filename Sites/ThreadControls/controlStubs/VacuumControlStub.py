@@ -122,6 +122,26 @@ class VacuumControlStub(Thread):
                         'Non-Operational Vacuum':               self.state_10,
                     }[self.state]()
 
+                    if self.hw.ShiCryopump.is_regen_active():
+                        self.hw.PC_104.digital_out.update({'RoughP GateValve': False})
+                        if self.hw.ShiCryopump.get_mcc_status('Roughing Interlock: Roughing Needed'):
+                            if self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'):
+                                if self.roughPumpPressure < self.cryoPumpPressure:
+                                    self.hw.Shi_MCC_Cmds.append(['Clear_RoughingInterlock'])
+                                    Logging.logEvent("Event", "Cryopump Regeneration",
+                                                     {"message": "Clearing Roughing Interlock.".format(self.state),
+                                                      "ProfileInstance": ProfileInstance.getInstance()})
+                            else:
+                                if self.hw.PC_104.digital_in.getVal('RoughP_Powered'):
+                                    self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
+                                    self.hw.PC_104.digital_out.update({'RoughP Start': True})
+                                else:
+                                    self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
+                                    self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
+                        elif not self.hw.ShiCryopump.get_mcc_status('Roughing Valve State'):
+                            self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
+                            self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
+
                     self.hw.VacuumState = self.state
 
                     if "Operational Vacuum" in self.state:
