@@ -1,6 +1,8 @@
 import uuid
 import datetime
 import time
+import os
+import math
 from DataContracts.ZoneProfileContract import ZoneProfileContract
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 
@@ -213,8 +215,7 @@ class ZoneCollection:
             Logging.debugPrint(1, "Error in saveZone, zoneCollection: {}".format(str(e)))
             raise e
 
-        #Saving the TC as well 
-
+        # Saving the TC as well 
         coloums = "( profile_name, zone, thermocouple )"
         values = ""
         for tc in zoneProfile["thermocouples"]:
@@ -247,9 +248,34 @@ class ZoneCollection:
 
 
     def updateThermalStartTime(self, thermalStartTime):
-        # self.thermalStartTime = thermalStartTime
-        sql = "update tvac.Profile_Instance set thermal_Start_Time=\"{}\" where thermal_Start_Time is null;".format(datetime.datetime.fromtimestamp(thermalStartTime))
+        '''
+        This is a helper function that is called either when a profile begins the
+        thermal section (when it is in a vacuum) or when the the server is restarted. 
+        '''
+        # This loop is to hold the program here until the temperature vaules have been loaded
+        if os.name == 'posix':
+            userName = os.environ['LOGNAME']
+        else:
+            userName = "User"
 
+        tmpStr = ""
+        for zone in self.zoneDict:
+            if self.zoneDict[zone].activeZoneProfile:
+                if "root" in userName:
+                    while True:
+                        currentTemp = self.zoneDict[zone].getTemp(self.zoneDict[zone].average)
+                        Logging.debugPrint(4,"Zone Col.: currentTemp: {}".format(currentTemp))
+                        if not math.isnan(currentTemp) and int(currentTemp) != 0:
+                            break
+                        time.sleep(.5)
+                else:
+                    currentTemp = self.zoneDict[zone].getTemp(self.zoneDict[zone].average)
+
+                tmpStr += "{}_Temp = {},".format(zone, currentTemp)
+
+        tmpStr = tmpStr[:-1]
+        sql = "UPDATE tvac.Profile_Instance set thermal_Start_Time=\"{}\",{} where thermal_Start_Time is null;".format(datetime.datetime.fromtimestamp(thermalStartTime),tmpStr)
+        print(sql)
         mysql = MySQlConnect()
         try:
             mysql.cur.execute(sql)

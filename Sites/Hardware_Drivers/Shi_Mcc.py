@@ -15,7 +15,10 @@ class Shi_Mcc:
     def open_port(self):
         self.port = open('/dev/ttyxuart0', 'r+b', buffering=0)
         self.port_listener.get_fd(self.port)
-        self.port_listener.start()
+        try:
+            self.port_listener.start()
+        except Exception as e:
+            pass
         self.port_listener.flush_buffer(1.0)
 
     def flush_port(self):
@@ -28,7 +31,6 @@ class Shi_Mcc:
     def Send_cmd(self, Command):
         for tries in range(3):
             self.port.write(self.GenCmd(Command).encode())
-            # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
             resp = self.port_listener.read_line(2.0)
             if self.ResponceGood(resp):
                 if resp[1] == 'A':  # Responce Good!

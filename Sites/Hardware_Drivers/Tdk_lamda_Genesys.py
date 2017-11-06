@@ -3,22 +3,42 @@
 import io
 import time
 
+from Hardware_Drivers.tty_reader import TTY_Reader
+
 
 class Tdk_lambda_Genesys:
 
+    def __init__(self):
+        self.port = None
+        self.port_listener = TTY_Reader(None)
+        self.port_listener.daemon = True
+
+    def open_port(self):
+        self.port = open('/dev/ttyxuart4', 'r+b', buffering=0)
+        self.port_listener.get_fd(self.port)
+        try:
+            self.port_listener.start()
+        except Exception as e:
+            pass
+        self.port_listener.flush_buffer(1.0)
+
+    def flush_port(self):
+        self.port_listener.flush_buffer(1.0)
+
+    def close_port(self):
+        if not self.port.closed:
+            self.port.close()
+
     def send_cmd(self, command):
-        tdk = open('/dev/ttyxuart4', 'r+b', buffering=0)
         for tries in range(1, 3+1):
-            tdk.write(self.append_checksum(command).encode())
+            self.port.write(self.append_checksum(command).encode())
             time.sleep(0.15 * tries)
-            # TODO: Change to error event print("C:--" + self.GenCmd(Command).replace('\r', r'\r') + "---")
-            (resp_good, resp) = self.check_checksum(tdk.read(128).decode())
+            reply = self.port_listener.read_line(2.0)
+            (resp_good, resp) = self.check_checksum(reply)
             if resp_good:
                 break
-            print("TDK LAMBDA cmd try number: {:d}".format(tries))
         else:
             raise Exception('Response: "{:s}" is not "OK"'.format(resp))
-        tdk.close()
         return resp
 
     def append_checksum(self, cmd):

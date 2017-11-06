@@ -57,8 +57,10 @@ class TdkLambdaUpdater(Thread):
     def run(self):
         '''
         '''
-        # used for testing
-        first = True
+        if os.name == 'posix':
+            userName = os.environ['LOGNAME']
+        else:
+            userName = "User"
         while True:
             # While true to restart the thread if it errors out
             try:
@@ -67,11 +69,8 @@ class TdkLambdaUpdater(Thread):
                                 {"message": "TDK Lambda Genesys Control Stub Thread",
                                  "level": 2})
 
-                if os.name == 'posix':
-                    userName = os.environ['LOGNAME']
-                else:
-                    userName = "User"
                 if "root" in userName:
+                    self.pwr_supply.open_port()
                     update_power_supplies = [{'addr': self.hw.TdkLambda_PS.get_platen_left_addr()},
                                              {'addr': self.hw.TdkLambda_PS.get_platen_right_addr()},
                                              {'addr': self.hw.TdkLambda_PS.get_shroud_left_addr()},
@@ -94,6 +93,8 @@ class TdkLambdaUpdater(Thread):
                     next_status_read_time += self.ps_read_peroid
                     if "root" in userName:
                         try:
+                            # TODO: Not sure on the location of flush port
+                            self.pwr_supply.flush_port()
                             update_power_supplies = [{'addr': self.hw.TdkLambda_PS.get_platen_left_addr()},
                                                      {'addr': self.hw.TdkLambda_PS.get_platen_right_addr()},
                                                      {'addr': self.hw.TdkLambda_PS.get_shroud_left_addr()},
@@ -101,6 +102,7 @@ class TdkLambdaUpdater(Thread):
                             for ps in update_power_supplies:
                                 self.pwr_supply.set_addr(ps['addr'])
                                 if not self.hw.OperationalVacuum and self.hw.TdkLambda_PS.get_val(ps['addr'], 'output enable'):
+                                    debugPrint(2,"TDK, either not in vacuum, or turned off")
                                     self.pwr_supply.set_out_off()
                                 ps.update(self.pwr_supply.get_status())
                                 ps.update(self.pwr_supply.get_out())
@@ -108,6 +110,7 @@ class TdkLambdaUpdater(Thread):
                             self.hw.TdkLambda_PS.update(update_power_supplies)
                             while len(self.hw.TdkLambda_Cmds):
                                 self.Process_Commands(self.hw.TdkLambda_Cmds.pop(0))
+
 
                         except ValueError as err:
                             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -126,19 +129,21 @@ class TdkLambdaUpdater(Thread):
                                           "level": 4})
                         # Just to see the screen for longer
                         time.sleep(5)
-
                     if time.time() < next_status_read_time:
                         time.sleep(next_status_read_time - time.time())
 
             except Exception as e:
-                # FileCreation.pushFile("Error",self.zoneUUID,'{"errorMessage":"%s"}'%(e))
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 Logging.logEvent("Error", "TDK Lambda Power Supplies Interface Thread",
                                  {"type": exc_type,
                                   "filename": fname,
                                   "line": exc_tb.tb_lineno,
-                                  "thread": "TdkLambdaUpdater"
+                                  "thread": "TdkLambdaUpdater",
+                                  "ThreadCollection":self.parent,
+                                  "item":"Tdk-Lambda Heater",
+                                  "itemID":-1,
+                                  "details":"A TDK-Lambda is probably powered off"
                                   })
                 Logging.logEvent("Debug", "Status Update",
                                  {"message": "There was a {} error in TdkLambdaUpdater. File: {}:{}\n{}".format(
@@ -146,6 +151,7 @@ class TdkLambdaUpdater(Thread):
                                   "level": 1})
                 if Logging.debug:
                     raise e
+                self.pwr_supply.close_port()
                 time.sleep(4)
             # nicely close things, to open them back up again...
 
@@ -154,7 +160,7 @@ class TdkLambdaUpdater(Thread):
         fun(val)
 
     def Process_Commands(self, cmd):
-        print("Tdk command: {}".format(cmd))
+        Logging.debugPrint(2,"Tdk command: {}".format(cmd))
         if 'Set Platen Left' == cmd[0]:
             if cmd[2] == 'V':
                 self.run_set_cmd(self.hw.TdkLambda_PS.get_platen_left_addr(),
