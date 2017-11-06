@@ -124,6 +124,7 @@ class VacuumControlStub(Thread):
 
                     if self.hw.ShiCryopump.is_regen_active():
                         self.hw.PC_104.digital_out.update({'RoughP GateValve': False})
+                        step = self.hw.ShiCryopump.get_mcc_status('Regen Step')
                         if self.hw.ShiCryopump.get_mcc_status('Roughing Interlock: Roughing Needed'):
                             if self.hw.PC_104.digital_in.getVal('RoughP_On_Sw'):
                                 if self.roughPumpPressure < self.cryoPumpPressure:
@@ -138,9 +139,15 @@ class VacuumControlStub(Thread):
                                 else:
                                     self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': True})
                                     self.hw.PC_104.digital_out.update({'RoughP PurgeGass': True})
-                        elif not self.hw.ShiCryopump.get_mcc_status('Roughing Valve State'):
+                        elif (not self.hw.ShiCryopump.get_mcc_status('Roughing Valve State')) and \
+                                (not step.startswith('T:')) and (not step.startswith('J:')) and \
+                                (not step.startswith('H:')):
                             self.hw.PC_104.digital_out.update({'RoughP Pwr Relay': False})
                             self.hw.PC_104.digital_out.update({'RoughP PurgeGass': False})
+                        if step.startswith('C:') or step.startswith('D:') or step.startswith('E:'):
+                            self.hw.Shi_Compressor_Cmds.append('off')
+                        if self.hw.ShiCryopump.get_mcc_status('PumpOn?') or step.startswith('M:'):
+                            self.hw.Shi_Compressor_Cmds.append('on')
 
                     self.hw.VacuumState = self.state
 
