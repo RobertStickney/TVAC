@@ -221,7 +221,7 @@ class ShiMccUpdater(Thread):
         if val['Error']:
             Logging.logEvent("Debug", "Status Update",
                              {"message": 'Shi MCC Set_"%s" Error Response: %s' % (cmd[0], val),
-                              "level": 4})
+                              "level": 3})
 
     def run_get_cmd(self, fun, key):
         val = fun()

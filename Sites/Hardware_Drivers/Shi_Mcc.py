@@ -406,7 +406,7 @@ class Shi_Mcc:
     def Get_RegenStartDelay(self):  # Command Ex: "$j?[\r"
         # return self.send_cmd("j?")
         val = self.Send_cmd("j?")
-        print('----------> Get_RegenStartDelay: "{}"". <----------'.format(val['Response']))
+        print('----------> Get_RegenStartDelay: "{}". <----------'.format(val['Response']))
         if not val['Error']:
             val['Data'] = int(val['Response'])
             print('----------> Get_RegenStartDelay to {:d}. <----------'.format(val['Data']))
