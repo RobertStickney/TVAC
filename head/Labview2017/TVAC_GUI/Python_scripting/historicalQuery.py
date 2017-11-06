@@ -261,7 +261,7 @@ def main(args):
 	xg3=[]
 
 
-	for time_value in range(0,len(pressure)):
+	for time_value in range(0,len(pTime)):
 		#print(pTime[time_value])
 		if pGuage[time_value] == 1:
 			xg1.append(pTime[time_value])
