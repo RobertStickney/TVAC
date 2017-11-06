@@ -411,6 +411,7 @@ class Shi_Mcc:
         return val
 
     def Set_RegenStartDelay(self, delay):
+        print('----------> Set_RegenStartDelay to {:d}. <----------'.format(delay))
         if (delay < 0) | (delay > 59994):
             # TODO: Change to error event print('Regeneration Start Delay out is of range (0-59994): {:d}'.format(delay))
             return self.Format_Responce("Regeneration Start Delay out of range: " + str(delay), error=True)

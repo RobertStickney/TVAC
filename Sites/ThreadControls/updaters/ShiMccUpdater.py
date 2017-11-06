@@ -210,13 +210,13 @@ class ShiMccUpdater(Thread):
                 self.mcc.close_port()
                 time.sleep(4)
 
-    def run_set_cmd(self, function, cmd):
+    def run_set_cmd(self, fun, cmd):
         if len(cmd) <= 1:
-            val = function()
+            val = fun()
         elif len(cmd) == 2:
-            val = function(cmd[1])
+            val = fun(cmd[1])
         elif len(cmd) == 3:
-            val = function(cmd[1],cmd[2])
+            val = fun(cmd[1],cmd[2])
         else:
             raise Exception('run_cmd has to many arguments')
         if val['Error']:
