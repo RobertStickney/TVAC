@@ -235,6 +235,16 @@ class ZoneCollection:
     def saveProfile(self,json):
         try:
             name = json["name"]
+
+            sql = "SELECT * FROM tvac.Thermal_Zone_Profile WHERE profile_name=\"{}\";".format(name)
+            mysql = MySQlConnect()
+            mysql.cur.execute(sql)
+            mysql.conn.commit()
+
+            results = mysql.cur.fetchall()
+            if results:
+                return "{'result':'Error, profile already exists'}"
+
             for zoneProfile in json['profiles']:
                 result = self.saveZone(name, zoneProfile)
                 if result != True:
@@ -244,6 +254,8 @@ class ZoneCollection:
                 "ProfileInstance": self.parent.getInstance()})
             return "{'result':'success'}"
         except Exception as e:
+            Logging.debugPrint(3,"sql: {}".format(sql))
+            Logging.debugPrint(1, "Error in loadProfile, zoneCollection: {}".format(str(e)))
             return str({'result':str(e)})
 
 
