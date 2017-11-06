@@ -132,12 +132,10 @@ class ShiMccUpdater(Thread):
                                                  {"message": 'Cryopump Gate Valve not closed. Purge valve not opened.',
                                                   "level": 2})
                                 elif 'Start_Regen' == cmd[0]:  # 2.16 • Regeneration pg:14
-                                    if self.hw.PC_104.digital_in.getVal('CryoP_GV_Closed'):
-                                        self.run_set_cmd(self.mcc.Start_Regen, cmd)
-                                    else:
-                                        Logging.logEvent("Debug", "Status Update",
-                                                 {"message": 'Cryopump Gate Valve not closed. Regen not started.',
-                                                  "level": 2})
+                                    self.run_set_cmd(self.mcc.Start_Regen, cmd)
+                                    Logging.logEvent("Event", "Vacuum State",
+                                                     {"message": "Cryopump regeneration starting",
+                                                      "ProfileInstance": ProfileInstance.getInstance()})
                                 elif 'Set_RegenParam' == cmd[0]:  # 2.19 • Regeneration Parameters pg:16
                                     self.run_set_cmd(self.mcc.Set_RegenParam, cmd)
                                     val = self.mcc.Get_RegenParam(cmd[1])
@@ -218,9 +216,6 @@ class ShiMccUpdater(Thread):
             val = fun(cmd[1],cmd[2])
         else:
             raise Exception('run_cmd has to many arguments')
-        Logging.logEvent("Debug", "Status Update",
-                         {"message": 'Shi MCC Set_"%s" Error Response: %s' % (cmd[0], val),
-                          "level": 3})
         if val['Error']:
             Logging.logEvent("Debug", "Status Update",
                              {"message": 'Shi MCC Set_"%s" Error Response: %s' % (cmd[0], val),
@@ -231,7 +226,7 @@ class ShiMccUpdater(Thread):
         if val['Error']:
             Logging.logEvent("Debug", "Status Update",
                              {"message": 'Shi MCC Get_"%s" Error Response: %s' % (key, val),
-                              "level": 4})
+                              "level": 3})
         else:
             if 'Data' in val:
                 self.hw.ShiCryopump.update({'MCC Params': {key: val['Data']}})
