@@ -53,7 +53,6 @@ class GetControl:
             return "{'error':'{}'}".format(e)
 
     def unHoldAllZones(self):
-        print("!")
         try:
             threadInstance = ThreadCollectionInstance.getInstance()
             threadInstance.threadCollection.releaseHoldThread()

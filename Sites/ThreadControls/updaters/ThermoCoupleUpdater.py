@@ -79,14 +79,14 @@ class ThermoCoupleUpdater(Thread):
                             TCs = {
                                 'time': datetime.now(),
                                 'tcList': [
-                                    {'Thermocouple': 11,'working':True, 'temp':hwStatus.Thermocouples.getTC(11).getTemp() + currentPID + 1},
-                                    {'Thermocouple': 90,'working':True, 'temp':hwStatus.Thermocouples.getTC(90).getTemp() + currentPID + 2},
-                                    {'Thermocouple': 15,'working':True, 'temp':hwStatus.Thermocouples.getTC(15).getTemp() + currentPID + 3},
-                                    {'Thermocouple': 16,'working':True, 'temp':hwStatus.Thermocouples.getTC(16).getTemp() + currentPID + 4},
-                                    {'Thermocouple': 17,'working':True, 'temp':hwStatus.Thermocouples.getTC(17).getTemp() + currentPID + 5},
-                                    {'Thermocouple': 18,'working':True, 'temp':hwStatus.Thermocouples.getTC(18).getTemp() + currentPID + 0},
-                                    {'Thermocouple': 19,'working':True, 'temp':hwStatus.Thermocouples.getTC(19).getTemp() + currentPID + 0},
-                                    {'Thermocouple': 20,'working':True, 'temp':hwStatus.Thermocouples.getTC(20).getTemp() + currentPID + 0},
+                                    {'Thermocouple': 11,'working':True, 'temp':hwStatus.Thermocouples.getTC(11).getTemp() + currentPID + 50},
+                                    # {'Thermocouple': 90,'working':True, 'temp':hwStatus.Thermocouples.getTC(90).getTemp() + currentPID + 2},
+                                    # {'Thermocouple': 15,'working':True, 'temp':hwStatus.Thermocouples.getTC(15).getTemp() + currentPID + 3},
+                                    # {'Thermocouple': 16,'working':True, 'temp':hwStatus.Thermocouples.getTC(16).getTemp() + currentPID + 4},
+                                    # {'Thermocouple': 17,'working':True, 'temp':hwStatus.Thermocouples.getTC(17).getTemp() + currentPID + 5},
+                                    # {'Thermocouple': 18,'working':True, 'temp':hwStatus.Thermocouples.getTC(18).getTemp() + currentPID + 0},
+                                    # {'Thermocouple': 19,'working':True, 'temp':hwStatus.Thermocouples.getTC(19).getTemp() + currentPID + 0},
+                                    # {'Thermocouple': 20,'working':True, 'temp':hwStatus.Thermocouples.getTC(20).getTemp() + currentPID + 0},
 
                                 ]
                             }
@@ -113,7 +113,7 @@ class ThermoCoupleUpdater(Thread):
 
                         Logging.logEvent("Debug","Data Dump",
                             {"message": "Current TC reading",
-                             "level":4,
+                             "level":3,
                              "dict":TCs['tcList']})
 
                         hwStatus.Thermocouples.update(TCs)
