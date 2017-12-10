@@ -105,7 +105,7 @@ def validateProfile(json,zone,errors):
 				errors+=1	
 
 
-	if zoneData["maxTemp"] > 423 or zoneData["maxTemp"] < 70:
+	if zoneData["maxTemp"] > 425 or zoneData["maxTemp"] < 70:
 		print("ProfileError : Maximum Temp Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))
 		errors+=1	
 	if zoneData["maxTemp"] == zoneData["minTemp"]:
@@ -114,7 +114,7 @@ def validateProfile(json,zone,errors):
 	if zoneData["maxTemp"] < zoneData["minTemp"]:
 		print("ProfileError : Maximum Temp Limit below Minimum Temp Limit for Zone",str(zoneData["zone"]))
 		errors+=1	
-	if zoneData["minTemp"] > 423 or zoneData["minTemp"] < 70:
+	if zoneData["minTemp"] > 425 or zoneData["minTemp"] < 70:
 		print("ProfileError : Minimum Temp Limit outside of chamber operational limits for Zone",str(zoneData["zone"]))		
 		errors+=1	
 
