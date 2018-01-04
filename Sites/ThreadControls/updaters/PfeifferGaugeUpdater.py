@@ -72,7 +72,8 @@ class PfeifferGaugeUpdater(Thread):
                 if os.name == "posix":
                     userName = os.environ['LOGNAME']
                 else:
-                    userName = "user" 
+                    userName = "user"
+                # userName = 'root'
                 if "root" in userName:
                     self.read_all_params()
                 next_pressure_read_time = time.time()

@@ -5,17 +5,30 @@ import os
 
 from Collections.HardwareStatusInstance import HardwareStatusInstance
 from Collections.ProfileInstance import ProfileInstance
-from ThreadControls.ThreadCollectionInstance import ThreadCollectionInstance
-
+from Logging.MySql import MySQlConnect
 from Logging.Logging import Logging
+
+
+def releaseHoldThread():
+    ProfileInstance.getInstance().inHold = False
+    sql = "UPDATE System_Status SET in_hold=0;"
+    mysql = MySQlConnect()
+    try:
+        mysql.cur.execute(sql)
+        mysql.conn.commit()
+    except Exception as e:
+        Logging.debugPrint(3, "sql: {}".format(sql))
+        Logging.debugPrint(1, "Error in ThreadCollection, holdThread: {}".format(str(e)))
+        if Logging.debug:
+            raise e
 
 
 class SafetyCheck(Thread):
     """
-	SafetyCheck is the thread that runs the sainty and safety checks over the system. 
-	If it finds anything wrong with the the system it makes an error report and stores it in a queue 
-	to be seen by the client. 
-	"""
+    SafetyCheck is the thread that runs the sainty and safety checks over the system.
+    If it finds anything wrong with the the system it makes an error report and stores it in a queue
+    to be seen by the client.
+    """
     __instance = None
 
     def __init__(self, parent):
@@ -126,8 +139,7 @@ class SafetyCheck(Thread):
                             HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Shroud Duty Cycle', 0])
                             HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
 
-                            threadInstance = ThreadCollectionInstance.getInstance()
-                            threadInstance.threadCollection.releaseHoldThread()
+                            releaseHoldThread()
                         # end of max operational test
 
                         if tc.userDefined:
@@ -258,10 +270,9 @@ class SafetyCheck(Thread):
                             HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Shroud Duty Cycle', 0])
                             HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Platen Duty Cycle', 0])
 
-                            threadInstance = ThreadCollectionInstance.getInstance()
-                            threadInstance.threadCollection.releaseHoldThread()
+                            releaseHoldThread()
 
-                        #end if vacuum in bad condintion
+                        # end if vacuum in bad condintion
                     # end if root
                     time.sleep(SLEEP_TIME)
             # end of inner while true loop

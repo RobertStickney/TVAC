@@ -105,7 +105,7 @@ class ZoneCollection:
             
         return thermalprofiles
 
-    def loadProfile(self, profileName, profileStartTime=None, thermalStartTime=None, firstSoakStartTime=None):
+    def load_profile(self, profileName, profileStartTime=None, thermalStartTime=None, firstSoakStartTime=None):
         '''
         This will take a profile loaded in the DB and put it in RAM
         If this is a pre exisiting profile we are loading after reboot, a startTime will be given

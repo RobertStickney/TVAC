@@ -17,7 +17,6 @@ from ThreadControls.updaters.TdkLambdaUpdater import TdkLambdaUpdater
 from ThreadControls.updaters.TsRegistersUpdater import TsRegistersUpdater
 
 
-
 class ThreadCollection:
 
     def __init__(self):
@@ -36,7 +35,7 @@ class ThreadCollection:
         if result:
             Logging.debugPrint(1, "Unfinished profile found: {}".format(str(result['profile_name'])))
             # load up ram (zone collection) with info from the database and the given start time
-            self.zoneProfiles.loadProfile(result['profile_name'],result['profile_Start_Time'],result['thermal_Start_Time'],result['first_Soak_Start_Time'])
+            self.zoneProfiles.load_profile(result['profile_name'], result['profile_Start_Time'], result['thermal_Start_Time'], result['first_Soak_Start_Time'])
             # after it's in memory, run it!
             self.runProfile(firstStart = False)
         # end if no active profile

@@ -9,7 +9,7 @@ class PostControl:
 
     def loadProfile(self,data):
         profileInstance = ProfileInstance.getInstance()
-        return profileInstance.zoneProfiles.loadProfile(data["profile_name"])
+        return profileInstance.zoneProfiles.load_profile(data["profile_name"])
 
     def saveProfile(self, data):
         profileInstance = ProfileInstance.getInstance()

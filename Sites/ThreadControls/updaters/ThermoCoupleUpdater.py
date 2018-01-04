@@ -51,7 +51,7 @@ class ThermoCoupleUpdater(Thread):
                 if os.name == "posix":
                     userName = os.environ['LOGNAME']
                 else:
-                    userName = "user" 
+                    userName = "User"
 
                 if "root" in userName:
                     # Hasn't been tested yet
@@ -79,7 +79,7 @@ class ThermoCoupleUpdater(Thread):
                             TCs = {
                                 'time': datetime.now(),
                                 'tcList': [
-                                    {'Thermocouple': 11,'working':True, 'temp':hwStatus.Thermocouples.getTC(11).getTemp() + currentPID + 50},
+                                    {'Thermocouple': 11,'working':True, 'temp':hwStatus.Thermocouples.getTC(11).getTemp() + currentPID + 5},
                                     # {'Thermocouple': 90,'working':True, 'temp':hwStatus.Thermocouples.getTC(90).getTemp() + currentPID + 2},
                                     # {'Thermocouple': 15,'working':True, 'temp':hwStatus.Thermocouples.getTC(15).getTemp() + currentPID + 3},
                                     # {'Thermocouple': 16,'working':True, 'temp':hwStatus.Thermocouples.getTC(16).getTemp() + currentPID + 4},

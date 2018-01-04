@@ -76,13 +76,20 @@ class PfeifferGauge:
 
     def SendReceive(self, Address, Parm=349, dataStr=None):
         for tries in range(3):
+            ip = '192.168.99.124'
+            ip = 'localhost'
             if dataStr is None:
-                self.a.sendto(self.GenCmdRead(Address, Parm).encode(), ('192.168.99.124', 1234))
+                tmp = self.GenCmdRead(Address, Parm).encode()
+                print("messing sending: {}".format(tmp))
+                self.a.sendto(tmp, (ip, 1234))
+                print("after send")
             else:
-                self.a.sendto(self.GenCmdWrite(Address, Parm, dataStr).encode(), ('192.168.99.124', 1234))
+                self.a.sendto(self.GenCmdWrite(Address, Parm, dataStr).encode(), (ip, 1234))
             time.sleep(0.060 * (tries + 1))
+            print("about to wait for reply")
             Responce,_ = self.a.recvfrom(4092)
             Resp = Responce.decode().strip()
+            print("reply: "+Resp)
             if self.ResponceGood(Address, Resp, Parm):
                 break
             print("Try number: " + str(tries))

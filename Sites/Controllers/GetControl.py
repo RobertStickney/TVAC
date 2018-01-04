@@ -211,7 +211,6 @@ class GetControl:
     def getShiTemps(self):
         return HardwareStatusInstance.getInstance().ShiCryopump.mcc_status.get_json_plots()
 
-
     def getEventList(self):
         # data unused
         Logging.debugPrint(2,"Calling: Get Event List")
@@ -284,6 +283,8 @@ class GetControl:
         return buff                        
 
     def runProfile(self):
+        HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Shroud Duty Cycle', 0])
+        HardwareStatusInstance.getInstance().TdkLambda_Cmds.append(['Disable Shroud Output'])
         threadInstance = ThreadCollectionInstance.getInstance()
         result = threadInstance.threadCollection.runProfile()
         return result
